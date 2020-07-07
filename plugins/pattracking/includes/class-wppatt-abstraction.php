@@ -93,6 +93,7 @@ abstract class PATT_DB {
 					if($i == 1){
 						$where = " WHERE {$cond[0]} = {$cond[1]}";
 					} else {
+						$cond[2] = isset($cond[2]) ? : 'AND';
 						$where .= " {$cond[2]} {$cond[0]} = {$cond[1]}";
 					}
 					$i++;
@@ -105,7 +106,8 @@ abstract class PATT_DB {
 		$join_query = '';
 		if(isset($args['join'])){
 			foreach($args['join'] as $join){
-				$join_query .= " {$join['type']} {$join['table']} ON {$join['table']}.{$join['key']} {$join['compare']} {$this->table_name}.{$join['foreign_key']}";
+				$base_table = isset($join['base_table']) ? $join['base_table'] : $this->table_name;
+				$join_query .= " {$join['type']} {$join['table']} ON {$join['table']}.{$join['key']} {$join['compare']} {$base_table}.{$join['foreign_key']}";
 			}
 		}
 
@@ -145,38 +147,72 @@ abstract class PATT_DB {
 		if(isset($args['order'])){
 			$order = "ORDER BY {$args['order'][0]} {$args['order'][1]}";
 		}
-
+		
+// 		$limits = 'LIMIT 20';
+		if (isset($args['limit'])) {
+			if(isset($args['limit'][1])){
+				$limits = "LIMIT {$args['limit'][0]}, {$args['limit'][1]}";
+			} else {
+				$limits = "LIMIT {$args['limit'][0]}";
+			}
+		}
+		
 		$select = isset($args['select']) ? $args['select'] : '*';
 
 		$where = '';
+		// print_r($args['where']);
 		if(isset($args['where'])){
 			if(is_array($args['where'][0])){
 				$i = 1;
-				foreach($args['where'] as $cond) {
+				foreach($args['where'] as $column => $cond) {
+					//print_r($cond);
 					if($i == 1){
-						$where = " WHERE {$cond[0]} = {$cond[1]}";
+						if($column && $column == 'custom'){
+							$where = " WHERE {$cond[0]}";
+						} else {
+							$cond[2] = isset($cond[2]) ? $cond[2] : ' = ';
+							$cond[2] = ($cond[2] == 'AND' || $cond[2] == 'OR') ? $cond[3] : ' = ';
+							$where = " WHERE {$cond[0]} {$cond[2]} {$cond[1]}";
+						}
 					} else {
-						$where .= " {$cond[2]} {$cond[0]} = {$cond[1]}";
+						if($column && $column == 'custom'){
+							$where .= " AND {$cond[0]}";
+						} else {
+							$cond[2] = isset($cond[2]) ? $cond[2] : 'AND';
+							$cond[3] = isset($cond[3]) ? $cond[3] : ' = ';
+							$where .= " {$cond[2]} {$cond[0]} {$cond[3]} {$cond[1]}";
+						}
 					}
 					$i++;
 				}
 			} else {
-				$where = " WHERE {$args['where'][0]} = {$args['where'][1]}";
+				if(isset($args['where']['custom'])){
+					$where = " WHERE {$args['where']['custom']}";
+				} else {
+					$where = " WHERE {$args['where'][0]} = {$args['where'][1]}";
+				}
 			}
 		}
 
 		$join_query = '';
 		if(isset($args['join'])){
 			foreach($args['join'] as $join){
-				$join_query .= " {$join['type']} {$join['table']} ON {$join['table']}.{$join['key']} {$join['compare']} {$this->table_name}.{$join['foreign_key']}";
+				$base_table = isset($join['base_table']) ? $join['base_table'] : $this->table_name;
+				$join_query .= " {$join['type']} {$join['table']} ON {$join['table']}.{$join['key']} {$join['compare']} {$base_table}.{$join['foreign_key']}";
 			}
 		}
 
+		$groupby = '';
+		if(isset($args['groupby'])){
+			$groupby = "GROUP BY {$args['groupby']}";
+		}
+
 		if($count) {
-			$result = $wpdb->get_results("SELECT COUNT(*) FROM $this->table_name {$join_query} {$where}");
+			$result = $wpdb->get_results("SELECT COUNT(*) FROM $this->table_name {$join_query} {$where} {$groupby} {$limits}");
 		} else {
-			$query = "SELECT {$select} FROM $this->table_name {$join_query} {$where} {$order}";
+			$query = "SELECT {$select} FROM $this->table_name {$join_query} {$where} {$groupby} {$order} {$limits}";
 			$result = $wpdb->get_results($query);
+			$result['query'] = $query;
 		}
 		return $result;
 	}
@@ -241,7 +277,6 @@ abstract class PATT_DB {
 
 		// Force fields to lower case
 		$data = array_change_key_case( $data );
-
 
 		// White list columns
 		$data = array_intersect_key( $data, $column_formats );
@@ -311,6 +346,8 @@ abstract class PATT_DB {
 			return false;
 		}
 
+		// echo $query = "DELETE FROM $this->table_name WHERE $this->primary_key = %d", $row_id;
+		$this->primary_key = isset($this->primary_key) ? $this->primary_key : 'id'; 
 		if ( false === $wpdb->query( $wpdb->prepare( "DELETE FROM $this->table_name WHERE $this->primary_key = %d", $row_id ) ) ) {
 			return false;
 		}
@@ -347,8 +384,10 @@ class WP_CUST_QUERY Extends PATT_DB {
 	}
 }
 function dd($arg) {
+/*
 	echo '<pre>';
 	print_r($arg); 
 	echo '</pre>'; 
+*/
 	die();
 }

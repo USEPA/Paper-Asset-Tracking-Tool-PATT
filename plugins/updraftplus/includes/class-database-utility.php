@@ -209,77 +209,46 @@ class UpdraftPlus_Database_Utility {
 	}
 
 	/**
-	 * Parse the SQL "create table" statement (non validating) and check whether it contains at least one generated column syntax and retrieve its all columns definitions and columns options
+	 * Parse the SQL "create table" column definition (non validating) and check whether it's a generated column and retrieve its column options
 	 *
 	 * @see https://dev.mysql.com/doc/refman/8.0/en/create-table.html
 	 * @see https://mariadb.com/kb/en/create-table/
 	 *
-	 * @param String $create_statement the SQL "CREATE TABLE" statement in which potential generated columns need to be identified
-	 * @return Array|False an array of generated column fragments (column definition, column name, generated column type, etc); false otherwise
+	 * @param String  $table_column_definition the column definition statement in which the generated column needs to be identified
+	 * @param Integer $starting_offset         the string position of the column definition in a "create table" statement
+	 * @return Array|False an array of generated column fragment (column definition, column name, generated column type, etc); false otherwise
 	 *
 	 * Example input:
 	 *
-	 *     $create_statement = "CREATE TABLE contacts (
-	 *         id INT AUTO_INCREMENT PRIMARY KEY,
-	 *         first_name VARCHAR(50) NOT NULL,
-	 *         last_name VARCHAR(50) NOT NULL,
-	 *         // the field below (fullname_virtual) is a virtual type of the generated columns
-	 *         fullname_virtual varchar(101) GENERATED ALWAYS AS (CONCAT(first_name,' ',last_name)) VIRTUAL,
-	 *         // and the one below (fullname_stored) is a stored type of the generated columns
-	 *         fullname_stored varchar(101) GENERATED ALWAYS AS (CONCAT(first_name,' ',last_name)) STORED,
-	 *         email VARCHAR(100) NOT NULL"
-	 *     );
+	 *     $column_definition = "fullname varchar(101) GENERATED ALWAYS AS (CONCAT(first_name,' ',last_name)) VIRTUAL NOT NULL COMMENT 'this is the comment',"
 	 *
 	 * Corresponding result:
 	 *
 	 *     [
-	 *         "columns" => [
-	 *             [
-	 *                 "column_definition" => "fullname varchar(101) GENERATED ALWAYS AS (CONCAT(first_name,' ',last_name)) VIRTUAL NOT NULL COMMENT 'this is the comment',",
-	 *                 "column_name" => "fullname",
-	 *                 "column_data_type_definition" => [
-	 *                     [
-	 *                        "GENERATED ALWAYS AS (CONCAT(first_name,' ',last_name))",
-	 *                        90
-	 *                     ],
-	 *                     [
-	 *                        "VIRTUAL NOT NULL",
-	 *                        123      // string position
-	 *                     ],
-	 *                     [
-	 *                        "COLUMN_FORMAT DEFAULT",
-	 *                        345      // string position
-	 *                     ]
-	 *                 ],
-	 *                 "is_virtual" => true
-	 *             ],
-	 *             [
-	 *                 etc...
-	 *             ]
+	 *         "column_definition" => "fullname varchar(101) GENERATED ALWAYS AS (CONCAT(first_name,' ',last_name)) VIRTUAL NOT NULL COMMENT 'this is the comment',",
+	 *         "column_name" => "fullname",
+	 *         "column_data_type_definition" => [
+	 *              [
+	 *                  "GENERATED ALWAYS AS (CONCAT(first_name,' ',last_name))",
+	 *                   90
+	 *              ],
+	 *              [
+	 *                   "VIRTUAL NOT NULL",
+	 *                   123 // string position
+	 *              ],
+	 *              [
+	 *                   "COMMENT 'this is the comment'",
+	 *                   345 // string position
+	 *              ]
 	 *         ],
-	 *         "column_names" => [
-	 *             [
-	 *                 "fullname_virtual",
-	 *                 "fullname_stored"
-	 *             ]
-	 *         ],
-	 *         "virtual_columns_exist" => true,
-	 *         "create_statement" => ["
-	 *             CREATE TABLE contacts (
-	 *             id INT AUTO_INCREMENT PRIMARY KEY,
-	 *             first_name VARCHAR(50) NOT NULL,
-	 *             last_name VARCHAR(50) NOT NULL,
-	 *             // the field below (fullname) is a virtual generated columns type
-	 *             fullname varchar(101) GENERATED ALWAYS AS (CONCAT(first_name,' ',last_name)) VIRTUAL,
-	 *             email VARCHAR(100) NOT NULL
-	 *         "]
+	 *         "is_virtual" => true
 	 *     ]
 	 */
-	public static function get_generated_column_info($create_statement) {
+	public static function get_generated_column_info($table_column_definition, $starting_offset) {
 
-		// check whether the create table statement contains one or more generated columns, if so then get all the columns definition
-		// https://regex101.com/r/Fy2Bkd/9
-		if (preg_match_all('/(?:,|\(|\s)\s*\`(.+)\`(.+?)(?:((?:GENERATED\s*ALWAYS\s*)?AS\s*\(.+\))([\w\s]*)(COMMENT\s*\'.*\')([\w\s]*)|((?:GENERATED\s*ALWAYS\s*)?AS\s*\(.+\))([\w\s]*))/i', $create_statement, $column_definitions, PREG_SET_ORDER | PREG_OFFSET_CAPTURE)) {
+		// check whether or not the column definition ($table_column_definition) is a generated column, if so then get all the column definitions
+		// https://regex101.com/r/Fy2Bkd/12
+		if (preg_match_all('/^\s*\`((?:[^`]|``)+)\`([^,\'"]+?)(?:((?:GENERATED\s*ALWAYS\s*)?AS\s*\(.+\))([\w\s]*)(COMMENT\s*(?:\'(?:[^\']|\'\')*\'|\"(?:[^"]|"")*\"))([\w\s]*)|((?:GENERATED\s*ALWAYS\s*)?AS\s*\(.+\)([\w\s]*)))/i', $table_column_definition, $column_definitions, PREG_SET_ORDER | PREG_OFFSET_CAPTURE)) {
 
 			if (empty($column_definitions)) return false;
 
@@ -375,38 +344,47 @@ class UpdraftPlus_Database_Utility {
 			 *  }
 			 */
 
-			$column_fragments = array();
-			$virtual_columns_exist = false;
-
 			foreach ($column_definitions as $key => $column_definition) {
-				if (empty($column_definition)) continue;
 				$data_type_definition = (!empty($column_definition[4][0]) ? $column_definition[4][0] : '').(!empty($column_definition[6][0]) ? $column_definition[6][0] : '').(!empty($column_definition[8][0]) ? $column_definition[8][0] : '');
 				// if no virtual, stored or persistent option is specified then it's virtual by default. It's not possible having two generated columns type in the column definition e.g fullname varchar(101) GENERATED ALWAYS AS (CONCAT(first_name,' ',last_name)) VIRTUAL STORED NOT NULL COMMENT 'comment text', both MySQL and MariaDB will produces an error
 				$is_virtual = preg_match('/\bvirtual\b/i', $data_type_definition) || (!preg_match('/\bstored\b/i', $data_type_definition) && !preg_match('/\bpersistent\b/i', $data_type_definition));
-				if ($is_virtual) $virtual_columns_exist = true;
+
 				$fragment = array(
 					// full syntax of the column definition
 					"column_definition" => $column_definition[0][0],
 					// the extracted column name
 					"column_name" => $column_definition[1][0],
-					'column_data_type_definition' => array_fill(0, 6, array()),
+					'column_data_type_definition' => array(),
 					"is_virtual" => $is_virtual,
 				);
-				if (!empty($column_definition[2][0])) $fragment['column_data_type_definition'][0] = $column_definition[2];
-				if (!empty($column_definition[3][0])) $fragment['column_data_type_definition'][1] = $column_definition[3];
-				if (empty($fragment['column_data_type_definition'][1]) && !empty($column_definition[7][0])) $fragment['column_data_type_definition'][1] = $column_definition[7];
-				if (!empty($column_definition[4][0])) $fragment['column_data_type_definition'][2] = $column_definition[4];
-				if (!empty($column_definition[5][0])) $fragment['column_data_type_definition'][3] = $column_definition[5];
-				if (!empty($column_definition[6][0])) $fragment['column_data_type_definition'][4] = $column_definition[6];
-				if (!empty($column_definition[8][0])) $fragment['column_data_type_definition'][5] = $column_definition[8];
-				$column_fragments['columns'][] = $fragment;
-				$column_fragments['column_names'][] = $fragment['column_name'];
+				if (!empty($column_definition[2])) {
+					$fragment['column_data_type_definition']['DATA_TYPE_TOKEN'] = $column_definition[2];
+					$fragment['column_data_type_definition']['DATA_TYPE_TOKEN'][1] = (int) $starting_offset + (int) $fragment['column_data_type_definition']['DATA_TYPE_TOKEN'][1];
+				}
+				if (!empty($column_definition[3])) {
+					$fragment['column_data_type_definition']['GENERATED_ALWAYS_TOKEN'] = $column_definition[3];
+					if (empty($fragment['column_data_type_definition'][1]) && !empty($column_definition[7][0])) $fragment['column_data_type_definition']['GENERATED_ALWAYS_TOKEN'] = $column_definition[7];
+					$fragment['column_data_type_definition']['GENERATED_ALWAYS_TOKEN'][1] = (int) $starting_offset + (int) $fragment['column_data_type_definition']['GENERATED_ALWAYS_TOKEN'][1];
+				}
+				if (!empty($column_definition[4])) {
+					$fragment['column_data_type_definition'][2] = $column_definition[4];
+					$fragment['column_data_type_definition'][2][1] = (int) $starting_offset + (int) $fragment['column_data_type_definition'][2][1];
+				}
+				if (!empty($column_definition[5])) {
+					$fragment['column_data_type_definition']['COMMENT_TOKEN'] = $column_definition[5];
+					$fragment['column_data_type_definition']['COMMENT_TOKEN'][1] = (int) $starting_offset + (int) $fragment['column_data_type_definition']['COMMENT_TOKEN'][1];
+				}
+				if (!empty($column_definition[6])) {
+					$fragment['column_data_type_definition'][4] = $column_definition[6];
+					$fragment['column_data_type_definition'][4][1] = (int) $starting_offset + (int) $fragment['column_data_type_definition'][4][1];
+				}
+				if (!empty($column_definition[8])) {
+					$fragment['column_data_type_definition'][5] = $column_definition[8];
+					$fragment['column_data_type_definition'][5][1] = (int) $starting_offset + (int) $fragment['column_data_type_definition'][5][1];
+				}
 			}
-			if ($virtual_columns_exist) $column_fragments['virtual_columns_exist'] = true;
-			$column_fragments['create_statement'] = $create_statement;
-
 		}
-		return isset($column_fragments) ? $column_fragments : false;
+		return isset($fragment) ? $fragment : false;
 	}
 
 	/**
@@ -508,6 +486,150 @@ class UpdraftPlus_Database_Utility {
 			$exist = (false == $columns) || (true == array_intersect($generated_columns, $columns));
 		}
 		return $exist;
+	}
+
+	/**
+	 * Check whether the currently running database server supports stored routines
+	 *
+	 * @return Array|WP_Error an array of booleans indicating whether or not some of syntax variations are supported, or WP_Error object if stored routine isn't supported
+	 *
+	 * Return format example:
+	 *
+	 *     [
+	 *         "is_create_or_replace_supported" => true, // true on MariaDB, false on MySQL
+	 *         "is_if_not_exists_function_supported" => true, // true on MariaDB, false on MySQL
+	 *         "is_aggregate_function_supported" => true, // true on MariaDB, false on MySQL
+	 *         "is_binary_logging_enabled" => true, // true if --bin-log is specified for both MariaDB and MySQL
+	 *         "is_function_creators_trusted" => false // the default value is false (MariaDB/MySQL)
+	 *     ]
+	 *
+	 *     OR a database error message, e.g. "Access denied for user 'root'@'localhost' to database 'wordpress'"
+	 */
+	public static function is_stored_routine_supported() {
+
+		global $wpdb;
+
+		$function_name = 'updraft_test_stored_routine';
+		$sql = array(
+			"DROP_FUNCTION" => "DROP FUNCTION IF EXISTS ".$function_name,
+			// sql to check whether stored routines is supported
+			"CREATE_FUNCTION" => "CREATE FUNCTION ".$function_name."() RETURNS tinyint(1) DETERMINISTIC READS SQL DATA RETURN true",
+			// sql to check whether create or replace syntax is supported
+			"CREATE_REPLACE_FUNCTION" => "CREATE OR REPLACE FUNCTION ".$function_name."() RETURNS tinyint(1) DETERMINISTIC READS SQL DATA RETURN true",
+			// sql to check whether if not exists syntax is supported (mariadb starting with 10.1.3)
+			"CREATE_FUNCTION_IF_NOT_EXISTS" => "CREATE FUNCTION IF NOT EXISTS ".$function_name."() RETURNS tinyint(1) DETERMINISTIC READS SQL DATA RETURN true",
+			// sql to check whether aggregate function is supported (mariadb starting with 10.3.3)
+			"CREATE_REPLACE_AGGREGATE" => "CREATE OR REPLACE AGGREGATE FUNCTION ".$function_name."() RETURNS tinyint(1) DETERMINISTIC READS SQL DATA BEGIN RETURN true; FETCH GROUP NEXT ROW; END;"
+		);
+
+		$old_val = $wpdb->suppress_errors();
+		$wpdb->query($sql['DROP_FUNCTION']);
+		$is_stored_routine_supported = $wpdb->query($sql['CREATE_FUNCTION']);
+		if ($is_stored_routine_supported) {
+			$is_binary_logging_enabled = 1 == $wpdb->get_var('SELECT @@GLOBAL.log_bin');
+			// not sure why the log_bin variable cant be retrieved on mysql 5.0, seems like there's a bug on that version, so we use another alternative to check whether or not binary logging is enabled
+			$is_binary_logging_enabled = false === $is_binary_logging_enabled ? $wpdb->get_results("SHOW GLOBAL VARIABLES LIKE 'log_bin'", ARRAY_A) : $is_binary_logging_enabled;
+			$is_binary_logging_enabled = is_array($is_binary_logging_enabled) && isset($is_binary_logging_enabled[0]['Value']) && '' != $is_binary_logging_enabled[0]['Value'] ? $is_binary_logging_enabled[0]['Value'] : $is_binary_logging_enabled;
+			$is_binary_logging_enabled = is_string($is_binary_logging_enabled) && ('ON' === strtoupper($is_binary_logging_enabled) || '1' === $is_binary_logging_enabled) ? true : $is_binary_logging_enabled;
+			$is_binary_logging_enabled = is_string($is_binary_logging_enabled) && ('OFF' === strtoupper($is_binary_logging_enabled) || '0' === $is_binary_logging_enabled) ? false : $is_binary_logging_enabled;
+			$is_stored_routine_supported = array(
+				'is_create_or_replace_supported' => $wpdb->query($sql['CREATE_REPLACE_FUNCTION']),
+				'is_if_not_exists_function_supported' => $wpdb->query($sql['CREATE_FUNCTION_IF_NOT_EXISTS']),
+				'is_aggregate_function_supported' => $wpdb->query($sql['CREATE_REPLACE_AGGREGATE']),
+				'is_binary_logging_enabled' => $is_binary_logging_enabled,
+				'is_function_creators_trusted' => 1 == $wpdb->get_var('SELECT @@GLOBAL.log_bin_trust_function_creators'),
+			);
+			$wpdb->query($sql['DROP_FUNCTION']);
+		} else {
+			$is_stored_routine_supported = new WP_Error('routine_creation_error', sprintf(__('An error occurred while attempting to check the support of stored routines creation (%s %s)', 'updraftplus'), $wpdb->last_error.' -', $sql['CREATE_FUNCTION']));
+		}
+		$wpdb->suppress_errors($old_val);
+
+		return $is_stored_routine_supported;
+	}
+
+	/**
+	 * Retrieve all the stored routines (functions and procedures) in the currently running database
+	 *
+	 * @return Array|WP_Error an array of routine statuses, or an empty array if there is no stored routine in the database, or WP_Error object on failure
+	 *
+	 * Output example:
+	 *
+	 *     [
+	 *         [
+	 *              "Db" => "wordpress",
+	 *              "Name" => "_NextVal",
+	 *              "Type" => "FUNCTION",
+	 *              "Definer" => "root@localhost",
+	 *              "Modified" => "2019-11-22 15:11:15",
+	 *              "Created" => "2019-11-22 14:20:29",
+	 *              "Security_type" => "DEFINER",
+	 *              "Comment" => "",
+	 *              "Function" => "_NextVal",
+	 *              "sql_mode" => "",
+	 *              "Create Function" => "
+	 *                  CREATE DEFINER=`root`@`localhost` FUNCTION `_NextVal`(vname VARCHAR(30)) RETURNS int(11)
+	 *                  BEGIN
+	 *                      -- Retrieve and update in single statement
+	 *                      UPDATE _sequences
+	 *                          SET next = next + 1
+	 *                          WHERE name = vname;
+	 *                      RETURN (SELECT next FROM _sequences LIMIT 1);
+	 *                  END"
+	 *         ],
+	 *         [
+	 *              "Db" => "wordpress",
+	 *              "Name" => "CreateSequence",
+	 *              "Type" => "Procedure",
+	 *              "Definer" => "root@localhost",
+	 *              "Modified" => "2019-11-22 15:11:15",
+	 *              "Created" => "2019-11-22 14:20:29",
+	 *              "Security_type" => "DEFINER",
+	 *              "Comment" => "",
+	 *              "Procedure" => "CreateSequence",
+	 *              "sql_mode" => "",
+	 *              "Create Procedure" => "
+	 *                   CREATE DEFINER=`root`@`localhost` PROCEDURE `CreateSequence`(name VARCHAR(30), start INT, inc INT)
+	 *                   BEGIN
+	 *                       -- Create a table to store sequences
+	 *                       CREATE TABLE  _sequences (
+	 *                           name VARCHAR(70) NOT NULL UNIQUE,
+	 *                           next INT NOT NULL,
+	 *                           inc INT NOT NULL,
+	 *                       );
+	 *                       -- Add the new sequence
+	 *                       INSERT INTO _sequences VALUES (name, start, inc);
+	 *                   END"
+	 *         ]
+	 *     ]
+	 */
+	public static function get_stored_routines() {
+
+		global $wpdb;
+
+		$old_val = $wpdb->suppress_errors();
+		try {
+			$err_msg = __('An error occurred while attempting to retrieve routine status (%s %s)', 'updraftplus');
+			$function_status = $wpdb->get_results($wpdb->prepare('SHOW FUNCTION STATUS WHERE DB = %s', DB_NAME), ARRAY_A);
+			if (!empty($wpdb->last_error)) throw new Exception(sprintf($err_msg, $wpdb->last_error.' -', $wpdb->last_query), 0);
+			$procedure_status = $wpdb->get_results($wpdb->prepare('SHOW PROCEDURE STATUS WHERE DB = %s', DB_NAME), ARRAY_A);
+			if (!empty($wpdb->last_error)) throw new Exception(sprintf($err_msg, $wpdb->last_error.' -', $wpdb->last_query), 0);
+			$stored_routines = array_merge((array) $function_status, (array) $procedure_status);
+			foreach ((array) $stored_routines as $key => $routine) {
+				if (empty($routine['Name']) || empty($routine['Type'])) continue;
+				$routine_name = $routine['Name'];
+				// Since routine name can include backquotes and routine name is typically enclosed with backquotes as well, the backquote escaping for the routine name can be done by adding a leading backquote
+				$quoted_escaped_routine_name = UpdraftPlus_Manipulation_Functions::backquote(str_replace('`', '``', $routine_name));
+				$routine = $wpdb->get_results($wpdb->prepare('SHOW CREATE %1$s %2$s', $routine['Type'], $quoted_escaped_routine_name), ARRAY_A);
+				if (!empty($wpdb->last_error)) throw new Exception(sprintf(__('An error occurred while attempting to retrieve the routine SQL/DDL statement (%s %s)', 'updraftplus'), $wpdb->last_error.' -', $wpdb->last_query), 1);
+				$stored_routines[$key] = array_merge($stored_routines[$key], $routine ? $routine[0] : array());
+			}
+		} catch (Exception $ex) {
+			$stored_routines = new WP_Error(1 === $ex->getCode() ? 'routine_sql_error' : 'routine_status_error', $ex->getMessage());
+		}
+		$wpdb->suppress_errors($old_val);
+
+		return $stored_routines;
 	}
 }
 

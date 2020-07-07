@@ -1,0 +1,279 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: wpsc-sla\n"
+"POT-Creation-Date: 2019-11-15 12:18+0530\n"
+"PO-Revision-Date: 2019-11-15 12:18+0530\n"
+"Last-Translator: \n"
+"Language-Team: \n"
+"Language: en\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Poedit 2.0.6\n"
+"X-Poedit-Basepath: ../www/live_backup/plugins/sla\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Poedit-SourceCharset: UTF-8\n"
+"X-Poedit-KeywordsList: __;_e\n"
+"X-Poedit-SearchPath-0: .\n"
+
+#: class-wpsc-sla-install.php:72 class-wpsc-sla.php:208
+#: includes/set_sla_settings.php:12 includes/sla_setting_pill.php:7
+msgid "SLA"
+msgstr ""
+
+#: class-wpsc-sla.php:128
+msgid "Out of SLA"
+msgstr ""
+
+#: class-wpsc-sla.php:195
+msgid "Out OF SLA"
+msgstr ""
+
+#: class-wpsc-sla.php:197
+msgid "IN SLA"
+msgstr ""
+
+#: includes/dashboard_graph/sla_dashboard_report.php:46
+msgid "Overdue tickets"
+msgstr ""
+
+#: includes/dashboard_graph/sla_dashboard_report.php:47
+msgid "in last "
+msgstr ""
+
+#: includes/dashboard_graph/sla_dashboard_report.php:50
+msgid "View More"
+msgstr ""
+
+#: includes/delete_sla_policy.php:16
+msgid "Policy deleted successfully."
+msgstr ""
+
+#: includes/get_add_sla_policy.php:13 includes/get_edit_sla_policy.php:18
+msgid "Title"
+msgstr ""
+
+#: includes/get_add_sla_policy.php:14 includes/get_edit_sla_policy.php:19
+msgid ""
+"Title to show in policy list. It will be easier to know what this policy is "
+"for."
+msgstr ""
+
+#: includes/get_add_sla_policy.php:18 includes/get_edit_sla_policy.php:23
+msgid "Time"
+msgstr ""
+
+#: includes/get_add_sla_policy.php:19 includes/get_edit_sla_policy.php:24
+msgid "Insert time."
+msgstr ""
+
+#: includes/get_add_sla_policy.php:22 includes/get_edit_sla_policy.php:28
+msgid "Minute"
+msgstr ""
+
+#: includes/get_add_sla_policy.php:23 includes/get_edit_sla_policy.php:29
+msgid "Hour"
+msgstr ""
+
+#: includes/get_add_sla_policy.php:24 includes/get_edit_sla_policy.php:30
+msgid "Day"
+msgstr ""
+
+#: includes/get_add_sla_policy.php:25 includes/get_edit_sla_policy.php:31
+msgid "Month"
+msgstr ""
+
+#: includes/get_add_sla_policy.php:26 includes/get_edit_sla_policy.php:32
+msgid "Year"
+msgstr ""
+
+#: includes/get_add_sla_policy.php:30 includes/get_edit_sla_policy.php:38
+msgid "Conditions"
+msgstr ""
+
+#: includes/get_add_sla_policy.php:31 includes/get_edit_sla_policy.php:39
+msgid "Set conditions to match to apply this policy."
+msgstr ""
+
+#: includes/get_add_sla_policy.php:43 includes/get_edit_sla_policy.php:49
+msgid "Close"
+msgstr ""
+
+#: includes/get_add_sla_policy.php:44 includes/get_edit_sla_policy.php:50
+msgid "Submit"
+msgstr ""
+
+#: includes/get_sla_settings.php:18
+msgid "Database upgrade required for existing tickets to use SLA !"
+msgstr ""
+
+#: includes/get_sla_settings.php:19
+msgid "Upgrade Now"
+msgstr ""
+
+#: includes/get_sla_settings.php:26 includes/get_sla_settings.php:31
+msgid "SLA Settings"
+msgstr ""
+
+#: includes/get_sla_settings.php:27 includes/get_sla_settings.php:58
+msgid "SLA Policy"
+msgstr ""
+
+#: includes/get_sla_settings.php:35
+msgid "Label"
+msgstr ""
+
+#: includes/get_sla_settings.php:36
+msgid "Edit label for SLA field you will see in ticket list."
+msgstr ""
+
+#: includes/get_sla_settings.php:40
+msgid "IN-SLA Color"
+msgstr ""
+
+#: includes/get_sla_settings.php:41
+msgid "Backgoround color of SLA time in ticket list when ticket is within SLA."
+msgstr ""
+
+#: includes/get_sla_settings.php:45
+msgid "OUT-SLA Color"
+msgstr ""
+
+#: includes/get_sla_settings.php:46
+msgid "Backgoround color of SLA time in ticket list when ticket is out of SLA."
+msgstr ""
+
+#: includes/get_sla_settings.php:50
+msgid "Save Changes"
+msgstr ""
+
+#: includes/get_sla_settings.php:59
+msgid "Add New"
+msgstr ""
+
+#: includes/get_sla_settings.php:161
+msgid "Add New SLA Policy"
+msgstr ""
+
+#: includes/get_sla_settings.php:176 includes/get_sla_settings.php:234
+msgid "Title should not be empty."
+msgstr ""
+
+#: includes/get_sla_settings.php:181 includes/get_sla_settings.php:239
+msgid "Time should not be empty."
+msgstr ""
+
+#: includes/get_sla_settings.php:186 includes/get_sla_settings.php:244
+msgid "At least one condition required."
+msgstr ""
+
+#: includes/get_sla_settings.php:192 includes/get_sla_settings.php:250
+msgid "Please wait ..."
+msgstr ""
+
+#: includes/get_sla_settings.php:218
+msgid "Edit SLA Policy"
+msgstr ""
+
+#: includes/get_sla_settings.php:276
+msgid "Are you sure?"
+msgstr ""
+
+#: includes/print_tl_sla.php:24
+#, php-format
+msgid "%1$s year %2$s month"
+msgstr ""
+
+#: includes/print_tl_sla.php:26
+#, php-format
+msgid "%1$s month %2$s day"
+msgstr ""
+
+#: includes/print_tl_sla.php:28
+#, php-format
+msgid "%1$s day %2$s hour"
+msgstr ""
+
+#: includes/print_tl_sla.php:30
+#, php-format
+msgid "%1$s hour %2$s min"
+msgstr ""
+
+#: includes/print_tl_sla.php:32
+#, php-format
+msgid "%1$s min %2$s sec"
+msgstr ""
+
+#: includes/print_tl_sla.php:34
+#, php-format
+msgid "%1$s sec"
+msgstr ""
+
+#: includes/set_add_sla_policy.php:29
+msgid "Policy added successfully."
+msgstr ""
+
+#: includes/set_add_sla_policy.php:31
+msgid "An error occured while creating policy."
+msgstr ""
+
+#: includes/set_edit_sla_policy.php:30
+msgid "Policy updated successfully."
+msgstr ""
+
+#: includes/set_sla_order.php:17
+msgid "SLA order saved."
+msgstr ""
+
+#: includes/set_sla_settings.php:26
+msgid "Settings saved."
+msgstr ""
+
+#: includes/sla_graph/get_sla_overdue_report.php:17
+msgid "Report Duration"
+msgstr ""
+
+#: includes/sla_graph/get_sla_overdue_report.php:22
+msgid "Last 7 Days"
+msgstr ""
+
+#: includes/sla_graph/get_sla_overdue_report.php:25
+msgid "Last 30 Days"
+msgstr ""
+
+#: includes/sla_graph/get_sla_overdue_report.php:28
+msgid "Last Month"
+msgstr ""
+
+#: includes/sla_graph/get_sla_overdue_report.php:31
+msgid "Last Quarter"
+msgstr ""
+
+#: includes/sla_graph/get_sla_overdue_report.php:34
+msgid "This Year"
+msgstr ""
+
+#: includes/sla_graph/get_sla_overdue_report.php:37
+msgid "Custom Date"
+msgstr ""
+
+#: includes/sla_graph/get_sla_overdue_report.php:44
+msgid "From Date"
+msgstr ""
+
+#: includes/sla_graph/get_sla_overdue_report.php:50
+msgid "To Date"
+msgstr ""
+
+#: includes/sla_graph/get_sla_overdue_report.php:55
+msgid "Apply"
+msgstr ""
+
+#: includes/sla_graph/get_sla_overdue_report.php:56
+msgid "Print"
+msgstr ""
+
+#: includes/sla_graph/sla_reports_by_filter.php:45
+#, php-format
+msgid "Total number of overdue tickets for period shown: %1$s"
+msgstr ""

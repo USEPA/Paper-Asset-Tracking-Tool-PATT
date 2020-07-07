@@ -168,7 +168,11 @@ switch ($company_name) {
 	}
 }
 
-
+    public function get_alert_replacement(){    
+    include WPPATT_ABSPATH . 'includes/ajax/get_alert_replacement.php';
+    die();
+    }
+    
     public function get_shipping_details(){    
     include WPPATT_ABSPATH . 'includes/ajax/get_shipping_details.php';
     die();
@@ -203,6 +207,80 @@ switch ($company_name) {
     include WPPATT_ABSPATH . 'includes/ajax/get_rfid_box_editor.php';
     die();
     }
+    
+    
+    // Added function to search for box/folder/file ID in Add Recall page 
+    public function recall_search_for_id(){
+	    include WPPATT_ABSPATH . 'includes/ajax/get_recall_search_id.php';    
+	    die();
+    }
+    
+    // Added function to search for box/folder/file ID in Add Recall page 
+    public function recall_submit(){
+	    include WPPATT_ABSPATH . 'includes/ajax/submit_recall.php';    
+	    die();
+    }
+    
+    // Added function to search and save recall shipping details
+    public function recall_get_shipping(){
+// 	    include WPPATT_ABSPATH . 'includes/ajax/recall_shipping.php';  
+	    include WPPATT_ABSPATH . 'includes/ajax/recall_shipping_multi.php';       
+	    die();
+    }    
+    
+    // Added function to search and save recall requestor details
+    public function recall_get_requestor(){
+	    include WPPATT_ABSPATH . 'includes/ajax/recall_requestor.php';    
+	    die();
+    }  
+    
+    // Added function to search and save recall request date
+    public function recall_get_date(){
+	    include WPPATT_ABSPATH . 'includes/ajax/recall_date.php';    
+	    die();
+    }  
+    
+    // Added function to 
+    public function recall_status_change(){
+	    include WPPATT_ABSPATH . 'includes/ajax/recall_status_change.php';    
+	    die();
+    }  
+    
+    // Added function to search and save recall returned date
+    public function recall_edit_multi_shipping(){
+	    include WPPATT_ABSPATH . 'includes/ajax/recall_shipping_multi.php';    
+	    die();
+    }  
+    
+    // Add settings pill for recall statuses 
+    public function get_recall_settings(){
+	    include WPPATT_ABSPATH . 'includes/admin/pages/get_recall_settings.php';    
+	    die();
+    }  
+    
+    // Add settings pill for recall statuses 
+    public function set_recall_settings(){
+	    include WPPATT_ABSPATH . 'includes/admin/pages/set_recall_settings.php';    
+	    die();
+    }  
+    
+    // Add file to cancel recall on recall details page 
+    public function recall_cancel(){
+	    include WPPATT_ABSPATH . 'includes/ajax/recall_cancel.php';    
+	    die();
+    }
+
+    
+
+    
+    // Added function to search and save recall returned date
+    public function ticket_initiate_return(){
+	    include WPPATT_ABSPATH . 'includes/ajax/return_editor.php';    
+	    die();
+    }  
+
+    
+    
   }
   
 endif;

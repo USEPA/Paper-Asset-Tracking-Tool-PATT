@@ -10,6 +10,12 @@ $wpsc_appearance_individual_ticket_page = get_option('wpsc_individual_ticket_pag
 $canned_reply_btn_css = 'background-color:'.$wpsc_appearance_individual_ticket_page['wpsc_other_reply_form_btn_bg_color'].' !important;color:'.$wpsc_appearance_individual_ticket_page['wpsc_other_reply_form_btn_text_color'].' !important;border-color:'.$wpsc_appearance_individual_ticket_page['wpsc_other_reply_form_btn_border_color'].'!important';
 
 ?>
+
+<?php
+$agent_permissions = $wpscfunction->get_current_agent_permissions();
+if (($agent_permissions['label'] == 'Administrator') || ($agent_permissions['label'] == 'Agent'))
+{
+?>
 <button type="button" onclick="javascript:wpsc_submit_canned_reply_post();" class="btn" style="<?php echo $canned_reply_btn_css?>">
 	<i class="fa fa-save"></i> <?php _e('Add Canned Reply','wpsc-canned-reply')?> 
 </button>
@@ -26,3 +32,6 @@ function wpsc_submit_canned_reply_post(){
 	   }); 
 }
 </script>
+<?php
+}
+?>

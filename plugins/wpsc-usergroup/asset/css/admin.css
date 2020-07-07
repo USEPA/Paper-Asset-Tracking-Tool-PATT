@@ -1,0 +1,4 @@
+#wpsp_company_selected_users{border: 1px solid #cebcbc; border-collapse: collapse;}
+#wpsp_company_selected_users th{border: 1px solid #cebcbc;padding: 5px;}
+#wpsp_company_selected_users td{border: 1px solid #cebcbc;padding: 5px;}
+.delete-row{color: #eb572e; cursor: pointer;}

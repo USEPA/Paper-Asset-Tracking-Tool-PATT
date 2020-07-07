@@ -34,9 +34,9 @@ $ticket_id_val = substr($id, 0, 7);
 $program_office_array_id = array();
 
 $boxlist_get_po = $wpdb->get_results(
-	"SELECT DISTINCT wpqa_wpsc_epa_program_office.acronym as program_office
+	"SELECT DISTINCT wpqa_wpsc_epa_program_office.office_acronym as program_office
 FROM wpqa_wpsc_epa_boxinfo
-INNER JOIN wpqa_wpsc_epa_program_office ON wpqa_wpsc_epa_boxinfo.program_office_id = wpqa_wpsc_epa_program_office.id
+INNER JOIN wpqa_wpsc_epa_program_office ON wpqa_wpsc_epa_boxinfo.program_office_id = wpqa_wpsc_epa_program_office.office_code
 WHERE wpqa_wpsc_epa_boxinfo.ticket_id = " . $ticket_id_val
 );
 
@@ -73,7 +73,6 @@ WHERE wpqa_wpsc_ticket.request_id = " . $id
 			echo "<h3>Request</h3>";
 			echo "<strong>Request ID:</strong> " . $id . "<br />";
 			echo "<strong>Program Office: </strong> " . $boxlist_po . "<br />";
-			echo "<strong>Request Handled by Digitization Center " . $request_info->ticket_location . "</strong><br />";
 			echo "<strong>Requestor Name:</strong> " . $request_info->customer_name . "<br />";
 			echo "<strong>Requestor Email:</strong> " . $request_info->customer_email . "<br />";
 			echo "<strong>Status:</strong> " . $request_info->ticket_status . "  <span style='color: ".$status_color." ;margin: 0px;'><i class='fas fa-circle'></i></span>
@@ -180,7 +179,7 @@ WHERE wpqa_wpsc_epa_boxinfo.box_id = '" . $id . "'"
 			$box_details_id = $box_details->pk;
 
 			$box_content = $wpdb->get_results(
-				"SELECT wpqa_wpsc_epa_folderdocinfo.folderdocinfo_id as id, wpqa_wpsc_epa_folderdocinfo.title as title, wpqa_wpsc_epa_folderdocinfo.date as date, wpqa_wpsc_epa_folderdocinfo.site_name as site, wpqa_wpsc_epa_folderdocinfo.epa_contact_email as contact, wpqa_wpsc_epa_folderdocinfo.source_format as source_format
+				"SELECT wpqa_wpsc_epa_folderdocinfo.folderdocinfo_id as id, wpqa_wpsc_epa_folderdocinfo.index_level as index_level, wpqa_wpsc_epa_folderdocinfo.title as title, wpqa_wpsc_epa_folderdocinfo.date as date, wpqa_wpsc_epa_folderdocinfo.site_name as site, wpqa_wpsc_epa_folderdocinfo.epa_contact_email as contact, wpqa_wpsc_epa_folderdocinfo.source_format as source_format
 FROM wpqa_wpsc_epa_folderdocinfo
 INNER JOIN wpqa_wpsc_epa_boxinfo ON wpqa_wpsc_epa_folderdocinfo.box_id = wpqa_wpsc_epa_boxinfo.id
 WHERE wpqa_wpsc_epa_folderdocinfo.box_id = '" . $box_details_id . "'"
@@ -189,14 +188,6 @@ WHERE wpqa_wpsc_epa_folderdocinfo.box_id = '" . $box_details_id . "'"
 
 			$request_id = $box_details->ticket;
 
-			$boxlist_il = $box_details->index_level;
-			$boxlist_il_val = '';
-			if ($boxlist_il == 1) {
-				$boxlist_il_val = "Folder";
-			} else {
-				$boxlist_il_val = "File";
-			}
-			
 				$box_details_location = $box_details->location;
 				if ($box_details_location == 'East') {
 					$box_details_location_val = "E";
@@ -216,7 +207,6 @@ WHERE wpqa_wpsc_epa_folderdocinfo.box_id = '" . $box_details_id . "'"
 			echo "<strong>Digitization Center Location:</strong> " . $box_details->location . "</strong><br />";
 			echo "<strong>Shelf Location:</strong> " . $box_details_shelf_location . "<br />";
 			echo "<strong>Record Schedule:</strong> " . $box_details->rsnum . "<br />";
-			echo "<strong>Index Level:</strong>  " . $boxlist_il_val;
 
 			$tbl = '<br /><br /><strong>Box Contents:</strong>
 <style>
@@ -231,6 +221,7 @@ WHERE wpqa_wpsc_epa_folderdocinfo.box_id = '" . $box_details_id . "'"
     <th></th>
     <th>ID</th>
     <th>Title</th>
+    <th>Index Level</th>
     <th class="desktop">Date</th>
     <th class="desktop">Contact</th>
   </tr>
@@ -239,6 +230,14 @@ WHERE wpqa_wpsc_epa_folderdocinfo.box_id = '" . $box_details_id . "'"
 
 			foreach ($box_content as $info) {
 				$boxcontent_id = $info->id;
+			$boxcontent_il = $info->index_level;
+			$boxcontent_il_val = '';
+			if ($boxcontent_il == 1) {
+				$boxcontent_il_val = "Folder";
+			} else {
+				$boxcontent_il_val = "File";
+			}
+			
 				$boxcontent_title = $info->title;
 				$boxcontent_title_truncated = (strlen($boxcontent_title) > 20) ? substr($boxcontent_title, 0, 20) . '...' : $boxcontent_title;
 				$boxcontent_date = $info->date;
@@ -250,6 +249,7 @@ WHERE wpqa_wpsc_epa_folderdocinfo.box_id = '" . $box_details_id . "'"
             <td></td>
             <td><a href="'.$subfolder_path.'/data?id=' . $boxcontent_id . '">' . $boxcontent_id . '</a></td>
             <td>' . $boxcontent_title_truncated . '</td>
+            <td>'. $boxcontent_il_val .'</td>
             <td>' . $boxcontent_date . '</td>
             <td>' . $boxcontent_contact . '</td>
             </tr>
@@ -263,23 +263,7 @@ WHERE wpqa_wpsc_epa_folderdocinfo.box_id = '" . $box_details_id . "'"
 
 		case 3:
 			$folderfile_details = $wpdb->get_row(
-				"SELECT 
-            wpqa_wpsc_epa_folderdocinfo.box_id,
-            wpqa_wpsc_epa_folderdocinfo.title, 
-            wpqa_wpsc_epa_folderdocinfo.date, 
-            wpqa_wpsc_epa_folderdocinfo.author, 
-            wpqa_wpsc_epa_folderdocinfo.record_type,
-            wpqa_wpsc_epa_folderdocinfo.site_name, 
-            wpqa_wpsc_epa_folderdocinfo.site_id, 
-            wpqa_wpsc_epa_folderdocinfo.close_date,
-            wpqa_wpsc_epa_folderdocinfo.epa_contact_email,
-            wpqa_wpsc_epa_folderdocinfo.access_type,
-            wpqa_wpsc_epa_folderdocinfo.source_format,
-            wpqa_wpsc_epa_folderdocinfo.rights, 
-            wpqa_wpsc_epa_folderdocinfo.contract_number,  
-            wpqa_wpsc_epa_folderdocinfo.grant_number,
-            wpqa_wpsc_epa_folderdocinfo.file_location,
-            wpqa_wpsc_epa_folderdocinfo.file_name
+				"SELECT *
             FROM wpqa_wpsc_epa_folderdocinfo WHERE folderdocinfo_id = '" . $id . "'"
 			);
 
@@ -295,10 +279,9 @@ WHERE wpqa_wpsc_epa_folderdocinfo.box_id = '" . $box_details_id . "'"
 			$folderfile_access_type = $folderfile_details->access_type;
 			$folderfile_source_format = $folderfile_details->source_format;
 			$folderfile_rights = $folderfile_details->rights;
-			$folderfile_contract_number = $folderfile_details->contract_number;
-			$folderfile_grant_number = $folderfile_details->grant_number;
 			$folderfile_file_location = $folderfile_details->file_location;
 			$folderfile_file_name = $folderfile_details->file_name;
+			$folderfile_folderid = $folderfile_details->folder_identifier;
 			$box_details = $wpdb->get_row(
 "SELECT wpqa_wpsc_epa_boxinfo.id, 
 wpqa_wpsc_epa_boxinfo.box_id as box_id, 
@@ -311,11 +294,11 @@ wpqa_wpsc_epa_storage_location.shelf as shelf,
 wpqa_wpsc_epa_storage_location.position as position, 
 
 wpqa_epa_record_schedule.Record_Schedule_Number as rsnum, 
-wpqa_wpsc_epa_program_office.acronym as program_office
+wpqa_wpsc_epa_program_office.office_acronym as program_office
 FROM wpqa_wpsc_epa_boxinfo
 INNER JOIN wpqa_wpsc_epa_folderdocinfo ON wpqa_wpsc_epa_boxinfo.id = wpqa_wpsc_epa_folderdocinfo.box_id
 INNER JOIN wpqa_epa_record_schedule ON wpqa_wpsc_epa_boxinfo.record_schedule_id = wpqa_epa_record_schedule.id
-INNER JOIN wpqa_wpsc_epa_program_office ON wpqa_wpsc_epa_boxinfo.program_office_id = wpqa_wpsc_epa_program_office.id
+INNER JOIN wpqa_wpsc_epa_program_office ON wpqa_wpsc_epa_boxinfo.program_office_id = wpqa_wpsc_epa_program_office.office_code
 INNER JOIN wpqa_wpsc_epa_storage_location ON wpqa_wpsc_epa_boxinfo.storage_location_id = wpqa_wpsc_epa_storage_location.id
 INNER JOIN wpqa_terms ON  wpqa_terms.term_id = wpqa_wpsc_epa_storage_location.digitization_center
 WHERE wpqa_wpsc_epa_boxinfo.id = '" . $folderfile_boxid . "'"
@@ -385,11 +368,8 @@ WHERE wpqa_wpsc_epa_boxinfo.id = '" . $folderfile_boxid . "'"
 			if (!empty($folderfile_rights)) {
 				echo "<strong>Rights:</strong> " . $folderfile_rights . "<br />";
 			}
-			if (!empty($folderfile_contract_number)) {
-				echo "<strong>Contract #:</strong> " . $folderfile_contract_number . "<br />";
-			}
-			if (!empty($folderfile_grant_number)) {
-				echo "<strong>Grant #:</strong> " . $folderfile_grant_number;
+			if (!empty($folderfile_folderid)) {
+				echo "<strong>Folder Identifier:</strong> " . $folderfile_folderid . "<br />";
 			}
 			echo "<h4>Location Information</h4>";
 

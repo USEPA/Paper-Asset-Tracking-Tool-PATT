@@ -71,6 +71,7 @@ if (!class_exists('Patt_HooksFilters'))
                     }
                 });
             </script>
+            
 <?php
         }
 
@@ -125,7 +126,8 @@ if (!class_exists('Patt_HooksFilters'))
                     $this->add_boxinfo_meta($boxinfo_id, 'prev_assigned_agent', '0');
                     $box = $boxinfo["Box"];
                 }
-                    $index_level = $boxinfo['Record Type'] == 'File' ? '01' : '02';
+                    $index_level = $boxinfo['Index Level'] == 2 ? '02' : '01';
+                    $essential_record = $boxinfo['Essential Record'] == 'Yes' ? '00' : '01'; 
                     $docinfo_id = $request_id . '-' . $boxinfo["Box"] . '-' . $index_level . "-" . $rowCounter;
                     $folderdocarray = array(
                         'folderdocinfo_id' => $docinfo_id,
@@ -139,13 +141,14 @@ if (!class_exists('Patt_HooksFilters'))
                         'access_type' => "{$boxinfo['Access Type']}",
                         'source_format' => "{$boxinfo['Source Format']}",
                         'rights' => "{$boxinfo['Rights']}",
-                        'contract_number' => "{$boxinfo['Contract #']}",
-                        'grant_number' => "{$boxinfo['Grant #']}",
+                        // 'contract_number' => "{$boxinfo['Contract #']}",
+                        // 'grant_number' => "{$boxinfo['Grant #']}",
+                        'folder_identifier' => "{$boxinfo['Folder Identifier']}",
                         // 'file_name' => '',
                         // 'file_location' => '',
-                        'index_level' => $index_level,
+                        'index_level' => "{$boxinfo['Index Level']}",
                         'box_id' => $boxinfo_id,
-                        'essential_record' => 1,// $boxinfo['Essential Records'],
+                        'essential_record' => "{$essential_record}",
                         'date_created' => date("Y-m-d H:i:s"),
                         'date_updated' => date("Y-m-d H:i:s")
                     );
@@ -328,19 +331,26 @@ if (!class_exists('Patt_HooksFilters'))
                                 var workbook = XLSX.read(data, {
                                     type: 'array'
                                 });
+                                
+                                // console.log('Test 11', workbook);
+                                
                                 var firstSheet = workbook.Sheets[workbook.SheetNames[0]];
 
                                 var result = XLSX.utils.sheet_to_json(firstSheet, {
-                                    header: 1
+                                    header: 1, raw: false
                                 });
+                                
+                                // console.log('Test 1', result);
                                 var arrayOfData = JSON.stringify(result);
+                                // console.log('Test 2', arrayOfData);
                                 var parsedData = JSON.parse(arrayOfData);
+                                // console.log('Test 3', parsedData);
                                 var arrayLength = Object.keys(parsedData).length;
 
                                 if (parsedData[2] !== undefined) {
-                                    console.log(parsedData);
+                                    // console.log(parsedData);
                                     // console.log(parsedData[1][12]);
-                                    if (parsedData[1][0] !== undefined && parsedData[1][15] !== undefined) {
+                                    if (parsedData[1][0] !== undefined && parsedData[1][16] !== undefined) {
                                         for (var count = 1; count < arrayLength; count++) {
                                             console.log(parsedData[count]);
                                             if (parsedData[count] !== undefined && parsedData[count].length > 0 && parsedData[count][0].toString().trim() != "Box") {
@@ -360,7 +370,8 @@ if (!class_exists('Patt_HooksFilters'))
                                                         parsedData[count][12],
                                                         parsedData[count][13],
                                                         parsedData[count][14],
-                                                        parsedData[count][15]
+                                                        parsedData[count][15],
+                                                        parsedData[count][16]
                                                     ]).draw().node();
                                             }
                                         }
@@ -660,9 +671,10 @@ alert(ex);
                 <th>Access Type</th>
                 <th>Source Format</th>
                 <th>Rights</th>
-                <th>Contract #</th>
-                <th>Grant #</th>
+                <th>Folder Identifier</th>
                 <th>Program Office</th>
+                <th>Index Level</th>
+                <th>Essential Record</th>
             </tr>
         </thead>
     </table>
@@ -676,10 +688,10 @@ alert(ex);
 
 <!-- End of new datatable -->
 
-<?
+<?php
             }
         }
     }
     new Patt_HooksFilters;
 }
-
+?>

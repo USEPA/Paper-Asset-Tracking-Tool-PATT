@@ -2,10 +2,10 @@
 
 global $wpdb, $current_user, $wpscfunction;
 
-$subfolder_path = site_url( '', 'relative'); 
-
 $path = preg_replace('/wp-content.*$/','',__DIR__);
 include($path.'wp-load.php');
+
+$subfolder_path = site_url( '', 'relative'); 
 
 echo '<link rel="stylesheet" type="text/css" href="' . WPPATT_PLUGIN_URL . 'includes/admin/css/jquery.seat-charts.css"/>';
 

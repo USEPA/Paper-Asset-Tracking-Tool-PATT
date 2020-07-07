@@ -9,7 +9,8 @@ if (!isset($_SESSION)) {
     session_start();    
 }
 
-$box_ids = strip_tags($_POST["box_id"]);
+
+$box_ids = strip_tags($_POST["postvarsboxid"]);
 
 //$box_id  = isset($_POST['box_id']) ? sanitize_text_field($_POST['box_id']) : '' ;
         
@@ -31,7 +32,8 @@ $patt_ticket_id = $box_details->request_id;
 
 ?>
 
-<button type="button" class="btn btn-sm wpsc_action_btn" id="wpsc_individual_refresh_btn" onclick="window.open('http://086.info/wordpress3/wp-content/plugins/pattracking/includes/ajax/pdf/box_label.php?id=<?php echo $box_ids; ?>');" style="background-color:#337ab7 !important;color:#FFFFFF !important;"><i class="fas fa-tags"></i> Regenerate Box Labels</button>
+<button type="button" class="btn btn-sm wpsc_action_btn" id="wpsc_individual_refresh_btn" onclick="window.open('<?php echo WPPATT_PLUGIN_URL; ?>includes/ajax/pdf/box_label.php?id=<?php echo $box_ids; ?>');" style="background-color:#337ab7 !important;color:#FFFFFF !important;"><i class="fas fa-tags"></i> Regenerate Box Labels</button>
+<button type="button" class="btn btn-sm wpsc_action_btn" id="wpsc_individual_destruction_completed_btn" onclick="window.open('<?php echo WPPATT_PLUGIN_URL; ?>includes/admin/pages/scripts/update_destruction.php?id=<?php echo $box_ids; ?>');" style="background-color:#337ab7 !important;color:#FFFFFF !important;"><i class="fas fa-ban"></i> Destruction Completed</button>
 
 <?php 
 $body = ob_get_clean();

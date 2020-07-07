@@ -7,6 +7,8 @@ global $wpdb, $current_user, $wpscfunction;
 
 $ticket_id 	 = isset($_POST['ticket_id']) ? intval($_POST['ticket_id']) : 0 ;
 
+$subfolder_path = site_url( '', 'relative'); 
+
 ob_start();
 ?>
 
@@ -32,60 +34,68 @@ ob_start();
   width: auto !IMPORTANT
 }
   </style>
-
         <div class="container>  
    <br />
    <div class="table-responsive">
     <div id="grid_table"></div>
    </div>  
   </div>
+<link rel="stylesheet" type="text/css" href="<?php echo WPPATT_PLUGIN_URL.'includes/admin/css/jsgrid.min.css';?>"/>
+<link rel="stylesheet" type="text/css" href="<?php echo WPPATT_PLUGIN_URL.'includes/admin/css/jsgrid-theme.min.css';?>"/>
+<script type="text/javascript" src="<?php echo WPPATT_PLUGIN_URL.'includes/admin/js/jsgrid.min.js';?>"></script>
+
 <script>
-(function ($) {
+ jQuery(document).ready(function() {
            
-    $('#grid_table').jsGrid({
+    jQuery('#grid_table').jsGrid({
 
      width: "auto",
      height: "auto",
 
-     filtering: true,
+     //filtering: true,
      inserting:true,
      editing: true,
      sorting: true,
      paging: true,
      autoload: true,
-     pageSize: 10,
+     pageSize: 20,
      pageButtonCount: 5,
      deleteConfirm: "Do you really want to delete this tracking number?",
 
      controller: {
       loadData: function(filter){
        var ticket_id = <?php echo $ticket_id; ?>; 
-       return $.ajax({
+       var subfolder = '<?php echo $subfolder_path; ?>';
+       return jQuery.ajax({
         type: "GET",
-        url: "/wordpress2/wp-content/plugins/pattracking/includes/ajax/fetch_shipping_data.php?ticket_id="+ticket_id,
+        url: subfolder+"/wp-content/plugins/pattracking/includes/ajax/fetch_shipping_data.php?ticket_id="+ticket_id,
         data: filter
        });
       },
       insertItem: function(item){
        var ticket_id = <?php echo $ticket_id; ?>; 
-       return $.ajax({
+       var subfolder = '<?php echo $subfolder_path; ?>';
+       return jQuery.ajax({
         type: "POST",
-        url: "/wordpress2/wp-content/plugins/pattracking/includes/ajax/fetch_shipping_data.php?ticket_id="+ticket_id,
+        url: subfolder+"/wp-content/plugins/pattracking/includes/ajax/fetch_shipping_data.php?ticket_id="+ticket_id,
         data:item
        });
       },
       updateItem: function(item){
        var ticket_id = <?php echo $ticket_id; ?>; 
-       return $.ajax({
+       var subfolder = '<?php echo $subfolder_path; ?>';
+       return jQuery.ajax({
         type: "PUT",
-        url: "/wordpress2/wp-content/plugins/pattracking/includes/ajax/fetch_shipping_data.php?ticket_id="+ticket_id,
+        url: subfolder+"/wp-content/plugins/pattracking/includes/ajax/fetch_shipping_data.php?ticket_id="+ticket_id,
         data: item
        });
       },
       deleteItem: function(item){
-       return $.ajax({
+       var ticket_id = <?php echo $ticket_id; ?>; 
+       var subfolder = '<?php echo $subfolder_path; ?>';
+       return jQuery.ajax({
         type: "DELETE",
-        url: "/wordpress2/wp-content/plugins/pattracking/includes/ajax/fetch_shipping_data.php",
+        url: subfolder+"/wp-content/plugins/pattracking/includes/ajax/fetch_shipping_data.php?ticket_id="+ticket_id,
         data: item
        });
       },
@@ -142,7 +152,7 @@ ob_start();
      ]
 
     });
-                })(jQuery);
+                 });
 </script>
 
 <?php 

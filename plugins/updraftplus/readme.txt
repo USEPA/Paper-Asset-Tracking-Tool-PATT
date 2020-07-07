@@ -3,7 +3,7 @@ Contributors: Backup with UpdraftPlus, DavidAnderson, DNutbourne, aporter, snigh
 Tags: backup, restore, database backup, wordpress backup, cloud backup, s3, dropbox, google drive, onedrive, ftp, backups
 Requires at least: 3.2
 Tested up to: 5.4
-Stable tag: 1.16.22
+Stable tag: 1.16.25
 Author URI: https://updraftplus.com
 Donate link: https://david.dw-perspective.org.uk/donate
 License: GPLv3 or later
@@ -36,7 +36,7 @@ You could always create your own manual backups- but using backup plugin is infi
 
 = How UpdraftPlus compares with other backup plugins: =
 
-UpdraftPlus is the most highly-rated and popular plugin out there - and for good reason. Not only is it comprehensive in terms of its features, but it's aso easy and intuitive to use. And because it has such a vast user base, it's tried and tested in a whole range of different situations and scenarios.
+UpdraftPlus is the most highly-rated and popular plugin out there - and for good reason. Not only is it comprehensive in terms of its features, but it's also easy and intuitive to use. And because it has such a vast user base, it's tried and tested in a whole range of different situations and scenarios.
 
 Unlike many other plugins, UpdraftPlus:
 
@@ -166,7 +166,58 @@ Unfortunately not; since this is free software, there’s no warranty and no gua
 
 The <a href="https://updraftplus.com/news/">UpdraftPlus backup blog</a> is the best place to learn in more detail about any important changes.
 
-N.B. Paid versions of UpdraftPlus Backup / Restore have a version number which is 1 higher in the first digit, and has an extra component on the end, but the changelog below still applies. i.e. changes listed for 1.16.17.x of the free version correspond to changes made in 2.16.17.x of the paid version.
+N.B. Paid versions of UpdraftPlus Backup / Restore have a version number which is 1 higher in the first digit, and has an extra component on the end, but the changelog below still applies. i.e. changes listed for 1.16.25.x of the free version correspond to changes made in 2.16.25.x of the paid version.
+
+= 1.16.25 - 23/May/2020 =
+
+* FIX: Dropbox since 1.16.24 was only deleting one backup files archive out of the set. i.e. Excess archives remained on Dropbox. These have to be deleted manually.
+* TWEAK: Add version to CSS and JS within filenames to prevent old versions being served after update on sites which have customisations to remove the query string
+
+= 1.16.24 - 15/May/2020 =
+
+* FEATURE: Support migration between different "generate columns" syntaxes of MySQL and MariaDB
+* FEATURE: Added the ability to choose the remote storage locations you want to send your backup to in the "Backup Now" modal
+* FIX: If non-WordPress tables are selected in the advanced 'Backup Now' options, then back them up (even if the saved setting to back them up is off). i.e. "Backup Now" over-ride options should have been taking priority.
+* FIX: Failure to restore database 'view' in some rare circumstances due to the nonexistent DEFINER account and lack of privileges
+* TWEAK: Handle binary data during backup
+* TWEAK: Add strack_st to the lists of large logging tables and tables not requiring search/replace
+* TWEAK: Make search and replace case insensitive when operating on URLs
+* TWEAK: The incremental backup notice logic
+* TWEAK: Update bundled updater class (YahnisElsts/plugin-update-checker) (paid versions) to version 4.9
+* TWEAK: Add another tweak to paid versions' update checking time algorithm
+* TWEAK: Add the options_exist() method to backup modules that did not have it
+* TWEAK: During manual backup uploads, check if the last 4 bytes are string "null" (caused by an error in uploading to Dropbox) and if so remove them. Prevents an unnecessary message about unexpected data.
+* TWEAK: Show the backup label (if specified) in the UI backup progress indicator
+* TWEAK: Added the facility to clear the list of existing migration sites
+* TWEAK: Create default instance labels
+* TWEAK: Bring list of debugging plugins up to date
+* TWEAK: Add support for the AWS Milan and Cape Town endpoints (and correct a couple of existing endpoints that had wrong references)
+
+= 1.16.23 - 01/Apr/2020 =
+
+* FEATURE: Post module handler for UpdraftCentral
+* FEATURE: Added the ability to select which database tables you want to restore
+* FIX: An apparent change in Dropbox API behaviour at a recent date was causing uploads to Dropbox to be corrupted in some circumstances in versions 1.16.21-22.
+* TWEAK: The "Backup now" options were all unselected after trying to take a manual incremental backup with no possible entities for increments
+* TWEAK: When importing a single site into a multisite remove UpdraftPlus options and cron to prevent unwanted backups
+* TWEAK: Auto select clone package based on size of the selected backup
+* TWEAK: Prevent PHP notice when logging a Google Drive account full condition
+* TWEAK: Prevent a PHP notice when Azure is deleting files on PHP 7.4
+* TWEAK: Prevent potential PHP notice if returned OneDrive quota is zero
+* TWEAK: When restoring a single site that is part of a multisite only put that single site in maintenance mode not the entire network
+* TWEAK: Remove filesize warning from the log if we successfully added the file to the zip to prevent user concern
+* TWEAK: Add page_visit_history table to list of those with low-priority data and search/replace unnecessary
+* TWEAK: Add a warning message when restoring/migrating from an older PHP version to a newer version
+* TWEAK: Set 'NO_AUTO_VALUE_ON_ZERO' sql mode on restorations, for better compatibility with MySQL 8
+* TWEAK: Add WordFence logging tables to list of optional tables
+* TWEAK: If the Google Cloud revoke call fails try again once
+* TWEAK: Catch file closed errors during uploads to Dropbox to prevent unwanted errors in the backup log and prevent user concern
+* TWEAK: Get list of supported UpdraftClone regions from updraftplus.com
+* TWEAK: Logging in backup modules will now correctly pass on arguments to main log function
+* TWEAK: Change OneDrive 'account full, expected to fail' error message to a recoverable warning
+* TWEAK: Detect non-homepage 404s and provide FAQ link after a restore
+* TWEAK: Add paging to the existing backups table to prevent long loading times for sites with a large amount of backups
+* TWEAK: Remove unwanted padding on some buttons
 
 = 1.16.22 - 17/Feb/2020 =
 
@@ -992,4 +1043,4 @@ Furthermore, reliance upon any non-English translation is at your own risk. Updr
 We recognise and thank the following for code and/or libraries used and/or modified under the terms of their open source licences; see: https://updraftplus.com/acknowledgements/
 
 == Upgrade Notice ==
-* 1.16.22: Fix a regression with some S3-compatible providers caused by a previous switch to virtual-hosted style bucket referencing. Various other small tweaks and improvements. A recommended update for all.
+* 1.16.25: Fix Dropbox deletion bug. A recommended update for all.

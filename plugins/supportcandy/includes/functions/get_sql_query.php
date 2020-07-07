@@ -114,9 +114,19 @@ foreach ($meta_query as $outer_key => $inner_query) {
 }
 
 if($search){
+//PATT BEGIN
+if (strpos($search, "id")!==false){
+parse_str(parse_url($search)['query'], $params);
+$num = $params['id'];
+$str_length = 7;
+$search = substr("000000{$num}", -$str_length);
+}
+//PATT END
   $term           = '%'.$search.'%';
   $layer1_where[] = "( " 
-                        ."t.id  LIKE '$term' OR "
+//PATT BEGIN
+."t.request_id  LIKE '$term' OR "
+//PATT END
                         ."t.customer_name  LIKE '$term' OR "
                         ."t.customer_email  LIKE '$term' OR "
                         ."t.ticket_subject  LIKE '$term' OR "

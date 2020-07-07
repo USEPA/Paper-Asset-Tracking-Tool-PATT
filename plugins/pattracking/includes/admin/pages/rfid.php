@@ -29,7 +29,7 @@ $edit_btn_css = 'background-color:'.$wpsc_appearance_individual_ticket_page['wps
 
 
 <div class="bootstrap-iso">
-  
+   
   <h3>RFID Dashboard</h3>
   
  <div id="wpsc_tickets_container" class="row" style="border-color:#1C5D8A !important;">
@@ -40,6 +40,7 @@ $edit_btn_css = 'background-color:'.$wpsc_appearance_individual_ticket_page['wps
     	<button type="button" id="wpsc_individual_ticket_list_btn" onclick="location.href='admin.php?page=wpsc-tickets';" class="btn btn-sm wpsc_action_btn" style="<?php echo $action_default_btn_css?>"><i class="fa fa-list-ul"></i> <?php _e('Ticket List','supportcandy')?></button>
 		<button type="button" class="btn btn-sm wpsc_action_btn" id="wpsc_individual_refresh_btn" onclick="window.location.reload();" style="<?php echo $action_default_btn_css?>"><i class="fas fa-retweet"></i> <?php _e('Reset Filters','supportcandy')?></button>
 		<button type="button" class="btn btn-sm wpsc_action_btn" id="wpsc_clear_rfid_btn" onclick="wpsc_clear_rfid();" style="<?php echo $action_default_btn_css?>"><i class="fas fa-eraser"></i> Clear by RFID Reader ID</button>
+        <button type="button" class="btn btn-sm wpsc_action_btn" id="editselectedbox"><i class="fas fa-edit"></i> Edit Selected Boxes</button>
   </div>
 
 </div>
@@ -119,8 +120,6 @@ color: rgb(255, 255, 255) !important;
         </thead>
     </table>
 <br /><br />
-<button type="submit" class="btn btn-primary" id="editselectedbox"><i class="fas fa-edit"></i> Edit Selected Boxes</button>
-<br /><br />
 </form>
 <link rel="stylesheet" type="text/css" href="<?php echo WPSC_PLUGIN_URL.'asset/lib/DataTables/datatables.min.css';?>"/>
 <script type="text/javascript" src="<?php echo WPSC_PLUGIN_URL.'asset/lib/DataTables/datatables.min.js';?>"></script>
@@ -153,6 +152,7 @@ jQuery(document).ready(function(){
           data.searchByReaderID = readerid;
        }
     },
+    'lengthMenu': [[10, 25, 50, 100, 500, 1000], [10, 25, 50, 100, 500, 1000]],
     'columnDefs': [
          {
             'targets': 0,
@@ -246,7 +246,7 @@ jQuery("#searchByBoxID_tag").on('paste',function(e){
 
 
 // Handle form submission event 
-   jQuery('#frm-example').on('submit', function(e){
+   jQuery('#editselectedbox').on('click', function(e){
       var form = this;
       
       var rows_selected = dataTable.column(0).checkboxes.selected();
@@ -264,7 +264,7 @@ jQuery("#searchByBoxID_tag").on('paste',function(e){
     	  wpsc_modal_open('Edit Box Information');
 		  var data = {
 		    action: 'wpsc_get_rfid_box_editor',
-		    box_id : rows_selected.join(",")
+		    postvarsboxid : rows_selected.join(",")
 		  };
 		  jQuery.post(wpsc_admin.ajax_url, data, function(response_str) {
 		    var response = JSON.parse(response_str);

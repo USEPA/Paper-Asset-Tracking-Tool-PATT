@@ -236,21 +236,24 @@ class UpdraftPlus_BackupModule_s3 extends UpdraftPlus_BackupModule {
 			case 'us-west-1':
 			case 'us-east-2':
 			case 'us-west-2':
-			case 'eu-west-2':
-			case 'eu-west-3':
-			case 'eu-north-1':
-			case 'ap-southeast-1':
-			case 'ap-southeast-2':
-			case 'ap-northeast-1':
-			case 'ap-northeast-2':
-			case 'sa-east-1':
-			case 'ca-central-1':
-			case 'us-gov-west-1':
-			case 'eu-central-1':
 			$endpoint = 's3-'.$region.'.amazonaws.com';
 				break;
+			case 'sa-east-1':
+			case 'us-gov-west-1':
+			case 'ca-central-1':
+			case 'ap-northeast-1':
+			case 'ap-northeast-2':
+			case 'ap-southeast-1':
+			case 'ap-southeast-2':
+			case 'eu-central-1':
+			case 'eu-south-1':
+			case 'eu-north-1':
+			case 'eu-west-2':
+			case 'eu-west-3':
 			case 'ap-south-1':
 			case 'me-south-1':
+			$endpoint = 's3.'.$region.'.amazonaws.com';
+				break;
 			case 'cn-north-1':
 			$endpoint = 's3.'.$region.'.amazonaws.com.cn';
 				break;
@@ -647,7 +650,15 @@ class UpdraftPlus_BackupModule_s3 extends UpdraftPlus_BackupModule {
 		return $results;
 
 	}
-
+	
+	/**
+	 * Delete a single file from the service using S3
+	 *
+	 * @param Array|String $files    - array of file names to delete
+	 * @param Array        $s3arr    - s3 service object and container details
+	 * @param Array        $sizeinfo - size of files to delete, used for quota calculation
+	 * @return Boolean|String - either a boolean true or an error code string
+	 */
 	public function delete($files, $s3arr = false, $sizeinfo = array()) {
 
 		global $updraftplus;
@@ -689,7 +700,7 @@ class UpdraftPlus_BackupModule_s3 extends UpdraftPlus_BackupModule {
 			if (!$bucket_exists) {
 				$this->log("Error: Failed to access bucket $bucket_name. Check your permissions and credentials.");
 				$this->log(sprintf(__('Error: Failed to access bucket %s. Check your permissions and credentials.', 'updraftplus'), $bucket_name), 'error');
-				return false;
+				return 'container_access_error';
 			}
 		}
 
@@ -717,7 +728,7 @@ class UpdraftPlus_BackupModule_s3 extends UpdraftPlus_BackupModule {
 			} catch (Exception $e) {
 				$this->log("delete failed (".get_class($e)."): ".$e->getMessage().' (line: '.$e->getLine().', file: '.$e->getFile().')');
 				$storage->setExceptions(false);
-				$ret = false;
+				$ret = 'file_delete_error';
 			}
 			$storage->setExceptions(false);
 

@@ -365,6 +365,54 @@ $field->slug = 'request_id';
 						 timeFormat: 'HH:mm:ss'
 					 });
 
+//PATT BEGIN
+
+jQuery( '#tf_request_id .wpsc_search_autocomplete' ).after( "<sub>Use a barcode reader or type a Request ID and <strong>press enter.</strong></sub>" );
+
+jQuery( '#tf_request_id .wpsc_search_autocomplete' ).autocomplete({
+			      disabled: true
+			        });
+			        
+jQuery(function() {
+  jQuery('#tf_request_id .wpsc_search_autocomplete').on('keyup', function(event) {
+    var url_string = jQuery(this).val();
+    var matches = /id=([^&#=]*)/.exec(url_string);
+    if (matches !== null) {
+       var paramid = matches[1].replace(/[\n\r]+/g, ' ').replace(/\s{2,}/g,' ').replace(/^\s+|\s+$/,'') ; 
+    } else {
+       var paramid = jQuery(this).val();
+    }
+    if (url_string.includes('id=')) {
+      jQuery(this).val(paramid);
+    }
+
+  })
+});
+
+		jQuery('#tf_request_id .wpsc_search_autocomplete').on('keypress', function(e) {
+			if (e.keyCode == 13) {
+			    e.preventDefault();
+                e.stopPropagation();
+                var paramid = jQuery(this).val();
+    var matches = /^\d{7}$/.exec(paramid);
+
+    if (matches !== null) {
+			        var html_str = '<li class="wpsp_filter_display_element">'
+															+'<div class="flex-container">'
+																+'<div class="wpsp_filter_display_text">'
+																	+paramid
+																	+'<input type="hidden" name="custom_filter[request_id][]" value="'+paramid+'">'
+																+'</div>'
+																+'<div class="wpsp_filter_display_remove" onclick="wpsc_remove_filter(this);"><i class="fa fa-times"></i></div>'
+															+'</div>'
+														+'</li>';
+							jQuery('#tf_request_id .wpsp_filter_display_container').append(html_str);
+							jQuery(this).val(''); return false;
+    }
+			}
+		});
+//PATT END
+		
 					jQuery( ".wpsc_search_autocomplete" ).autocomplete({
 			      minLength: 0,
 			      appendTo: jQuery('.wpsc_search_autocomplete').parent(),
@@ -634,6 +682,21 @@ var link = true;
 			}
 		});
 		
+//PATT BEGIN		
+		jQuery('#wpsc_ticket_search').on('keyup', function(event) {
+    var url_string = jQuery(this).val();
+    var matches = /id=([^&#=]*)/.exec(url_string);
+    if (matches !== null) {
+       var paramid = matches[1]; 
+    } else {
+       var paramid = jQuery(this).val();
+    }
+    if (url_string.includes('id=')) {
+      jQuery(this).val(paramid);
+    }
+});
+//PATT END
+
 		jQuery('#wpsc_load_apply_filter_btn').on("click", function(e) {
 			jQuery('#wpsc_pg_no').val('1');
 		});

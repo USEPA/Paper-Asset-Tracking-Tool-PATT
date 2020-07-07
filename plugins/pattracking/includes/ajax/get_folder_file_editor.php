@@ -35,18 +35,20 @@ ob_start();
 			$folderfile_access_type = $folderfile_details->access_type;
 			$folderfile_source_format = $folderfile_details->source_format;
 			$folderfile_rights = $folderfile_details->rights;
-			$folderfile_contract_number = $folderfile_details->contract_number;
-			$folderfile_grant_number = $folderfile_details->grant_number;
+			//$folderfile_contract_number = $folderfile_details->contract_number;
+			//$folderfile_grant_number = $folderfile_details->grant_number;
 			$folderfile_file_location = $folderfile_details->file_location;
 			$folderfile_file_name = $folderfile_details->file_name;
+			$folderfile_essential_record = $folderfile_details->essential_record;
+			$folderfile_identifier = $folderfile_details->folder_identifier;
 
 ?>
 
 <form>
 <strong>Index Level:</strong><br />
 <select id="il" name="il">
-  <option value="1">Folder</option>
-  <option value="2">File</option>
+  <option value="1" <?php if ($folderfile_il == 1 ) echo 'selected' ; ?>>Folder</option>
+  <option value="2" <?php if ($folderfile_il == 2 ) echo 'selected' ; ?>>File</option>
 </select></br></br>
 
 <?php
@@ -129,7 +131,7 @@ else {
     echo "<strong>Rights:</strong><br /><input type='text' id='rights' placeholder= 'Enter folder/file rights...'></br></br>";
 }
 
-if(!empty($folderfile_contract_number)) {
+/*if(!empty($folderfile_contract_number)) {
     echo "<strong>Contract Number:</strong><br /><input type='text' id='contract_number' placeholder= '$folderfile_contract_number'></br></br>";
 }
 else {
@@ -141,8 +143,22 @@ if(!empty($folderfile_grant_number)) {
 }
 else {
     echo "<strong>Grant Number:</strong><br /><input type='text' id='grant_number' placeholder= 'Enter grant number...'>";
+}*/
+
+if(!empty($folderfile_identifier)) {
+    echo "<strong>Folder Identifier:</strong><br /><input type='text' id='folder_identifier' placeholder= '$folderfile_identifier'><br />";
 }
+else {
+    echo "<strong>Folder Identifier:</strong><br /><input type='text' id='folder_identifier' placeholder= 'Enter folder identifier...'><br />";
+}
+
 ?>
+<br><strong>Essential Record:</strong><br />
+<select id="er" name="er">
+  <option value="1" <?php if ($folderfile_essential_record == 1 ) echo 'selected' ; ?>>Yes</option>
+  <option value="0" <?php if ($folderfile_essential_record == 0) echo 'selected' ; ?>>No</option>
+</select></br></br>
+
 <input type="hidden" id="folderfileid" name="folderfileid" value="<?php echo $folderfile_id; ?>">
 <input type="hidden" id="pattdocid" name="pattdocid" value="<?php echo $folderfile_folderdocinfoid; ?>">
 </form>
@@ -176,8 +192,10 @@ postvarsce: jQuery("#contact_email").val(),
 postvarsat: jQuery("#access_type").val(),
 postvarssf: jQuery("#source_format").val(),
 postvarsrights: jQuery("#rights").val(),
-postvarscn: jQuery("#contract_number").val(),
-postvarsgn: jQuery("#grant_number").val()
+//postvarscn: jQuery("#contract_number").val(),
+//postvarsgn: jQuery("#grant_number").val(),
+postvarser: jQuery("#er").val(),
+postvarsfi: jQuery("#folder_identifier").val()
 }, 
 
    function (response) {

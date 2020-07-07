@@ -1,0 +1,275 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: wpsc-rp\n"
+"POT-Creation-Date: 2019-11-15 12:22+0530\n"
+"PO-Revision-Date: 2019-11-15 12:22+0530\n"
+"Last-Translator: \n"
+"Language-Team: \n"
+"Language: en\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Poedit 2.0.6\n"
+"X-Poedit-Basepath: ../www/live_backup/plugins/reports\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Poedit-SourceCharset: UTF-8\n"
+"X-Poedit-KeywordsList: __;_e\n"
+"X-Poedit-SearchPath-0: .\n"
+
+#: includes/active_customers/get_active_customers_list.php:50
+#: includes/active_customers/get_active_customers_list.php:54
+msgid "Customers"
+msgstr ""
+
+#: includes/active_customers/get_active_customers_list.php:61
+msgid "Rank"
+msgstr ""
+
+#: includes/active_customers/get_active_customers_list.php:62
+msgid "Name"
+msgstr ""
+
+#: includes/active_customers/get_active_customers_list.php:63
+msgid "Email"
+msgstr ""
+
+#: includes/active_customers/get_active_customers_list.php:64
+msgid "No of Tickets"
+msgstr ""
+
+#: includes/active_customers/get_active_customers_list.php:95
+msgid "of"
+msgstr ""
+
+#: includes/active_customers/get_active_customers_list.php:95
+msgid "Pages"
+msgstr ""
+
+#: includes/active_customers/get_active_customers_report.php:17
+#: includes/all_reports.php:80
+msgid "Active Customers"
+msgstr ""
+
+#: includes/active_customers/get_active_customers_report.php:18
+msgid "Search"
+msgstr ""
+
+#: includes/active_customers/get_active_customers_report.php:23
+#: includes/category/get_category_report.php:55
+#: includes/checkbox/get_all_checkbox_report.php:57
+#: includes/dropdown/get_all_dropdown_report.php:57
+#: includes/first_response_time/get_first_response_time_reports.php:71
+#: includes/radio_button/get_all_radio_button_report.php:57
+#: includes/ticket_statistics/ticket_stats_report.php:72
+msgid "Apply"
+msgstr ""
+
+#: includes/active_customers/get_active_customers_report.php:24
+msgid "Reset Filter"
+msgstr ""
+
+#: includes/all_reports.php:45 includes/reports_setting_pill.php:7
+#: includes/rp_setting_pill.php:8 includes/rp_setting_pill.php:9
+msgid "Reports"
+msgstr ""
+
+#: includes/all_reports.php:46
+msgid "Need Help? Click Here!"
+msgstr ""
+
+#: includes/all_reports.php:52
+msgid "Search...."
+msgstr ""
+
+#: includes/all_reports.php:54
+msgid "Dashboard"
+msgstr ""
+
+#: includes/all_reports.php:55
+msgid "Ticket Statistics"
+msgstr ""
+
+#: includes/all_reports.php:56
+msgid "First Response Time"
+msgstr ""
+
+#: includes/all_reports.php:57
+msgid "Category"
+msgstr ""
+
+#: includes/category/get_category_report.php:17
+#: includes/checkbox/get_all_checkbox_report.php:19
+#: includes/dropdown/get_all_dropdown_report.php:19
+#: includes/first_response_time/get_first_response_time_reports.php:33
+#: includes/radio_button/get_all_radio_button_report.php:19
+#: includes/ticket_statistics/ticket_stats_report.php:34
+msgid "Report Duration"
+msgstr ""
+
+#: includes/category/get_category_report.php:22
+#: includes/checkbox/get_all_checkbox_report.php:24
+#: includes/dropdown/get_all_dropdown_report.php:24
+#: includes/first_response_time/get_first_response_time_reports.php:37
+#: includes/radio_button/get_all_radio_button_report.php:24
+#: includes/ticket_statistics/ticket_stats_report.php:39
+msgid "Last 7 Days"
+msgstr ""
+
+#: includes/category/get_category_report.php:25
+#: includes/checkbox/get_all_checkbox_report.php:27
+#: includes/dropdown/get_all_dropdown_report.php:27
+#: includes/first_response_time/get_first_response_time_reports.php:40
+#: includes/radio_button/get_all_radio_button_report.php:27
+#: includes/ticket_statistics/ticket_stats_report.php:42
+msgid "Last 30 Days"
+msgstr ""
+
+#: includes/category/get_category_report.php:28
+#: includes/checkbox/get_all_checkbox_report.php:30
+#: includes/dropdown/get_all_dropdown_report.php:30
+#: includes/first_response_time/get_first_response_time_reports.php:43
+#: includes/radio_button/get_all_radio_button_report.php:30
+#: includes/ticket_statistics/ticket_stats_report.php:45
+msgid "Last Month"
+msgstr ""
+
+#: includes/category/get_category_report.php:31
+#: includes/checkbox/get_all_checkbox_report.php:33
+#: includes/dropdown/get_all_dropdown_report.php:33
+#: includes/first_response_time/get_first_response_time_reports.php:46
+#: includes/radio_button/get_all_radio_button_report.php:33
+#: includes/ticket_statistics/ticket_stats_report.php:48
+msgid "Last Quarter"
+msgstr ""
+
+#: includes/category/get_category_report.php:34
+#: includes/checkbox/get_all_checkbox_report.php:36
+#: includes/dropdown/get_all_dropdown_report.php:36
+#: includes/first_response_time/get_first_response_time_reports.php:49
+#: includes/radio_button/get_all_radio_button_report.php:36
+#: includes/ticket_statistics/ticket_stats_report.php:51
+msgid "This Year"
+msgstr ""
+
+#: includes/category/get_category_report.php:37
+#: includes/checkbox/get_all_checkbox_report.php:39
+#: includes/dropdown/get_all_dropdown_report.php:39
+#: includes/first_response_time/get_first_response_time_reports.php:52
+#: includes/radio_button/get_all_radio_button_report.php:39
+#: includes/ticket_statistics/ticket_stats_report.php:54
+msgid "Custom Date"
+msgstr ""
+
+#: includes/category/get_category_report.php:44
+#: includes/checkbox/get_all_checkbox_report.php:46
+#: includes/dropdown/get_all_dropdown_report.php:46
+#: includes/radio_button/get_all_radio_button_report.php:46
+#: includes/ticket_statistics/ticket_stats_report.php:61
+msgid "From Date"
+msgstr ""
+
+#: includes/category/get_category_report.php:50
+#: includes/checkbox/get_all_checkbox_report.php:52
+#: includes/dropdown/get_all_dropdown_report.php:52
+#: includes/radio_button/get_all_radio_button_report.php:52
+#: includes/ticket_statistics/ticket_stats_report.php:67
+msgid "To Date"
+msgstr ""
+
+#: includes/category/get_category_report.php:56
+#: includes/checkbox/get_all_checkbox_report.php:58
+#: includes/dropdown/get_all_dropdown_report.php:58
+#: includes/first_response_time/get_first_response_time_reports.php:73
+#: includes/radio_button/get_all_radio_button_report.php:58
+#: includes/ticket_statistics/ticket_stats_report.php:73
+msgid "Print"
+msgstr ""
+
+#: includes/category/ticket_category_report_by_filter.php:41
+#: includes/checkbox/get_all_checkbox_report_by_filter.php:51
+#: includes/dropdown/get_all_dropdown_report_by_filter.php:51
+#: includes/radio_button/get_all_radio_button_report_by_filter.php:52
+msgid "No data found!"
+msgstr ""
+
+#: includes/dashboard/get_dashboard_report.php:46
+msgid "New tickets"
+msgstr ""
+
+#: includes/dashboard/get_dashboard_report.php:47
+#: includes/dashboard/get_dashboard_report.php:74
+msgid "in last "
+msgstr ""
+
+#: includes/dashboard/get_dashboard_report.php:50
+#: includes/dashboard/get_dashboard_report.php:77
+msgid "View More"
+msgstr ""
+
+#: includes/dashboard/get_dashboard_report.php:73
+msgid "First response time"
+msgstr ""
+
+#: includes/db_upgrade/db_version2.php:24
+#: includes/first_response_time/get_first_response_time_reports.php:23
+#: includes/ticket_statistics/ticket_stats_report.php:24
+msgid "Upgrade Now"
+msgstr ""
+
+#: includes/first_response_time/first_response_time_report_filter.php:45
+#, php-format
+msgid "Average response time for period shown: %1$s Hrs and %2$s Mins"
+msgstr ""
+
+#: includes/first_response_time/get_first_response_time_reports.php:22
+msgid "Database upgrade required for existing tickets to use First Response Time  !"
+msgstr ""
+
+#: includes/first_response_time/get_first_response_time_reports.php:60
+msgid "From Date:"
+msgstr ""
+
+#: includes/first_response_time/get_first_response_time_reports.php:66
+msgid "To Date:"
+msgstr ""
+
+#: includes/first_response_time/get_first_response_time_reports.php:72
+msgid "Recalculate"
+msgstr ""
+
+#: includes/settings/get_reports_settings.php:29
+msgid "Dashboard duration"
+msgstr ""
+
+#: includes/settings/get_reports_settings.php:30
+msgid "Select duration for dashboard reports."
+msgstr ""
+
+#: includes/settings/get_reports_settings.php:53
+msgid "Dashboard widgets"
+msgstr ""
+
+#: includes/settings/get_reports_settings.php:54
+msgid "Select which reports you want to show on dashboard."
+msgstr ""
+
+#: includes/settings/get_reports_settings.php:85
+msgid "Save Changes"
+msgstr ""
+
+#: includes/settings/save_settings.php:22
+msgid "Settings saved."
+msgstr ""
+
+#: includes/ticket_reports.php:32
+msgid "Invalid Action"
+msgstr ""
+
+#: includes/ticket_statistics/ticket_stat_report_by_filter.php:41
+#, php-format
+msgid "Total number of tickets for period shown: %1$s"
+msgstr ""
+
+#: includes/ticket_statistics/ticket_stats_report.php:23
+msgid "Database upgrade required for existing tickets!"
+msgstr ""

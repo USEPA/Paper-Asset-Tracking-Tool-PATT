@@ -17,10 +17,16 @@ if ( ! class_exists( 'wppatt_Functions' ) ) :
     include WPPATT_ABSPATH . 'includes/admin/shipping_cron.php';
     }
     
+    // CRON for Recall Status Shipping
+    //public function wppatt_recall_shipping_status_schedule(){    
+    //include WPPATT_ABSPATH . 'includes/admin/recall_shipping_status_cron.php';
+    //}
+    
     // CRON for ecms
     public function wpatt_ecms_cron_schedule(){    
     include WPPATT_ABSPATH . 'includes/admin/ecms_cron.php';
     }
+    
     
     public function addStyles(){    
         wp_register_style('wpsc-bootstrap-css', WPSC_PLUGIN_URL.'asset/css/bootstrap-iso.css?version='.WPSC_VERSION );
@@ -37,6 +43,11 @@ if ( ! class_exists( 'wppatt_Functions' ) ) :
         wp_enqueue_style('wpsc-admin-css');
         wp_enqueue_style('wpsc-modal-css');
     }
+    
+    // Add settings pill for recall statuses 
+    public function recall_settings_pill(){
+	    include WPPATT_ABSPATH . 'includes/admin/pages/recall_settings_pill.php';    
+    }  
     
 }  
 endif;

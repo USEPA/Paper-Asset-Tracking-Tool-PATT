@@ -69,6 +69,18 @@ abstract class UpdraftPlus_BackupModule {
 	}
 
 	/**
+	 * Check whether options have been set up by the user, or not
+	 * This method would normally be over-ridden by the child.
+	 *
+	 * @param Array $opts - the potential options
+	 *
+	 * @return Boolean
+	 */
+	public function options_exist($opts) { // phpcs:ignore VariableAnalysis.CodeAnalysis.VariableAnalysis.UnusedVariable
+		return false;
+	}
+
+	/**
 	 * Retrieve a list of supported features for this storage method
 	 * This method should be over-ridden by methods supporting new
 	 * features.
@@ -645,7 +657,7 @@ abstract class UpdraftPlus_BackupModule {
 
 		$prefix = $this->get_storage_label();
 
-		$updraftplus->log("$prefix: $line", $level, $uniq_id = false, $skip_dblog = false);
+		$updraftplus->log("$prefix: $line", $level, $uniq_id, $skip_dblog);
 	}
 
 	/**

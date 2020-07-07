@@ -62,6 +62,7 @@ if(apply_filters('wpsc_print_create_ticket_html',true)):
 		<div class="row create_ticket_fields_container">
 			<?php 
 			foreach ($fields as $field) {
+				do_action('print_listing_form_block', $field);
 				$form_field->print_field($field);
 			}
 			?>
@@ -163,6 +164,8 @@ if(apply_filters('wpsc_print_create_ticket_html',true)):
 		
 	</form>
 </div>
+
+<?php do_action('patt_custom_imports_tickets', WPSC_PLUGIN_URL); ?>
 
 <script type="text/javascript">
 	jQuery(document).ready(function(){
@@ -382,6 +385,8 @@ if(apply_filters('wpsc_print_create_ticket_html',true)):
     });
 		jQuery('#attachment_upload').trigger('click');
 	}
+
+	<?php do_action('patt_print_js_functions_create'); ?>
 	
 	function wpsc_submit_ticket(){
 		
@@ -533,7 +538,18 @@ if(apply_filters('wpsc_print_create_ticket_html',true)):
 		?>
 		
 		if (validation) {
-			var dataform = new FormData(jQuery('#wpsc_frm_create_ticket')[0]);
+// 			var dataform = new FormData(jQuery('#wpsc_frm_create_ticket')[0]);
+					// CR - SCroll To Top
+					jQuery("html, body").animate({ scrollTop: 0 }, "slow");
+// 			                        //New get DataTable data in the form of an
+                        var data = jQuery('#boxinfodatatable').DataTable().rows().data().toArray();
+
+                        var data = JSON.stringify(jQuery('#boxinfodatatable').toJson());
+
+                        var dataform = new FormData(jQuery('#wpsc_frm_create_ticket')[0]);
+
+                        dataform.append('boxinfo', data);
+			
 			var is_tinymce = true;
 			<?php
 

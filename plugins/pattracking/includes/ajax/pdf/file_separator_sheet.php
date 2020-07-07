@@ -34,7 +34,9 @@ if (preg_match('/^\d+$/', $GLOBALS['id'])) {
     SELECT DISTINCT a.id
     FROM wpqa_wpsc_epa_boxinfo a
     LEFT JOIN wpqa_wpsc_epa_folderdocinfo b ON b.box_id = a.id
-    WHERE b.index_level = 2 AND a.ticket_id =" .$GLOBALS['id']);
+    RIGHT JOIN wpqa_wpsc_epa_storage_location s ON a.storage_location_id = s.id
+    WHERE ((index_level = 2 AND freeze = 1) OR (index_level = 2 AND aisle <> 0 AND bay <> 0 AND shelf <> 0 AND position <> 0 AND digitization_center <> 666)) AND 
+    a.ticket_id = " .$GLOBALS['id']);
 
 //print_r($box_ids);
 
@@ -42,8 +44,9 @@ if (preg_match('/^\d+$/', $GLOBALS['id'])) {
     {
 
 $folderfile_info = $wpdb->get_results("SELECT folderdocinfo_id, title
-FROM wpqa_wpsc_epa_folderdocinfo
-WHERE box_id = " .$item->id);
+FROM wpqa_wpsc_epa_folderdocinfo, wpqa_wpsc_epa_boxinfo, wpqa_wpsc_epa_storage_location
+WHERE wpqa_wpsc_epa_folderdocinfo.box_id = wpqa_wpsc_epa_boxinfo.id AND wpqa_wpsc_epa_storage_location.id = wpqa_wpsc_epa_boxinfo.storage_location_id AND ((index_level = 2 AND aisle <> 0 AND bay <> 0 AND shelf <> 0 AND position <> 0 AND digitization_center <> 666) OR (index_level = 2 AND freeze = 1)) AND
+wpqa_wpsc_epa_folderdocinfo.box_id = " .$item->id);
 
 //print_r($folderfile_info);
 
@@ -119,8 +122,10 @@ $folderfile_array= explode(',', $GLOBALS['id']);
 foreach($folderfile_array as $item) {
 
 $folderfile_info = $wpdb->get_row("SELECT folderdocinfo_id, title
-FROM wpqa_wpsc_epa_folderdocinfo
-WHERE folderdocinfo_id = '" .$item."'");
+FROM wpqa_wpsc_epa_folderdocinfo, wpqa_wpsc_epa_boxinfo, wpqa_wpsc_epa_storage_location
+WHERE wpqa_wpsc_epa_folderdocinfo.box_id = wpqa_wpsc_epa_boxinfo.id AND wpqa_wpsc_epa_storage_location.id = wpqa_wpsc_epa_boxinfo.storage_location_id AND 
+((index_level = 2 AND aisle <> 0 AND bay <> 0 AND shelf <> 0 AND position <> 0 AND digitization_center <> 666) OR (index_level = 2 AND freeze = 1)) AND
+folderdocinfo_id = '" .$item."'");
 
 $parent = new stdClass;
 $parent->folderdocinfo_id = $folderfile_info->folderdocinfo_id;
@@ -140,14 +145,20 @@ $batch = array_chunk($final_array, $batch_of);
 foreach($batch as $b) {
 
 //Open the table and its first row
-$tbl = '<table style="width: 638px;font-size: 9px;" cellspacing="10"; nobr="true">';
-$tbl .= '<tr">';
+$tbl   =  '<style>
+                .tableWithOuterBorder{
+                    border-spacing: 80px 2px;
+                }
+                </style>';
+                
+$tbl .= '<table class="tableWithOuterBorder" style="width: 638px; font-size: 9px;" cellspacing="10" nobr="true">';
+$tbl .= '<tr>';
 
 foreach($b as $info){
 
     $folderfile_id = $info->folderdocinfo_id;
-    $folderfile_barcode =  $obj_pdf->serializeTCPDFtagParameters(array($folderfile_id, 'C128', '', '', 62, 20, 0.4, array('position'=>'S', 'border'=>false, 'padding'=>1, 'fgcolor'=>array(0,0,0), 'bgcolor'=>array(255,255,255), 'text'=>true, 'font'=>'helvetica', 'fontsize'=>8, 'stretchtext'=>4), 'N'));
-    $folderfile_title = $info->title;
+ $folderfile_barcode =  $obj_pdf->serializeTCPDFtagParameters(array($folderfile_id, 'C128', '', '', 57, 17, 0.4, array('position'=>'S', 'border'=>false, 'padding'=>1, 'fgcolor'=>array(0,0,0), 'bgcolor'=>array(255,255,255), 'text'=>true, 'font'=>'helvetica', 'fontsize'=>8, 'stretchtext'=>4), 'N'));
+$folderfile_title = $info->title;
     $folderfile_title_truncate = (strlen($folderfile_title) > 30) ? substr($folderfile_title, 0, 30) . '...' : $folderfile_title;
 
     if ($i == $maxcols) {
@@ -180,7 +191,7 @@ $obj_pdf->writeHTML($tbl, true, false, false, false, '');
 }  //end box id regex
 
     //Generate PDF
-    $obj_pdf->Output('file.pdf', 'I');
+    $obj_pdf->Output('patt_file_seperator_printout.pdf', 'I');
 
 } else {
 echo "Pass a valid ID in URL";

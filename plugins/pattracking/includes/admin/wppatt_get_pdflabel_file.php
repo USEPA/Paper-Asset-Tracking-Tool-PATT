@@ -16,8 +16,10 @@ $ticket_data = $wpscfunction->get_ticket($ticket_id);
 $status_id   	= $ticket_data['ticket_status'];
 
 // Change Status ID when going to production to reflect the term_id of the "New" status
-if ($status_id != 3) {
-	$flag_btn = true;
+
+$status_array = array(3, 67, 68, 69);
+if (!in_array($status_id, $status_array)) {
+    $flag_btn = true;
 }
 
 if($flag_btn):

@@ -54,6 +54,12 @@ if(is_user_logged_in() && !$current_user->has_cap('wpsc_agent') ){
 	$args['customer_email'] = $customer_email;
 }
 
+
+// CR - Add data to request
+$boxinfodata = $_POST["boxinfo"];
+$args['box_info'] = $boxinfodata;
+
+
 // Subject
 $ticket_subject = isset($_POST['ticket_subject']) ? sanitize_text_field($_POST['ticket_subject']) : '';
 if($ticket_subject) $args['ticket_subject'] = $ticket_subject;
@@ -141,6 +147,17 @@ $args = apply_filters( 'wpsc_before_create_ticket_args', $args);
 $ticket_id = $wpscfunction->create_ticket($args);
 $thankyou_html = $wpscfunction->replace_macro(get_option('wpsc_thankyou_html'),$ticket_id);
 $thankyou_html = apply_filters('wpsc_after_thankyou_page_button',$thankyou_html,$ticket_id);
+
+
+/**
+ * CR - ADDING NEW URL 
+*/
+$num = $ticket_id;
+$str_length = 7;
+$padded_request_id = substr("000000{$num}", -$str_length);
+$request_link = site_url().'/data/?id='.$padded_request_id;
+$thankyou_html = str_replace('{request_id}', $padded_request_id, $thankyou_html);
+$thankyou_html .= '<p><a target="_blank" href="'.$request_link .'">'.$request_link .'</a></p>';
 
 ob_start();
 ?>

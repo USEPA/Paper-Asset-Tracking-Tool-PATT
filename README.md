@@ -10,6 +10,7 @@ REMOVE
 <button type="button" id="wpsc_individual_clone_btn" onclick="wpsc_get_clone_ticket(<?php echo $ticket_id ?>)" class="btn btn-sm wpsc_action_btn" style="<?php echo $action_default_btn_css?>"><i class="far fa-clone"></i> <?php _e('Clone','supportcandy')?></button>
 <?php endif;?>
 ```
+					    
 ### Format the request id on the ticket page. 
 ###### /supportcandy/includes/admin/tickets/individual_ticket/load_individual_ticket.php
 FIND
@@ -62,7 +63,7 @@ $assigned_agent = $wpscfunction->get_ticket_meta( $ticket_id, assigned_agent, tr
 $request_data = $wpscfunction->get_ticket($ticket_id);
 $request_status = $request_data['ticket_status'];
 
-if(in_array($request_status, array('3', '4', '5', '63')) && $assigned_agent != '')
+if(in_array($request_status, array('3', '4', '5', '670', '63')) && $assigned_agent != '')
 {
 $wpscfunction->change_status($ticket_id, 64);
 }
@@ -202,7 +203,7 @@ $assigned_agent = $wpscfunction->get_ticket_meta( $ticket['id'], assigned_agent,
 $request_data = $wpscfunction->get_ticket($ticket['id']);
 $request_status = $request_data['ticket_status'];
 
-                          if(in_array($request_status, array('3', '4', '5', '63')) && $assigned_agent != '') 
+                          if(in_array($request_status, array('3', '4', '5', '670', '63')) && $assigned_agent != '') 
                           {
                             $wpscfunction->change_status($ticket['id'], 64);
                           }
@@ -290,11 +291,16 @@ wpsc_init(wpsc_setting_action,attrs);
 ```
 ### Modify menu to allow the addition of items to be displayed to digitization staff/administrators only.
 ###### /supportcandy/includes/class-wpsc-admin.php
-ABOVE
+BELOW
 ```
-add_submenu_page(
-'wpsc-tickets',
-__( 'Ticket List', 'supportcandy' ),
+      add_submenu_page(
+        'wpsc-tickets',
+        __( 'Ticket List', 'supportcandy' ),
+        __( 'Tickets', 'supportcandy' ),
+        'wpsc_agent',
+        'wpsc-tickets',
+        array($this,'tickets')
+      );
 ```
 ADD
 ```
@@ -310,6 +316,92 @@ do_action('wpsc_add_admin_page');
 COMMENT OUT
 ```
  // PATT do_action('wpsc_add_submenu_page');
+```
+### Disable status based on validation, assignment of digitization staff and box destruction.
+###### /supportcandy/includes/admin/tickets/individual_ticket/get_change_ticket_status.php
+BELOW
+```<form id="frm_get_ticket_change_status" method="post">```
+ADD
+```
+<?php
+//PATT BEGIN
+$get_assigned = $wpdb->get_row("SELECT sum(meta_value) as assigned_val FROM wpqa_wpsc_ticketmeta WHERE ticket_id = '" . $ticket_id . "' AND meta_key = 'assigned_agent' ORDER BY ticket_id DESC");
+$assigned_val = $get_assigned->assigned_val.',';
+
+$get_sum_total = $wpdb->get_row("select sum(a.total_count) as sum_total_count
+    from (
+SELECT (SELECT count(id) FROM wpqa_wpsc_epa_folderdocinfo WHERE box_id = a.id) as total_count FROM wpqa_wpsc_epa_boxinfo as a INNER JOIN wpqa_wpsc_ticket as b ON a.ticket_id = b.id WHERE b.id = '" . $ticket_id . "'
+    ) a");
+$sum_total_val = $get_sum_total->sum_total_count;
+
+$get_sum_validation = $wpdb->get_row("select sum(a.validation) as sum_validation
+    from (
+SELECT (SELECT sum(validation = 1) FROM wpqa_wpsc_epa_folderdocinfo WHERE box_id = a.id) as validation FROM wpqa_wpsc_epa_boxinfo as a INNER JOIN wpqa_wpsc_ticket as b ON a.ticket_id = b.id WHERE b.id = '" . $ticket_id . "'
+    ) a");
+$sum_validation = $get_sum_validation->sum_validation;
+
+$get_sum_destruction = $wpdb->get_row("select count(id) as count_destruction
+    from wpqa_wpsc_epa_boxinfo where ticket_id = '" . $ticket_id . "' and box_destroyed = 1");
+$count_destruction = $get_sum_destruction->count_destruction;
+
+$get_sum_boxes = $wpdb->get_row("select count(id) as box_count
+    from wpqa_wpsc_epa_boxinfo where ticket_id = '" . $ticket_id . "'");
+$count_boxes = $get_sum_boxes->box_count;
+
+$validated = '';
+$assigned = '';
+$destruction = '';
+
+if($sum_total_val == $sum_validation) {
+$validated = 1;
+} else {
+$validated = 0;
+}
+
+$validated_array = array(66,68,67,69);
+
+if($assigned_val > 0) {
+$assigned = 1;
+} else {
+$assigned = 0;
+}
+
+$assigned_array = array(3,4,670,5,63);
+
+if($count_boxes == $count_destruction) {
+$destruction = 1;
+} else {
+$destruction = 0;
+}
+
+$destruction_array = array(3,4,670,5,63,64,672,671,65,6,673,674,66);
+//PATT END
+?>
+```
+BELOW
+```$selected = $status_id == $status->term_id ? 'selected="selected"' : '';```
+ADD
+```
+//PATT BEGIN
+$disabled = '';
+if (in_array($status->term_id, $validated_array) && $validated == 0) {
+    $disabled = 'disabled';
+}
+if (in_array($status->term_id, $assigned_array) && $assigned == 1) {
+    $disabled = 'disabled';
+}
+if (in_array($status->term_id, $destruction_array) && $destruction == 1) {
+    $disabled = 'disabled';
+}
+//PATT END
+```
+ADD
+```
+$disabled
+```
+TO
+```
+echo '<option '.$selected.' value="'.$status->term_id.'" '.$disabled.'>
 ```
 ### Enable auto-assignment functionality in the change status modal window.
 ###### /supportcandy/includes/admin/tickets/individual_ticket/get_change_ticket_status.php AND
@@ -460,6 +552,185 @@ REPLACE
 //PATT
 $selected = Patt_Custom_Func::get_default_digitization_center($ticket_id) == $category->term_id ? 'selected="selected"' : '';
 ```
+### Only display digitization center selector when nothing has been initialy assigned.
+###### /supportcandy/includes/admin/tickets/individual_ticket/get_change_ticket_status.php
+ADD $wpdb to global
+```
+global $current_user,$wpscfunction,$wpdb;
+```
+FIND
+```
+	<div class="form-group">
+		<label for="wpsc_default_ticket_category"><?php _e('Ticket Category','supportcandy');?></label>
+```
+ADD ABOVE
+```
+<?php
+//PATT BEGIN
+$box_details = $wpdb->get_results(
+"SELECT wpqa_terms.term_id as digitization_center, location_status_id as location
+FROM wpqa_wpsc_epa_boxinfo
+INNER JOIN wpqa_wpsc_epa_storage_location ON wpqa_wpsc_epa_boxinfo.storage_location_id = wpqa_wpsc_epa_storage_location.id
+INNER JOIN wpqa_terms ON  wpqa_terms.term_id = wpqa_wpsc_epa_storage_location.digitization_center
+WHERE wpqa_wpsc_epa_boxinfo.ticket_id = '" . $ticket_id . "'"
+			);
+$dc_array = array();
+$pl_array = array();
+foreach ($box_details as $info) {
+$dc_details = $info->digitization_center;
+$physical_location = $info->location;
+array_push($dc_array, $dc_details);
+array_push($pl_array, $physical_location);
+}
+
+if (count(array_keys($dc_array, '666')) == count($dc_array) && !in_array('-99999', $pl_array) && !in_array(6, $pl_array)) {
+//PATT END
+?>
+```
+FIND
+```
+		echo '<option '.$selected.' value="'.$category->term_id.'">'.$wpsc_custom_category_localize['custom_category_'.$category->term_id].'</option>';
+			endforeach;
+			?>
+		</select>
+	</div>
+```
+ADD BELOW
+```
+<?php
+//PATT BEGIN
+} else {
+//PATT END
+
+echo '<input type="hidden" name="category" value="'.Patt_Custom_Func::get_default_digitization_center($ticket_id).'">';
+
+//PATT BEGIN
+}
+//PATT END
+?>
+```
+FIND
+```
+onclick="wpsc_set_change_ticket_status(<?php echo htmlentities($ticket_id)?>);
+```
+ADD AFTER
+```
+wpsc_open_ticket(<?php echo htmlentities($ticket_id)?>);
+```
+### Fix Search to accept QR Code and Request ID
+###### /supportcandy/includes/functions/get_sql_query.php
+FIND
+```
+if($search){
+```
+ADD BELOW
+```
+//PATT BEGIN
+if (strpos($search, "id")!==false){
+parse_str(parse_url($search)['query'], $params);
+$num = $params['id'];
+$str_length = 7;
+$search = substr("000000{$num}", -$str_length);
+}
+//PATT END
+```
+FIND
+```
+."t.id  LIKE '$term' OR "
+```
+REPLACE
+```
+//PATT BEGIN
+."t.request_id  LIKE '$term' OR "
+//PATT END
+```
+### Fix Advanced Search to accept QR Code and Basic Search to clear url when QR is scanned.
+###### /supportcandy/includes/admin/tickets/ticket_list/get_ticket_list.php
+FIND
+```
+jQuery( ".wpsc_search_autocomplete" ).autocomplete({
+```
+ADD ABOVE
+```
+//PATT BEGIN
+
+jQuery( '#tf_request_id .wpsc_search_autocomplete' ).after( "<sub>Use a barcode reader or type a Request ID and <strong>press enter.</strong></sub>" );
+
+jQuery( '#tf_request_id .wpsc_search_autocomplete' ).autocomplete({
+			      disabled: true
+			        });
+			        
+jQuery(function() {
+  jQuery('#tf_request_id .wpsc_search_autocomplete').on('keyup', function(event) {
+    var url_string = jQuery(this).val();
+    var matches = /id=([^&#=]*)/.exec(url_string);
+    if (matches !== null) {
+       var paramid = matches[1].replace(/[\n\r]+/g, ' ').replace(/\s{2,}/g,' ').replace(/^\s+|\s+$/,'') ; 
+    } else {
+       var paramid = jQuery(this).val();
+    }
+    if (url_string.includes('id=')) {
+      jQuery(this).val(paramid);
+    }
+
+  })
+});
+
+		jQuery('#tf_request_id .wpsc_search_autocomplete').on('keypress', function(e) {
+			if (e.keyCode == 13) {
+			    e.preventDefault();
+                e.stopPropagation();
+                var paramid = jQuery(this).val();
+    var matches = /^\d{7}$/.exec(paramid);
+
+    if (matches !== null) {
+			        var html_str = '<li class="wpsp_filter_display_element">'
+															+'<div class="flex-container">'
+																+'<div class="wpsp_filter_display_text">'
+																	+paramid
+																	+'<input type="hidden" name="custom_filter[request_id][]" value="'+paramid+'">'
+																+'</div>'
+																+'<div class="wpsp_filter_display_remove" onclick="wpsc_remove_filter(this);"><i class="fa fa-times"></i></div>'
+															+'</div>'
+														+'</li>';
+							jQuery('#tf_request_id .wpsp_filter_display_container').append(html_str);
+							jQuery(this).val(''); return false;
+    }
+			}
+		});
+//PATT END
+```
+FIND
+```
+jQuery('#wpsc_load_apply_filter_btn').on("click", function(e) {
+```
+ADD ABOVE
+```
+//PATT BEGIN		
+jQuery('#wpsc_ticket_search').on('keyup', function(event) {
+    var url_string = jQuery(this).val();
+    var matches = /id=([^&#=]*)/.exec(url_string);
+    if (matches !== null) {
+       var paramid = matches[1]; 
+    } else {
+       var paramid = jQuery(this).val();
+    }
+    if (url_string.includes('id=')) {
+      jQuery(this).val(paramid);
+    }
+});
+//PATT END
+```
+### Ensure Request Page refreshes when an agent is assigned so that the status auto updates
+###### /supportcandy/includes/admin/tickets/individual_ticket/get_change_assign_agent.php
+FIND INSIDE ONCLICK
+```
+wpsc_set_change_assign_agent(<?php echo htmlentities($ticket_id) ?>);
+```
+ADD AFTER
+```
+wpsc_open_ticket(<?php echo htmlentities($ticket_id)?>);
+```
 ### Box List Ingestion Changes
 ###### /supportcandy/includes/admin/tickets/create_ticket/load_create_ticket.php
 FIND
@@ -488,6 +759,30 @@ function wpsc_submit_ticket() {
 ADD ABOVE
 ```
 <?php do_action('patt_print_js_functions_create'); ?>
+```
+###### /supportcandy/includes/admin/tickets/create_ticket/load_create_ticket.php
+FIND
+```
+if (validation) {
+```
+ADD BELOW
+```
+//New get DataTable data in the form of an
+var data = jQuery('#boxinfodatatable').DataTable().rows().data().toArray();
+var data = JSON.stringify(jQuery('#boxinfodatatable').toJson());
+var dataform = new FormData(jQuery('#wpsc_frm_create_ticket')[0]);
+dataform.append('boxinfo', data);
+```
+###### /supportcandy/includes/admin/tickets/create_ticket/submit_ticket.php
+FIND
+```
+// Subject
+$ticket_subject = isset($_POST['ticket_subject']) ? sanitize_text_field($_POST['ticket_subject']) : '';
+```
+ADD ABOVE
+```
+$boxinfodata = $_POST["boxinfo"];
+$args['box_info'] = $boxinfodata;
 ```
 ###### /supportcandy/includes/functions/create_ticket.php
 FIND
@@ -552,3 +847,35 @@ ADD ABOVE
 ```
 $filter = apply_filters('ticket_filter_the_filter',$filter, $order_key, $order); // PATT BEGIN - Location Filtering, allows sidebar filters - PATT END	
 ```
+
+##### /supportcandy/includes/admin/tickets/individual_ticket/load_individual_ticket.php
+FIND ALL INSTANCES OF
+```
+<?php if($current_user->has_cap('wpsc_agent')): ?>
+```
+REMOVE LINE DIRECTLY BELOW
+
+##### /wpsc-canned-reply/includes/admin/wpsc_submit_canned_reply_post.php
+FIND
+```
+<button type="button" onclick="javascript:wpsc_submit_canned_reply_post();" class="btn" style="<?php echo $canned_reply_btn_css?>">
+```
+ADD ABOVE
+```
+<?php
+$agent_permissions = $wpscfunction->get_current_agent_permissions();
+if (($agent_permissions['label'] == 'Administrator') || ($agent_permissions['label'] == 'Agent'))
+{
+?>
+```
+ADD TO LAST LINE
+```
+<?php
+}
+?>
+```
+
+##### Reset counts in DB
+UPDATE wpqa_usermeta
+SET meta_value = 'a:1:{s:16:"unresolved_agent";i:0;}'
+WHERE meta_key LIKE '%%_label_counts%%'

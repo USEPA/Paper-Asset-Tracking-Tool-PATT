@@ -3,6 +3,7 @@
 $path = preg_replace('/wp-content.*$/','',__DIR__);
 include($path.'wp-load.php');
 include($path . 'wp-content/plugins/pattracking/includes/class-wppatt-custom-function.php');
+$subfolder_path = site_url( '', 'relative'); 
 
 global $wpdb;
 
@@ -30,7 +31,7 @@ if (isset($_GET['id']))
         global $wpdb;
         $array = array();
         
-        $box_result = $wpdb->get_results( "SELECT * FROM wpqa_wpsc_epa_boxinfo WHERE ticket_id = " . $GLOBALS['id']);
+        $box_result = $wpdb->get_results( "SELECT * FROM wpqa_wpsc_epa_boxinfo a INNER JOIN wpqa_wpsc_epa_storage_location b ON a.storage_location_id = b. id WHERE b.aisle <> 0 AND b.bay <> 0 AND b.shelf <> 0 AND b.position <> 0 AND b.digitization_center <> 666 AND a.ticket_id = " . $GLOBALS['id']);
 
         foreach ( $box_result as $box )
             {
@@ -48,11 +49,24 @@ if (isset($_GET['id']))
 
         $boxidArray = explode(',', $GLOBALS['id']);
 
-        return $boxidArray;
+        $array = array();
+        
+        $box_result = $wpdb->get_results( "SELECT a.box_id as box_id FROM wpqa_wpsc_epa_boxinfo a LEFT JOIN wpqa_wpsc_epa_storage_location b ON a.storage_location_id = b.id WHERE b.aisle <> 0 AND b.bay <> 0 AND b.shelf <> 0 AND b.position <> 0 AND b.digitization_center <> 666");
 
+        foreach ( $box_result as $box )
+            {
+            
+                array_push($array, $box->box_id);
+            }
+
+        $filteredresult = array_intersect($array, $boxidArray);
+        
+        return array_values($filteredresult);
+        
     }
     
     //Function to obtain location value from database
+    //don't draw pdf page if location = 'Not Assigned'
     function fetch_location()
     {
         global $wpdb;
@@ -62,7 +76,13 @@ if (isset($_GET['id']))
         FROM wpqa_wpsc_epa_boxinfo
         INNER JOIN wpqa_wpsc_epa_storage_location ON wpqa_wpsc_epa_boxinfo.storage_location_id = wpqa_wpsc_epa_storage_location.id
         INNER JOIN wpqa_terms ON wpqa_terms.term_id = wpqa_wpsc_epa_storage_location.digitization_center
-        WHERE wpqa_wpsc_epa_boxinfo.ticket_id = " . $GLOBALS['id']);
+        WHERE
+        wpqa_wpsc_epa_storage_location.aisle <> 0 AND 
+        wpqa_wpsc_epa_storage_location.bay <> 0 AND 
+        wpqa_wpsc_epa_storage_location.shelf <> 0 AND 
+        wpqa_wpsc_epa_storage_location.position <> 0 AND 
+        wpqa_wpsc_epa_storage_location.digitization_center <> 666 AND
+        wpqa_wpsc_epa_boxinfo.ticket_id = " . $GLOBALS['id']);
 
                 foreach ( $box_digitization_center as $location )
             {
@@ -79,7 +99,18 @@ if (isset($_GET['id']))
         global $wpdb;
         $array = array();
 
-        $request_program_office = $wpdb->get_results("SELECT organization_acronym FROM wpqa_wpsc_epa_boxinfo, wpqa_wpsc_epa_program_office WHERE wpqa_wpsc_epa_boxinfo.program_office_id = wpqa_wpsc_epa_program_office.office_code AND ticket_id = " . $GLOBALS['id']);
+        $request_program_office = $wpdb->get_results("SELECT b.organization_acronym FROM wpqa_wpsc_epa_boxinfo a
+        INNER JOIN wpqa_wpsc_epa_program_office b ON a.program_office_id = b.office_code
+        INNER JOIN wpqa_wpsc_epa_storage_location c ON a.storage_location_id = c.id
+        WHERE a.program_office_id = b.office_code AND 
+        c.aisle <> 0 AND 
+        c.bay <> 0 AND 
+        c.shelf <> 0 AND 
+        c.position <> 0 AND 
+        c.digitization_center <> 666 AND
+        a.ticket_id = " . $GLOBALS['id']);
+        
+        
         
         foreach($request_program_office as $program_office)
         {
@@ -95,11 +126,20 @@ if (isset($_GET['id']))
         global $wpdb;
         $array = array();
         //$request_shelf = $wpdb->get_results("SELECT aisle, bay, shelf, position FROM wpqa_wpsc_epa_boxinfo, wpqa_wpsc_epa_program_office WHERE wpqa_wpsc_epa_boxinfo.program_office_id = wpqa_wpsc_epa_program_office.id AND ticket_id = " . $GLOBALS['id']);
-        $request_shelf = $wpdb->get_results("SELECT wpqa_wpsc_epa_storage_location.aisle as aisle, wpqa_wpsc_epa_storage_location.bay as bay, wpqa_wpsc_epa_storage_location.shelf as shelf, wpqa_wpsc_epa_storage_location.position as position FROM wpqa_wpsc_epa_boxinfo, wpqa_wpsc_epa_storage_location, wpqa_wpsc_epa_program_office WHERE wpqa_wpsc_epa_boxinfo.storage_location_id = wpqa_wpsc_epa_storage_location.id AND wpqa_wpsc_epa_boxinfo.program_office_id = wpqa_wpsc_epa_program_office.office_code AND ticket_id = " . $GLOBALS['id']);
+        $request_shelf = $wpdb->get_results("SELECT wpqa_wpsc_epa_storage_location.aisle as aisle, wpqa_wpsc_epa_storage_location.bay as bay, wpqa_wpsc_epa_storage_location.shelf as shelf, wpqa_wpsc_epa_storage_location.position as position,
+            UPPER(wpqa_terms.slug) as digitization_center
+            FROM wpqa_wpsc_epa_boxinfo, wpqa_wpsc_epa_storage_location, wpqa_wpsc_epa_program_office, wpqa_terms WHERE
+            wpqa_terms.term_id = wpqa_wpsc_epa_storage_location.digitization_center AND wpqa_wpsc_epa_boxinfo.storage_location_id = wpqa_wpsc_epa_storage_location.id AND wpqa_wpsc_epa_boxinfo.program_office_id = wpqa_wpsc_epa_program_office.office_code AND 
+        wpqa_wpsc_epa_storage_location.aisle <> 0 AND 
+        wpqa_wpsc_epa_storage_location.bay <> 0 AND 
+        wpqa_wpsc_epa_storage_location.shelf <> 0 AND 
+        wpqa_wpsc_epa_storage_location.position <> 0 AND 
+        wpqa_wpsc_epa_storage_location.digitization_center <> 666 AND
+            ticket_id = " . $GLOBALS['id']);
         
         foreach($request_shelf as $location)
         {
-            array_push($array, strtoupper($location->aisle.'A_'.$location->aisle.'B_'.$location->shelf.'S_'.$location->position.'P'));
+            array_push($array, strtoupper($location->aisle.'A_'.$location->aisle.'B_'.$location->shelf.'S_'.$location->position.'P_'.$location->digitization_center));
         }
         
         return $array;
@@ -109,7 +149,16 @@ if (isset($_GET['id']))
     function fetch_create_date()
     {
         global $wpdb;
-        $request_create_date = $wpdb->get_row( "SELECT date_created FROM wpqa_wpsc_ticket WHERE id = " . $GLOBALS['id']);
+        $request_create_date = $wpdb->get_row( "SELECT a.date_created FROM wpqa_wpsc_ticket a 
+INNER JOIN wpqa_wpsc_epa_boxinfo b ON b.ticket_id = a.id
+INNER JOIN wpqa_wpsc_epa_storage_location c ON b.storage_location_id = c.id
+        WHERE
+        c.aisle <> 0 AND 
+        c.bay <> 0 AND 
+        c.shelf <> 0 AND 
+        c.position <> 0 AND 
+        c.digitization_center <> 666 AND
+        a.id = " . $GLOBALS['id']);
         
         $create_date = $request_create_date->date_created;
         $date = strtotime($create_date);
@@ -202,6 +251,9 @@ if (isset($_GET['id']))
         $obj_pdf->setPrintFooter(false);
         $obj_pdf->SetAutoPageBreak(true, 10);
         $obj_pdf->SetFont('helvetica', '', 11);
+        
+$box_not_assigned = fetch_location();
+if($box_not_assigned != 'Not Assigned') {
 
 if ((preg_match('/^\d+$/', $GLOBALS['id'])) || (preg_match("/^([0-9]{7}-[0-9]{1,4})(?:,\s*(?1))*$/", $GLOBALS['id']))) {
     
@@ -252,9 +304,10 @@ if (preg_match("/^([0-9]{7}-[0-9]{1,4})(?:,\s*(?1))*$/", $GLOBALS['id'])) {
         $box_program_office_a = $request_program_office->acronym;
     
         //$request_location_position = $wpdb->get_row("SELECT aisle, bay, shelf, position FROM wpqa_wpsc_epa_boxinfo, wpqa_wpsc_epa_program_office WHERE wpqa_wpsc_epa_boxinfo.program_office_id = wpqa_wpsc_epa_program_office.id AND box_id = '" . $box_array[$i] ."'");
-        $request_location_position = $wpdb->get_row("SELECT wpqa_wpsc_epa_storage_location.aisle as aisle, wpqa_wpsc_epa_storage_location.bay as bay, wpqa_wpsc_epa_storage_location.shelf as shelf, wpqa_wpsc_epa_storage_location.position as position FROM wpqa_wpsc_epa_storage_location, wpqa_wpsc_epa_boxinfo, wpqa_wpsc_epa_program_office  WHERE wpqa_wpsc_epa_storage_location.id = wpqa_wpsc_epa_boxinfo.storage_location_id AND wpqa_wpsc_epa_boxinfo.program_office_id = wpqa_wpsc_epa_program_office.office_code AND box_id =  '" . $box_array[$i] ."'");
+        $request_location_position = $wpdb->get_row("SELECT wpqa_wpsc_epa_storage_location.aisle as aisle, wpqa_wpsc_epa_storage_location.bay as bay, wpqa_wpsc_epa_storage_location.shelf as shelf, wpqa_wpsc_epa_storage_location.position as position,
+            UPPER(wpqa_terms.slug) as digitization_center FROM wpqa_wpsc_epa_storage_location, wpqa_wpsc_epa_boxinfo, wpqa_wpsc_epa_program_office, wpqa_terms  WHERE wpqa_terms.term_id = wpqa_wpsc_epa_storage_location.digitization_center AND wpqa_wpsc_epa_storage_location.id = wpqa_wpsc_epa_boxinfo.storage_location_id AND wpqa_wpsc_epa_boxinfo.program_office_id = wpqa_wpsc_epa_program_office.office_code AND box_id =  '" . $box_array[$i] ."'");
         
-        $request_location_position_a = $request_location_position->aisle.'A_'.$request_location_position->aisle.'B_'.$request_location_position->shelf.'S_'.$request_location_position->position.'P';
+        $request_location_position_a = $request_location_position->aisle.'A_'.$request_location_position->aisle.'B_'.$request_location_position->shelf.'S_'.$request_location_position->position.'P_'.$request_location_position->digitization_center;
 
         $request_create_date = $wpdb->get_row( "SELECT date_created FROM wpqa_wpsc_ticket WHERE id = " . $asset_ticket_id->ticket_id);
         
@@ -285,29 +338,29 @@ if (preg_match("/^([0-9]{7}-[0-9]{1,4})(?:,\s*(?1))*$/", $GLOBALS['id'])) {
             {
                 // Even
                 //1D barcode coordinates
-                $x_loc_1d = 65;
+                $x_loc_1d = 55;
                 $y_loc_1d = 70;
                 //QR barcode coordinates
                 $x_loc_2d = 155;
                 $y_loc_2d = 12;
                 //Box x of y text coordinates
-                $x_loc_b = 45;
+                $x_loc_b = 40;
                 $y_loc_b = 115;
                 //Box ID Printout coordinates
-                $x_loc_c = 90;
+                $x_loc_c = 80;
                 $y_loc_c = 97;
                 //Line seperator coordinates
-                $x_loc_l1 = 45;
+                $x_loc_l1 = 39;
                 $y_loc_l1 = 110;
                 $x_loc_l2 = 195;
                 $y_loc_l2 = 110;
                 //Box_a RFID coordinates
-                $x_loc_ba1 = 13;
+                $x_loc_ba1 = 11;
                 $y_loc_ba1 = 55;
-                $x_loc_la2 = 25;
-                $y_loc_la2 = 70;
+                $x_loc_la2 = 23;
+                $y_loc_la2 = 68.5;
                 //Location Coordinates
-                $x_loc_l = 169;
+                $x_loc_l = 152;
                 $y_loc_l = 90;
                 //Creation Date Coordinates
                 $x_loc_cd = 79;
@@ -316,14 +369,14 @@ if (preg_match("/^([0-9]{7}-[0-9]{1,4})(?:,\s*(?1))*$/", $GLOBALS['id'])) {
                 $x_loc_rid = 165;
                 $y_loc_rid = 50;
                 //EPC Vertical Text Coordinates
-                $x_loc_rfid = 15;
+                $x_loc_rfid = 12;
                 $y_loc_rfid = 124;
                 //Digitization center box regular border
                 $x_loc_digi_box_regular = 164;
                 $y_loc_digi_box_regular = 89;
                 //Digitization center box dashed border
-                $x_loc_digi_box_dashed = 160.5;
-                $y_loc_digi_box_dashed = 86;
+                $x_loc_digi_box_dashed = 148.5;
+                $y_loc_digi_box_dashed = 87;
                 //Black rectangle containing program office and month/year of request
                 $x_loc_black_rectangle = 10;
                 $y_loc_black_rectangle = 15;
@@ -340,39 +393,39 @@ if (preg_match("/^([0-9]{7}-[0-9]{1,4})(?:,\s*(?1))*$/", $GLOBALS['id'])) {
                 $x_loc_shelf = 161;
                 $y_loc_shelf = 115;
                 //Dashed border around aisle/bay/shelf/position
-                $x_loc_dashed_border = 98;
+                $x_loc_dashed_border = 86;
                 $y_loc_dashed_border = 113;
                 //aisle/bay/shelf/position
-                $x_loc_box_position = 101;
+                $x_loc_box_position = 88.5;
                 $y_loc_box_position = 115;
             }
             else
             {
                 // Odd
                 //1D barcode coordinates
-                $x_loc_1d = 65;
+                $x_loc_1d = 55;
                 $y_loc_1d = 200;
                 //QR barcode coordinates
                 $x_loc_2d = 155;
                 $y_loc_2d = 142;
                 //Box x of y text coordinates
-                $x_loc_b = 45;
+                $x_loc_b = 40;
                 $y_loc_b = 245;
                 //Box ID Printout coordinates
-                $x_loc_c = 90;
+                $x_loc_c = 80;
                 $y_loc_c = 227;
                 //Line seperator coordinates
-                $x_loc_l1 = 45;
+                $x_loc_l1 = 39;
                 $y_loc_l1 = 240;
                 $x_loc_l2 = 195;
                 $y_loc_l2 = 240;
                 //Box_a RFID coordinates
-                $x_loc_ba1 = 13;
+                $x_loc_ba1 = 11;
                 $y_loc_ba1 = 185;
-                $x_loc_la2 = 25;
+                $x_loc_la2 = 23;
                 $y_loc_la2 = 70;
                 //Location Coordinates
-                $x_loc_l = 169;
+                $x_loc_l = 152;
                 $y_loc_l = 220;                
                 //Creation Date Coordinates
                 $x_loc_cd = 79;
@@ -381,14 +434,14 @@ if (preg_match("/^([0-9]{7}-[0-9]{1,4})(?:,\s*(?1))*$/", $GLOBALS['id'])) {
                 $x_loc_rid = 165;
                 $y_loc_rid = 180;
                 //EPC Vertical Text Coordinates
-                $x_loc_rfid = 15;
+                $x_loc_rfid = 12;
                 $y_loc_rfid = 254;
                 //Digitization center box regular border
                 $x_loc_digi_box_regular = 164;
                 $y_loc_digi_box_regular = 219;
                 //Digitization center box dashed border
-                $x_loc_digi_box_dashed = 160.5;
-                $y_loc_digi_box_dashed = 216;
+                $x_loc_digi_box_dashed = 148.5;
+                $y_loc_digi_box_dashed = 217;
                 //Black rectangle containing program office and month/year of request
                 $x_loc_black_rectangle = 10;
                 $y_loc_black_rectangle = 145;
@@ -405,10 +458,10 @@ if (preg_match("/^([0-9]{7}-[0-9]{1,4})(?:,\s*(?1))*$/", $GLOBALS['id'])) {
                 $x_loc_shelf = 161;
                 $y_loc_shelf = 245;
                 //Dashed border around aisle/bay/shelf/position
-                $x_loc_dashed_border = 98;
+                $x_loc_dashed_border = 86;
                 $y_loc_dashed_border = 243;
                 //aisle/bay/shelf/position
-                $x_loc_box_position = 101;
+                $x_loc_box_position = 88.5;
                 $y_loc_box_position = 245;
             }
             //Determine box count out of total
@@ -432,10 +485,10 @@ if (preg_match("/^([0-9]{7}-[0-9]{1,4})(?:,\s*(?1))*$/", $GLOBALS['id'])) {
             //));
             
             //Digitization center box regular border
-            $obj_pdf->Rect($x_loc_digi_box_regular, $y_loc_digi_box_regular, 30, 10, '', '', array(0, 0, 0));
+            //$obj_pdf->Rect($x_loc_digi_box_regular, $y_loc_digi_box_regular, 30, 10, '', '', array(0, 0, 0));
             
             //Digitization center box dashed border
-            $obj_pdf->RoundedRect($x_loc_digi_box_dashed, $y_loc_digi_box_dashed, 37, 16, 2, '1111', null, $style_box_dash);
+            $obj_pdf->RoundedRect($x_loc_digi_box_dashed, $y_loc_digi_box_dashed, 46.5, 16, 2, '1111', null, $style_box_dash);
             
             //Black rectangle containing program office and month/year of request
             $obj_pdf->Rect($x_loc_black_rectangle, $y_loc_black_rectangle, 140, 35, 'F', '', array(0,0,0));
@@ -467,18 +520,18 @@ if (preg_match("/^([0-9]{7}-[0-9]{1,4})(?:,\s*(?1))*$/", $GLOBALS['id'])) {
 //Top half of page containing cell with aisle/bay/shelf/position  
 if (preg_match('/^\d+$/', $GLOBALS['id'])) {
             $obj_pdf->SetXY($x_loc_box_position, $y_loc_box_position);
-            $obj_pdf->SetLineStyle(array('width' => 0, 'cap' => 'butt', 'join' => 'butt', 'dash' => 0, 'color' => array(0, 0, 0)));
-            $obj_pdf->SetFont('helvetica', 'B', 25);
-            $obj_pdf->Cell(90, 13, $box_location_position[$i], 1, 0, 'C', 1);
+            $obj_pdf->SetLineStyle(array('width' => 0.5, 'cap' => 'butt', 'join' => 'butt', 'dash' => 0, 'color' => array(0, 0, 0)));
+            $obj_pdf->SetFont('helvetica', 'B', 20);
+            $obj_pdf->Cell(105, 13, $box_location_position[$i], 1, 0, 'C', 1);
 
 }
 
 //Bottom half of page containing cell with aisle/bay/shelf/position  
 if (preg_match("/^([0-9]{7}-[0-9]{1,4})(?:,\s*(?1))*$/", $GLOBALS['id'])) {
             $obj_pdf->SetXY($x_loc_box_position, $y_loc_box_position);
-            $obj_pdf->SetLineStyle(array('width' => 0, 'cap' => 'butt', 'join' => 'butt', 'dash' => 0, 'color' => array(0, 0, 0)));
-            $obj_pdf->SetFont('helvetica', 'B', 25);
-            $obj_pdf->Cell(90, 13, $request_location_position_a, 1, 0, 'C', 1);
+            $obj_pdf->SetLineStyle(array('width' => 0.5, 'cap' => 'butt', 'join' => 'butt', 'dash' => 0, 'color' => array(0, 0, 0)));
+            $obj_pdf->SetFont('helvetica', 'B', 20);
+            $obj_pdf->Cell(105, 13, $request_location_position_a, 1, 0, 'C', 1);
 
 }
             
@@ -502,7 +555,7 @@ if (preg_match("/^([0-9]{7}-[0-9]{1,4})(?:,\s*(?1))*$/", $GLOBALS['id'])) {
             $obj_pdf->SetTextColor(0,0,0);
             
             //Dashed border around aisle/bay/shelf/position
-            $obj_pdf->RoundedRect($x_loc_dashed_border, $y_loc_dashed_border, 96, 18, 2, '1111', null, $style_box_dash);
+            $obj_pdf->RoundedRect($x_loc_dashed_border, $y_loc_dashed_border, 110, 18, 2, '1111', null, $style_box_dash);
             
             //RFID Box Location
             $obj_pdf->RoundedRect($x_loc_ba1, $y_loc_ba1, $x_loc_la2, $y_loc_la2, 5, '1111', null, $style_box_dash);
@@ -551,7 +604,7 @@ $url_id = $asset_id;
 }
             //$url_key = fetch_request_key();
             //QR Code of Request
-            $url = 'http://' . $_SERVER['SERVER_NAME'] . '/wordpress3/data/?id=' . $num;
+            $url = 'http://' . $_SERVER['SERVER_NAME'] . $subfolder_path .'/index.php/data/?id=' . $num;
             //$obj_pdf->writeHTML($url);
             $obj_pdf->write2DBarcode($url, 'QRCODE,H', $x_loc_2d, $y_loc_2d, '', 50, $style_barcode, 'N');
             //$obj_pdf->Cell(150, 50, $url, 0, 1);
@@ -559,12 +612,24 @@ $url_id = $asset_id;
             
 if (preg_match('/^\d+$/', $GLOBALS['id'])) {
             //Obtain array of box locations
-            $obj_pdf->Text($x_loc_l, $y_loc_l, $box_location[$i]);
+            //$obj_pdf->Text($x_loc_l, $y_loc_l, $box_location[$i]);
+            
+            //prints digitization center for all box labels in a request
+            $obj_pdf->SetXY($x_loc_l, $y_loc_l);
+            $obj_pdf->SetLineStyle(array('width' => 0.8, 'cap' => 'butt', 'join' => 'butt', 'dash' => 0, 'color' => array(0, 0, 0)));
+            $obj_pdf->SetFont('helvetica', 'B', 20);
+            $obj_pdf->Cell(40, 10, $box_location[$i], 1, 0, 'C', 1);
 }
 
 if (preg_match("/^([0-9]{7}-[0-9]{1,4})(?:,\s*(?1))*$/", $GLOBALS['id'])) {
             //Obtain array of box locations
-            $obj_pdf->Text($x_loc_l, $y_loc_l, $box_location_a);
+            //$obj_pdf->Text($x_loc_l, $y_loc_l, $box_location_a);
+            
+            //prints digitization center for specific box labels
+            $obj_pdf->SetXY($x_loc_l, $y_loc_l);
+            $obj_pdf->SetLineStyle(array('width' => 0.8, 'cap' => 'butt', 'join' => 'butt', 'dash' => 0, 'color' => array(0, 0, 0)));
+            $obj_pdf->SetFont('helvetica', 'B', 20);
+            $obj_pdf->Cell(40, 10, $box_location_a, 1, 0, 'C', 1);
 }
 
             //set month/year text color = white
@@ -585,7 +650,8 @@ if (preg_match("/^([0-9]{7}-[0-9]{1,4})(?:,\s*(?1))*$/", $GLOBALS['id'])) {
         }
         
         //Generate PDF
-        $obj_pdf->Output('file.pdf', 'I');     
+        $obj_pdf->Output('patt_box_label_printout.pdf', 'I');     
+}
 } else {
 echo "Pass a valid ID in URL";
 }

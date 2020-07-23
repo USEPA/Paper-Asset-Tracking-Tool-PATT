@@ -1,5 +1,4 @@
  <?php  
-//testing 
 include 'db_connection.php';
  $conn = OpenCon();
 

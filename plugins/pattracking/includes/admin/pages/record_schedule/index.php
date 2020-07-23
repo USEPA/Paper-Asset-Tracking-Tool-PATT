@@ -1,5 +1,6 @@
  <?php  
- include 'db_connection.php';
+//testing 
+include 'db_connection.php';
  $conn = OpenCon();
 
  $query ="SELECT DISTINCT(Schedule_Number) AS Schedule_Number, Schedule_Title, Function_Number, Program, Applicability, Revised 

@@ -12,6 +12,7 @@ $GLOBALS['pid'] = $_GET['pid'];
 $GLOBALS['page'] = $_GET['page'];
 
 $agent_permissions = $wpscfunction->get_current_agent_permissions();
+$agent_permissions['label'];
 
 //include_once WPPATT_ABSPATH . 'includes/class-wppatt-functions.php';
 //$load_styles = new wppatt_Functions();
@@ -120,10 +121,41 @@ WHERE wpqa_terms.term_id = wpqa_wpsc_epa_storage_location.digitization_center AN
         if (($agent_permissions['label'] == 'Administrator') || ($agent_permissions['label'] == 'Agent'))
         {
         ?>
+        <!-- language of buttons change based on 0 or 1 -->
+        <?php
+        if($folderfile_validation == 0) { ?>
         <button type="button" class="btn btn-sm wpsc_action_btn" id="wpsc_individual_validation_btn" style="<?php echo $action_default_btn_css?>"<?php echo (($folderfile_rescan == 1 || $folderfile_destruction == 1) || ($folderfile_rescan == 1 && $box_destruction == 1) || $folderfile_destruction == 1 || $box_destruction == 1)? "disabled" : ""; ?>><i class="fas fa-check-circle"></i> Validate</button></button>
+        <?php
+        }
+        else { ?>
+        <button type="button" class="btn btn-sm wpsc_action_btn" id="wpsc_individual_validation_btn" style="<?php echo $action_default_btn_css?>"<?php echo (($folderfile_rescan == 1 || $folderfile_destruction == 1) || ($folderfile_rescan == 1 && $box_destruction == 1) || $folderfile_destruction == 1 || $box_destruction == 1)? "disabled" : ""; ?>><i class="fas fa-check-circle"></i> Un-Validate</button></button>
+        <?php
+        }
+        ?>
+        
+        <?php
+        if($folderfile_rescan == 0) { ?>
         <button type="button" class="btn btn-sm wpsc_action_btn" id="wpsc_individual_rescan_btn" style="<?php echo $action_default_btn_css?>"<?php echo (($folderfile_validation == 1 || $folderfile_destruction == 1) || ($folderfile_validation == 1 && $box_destruction == 1) || $folderfile_destruction == 1 || $box_destruction == 1)? "disabled" : ""; ?>><i class="fas fa-times-circle"></i> Re-Scan</button></button>
-    	<button type="button" class="btn btn-sm wpsc_action_btn" id="wpsc_individual_destruction_btn" style="<?php echo $action_default_btn_css?>"<?php echo ($box_destruction == 1 || $folderfile_freeze == 1)? "disabled" : ""; ?>><i class="fas fa-flag"></i> Unauthorize Destruction</button></button>
+       	<?php }
+       	else { ?>
+       	<button type="button" class="btn btn-sm wpsc_action_btn" id="wpsc_individual_rescan_btn" style="<?php echo $action_default_btn_css?>"<?php echo (($folderfile_validation == 1 || $folderfile_destruction == 1) || ($folderfile_validation == 1 && $box_destruction == 1) || $folderfile_destruction == 1 || $box_destruction == 1)? "disabled" : ""; ?>><i class="fas fa-times-circle"></i> Undo Re-Scan</button></button>
+        <?php } ?>
+        
+       	<?php
+       	if($folderfile_destruction == 0) { ?>
+       	<button type="button" class="btn btn-sm wpsc_action_btn" id="wpsc_individual_destruction_btn" style="<?php echo $action_default_btn_css?>"<?php echo ($box_destruction == 1 || $folderfile_freeze == 1)? "disabled" : ""; ?>><i class="fas fa-flag"></i> Unauthorize Destruction</button></button>
+    	<?php }
+    	else { ?>
+    	<button type="button" class="btn btn-sm wpsc_action_btn" id="wpsc_individual_destruction_btn" style="<?php echo $action_default_btn_css?>"<?php echo ($box_destruction == 1 || $folderfile_freeze == 1)? "disabled" : ""; ?>><i class="fas fa-flag"></i> Undo Unauthorize Destruction</button></button>
+    	<?php } ?>
+    	
+    	<?php 
+    	if($folderfile_freeze == 0) { ?>
     	<button type="button" class="btn btn-sm wpsc_action_btn" id="wpsc_individual_freeze_btn" style="<?php echo $action_default_btn_css?>"<?php echo ($folderfile_destruction == 1 || $box_destruction == 1)? "disabled" : ""; ?>><i class="fas fa-snowflake"></i> Freeze</button></button>
+        <?php }
+        else { ?>
+        <button type="button" class="btn btn-sm wpsc_action_btn" id="wpsc_individual_freeze_btn" style="<?php echo $action_default_btn_css?>"<?php echo ($folderfile_destruction == 1 || $box_destruction == 1)? "disabled" : ""; ?>><i class="fas fa-snowflake"></i> Un-Freeze</button></button>
+        <?php } ?>
         <?php
         }
         ?>	
@@ -218,8 +250,6 @@ echo '</div>';
 		  <?php } ?>		
 		  
 		  <?php 
-		  $agent_permissions = $wpscfunction->get_current_agent_permissions();
-          $agent_permissions['label'];
 		  if (($agent_permissions['label'] == 'Administrator') || ($agent_permissions['label'] == 'Agent'))
                 {
 			         echo '<a href="#" onclick="wpsc_get_folderfile_editor(' . $folderfile_id . ')"><i class="fas fa-edit fa-xs"></i></a>';
@@ -293,11 +323,67 @@ echo '</div>';
 			    echo "<strong>Essential Record:</strong> Yes <br />";
 			}
 			
-			if (!empty($folderfile_file_location) || !empty($folderfile_file_name)) {
-				echo '<strong>Link to File:</strong> <a href="' . $folderfile_file_location . '" target="_blank">' . $folderfile_file_name . '</a><br />';
-			}
-			
 ?>
+
+<?php 
+wp_get_current_user();
+
+$ticket_details = $wpdb->get_row("SELECT customer_name
+FROM wpqa_wpsc_ticket
+WHERE id = '" . $box_ticketid . "'");
+
+$ticket_user = $ticket_details->customer_name;
+
+if ((!empty($folderfile_file_location) || !empty($folderfile_file_name)) && ($agent_permissions['label'] == 'Administrator') || ($agent_permissions['label'] == 'Agent') || $current_user->nickname == $ticket_user) {
+?>
+<h3>Links to digitized files in ECMS</h3>
+<style>
+.datatable_header {
+    background-color: rgb(66, 73, 73) !important;
+    color: rgb(255, 255, 255) !important;
+    width: 204px;
+}
+</style>
+<?php
+if (preg_match('/(http|https)/', $folderfile_file_location)) {
+?>
+<table class="table table-striped table-bordered dataTable no-footer">
+  <tr>
+    <th class="datatable_header">Title</th>
+    <th class="datatable_header">URL</th>
+  </tr>
+<?php
+$count = 0;
+if (strpos($folderfile_file_location, ',') == 0) {
+$tbl = '<tr>';
+$tbl .= '<td>'.$folderfile_title.'</td>';
+$tbl .= '<td><a href="'. $folderfile_file_location . '">'.$folderfile_file_location.'</a></td>';
+$tbl .= '</tr>';
+
+echo $tbl;
+} elseif(strpos($folderfile_file_location, ',') > 0) {
+$array = explode(', ', $folderfile_file_location); //split string into array seperated by ', '
+
+foreach ($array as $url) {
+$count++;
+$tbl = '<tr>';
+$tbl .= '<td>'.$folderfile_title.' Part: '.$count.'</td>';
+$tbl .= '<td><a href="'. $url . '">'.$url.'</a></td>';
+$tbl .= '</tr>';
+
+echo $tbl;
+}
+}
+?>
+</table>
+<?php
+} else {
+echo "No url's from ECMS currently exist.";
+}
+}
+?>
+
+
 <form>
 <input type='hidden' id='doc_id' value='<?php echo $GLOBALS['id']; ?>' />
 <input type='hidden' id='page' value='<?php echo $GLOBALS['page']; ?>' />

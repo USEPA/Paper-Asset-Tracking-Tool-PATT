@@ -63,7 +63,7 @@ if (preg_match("/^[0-9]{7}-[0-9]{1,3}$/", $GLOBALS['id']) && $GLOBALS['pid'] == 
 <?php
 if (preg_match("/^[0-9]{7}-[0-9]{1,3}$/", $GLOBALS['id']) && $GLOBALS['pid'] == 'docsearch') {
 ?>
-<button type="button" class="btn btn-sm wpsc_action_btn" id="wpsc_individual_refresh_btn" onclick="location.href='admin.php?page=folderfile';" style="<?php echo $action_default_btn_css?>"><i class="fas fa-chevron-circle-left"></"></i> Back to Folder/File Dashboard</button>
+<button type="button" class="btn btn-sm wpsc_action_btn" id="wpsc_individual_refresh_btn" onclick="location.href='admin.php?page=folderfile';" style="<?php echo $action_default_btn_css?>"><i class="fas fa-chevron-circle-left"></i> Back to Folder/File Dashboard</button>
 <?php
 }
 ?>
@@ -308,7 +308,34 @@ postvarpage : jQuery('#page').val()
       //}
    });
 });
-
+// Code block for toggling edit buttons on/off when checkboxes are set
+	jQuery('#tbl_templates_box_details tbody').on('click', 'input', function () {        
+	// 	console.log('checked');
+		setTimeout(toggle_button_display, 1); //delay otherwise 
+	});
+	
+	jQuery('.dt-checkboxes-select-all').on('click', 'input', function () {        
+	 	console.log('checked');
+		setTimeout(toggle_button_display, 1); //delay otherwise 
+	});
+	
+	jQuery('#wpsc_individual_destruction_btn').attr('disabled', 'disabled');
+	jQuery('#wpsc_individual_freeze_btn').attr('disabled', 'disabled');
+	jQuery('#wpsc_individual_label_btn').attr('disabled', 'disabled');
+	
+	function toggle_button_display() {
+	//	var form = this;
+		var rows_selected = dataTable.column(0).checkboxes.selected();
+		if(rows_selected.count() > 0) {
+			jQuery('#wpsc_individual_destruction_btn').removeAttr('disabled');
+			jQuery('#wpsc_individual_freeze_btn').removeAttr('disabled');
+        	jQuery('#wpsc_individual_label_btn').removeAttr('disabled');
+	  	} else {
+	    	jQuery('#wpsc_individual_destruction_btn').attr('disabled', 'disabled');  
+	    	jQuery('#wpsc_individual_freeze_btn').attr('disabled', 'disabled');
+        	jQuery('#wpsc_individual_label_btn').attr('disabled', 'disabled');
+	  	}
+	}
 //unauthorized destruction button
 jQuery('#wpsc_individual_destruction_btn').on('click', function(e){
      var form = this;
@@ -557,6 +584,47 @@ jQuery('#freeze_alert').hide();
     
     $general_box_location = $wpdb->get_row("SELECT locations FROM wpqa_wpsc_epa_location_status, wpqa_wpsc_epa_boxinfo WHERE wpqa_wpsc_epa_boxinfo.location_status_id = wpqa_wpsc_epa_location_status.id AND wpqa_wpsc_epa_boxinfo.box_id = '" . $GLOBALS['id'] . "'");
     $location_general = $general_box_location->locations;
+    
+    
+    //
+    // Box Statuses
+    //
+    
+    // Register Box Status Taxonomy
+	if( !taxonomy_exists('wpsc_box_statuses') ) {
+		$args = array(
+			'public' => false,
+			'rewrite' => false
+		);
+		register_taxonomy( 'wpsc_box_statuses', 'wpsc_ticket', $args );
+	}
+	
+	// $box_statuses = get_tax();
+	
+	// Get List of Box Statuses
+	$box_statuses = get_terms([
+		'taxonomy'   => 'wpsc_box_statuses',
+		'hide_empty' => false,
+		'orderby'    => 'meta_value_num',
+		'order'    	 => 'ASC',
+		'meta_query' => array('order_clause' => array('key' => 'wpsc_box_status_load_order')),
+	]);
+	
+	// List of box status that do not need agents assigned.
+	$ignore_box_status = ['Pending', 'Ingestion', 'Completed', 'Dispositioned'];
+	
+	$term_id_array = array();
+	foreach( $box_statuses as $key=>$box ) {
+		if( in_array( $box->name, $ignore_box_status ) ) {
+			unset($box_statuses[$key]);
+			
+		} else {
+			$term_id_array[] = $box->term_id;
+		}
+	}
+	array_values($box_statuses);
+    
+    
  ?>
  
 	<div class="col-sm-4 col-md-3 wpsc_sidebar individual_ticket_widget">
@@ -576,6 +644,7 @@ jQuery('#freeze_alert').hide();
 			<hr class="widget_divider">
 			<!--error handling implemented, will not display a field if it is empty/null-->
 			<?php 
+				
             if(!empty($location_request_id)) {
                 echo "<div class='wpsp_sidebar_labels'><strong>Request ID: </strong> <a href='admin.php?page=wpsc-tickets&id=" . $location_request_id . "'>" . $location_request_id . "</a></div>";
             }
@@ -611,8 +680,42 @@ jQuery('#freeze_alert').hide();
             }
 			?>
 			
+			
 	</div>
 	</div>
+	
+	
+	
+	
+	<div class="col-sm-4 col-md-3 wpsc_sidebar individual_ticket_widget">
+		<div class="row" id="wpsc_status_widget" style="background-color:<?php echo $wpsc_appearance_individual_ticket_page['wpsc_ticket_widgets_bg_color']?> !important;color:<?php echo $wpsc_appearance_individual_ticket_page['wpsc_ticket_widgets_text_color']?> !important;border-color:<?php echo $wpsc_appearance_individual_ticket_page['wpsc_ticket_widgets_border_color']?> !important;">
+      <h4 class="widget_header"><i class="fa fa-arrow-circle-right"></i> Edit Assigned Staff
+			<!--only admins/agents have the ability to edit box details-->
+			<?php
+			    $agent_permissions = $wpscfunction->get_current_agent_permissions();
+                $agent_permissions['label'];
+                if (($agent_permissions['label'] == 'Administrator') || ($agent_permissions['label'] == 'Agent'))
+                {
+                  echo '<button id="wpsc_individual_change_ticket_status" onclick="wpsc_get_assigned_staff_editor('.$box_id.');" class="btn btn-sm wpsc_action_btn" style="background-color:#FFFFFF !important;color:#000000 !important;border-color:#C3C3C3!important"><i class="fas fa-edit"></i></button>';
+                } 
+			?>
+			
+			</h4>
+			<hr class="widget_divider">
+			<!--error handling implemented, will not display a field if it is empty/null-->
+			<?php 
+            
+            foreach($box_statuses as $status ) {
+	            echo '<div class="wpsp_sidebar_labels"><strong>'.$status->name.': </strong>'.'[name]'.'</div>';
+            }
+            
+            
+            
+            
+            ?>
+			
+	</div>
+	</div>	
 	
 <?php
 } else {
@@ -644,18 +747,34 @@ echo '<span style="padding-left: 10px">Please pass a valid Box ID</span>';
 <!-- Pop-up snippet end -->
 
 <script>
-		function wpsc_get_box_editor(box_id){
+function wpsc_get_box_editor(box_id){
 
-		  wpsc_modal_open('Edit Box Details');
-		  var data = {
-		    action: 'wpsc_get_box_editor',
-		    box_id: box_id
-		  };
-		  jQuery.post(wpsc_admin.ajax_url, data, function(response_str) {
-		    var response = JSON.parse(response_str);
-		    jQuery('#wpsc_popup_body').html(response.body);
-		    jQuery('#wpsc_popup_footer').html(response.footer);
-		    jQuery('#wpsc_cat_name').focus();
-		  });  
-		}
+	wpsc_modal_open('Edit Box Details');
+	var data = {
+		action: 'wpsc_get_box_editor',
+		box_id: box_id
+	};
+	jQuery.post(wpsc_admin.ajax_url, data, function(response_str) {
+		var response = JSON.parse(response_str);
+		jQuery('#wpsc_popup_body').html(response.body);
+		jQuery('#wpsc_popup_footer').html(response.footer);
+		jQuery('#wpsc_cat_name').focus();
+	});  
+}
+
+function wpsc_get_assigned_staff_editor(box_id){
+
+	wpsc_modal_open('Edit Assigned Staff');
+	var data = {
+		action: 'wppatt_assign_agents',
+	    item_ids: box_id,
+	    type: 'edit'
+	};
+	jQuery.post(wpsc_admin.ajax_url, data, function(response_str) {
+		var response = JSON.parse(response_str);
+		jQuery('#wpsc_popup_body').html(response.body);
+		jQuery('#wpsc_popup_footer').html(response.footer);
+		jQuery('#wpsc_cat_name').focus();
+	});  
+}
 </script>

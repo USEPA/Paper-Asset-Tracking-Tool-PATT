@@ -93,6 +93,27 @@ Enter one or more Document IDs:<br />
            <option value='West CUI'>West CUI</option>
            <option value='Not Assigned'>Not Assigned</option>
          </select>
+<br /><br />
+
+<?php		
+if (($agent_permissions['label'] == 'Administrator') || ($agent_permissions['label'] == 'Agent'))
+{
+?>
+				<select id='searchByUser'>
+					<option value=''>-- Select User --</option>
+					<option value='mine'>Mine</option>
+					<option value='not assigned'>All Documents</option>
+					<option value='search for user'>Search for User</option>
+				</select>
+<?php }
+else {
+?>
+<input type="hidden" id="searchByUser" name="searchByUser" value="mine">
+<?php		
+}
+?>	
+<input type="hidden" id="current_user" name="current_user" value="<?php wp_get_current_user(); echo $current_user->nickname; ?>">
+<input type="hidden" id="user_search" name="user_search" value="">
 
 	                            </div>
 			    		</div>
@@ -542,6 +563,41 @@ jQuery("#searchByDocID_tag").on('paste',function(e){
          }
     }, 0);
 });
+
+// Code block for toggling edit buttons on/off when checkboxes are set
+	jQuery('#tbl_templates_folderfile tbody').on('click', 'input', function () {        
+	// 	console.log('checked');
+		setTimeout(toggle_button_display, 1); //delay otherwise 
+	});
+	
+	jQuery('.dt-checkboxes-select-all').on('click', 'input', function () {        
+	 	console.log('checked');
+		setTimeout(toggle_button_display, 1); //delay otherwise 
+	});
+	
+	jQuery('#wpsc_individual_destruction_btn').attr('disabled', 'disabled');
+	jQuery('#wpsc_individual_freeze_btn').attr('disabled', 'disabled');
+	jQuery('#wpsc_individual_label_btn').attr('disabled', 'disabled');
+	jQuery('#wpsc_individual_validation_btn').attr('disabled', 'disabled');
+	jQuery('#wpsc_individual_rescan_btn').attr('disabled', 'disabled');
+	
+	function toggle_button_display() {
+	//	var form = this;
+		var rows_selected = dataTable.column(0).checkboxes.selected();
+		if(rows_selected.count() > 0) {
+			jQuery('#wpsc_individual_destruction_btn').removeAttr('disabled');
+			jQuery('#wpsc_individual_freeze_btn').removeAttr('disabled');
+        	jQuery('#wpsc_individual_label_btn').removeAttr('disabled');
+        	jQuery('#wpsc_individual_validation_btn').removeAttr('disabled');
+        	jQuery('#wpsc_individual_rescan_btn').removeAttr('disabled');
+	  	} else {
+	    	jQuery('#wpsc_individual_destruction_btn').attr('disabled', 'disabled');  
+	    	jQuery('#wpsc_individual_freeze_btn').attr('disabled', 'disabled');
+        	jQuery('#wpsc_individual_label_btn').attr('disabled', 'disabled');
+        	jQuery('#wpsc_individual_validation_btn').attr('disabled', 'disabled');
+        	jQuery('#wpsc_individual_rescan_btn').attr('disabled', 'disabled');
+	  	}
+	}
 
 });
 

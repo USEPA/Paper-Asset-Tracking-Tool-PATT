@@ -203,9 +203,10 @@ echo $tbl;
 <?php
 	//$box_details = Patt_Custom_Func::fetch_box_details($ticket_id);
 
-$box_details = $wpdb->get_results(
+/*$box_details = $wpdb->get_results(
 "SELECT 
 wpqa_wpsc_epa_boxinfo.id as id, 
+wpqa_terms.name as status, 
 (SELECT sum(unauthorized_destruction = 1) FROM wpqa_wpsc_epa_folderdocinfo WHERE box_id = wpqa_wpsc_epa_boxinfo.id) as ud,
 (SELECT sum(validation = 1) FROM wpqa_wpsc_epa_folderdocinfo WHERE box_id = wpqa_wpsc_epa_boxinfo.id) as val_sum,
 (SELECT sum(freeze = 1) FROM wpqa_wpsc_epa_folderdocinfo WHERE box_id = wpqa_wpsc_epa_boxinfo.id) as freeze_sum,
@@ -223,15 +224,42 @@ FROM wpqa_wpsc_epa_boxinfo
 INNER JOIN wpqa_wpsc_epa_storage_location ON wpqa_wpsc_epa_boxinfo.storage_location_id = wpqa_wpsc_epa_storage_location.id 
 INNER JOIN wpqa_wpsc_epa_location_status ON wpqa_wpsc_epa_boxinfo.location_status_id = wpqa_wpsc_epa_location_status.id 
 INNER JOIN wpqa_terms ON wpqa_terms.term_id = wpqa_wpsc_epa_storage_location.digitization_center 
+INNER JOIN wpqa_terms ON wpqa_terms.term_id = wpqa_wpsc_epa_boxinfo.box_status
 WHERE wpqa_wpsc_epa_boxinfo.ticket_id = '" . $ticket_id . "'"
-			);
+			);*/
+$box_id = $wpdb->get_row("SELECT wpqa_wpsc_epa_boxinfo.id as id FROM wpqa_wpsc_epa_boxinfo WHERE wpqa_wpsc_epa_boxinfo.ticket_id = '" . $ticket_id . "'");
+$get_box_id = $box_id->id;
+
+$box_details = $wpdb->get_results("SELECT 
+wpqa_wpsc_epa_boxinfo.id as id, 
+(SELECT wpqa_terms.name FROM wpqa_wpsc_epa_boxinfo, wpqa_terms WHERE wpqa_wpsc_epa_boxinfo.box_status = wpqa_terms.term_id AND wpqa_wpsc_epa_boxinfo.id = '" . $get_box_id . "') as status,
+wpqa_wpsc_epa_boxinfo.box_status as status_id,
+(SELECT sum(unauthorized_destruction = 1) FROM wpqa_wpsc_epa_folderdocinfo WHERE box_id = wpqa_wpsc_epa_boxinfo.id) as ud,
+(SELECT sum(validation = 1) FROM wpqa_wpsc_epa_folderdocinfo WHERE box_id = wpqa_wpsc_epa_boxinfo.id) as val_sum,
+(SELECT sum(freeze = 1) FROM wpqa_wpsc_epa_folderdocinfo WHERE box_id = wpqa_wpsc_epa_boxinfo.id) as freeze_sum,
+(SELECT count(id) FROM wpqa_wpsc_epa_folderdocinfo WHERE box_id = wpqa_wpsc_epa_boxinfo.id) as doc_total,
+wpqa_wpsc_epa_boxinfo.box_id as box_id, 
+(SELECT wpqa_terms.name FROM wpqa_terms, wpqa_wpsc_epa_boxinfo WHERE wpqa_wpsc_epa_storage_location.digitization_center = wpqa_terms.term_id AND wpqa_wpsc_epa_boxinfo.id = '" . $get_box_id . "') as digitization_center,
+(SELECT wpqa_terms.slug FROM wpqa_wpsc_epa_storage_location, wpqa_terms, wpqa_wpsc_epa_boxinfo WHERE wpqa_terms.term_id = wpqa_wpsc_epa_storage_location.digitization_center AND wpqa_wpsc_epa_storage_location.id = wpqa_wpsc_epa_boxinfo.storage_location_id and wpqa_wpsc_epa_boxinfo.id = '" . $get_box_id . "') as digitization_center_slug, 
+wpqa_wpsc_epa_storage_location.aisle as aisle, 
+wpqa_wpsc_epa_storage_location.bay as bay, 
+wpqa_wpsc_epa_storage_location.shelf as shelf, 
+wpqa_wpsc_epa_storage_location.position as position, 
+wpqa_wpsc_epa_location_status.locations as physical_location,
+wpqa_wpsc_epa_boxinfo.box_destroyed as bd
+FROM wpqa_wpsc_epa_boxinfo 
+INNER JOIN wpqa_wpsc_epa_storage_location ON wpqa_wpsc_epa_boxinfo.storage_location_id = wpqa_wpsc_epa_storage_location.id 
+INNER JOIN wpqa_wpsc_epa_location_status ON wpqa_wpsc_epa_boxinfo.location_status_id = wpqa_wpsc_epa_location_status.id
+WHERE wpqa_wpsc_epa_boxinfo.ticket_id = '" . $ticket_id . "'");
 
 			$tbl = '
 <div class="table-responsive" style="overflow-x:auto;">
 	<table id="tbl_templates_boxes" class="table table-striped table-bordered" cellspacing="5" cellpadding="5">
 <thead>
   <tr>
+                    <th class="datatable_header"></th>
     	  			<th class="datatable_header">Box ID</th>
+    	  			<th class="datatable_header">Box Status</th>
     	  			<th class="datatable_header">Physical Location</th>
     	  			<th class="datatable_header">Assigned Location</th>
     	  			<th class="datatable_header">Digitization Center</th>
@@ -243,6 +271,11 @@ WHERE wpqa_wpsc_epa_boxinfo.ticket_id = '" . $ticket_id . "'"
 			foreach ($box_details as $info) {
 			    $boxlist_dbid = $info->id;
 			    $boxlist_id = $info->box_id;
+			    $boxlist_status_id = $info->status_id;
+			    $status_background = get_term_meta($boxlist_status_id, 'wpsc_box_status_background_color', true);
+	            $status_color = get_term_meta($boxlist_status_id, 'wpsc_box_status_color', true);
+	            $status_style = "background-color:".$status_background.";color:".$status_color.";";
+	            $boxlist_status = "<span class='wpsp_admin_label' style='".$status_style."'>".$info->status."</span>";
 			    $boxlist_dc = $info->digitization_center;
 			    $boxlist_dc_val = strtoupper($info->digitization_center_slug);
 			    $boxlist_aisle = $info->aisle;
@@ -275,7 +308,7 @@ WHERE wpqa_wpsc_epa_boxinfo.ticket_id = '" . $ticket_id . "'"
 			}
 			*/
 			$tbl .= '<tr class="wpsc_tl_row_item">';
-			
+			$tbl .= '<td></td>';
             if($boxlist_box_destroyed > 0 && $boxlist_freeze_sum == 0) {
                  $tbl .= '
             <td><a href="' . $subfolder_path . '/wp-admin/admin.php?page=boxdetails&pid=requestdetails&id=' . $boxlist_id . '" style="color:#FF0000 !important; text-decoration: line-through;">' . $boxlist_id . '</a>';
@@ -303,7 +336,7 @@ WHERE wpqa_wpsc_epa_boxinfo.ticket_id = '" . $ticket_id . "'"
             }
             
             $tbl .= '</td>';
-           
+            $tbl .= '<td>' . $boxlist_status . '</td>';  
             $tbl .= '<td>' . $boxlist_physical_location . '</td>';   
 			if (($boxlist_unathorized_destruction == 0)&&($boxlist_box_destroyed == 0)&&($agent_permissions['label'] == 'Administrator') || ($agent_permissions['label'] == 'Agent'))
             {
@@ -347,10 +380,32 @@ WHERE wpqa_wpsc_epa_boxinfo.ticket_id = '" . $ticket_id . "'"
 
 <link rel="stylesheet" type="text/css" href="<?php echo WPSC_PLUGIN_URL.'asset/lib/DataTables/datatables.min.css';?>"/>
 <script type="text/javascript" src="<?php echo WPSC_PLUGIN_URL.'asset/lib/DataTables/datatables.min.js';?>"></script>
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-tagsinput/1.3.3/jquery.tagsinput.css" crossorigin="anonymous">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-tagsinput/1.3.3/jquery.tagsinput.js" crossorigin="anonymous"></script>
+
+<link type="text/css" href="//gyrocode.github.io/jquery-datatables-checkboxes/1.2.11/css/dataTables.checkboxes.css" rel="stylesheet" />
+<script type="text/javascript" src="//gyrocode.github.io/jquery-datatables-checkboxes/1.2.11/js/dataTables.checkboxes.min.js"></script>
+
 <script>
  jQuery(document).ready(function() {
 	 jQuery('#tbl_templates_boxes').DataTable({
-		 "aLengthMenu": [[10, 20, 30, -1], [10, 20, 30, "All"]]
+	     "autoWidth": false,
+		 "aLengthMenu": [[10, 20, 30, -1], [10, 20, 30, "All"]],
+    //checkbox column defaults to 61px when set to 5px, need to fix 
+        'columnDefs': [	
+         {	
+            'width': 5,
+            'targets': 0,	
+            'checkboxes': {	
+               'selectRow': true	
+            }	
+         }
+      ],
+      'select': {	
+         'style': 'multi'	
+      },	
+      'order': [[1, 'asc']],
 		});
 } );
 

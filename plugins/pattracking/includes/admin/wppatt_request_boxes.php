@@ -254,7 +254,7 @@ WHERE wpqa_wpsc_epa_boxinfo.ticket_id = '" . $ticket_id . "'");
 
 			$tbl = '
 <div class="table-responsive" style="overflow-x:auto;">
-	<table id="tbl_templates_boxes" class="table table-striped table-bordered" cellspacing="5" cellpadding="5">
+	<table id="tbl_templates_request_details" class="table table-striped table-bordered" cellspacing="5" cellpadding="5">
 <thead>
   <tr>
                     <th class="datatable_header"></th>
@@ -389,10 +389,9 @@ WHERE wpqa_wpsc_epa_boxinfo.ticket_id = '" . $ticket_id . "'");
 
 <script>
  jQuery(document).ready(function() {
-	 jQuery('#tbl_templates_boxes').DataTable({
+	 var dataTable = jQuery('#tbl_templates_request_details').DataTable({
 	     "autoWidth": false,
 		 "aLengthMenu": [[10, 20, 30, -1], [10, 20, 30, "All"]],
-    //checkbox column defaults to 61px when set to 5px, need to fix 
         'columnDefs': [	
          {	
             'width': 5,
@@ -407,7 +406,32 @@ WHERE wpqa_wpsc_epa_boxinfo.ticket_id = '" . $ticket_id . "'");
       },	
       'order': [[1, 'asc']],
 		});
-} );
+	// Code block for toggling edit buttons on/off when checkboxes are set
+	jQuery('#tbl_templates_request_details tbody').on('click', 'input', function () {        
+	// 	console.log('checked');
+		setTimeout(toggle_button_display, 1); //delay otherwise 
+	});
+	
+	jQuery('.dt-checkboxes-select-all').on('click', 'input', function () {        
+	 	console.log('checked');
+		setTimeout(toggle_button_display, 1); //delay otherwise 
+	});
+	
+	jQuery('#wpsc_box_status_label_btn').attr('disabled', 'disabled');
+	jQuery('#wpsc_box_assign_label_btn').attr('disabled', 'disabled');
+	
+	function toggle_button_display() {
+	//	var form = this;
+		var rows_selected = dataTable.column(0).checkboxes.selected();
+		if(rows_selected.count() > 0) {
+			jQuery('#wpsc_box_status_label_btn').removeAttr('disabled');
+			jQuery('#wpsc_box_assign_label_btn').removeAttr('disabled');
+	  	} else {
+	    	jQuery('#wpsc_box_status_label_btn').attr('disabled', 'disabled');  
+	    	jQuery('#wpsc_box_assign_label_btn').attr('disabled', 'disabled');
+	  	}
+	}
+});
 
 		function wpsc_get_digitization_editor_final(box_id){
 		  wpsc_modal_open('Re-assign Digitization Center');

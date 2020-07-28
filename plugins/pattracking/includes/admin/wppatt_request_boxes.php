@@ -10,6 +10,8 @@ if (!($current_user->ID && $current_user->has_cap('wpsc_agent'))) {
 		exit;
 }
 $ticket_id 	 = isset($_POST['ticket_id']) ? intval($_POST['ticket_id']) : 0 ;
+$ticket_data         = $wpscfunction->get_ticket($ticket_id);
+$status_id           = $ticket_data['ticket_status'];
 $raisedby_email = $wpscfunction->get_ticket_fields($ticket_id, 'customer_email');
 $wpsc_appearance_modal_window = get_option('wpsc_modal_window');
 $wpsc_appearance_ticket_list = get_option('wpsc_appearance_ticket_list');
@@ -196,37 +198,12 @@ echo $tbl;
 }
 ?>
 
-
+<?php 
+$status_id_arr = array('3','670','69');
+?>
 
 <h4>Boxes Related to Request</h4>
-
 <?php
-	//$box_details = Patt_Custom_Func::fetch_box_details($ticket_id);
-
-/*$box_details = $wpdb->get_results(
-"SELECT 
-wpqa_wpsc_epa_boxinfo.id as id, 
-wpqa_terms.name as status, 
-(SELECT sum(unauthorized_destruction = 1) FROM wpqa_wpsc_epa_folderdocinfo WHERE box_id = wpqa_wpsc_epa_boxinfo.id) as ud,
-(SELECT sum(validation = 1) FROM wpqa_wpsc_epa_folderdocinfo WHERE box_id = wpqa_wpsc_epa_boxinfo.id) as val_sum,
-(SELECT sum(freeze = 1) FROM wpqa_wpsc_epa_folderdocinfo WHERE box_id = wpqa_wpsc_epa_boxinfo.id) as freeze_sum,
-(SELECT count(id) FROM wpqa_wpsc_epa_folderdocinfo WHERE box_id = wpqa_wpsc_epa_boxinfo.id) as doc_total,
-wpqa_wpsc_epa_boxinfo.box_id as box_id, 
-wpqa_terms.name as digitization_center, 
-wpqa_terms.slug as digitization_center_slug, 
-wpqa_wpsc_epa_storage_location.aisle as aisle, 
-wpqa_wpsc_epa_storage_location.bay as bay, 
-wpqa_wpsc_epa_storage_location.shelf as shelf, 
-wpqa_wpsc_epa_storage_location.position as position, 
-wpqa_wpsc_epa_location_status.locations as physical_location,
-wpqa_wpsc_epa_boxinfo.box_destroyed as bd
-FROM wpqa_wpsc_epa_boxinfo 
-INNER JOIN wpqa_wpsc_epa_storage_location ON wpqa_wpsc_epa_boxinfo.storage_location_id = wpqa_wpsc_epa_storage_location.id 
-INNER JOIN wpqa_wpsc_epa_location_status ON wpqa_wpsc_epa_boxinfo.location_status_id = wpqa_wpsc_epa_location_status.id 
-INNER JOIN wpqa_terms ON wpqa_terms.term_id = wpqa_wpsc_epa_storage_location.digitization_center 
-INNER JOIN wpqa_terms ON wpqa_terms.term_id = wpqa_wpsc_epa_boxinfo.box_status
-WHERE wpqa_wpsc_epa_boxinfo.ticket_id = '" . $ticket_id . "'"
-			);*/
 $box_id = $wpdb->get_row("SELECT wpqa_wpsc_epa_boxinfo.id as id FROM wpqa_wpsc_epa_boxinfo WHERE wpqa_wpsc_epa_boxinfo.ticket_id = '" . $ticket_id . "'");
 $get_box_id = $box_id->id;
 
@@ -256,9 +233,14 @@ WHERE wpqa_wpsc_epa_boxinfo.ticket_id = '" . $ticket_id . "'");
 <div class="table-responsive" style="overflow-x:auto;">
 	<table id="tbl_templates_request_details" class="table table-striped table-bordered" cellspacing="5" cellpadding="5">
 <thead>
-  <tr>
-                    <th class="datatable_header"></th>
-    	  			<th class="datatable_header">Box ID</th>
+  <tr>';
+  
+  
+if (!(in_array($status_id, $status_id_arr)) && (($agent_permissions['label'] == 'Administrator') || ($agent_permissions['label'] == 'Agent'))) {
+$tbl .=  '<th class="datatable_header"></th>';
+}     
+                    
+         $tbl .=   '<th class="datatable_header">Box ID</th>
     	  			<th class="datatable_header">Box Status</th>
     	  			<th class="datatable_header">Physical Location</th>
     	  			<th class="datatable_header">Assigned Location</th>
@@ -308,7 +290,11 @@ WHERE wpqa_wpsc_epa_boxinfo.ticket_id = '" . $ticket_id . "'");
 			}
 			*/
 			$tbl .= '<tr class="wpsc_tl_row_item">';
+
+ if (!(in_array($status_id, $status_id_arr)) && (($agent_permissions['label'] == 'Administrator') || ($agent_permissions['label'] == 'Agent'))) {
 			$tbl .= '<td></td>';
+}    
+
             if($boxlist_box_destroyed > 0 && $boxlist_freeze_sum == 0) {
                  $tbl .= '
             <td><a href="' . $subfolder_path . '/wp-admin/admin.php?page=boxdetails&pid=requestdetails&id=' . $boxlist_id . '" style="color:#FF0000 !important; text-decoration: line-through;">' . $boxlist_id . '</a>';
@@ -392,6 +378,9 @@ WHERE wpqa_wpsc_epa_boxinfo.ticket_id = '" . $ticket_id . "'");
 	 var dataTable = jQuery('#tbl_templates_request_details').DataTable({
 	     "autoWidth": false,
 		 "aLengthMenu": [[10, 20, 30, -1], [10, 20, 30, "All"]],
+		 <?php
+		  if (!(in_array($status_id, $status_id_arr)) && (($agent_permissions['label'] == 'Administrator') || ($agent_permissions['label'] == 'Agent'))) {
+        ?>
         'columnDefs': [	
          {	
             'width': 5,
@@ -405,6 +394,7 @@ WHERE wpqa_wpsc_epa_boxinfo.ticket_id = '" . $ticket_id . "'");
          'style': 'multi'	
       },	
       'order': [[1, 'asc']],
+      <?php } ?>
 		});
 	// Code block for toggling edit buttons on/off when checkboxes are set
 	jQuery('#tbl_templates_request_details tbody').on('click', 'input', function () {        

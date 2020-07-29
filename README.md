@@ -962,3 +962,28 @@ plugins/supportcandy/includes/class-wpsc-admin.php
         __( 'Support','supportcandy'),
 	
 	Remove count in left navigation
+Default all files to frozen when RLO selects litigation on New Request screen	
+/plugins/pattracking/includes/class-wppatt-hooks-filters.php
+ADD:
+if($data["ticket_useage"] == 'Litigation') {
+   $folderdocarray['freeze'] = 1;
+}
+AFTER
+$folderdocarray = array(...
+
+/plugins/supportcandy/includes/admin/tickets/create_ticket/submit_ticket.php
+ADD: 
+$useagedata = $_POST["are-these-documents-used-for-the-following"];
+$args['ticket_useage'] = $useagedata;
+
+AFTER:
+$boxinfodata = $_POST["boxinfo"];
+$args['box_info'] = $boxinfodata;
+
+/plugins/supportcandy/includes/functions/create_ticket.php
+ADD:
+$data['ticket_useage'] = $args["ticket_useage"];
+
+AFTER:
+$data['ticket_id'] = $ticket_id;
+$data['box_info'] = $args["box_info"];

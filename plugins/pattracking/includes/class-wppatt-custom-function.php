@@ -23,6 +23,514 @@ if (!class_exists('Patt_Custom_Func')) {
 
 
         /**
+         * Update user status data by status & box ID
+         * @return Id
+         */
+        public static function update_status_by_id( $data ){
+            global $wpdb;
+            $status_id = array_keys($data['status'])[0];// array_key_first($data['status']);
+            if(!isset($status_id) || !isset($data['box_id'])) {
+                return false;
+            }
+
+            $args = [
+                'select' => 'id',
+                'where' => [
+                    ['box_id', $data['box_id']],
+                    ['status_id', $status_id]
+                ]
+            ];
+
+            $wpsc_epa_boxinfo_userstatus = new WP_CUST_QUERY("{$wpdb->prefix}wpsc_epa_boxinfo_userstatus");
+            $wpsc_epa_boxinfo_userstatus_data = $wpsc_epa_boxinfo_userstatus->get_results($args);
+            
+            if(count($wpsc_epa_boxinfo_userstatus_data) > 0){
+                foreach($wpsc_epa_boxinfo_userstatus_data as $row_id){
+                     $wpsc_epa_boxinfo_userstatus->delete($row_id->id);
+                }
+            }
+
+            self::user_status_insert( $data );
+            return true;
+        }
+
+        /**
+         * Get all user status data
+         */
+        public static function get_user_status_data($where){
+            global $wpdb;
+            if(is_array($where) && count($where) > 0){
+                foreach($where as $key => $whr) {
+                    $args['where'][] = ["{$wpdb->prefix}wpsc_epa_boxinfo_userstatus.$key", "'{$whr}'"];
+                }
+            }
+            $wpsc_epa_boxinfo_userstatus = new WP_CUST_QUERY("{$wpdb->prefix}wpsc_epa_boxinfo_userstatus");
+            $wpsc_epa_boxinfo_userstatus_records = $wpsc_epa_boxinfo_userstatus->get_results($args);
+            // print_r($wpsc_epa_boxinfo_userstatus_records);
+            $box_id = null;
+            $status_id = null;
+            $sorted_data = [];
+            $counter = 1;
+            $get_all_status = self::get_all_status();
+            
+            foreach($wpsc_epa_boxinfo_userstatus_records as $record){ 
+                
+                if(!isset($sorted_data[$record->box_id]['all_status'])) {
+                    $sorted_data[$record->box_id]['all_status'] = $get_all_status;
+                }
+                
+                if($record->box_id == $box_id) {
+                    // echo '<br/>===B====' . $record->box_id;
+                    if($record->status_id <> null){
+                        // echo '<br/>===C====' . $record->box_id;
+                        unset($sorted_data[$record->box_id]['all_status'][$record->status_id]);
+                        $sorted_data[$record->box_id]['status'][$record->status_id][] = $record->user_id;
+                        $sorted_data[$record->box_id]['other_status'] = $sorted_data[$record->box_id]['all_status'];
+                    }
+                } else {
+                    // echo '<br/>===D====' . $record->box_id;
+                    if($record->status_id <> null){
+                        $sorted_data[$record->box_id]['box_id'] = $record->box_id;
+                        unset($sorted_data[$record->box_id]['all_status'][$record->status_id]);
+                        $sorted_data[$record->box_id]['status'][$record->status_id][] = $record->user_id;
+                        $sorted_data[$record->box_id]['other_status'] = $sorted_data[$record->box_id]['all_status'];
+                        $box_id = $record->box_id;
+                        // print_r($sorted_data[$record->box_id]['other_status']);
+                        // die($record->status_id);
+                    }
+                }
+            }
+
+
+                // die(print_r($sorted_data));
+            // Add the un assigned statues to the box_id
+            foreach($sorted_data as $box_id_key => $fresh_data){ 
+                // print_r($sorted_data);
+                // echo '==!'.$box_id_key.'!==';
+                // print_r($fresh_data);
+                // die($box_id_key);
+                if(is_array($fresh_data['other_status']) && count($fresh_data['other_status']) > 0){
+                    
+                    foreach($fresh_data['other_status'] as $status_id => $other_status){
+                      $sorted_data[$box_id_key]['status'][$status_id] = 'N/A'; 
+                    }
+                    unset($sorted_data[$box_id_key]['other_status']);
+                    unset($sorted_data[$box_id_key]['all_status']);
+                }
+            }
+            
+            return $sorted_data;
+        }
+
+        /**
+         * Insert to Userstatus
+         */
+        public static function user_status_insert( $data ) { 
+
+            // die(print_r($get_all_status));
+            if( is_array($data['status']) && count($data['status']) > 0 ) {
+                foreach ($data['status'] as $status_id => $users) {
+                    if( is_array($users) && count($users) > 0 ) {                
+                        foreach($users as $user){
+                            $inser_data = [
+                                'box_id' => $data['box_id'],
+                                'user_id' => $user,
+                                'status_id' => $status_id
+                            ];
+                            $status_table_insert_id = self::insert_status_table($inser_data);
+                            // unset($get_all_status[$status_id]);
+                        }
+                        return $status_table_insert_id; 
+                        // die();
+                    } else {
+                        $inser_data = [
+                            'box_id' => $data['box_id'],
+                            'user_id' => $user,
+                            'status_id' => $status_id
+                        ];
+                        $status_table_insert_id = self::insert_status_table($inser_data);
+                        // unset($get_all_status[$status_id]);
+                        return $status_table_insert_id;
+                    }
+                }
+            }
+        }
+
+        /**
+         * Insert Userstatus table
+         */
+        public static function insert_status_table($data) {
+            global $wpdb;
+            $insert_status_table = new WP_CUST_QUERY("{$wpdb->prefix}wpsc_epa_boxinfo_userstatus");
+            return $insert_status_table_id = $insert_status_table->insert($data);
+        }
+
+        public function get_all_status() {
+            $status = [
+                748 => 'Pending',
+                621 => 'Not Assigned',
+                64  => 'Assigned',
+                672 => 'Scanning Preparation',
+                671 => 'Scanning/Digitization',
+                65  => 'QA/QC',
+                6   => 'Digitized/Not Validated',
+                673 => 'Ingestion',
+                674 => 'Validation',
+                743 => 'Re-Scan',
+                66  => 'Completed',
+                68  => 'Destruction Approval',
+                67  => 'Dispositioned'
+            ];
+            return $status;
+        }
+        
+        
+         /**
+         * Update return user data by return id
+         * @return Id
+         */
+        public static function update_return_user_by_id( $data ){
+
+            if(!isset($data['return_id']) || !isset($data['user_id'])) {
+                return false;
+            }
+
+            global $wpdb;
+
+            $args = [
+                'select' => 'id',
+                'where' => ['return_id', $data['return_id']]
+            ];
+
+            $wpsc_return_users = new WP_CUST_QUERY("{$wpdb->prefix}wpsc_epa_return_users");
+            $wpsc_return_user_data = $wpsc_return_users->get_results($args);
+            if(count($wpsc_return_user_data) > 0){
+                foreach($wpsc_return_user_data as $row_id){
+                     $wpsc_return_users->delete($row_id->id);
+                }
+            }
+
+            if(is_array($data['user_id']) && count($data['user_id']) > 0){
+                foreach($data['user_id'] as $user_id){
+                    $data_req = [
+                        'return_id' => $data['return_id'],
+                        'user_id'   => $user_id
+                    ];
+                   $insert_id = $wpsc_return_users->insert($data_req); 
+                }
+            } else {
+                $data_req = [
+                    'return_id' => $data['return_id'],
+                    'user_id'   => $data['user_id']
+                ];
+               $insert_id =  $wpsc_return_users->insert($data_req); 
+            }
+            return true;
+        }
+
+        /**
+         * Get return data
+         * @return Id
+         */
+        public static function get_return_data( $where ){            
+            global $wpdb;   
+
+            if(is_array($where) && count($where) > 0){
+                foreach($where as $key => $whr) {
+                    if($key == 'custom') {
+                       $args['where']['custom'] = $whr;
+                    } elseif($key == 'filter') {                        
+                        $orderby = isset($whr['orderby']) ? $whr['orderby'] : 'id';
+                        $order = isset($whr['order']) ? $whr['order'] : 'DESC';
+                        if($orderby == 'status') {
+                            $orderby = "{$wpdb->prefix}terms.name";
+                        }
+                        $args['order'] = [$orderby, $order];
+                        if(isset($whr['records_per_page']) && $whr['records_per_page'] > 0){  
+                            $number_of_records =  isset($whr['records_per_page']) ? $whr['records_per_page'] : 20;
+                            $start = isset($whr['paged']) ? $whr['paged'] : 0;
+                            $args['limit'] = [$start, $number_of_records];        
+                        }
+                    } elseif($key == 'program_office_id') {
+                            $args['where'][] = [
+                                "{$wpdb->prefix}wpsc_epa_program_office.office_acronym", 
+                                $whr
+                            ];
+                        // }
+                    } elseif($key == 'digitization_center') {
+                        $storage_location_id = self::get_storage_location_id_by_dc($whr);
+                        if(is_array($storage_location_id) && count($storage_location_id) > 0) {
+                            foreach($storage_location_id as $val){
+                                if($val->id) {
+                                    $dc_ids[] = $val->id;
+                                }
+                            }
+                            $dc_ids = implode(', ', $dc_ids);
+                            $args['where'][] = [
+                                "{$wpdb->prefix}wpsc_epa_boxinfo.storage_location_id", 
+                                "($dc_ids)",
+                                "AND",
+                                ' IN '
+                            ];
+                        }
+                    } elseif($key == 'id' && is_array($whr) && count($whr) > 0) {
+                        $args['where'][] = [
+                            "{$wpdb->prefix}wpsc_epa_returnrequest.id", 
+                            "(".implode(',', $whr).")",
+                            "AND",
+                            ' IN '
+                        ];
+                    } elseif($key == 'return_id' && is_array($whr) && count($whr) > 0) {
+                        $args['where'][] = [
+                            "{$wpdb->prefix}wpsc_epa_return.return_id", 
+                            '("' . implode('", "', $whr) . '")',
+                            "AND",
+                            ' IN '
+                        ];
+                    } else {
+                        $args['where'][] = ["{$wpdb->prefix}wpsc_epa_return.$key", "'{$whr}'"];
+                    }
+                }   
+            }
+
+            $args['where'][] = [
+                                "{$wpdb->prefix}wpsc_epa_return.id", 
+                                "0",
+                                "AND",
+                                ' > '
+                            ];
+
+            $select_fields = [
+                "{$wpdb->prefix}wpsc_epa_return" => ['id', 'return_id', 'return_date', 'comments'],
+                // "{$wpdb->prefix}wpsc_epa_boxinfo" => ['ticket_id', 'box_id', 'storage_location_id', 'location_status_id', 'box_destroyed', 'date_created', 'date_updated'],
+                // "{$wpdb->prefix}wpsc_epa_folderdocinfo" => ['title', 'folderdocinfo_id as folderdoc_id'],
+                "{$wpdb->prefix}wpsc_epa_return_items" => ['box_id'],
+                "{$wpdb->prefix}wpsc_epa_shipping_tracking" => ['company_name as shipping_carrier', 'tracking_number', 'status'],
+                "{$wpdb->prefix}terms" => ['name as reason'],
+                "{$wpdb->prefix}wpsc_epa_return_users" => ['user_id'],
+            ];
+
+            foreach($select_fields as $key => $fields_array){
+                foreach($fields_array as $field) {
+                    if($key == "{$wpdb->prefix}wpsc_epa_return_users"){
+                        $select[] = "GROUP_CONCAT($key.user_id) as $field";
+                    } if($key == "{$wpdb->prefix}wpsc_epa_return_items"){
+                        $select[] = "GROUP_CONCAT($key.$field) as $field";
+                    } else {
+                        $select[] = $key . '.' . $field;
+                    }
+                }
+            }
+
+            $args['groupby']  = "{$wpdb->prefix}wpsc_epa_return.return_id";
+            $args['select']  = implode(', ', $select);
+            $args['join']  = [
+
+                        [
+                            'type' => 'LEFT JOIN', 
+                            'table' => "{$wpdb->prefix}terms", 
+                            'key'  => 'term_id',
+                            'compare' => '=',
+                            'foreign_key' => 'return_reason_id'
+                        ],
+                        [
+                            'type' => 'Inner JOIN', 
+                            'table' => "{$wpdb->prefix}wpsc_epa_return_items", 
+                            'key' => 'return_id',
+                            'foreign_key'  => 'id',
+                            'compare' => '=',
+                        ],
+                        // [
+                        //     'type' => 'LEFT JOIN', 
+                        //     'table' => "{$wpdb->prefix}wpsc_epa_boxinfo", 
+                        //     'foreign_key'  => 'box_id',
+                        //     'compare' => '=',
+                        //     'key' => 'return_id',
+                        //     'base_table' => "{$wpdb->prefix}wpsc_epa_return_items"
+                        // ],
+                        [
+                            'type' => 'LEFT JOIN', 
+                            'table' => "{$wpdb->prefix}wpsc_epa_return_users", 
+                            'foreign_key'  => 'id',
+                            'compare' => '=',
+                            'key' => 'return_id'
+                        ],
+                        // [
+                        //     'type' => 'LEFT JOIN', 
+                        //     'table' => "{$wpdb->prefix}wpsc_epa_folderdocinfo", 
+                        //     'key'  => 'id',
+                        //     'compare' => '=',
+                        //     'foreign_key' => 'folderdoc_id'
+                        // ],
+                        [
+                            'type' => 'LEFT JOIN', 
+                            'table' => "{$wpdb->prefix}wpsc_epa_shipping_tracking", 
+                            'key'  => 'id',
+                            'compare' => '=',
+                            'foreign_key' => 'shipping_tracking_id'
+                        ]
+                        ];
+
+            $wpsc_epa_box = new WP_CUST_QUERY("{$wpdb->prefix}wpsc_epa_return");
+            $box_details = $wpsc_epa_box->get_results($args);
+
+            if(count($box_details) > 0 ){
+                foreach($box_details as $key => $record){
+                    if(!empty($record->user_id)) {
+                        $record->user_id = explode(',', $record->user_id );
+                    }
+                }
+            }
+            
+            return $box_details;
+        }
+
+
+        /**
+         * Insert return data
+         * @return Id
+         */
+        public static function insert_return_data( $data ){            
+            global $wpdb;   
+           
+            $user_id = $data['user_id'];
+            unset($data['user_id']);
+
+            $folderdoc_id = isset($data['folderdoc_id']) ? $data['folderdoc_id'] : -99999;;
+            unset($data['folderdoc_id']);
+            
+            $box_id = isset($data['box_id']) ? $data['box_id'] : -99999;
+            unset($data['box_id']);
+
+            // Updated At
+            $data['updated_date'] = date("Y-m-d H:i:s");
+            
+            // DEFAULT ID
+            $data['return_id'] = '000000';
+
+			//print_r($data); die();
+			if ( $box_id == -99999 && $folderdoc_id == -99999 ) {
+				die('Cannot insert a value without a Box and Folder/File ID - ERR-001');
+			} elseif ( ( is_array($box_id) && count($box_id) == 0 ) && $folderdoc_id == -99999 ) {
+				die('Cannot insert a value without a Box and Folder/File ID - ERR-002');
+			} elseif ( $box_id == -99999 && ( is_array($folderdoc_id) && count($folderdoc_id) == 0) ) {
+				die('Cannot insert a value without a Box and Folder/File ID - ERR-003');
+			} elseif ( ( is_array($box_id) && count($box_id) == 0 ) && ( is_array($folderdoc_id) && count($folderdoc_id) == 0) ) {
+				die('Cannot insert a value without a Box and Folder/File ID - ERR-004');
+			}
+			
+        	$wpsc_return_method = new WP_CUST_QUERY("{$wpdb->prefix}wpsc_epa_return");	
+            $return_insert_id = $wpsc_return_method->insert($data);	
+            	
+            // Add row to Shipping Table 	
+            $shipping_tracking_number = isset($data['shipping_tracking_id']) ? $data['shipping_tracking_id'] : '';	
+            unset($data['shipping_tracking_id']);	
+            	
+            $shipping_carrier = isset($data['shipping_carrier']) ? $data['shipping_carrier'] : '';	
+            unset($data['shipping_carrier']);	
+            	
+            $shipping_data = [	
+				'ticket_id' => -99999,	
+				'company_name' => $shipping_carrier,	
+				'tracking_number' => $shipping_tracking_number,
+// 				'tracking_number' => 4,	
+				'status' => '',	
+				'shipped' => 0,	
+				'delivered' => 0,					
+				'recallrequest_id' => -99999, 	
+				'return_id' => $return_insert_id	
+			];	
+            	
+            $wpsc_shipping_method = new WP_CUST_QUERY("{$wpdb->prefix}wpsc_epa_shipping_tracking");	
+            $shipping_return_insert_id = $wpsc_shipping_method->insert($shipping_data);	
+            	
+            // Update Shipping Tracking ID in Return Table	
+            $update_data['shipping_tracking_id'] = $shipping_return_insert_id;	
+            $shipping_recall_updated = $wpsc_return_method->update($update_data, ['id' => $return_insert_id]);	
+            	
+            // Update the return ID with insert ID	
+            $num = $return_insert_id;	
+            $str_length = 7;	
+            $update_data['return_id'] = substr("000000{$num}", -$str_length);	
+            $return_updated = $wpsc_return_method->update($update_data, ['id' => $return_insert_id]);	            
+
+            // Add data to return_users 
+            $wpsc_epa_box_user = new WP_CUST_QUERY("{$wpdb->prefix}wpsc_epa_return_users");        
+            if(is_array($user_id) && count($user_id) > 0){
+                foreach($user_id as $user){
+                    $user_data = [
+                        'user_id' => $user,
+                        'return_id' => $return_insert_id
+                    ];
+                    $box_details = $wpsc_epa_box_user->insert($user_data);
+                }
+            } else {
+                $user_data = [
+                    'user_id' => $user_id,
+                    'return_id' => $return_insert_id
+                ];
+                $box_details = $wpsc_epa_box_user->insert($user_data);
+            }
+
+            // Add data to return items table
+            $wpsc_epa_return_items = new WP_CUST_QUERY("{$wpdb->prefix}wpsc_epa_return_items");
+            // if($return_insert_id){
+            //     $item_data = [
+            //         'box_id' => $box_id,
+            //         'folderdoc_id' => $folderdoc_id,
+            //         'return_id' => $return_insert_id
+            //     ];
+            //     // print_r($item_data);
+            //     $wpsc_epa_rec = $wpsc_epa_return_items->insert($item_data);
+            // }
+
+            if(is_array($box_id) && count($box_id) > 0){
+                foreach($box_id as $box){
+                    $item_data = [
+                        'box_id' => $box,
+                        'folderdoc_id' => -99999,
+                        'return_id' => $return_insert_id
+                    ];
+                    $wpsc_epa_rec = $wpsc_epa_return_items->insert($item_data);
+                }
+            } else {
+                $item_data = [
+                    'box_id' => $box_id,
+                    'folderdoc_id' => -99999,
+                    'return_id' => $return_insert_id
+                ];
+                if( $box_id != -99999 ) {
+	                $wpsc_epa_rec = $wpsc_epa_return_items->insert($item_data);
+	            }
+            }
+
+
+            if (is_array($folderdoc_id) && count($folderdoc_id) > 0) {
+                foreach ($folderdoc_id as $folderdoc) {
+                    $item_data = [
+	                    'box_id' => -99999,
+	                    'folderdoc_id' => $folderdoc,
+                        'return_id' => $return_insert_id,
+                    ];
+                    $wpsc_epa_rec = $wpsc_epa_return_items->insert($item_data);
+                }
+            } else {
+                $item_data = [
+                    'box_id' => -99999,
+                    'folderdoc_id' => $folderdoc_id,
+                    'return_id' => $return_insert_id,
+                ];
+                if( $folderdoc_id != -99999 ) {
+	                $wpsc_epa_rec = $wpsc_epa_return_items->insert($item_data);
+	            }
+                
+            }
+
+
+            return $return_insert_id;
+        }
+
+        /**
          * Get Box details by BOX/FOLDER ID !!
          * @return Id, Title, Record Schedule, Programe Office !!
          */
@@ -30,7 +538,7 @@ if (!class_exists('Patt_Custom_Func')) {
             global $wpdb; 
             $box_details = [];
             $args = [
-                'select' => "box_id, {$wpdb->prefix}wpsc_epa_boxinfo.id as Box_id_FK, program_office_id as box_prog_office_code, box_destroyed,
+                'select' => "box_id, {$wpdb->prefix}wpsc_epa_boxinfo.id as Box_id_FK, program_office_id as box_prog_office_code, box_destroyed, box_status,
                 {$wpdb->prefix}wpsc_epa_program_office.id as Program_Office_id_FK, 
                 {$wpdb->prefix}wpsc_epa_program_office.office_acronym,
                 {$wpdb->prefix}wpsc_epa_program_office.office_name,
@@ -65,9 +573,12 @@ if (!class_exists('Patt_Custom_Func')) {
                     {$wpdb->prefix}wpsc_epa_folderdocinfo.id as Folderdoc_Info_id_FK,
                     {$wpdb->prefix}wpsc_epa_folderdocinfo.folderdocinfo_id as Folderdoc_Info_id,
                     {$wpdb->prefix}wpsc_epa_folderdocinfo.freeze,
+                    {$wpdb->prefix}wpsc_epa_folderdocinfo.unauthorized_destruction,  
                     {$wpdb->prefix}wpsc_epa_boxinfo.program_office_id,  
                     index_level,
                     title, 
+                    box_destroyed,
+                    {$wpdb->prefix}wpsc_epa_boxinfo.box_id,
                     {$wpdb->prefix}wpsc_epa_program_office.id as Program_Office_id_FK, 
                     {$wpdb->prefix}wpsc_epa_program_office.office_acronym,
                     {$wpdb->prefix}wpsc_epa_program_office.office_name,
@@ -207,6 +718,7 @@ if (!class_exists('Patt_Custom_Func')) {
 				'tracking_number' => '',
 				'status' => '',
 				'shipped' => 0,
+				'delivered' => 0,
 				'recallrequest_id' => $recall_insert_id, 
 				'return_id' => -99999
 			];
@@ -614,6 +1126,46 @@ if (!class_exists('Patt_Custom_Func')) {
             }
             return $ticket_id;
         }
+        
+        /**
+         * Get ticket id (without leading zeros) by box id or folder/file id
+         * @return Id
+         */
+        public static function get_ticket_id_from_box_folder_file( $where ){              
+            
+            $id = $where['box_folder_file_id'];
+            
+			if( substr_count($id, '-') == 1 ) {
+				$type = 'Box';
+				$arr = explode("-", $id, 2);
+				$ticket_id = (int)$arr[0];
+			} elseif( substr_count($id, '-') == 3 ) {
+				$type = 'Folder/File';
+				$arr = explode("-", $id, 2);
+				$ticket_id = (int)$arr[0];
+			} else {
+				$type = 'Error';
+				$ticket_id = null;
+			}
+			
+			$return = [
+				'type' => $type,
+				'ticket_id' => $ticket_id,
+				'item_id' => $id
+			];
+			
+            return $return;
+        }
+        
+        // Get ticket status term id from non-zero'd ticket id. 
+        public static function get_ticket_status( $where ) {
+	        global $wpdb;
+	        $id = $where['ticket_id'];
+	        $the_row = $wpdb->get_row("SELECT ticket_status FROM {$wpdb->prefix}wpsc_ticket WHERE id = ".$id);
+	        
+	        return $the_row->ticket_status;
+        }
+        
 
         public static function calc_max_gap_val($dc_final){
 
@@ -1098,6 +1650,55 @@ if (!class_exists('Patt_Custom_Func')) {
             
             return $newstr;
         }
+        
+       	// Translates an array of wp user ids to wpsc agent ids and visaversa
+        public static function translate_user_id( $array_of_users, $change_to_type ) {
+	
+			$agent_ids = self::get_user_lut();
+			
+			if( $change_to_type == 'wp_user_id' ) {
+				if( is_array($array_of_users) ) {
+					foreach ( $array_of_users as $wp_id ) {
+						$key = array_search( $wp_id, array_column($agent_ids, 'agent_term_id'));
+						$wp_user_id = $agent_ids[$key]['wp_user_id']; //current user agent term id
+						$assigned_agents[] = $wp_user_id;
+					}
+				} 
+				
+			} elseif ( $change_to_type == 'agent_term_id' ) {
+				if( is_array($array_of_users) ) {
+					foreach ( $array_of_users as $agent_term ) {
+						$key = array_search( $agent_term, array_column($agent_ids, 'wp_user_id'));
+						$agent_term_id = $agent_ids[$key]['agent_term_id']; //current user agent term id
+						$assigned_agents[] = $agent_term_id;
+					}
+				} 
+			}
+			
+			return $assigned_agents;
+		}
+		
+		// Creates an array that acts as a lookup table for wp user id and wpsc agent id
+        public static function get_user_lut() {
+			// Get current user id & convert to wpsc agent id.
+			$agent_ids = array();
+			$agents = get_terms([
+				'taxonomy'   => 'wpsc_agents',
+				'hide_empty' => false,
+				'orderby'    => 'meta_value_num',
+				'order'    	 => 'ASC',
+			]);
+			foreach ($agents as $agent) {
+				$agent_ids[] = [
+					'agent_term_id' => $agent->term_id,
+					'wp_user_id' => get_term_meta( $agent->term_id, 'user_id', true),
+				];
+			}
+			
+			return $agent_ids;
+		}
+        
+        
 
     }
     // new Patt_Custom_Func;

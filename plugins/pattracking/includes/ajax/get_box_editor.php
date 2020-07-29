@@ -31,11 +31,28 @@ ob_start();
     
     $box_dc = $wpdb->get_row("SELECT box_destroyed FROM wpqa_wpsc_epa_boxinfo WHERE id = '" . $box_id . "'");
     $dc = $box_dc->box_destroyed;
-
-?>
-<?php  ?>
+    
+    $box_status = $wpdb->get_row("SELECT wpqa_terms.term_id as box_status FROM wpqa_terms, wpqa_wpsc_epa_boxinfo WHERE wpqa_terms.term_id = wpqa_wpsc_epa_boxinfo.box_status AND wpqa_wpsc_epa_boxinfo.id = '" . $box_id . "'");
+    $status = $box_status->box_status;
+?>   
 <!--converts program office and record schedules into a datalist-->
 <form autocomplete='off'>
+<strong>Box Status:</strong><br />
+<select id="box_status" name="box_status">
+  <option value="748" <?php if ($status == 748 ) echo 'selected' ; ?>>Pending</option>
+  <option value="672" <?php if ($status == 672 ) echo 'selected' ; ?>>Scanning Preparation</option>
+  <option value="671" <?php if ($status == 671 ) echo 'selected' ; ?>>Scanning/Digitization</option>
+  <option value="65" <?php if ($status == 65 ) echo 'selected' ; ?>>QA/QC</option>
+  <option value="6" <?php if ($status == 6 ) echo 'selected' ; ?>>Digitized - Not Validated</option>
+  <option value="673" <?php if ($status == 673 ) echo 'selected' ; ?>>Ingestion</option>
+  <option value="674" <?php if ($status == 674 ) echo 'selected' ; ?>>Validation</option>
+  <option value="743" <?php if ($status == 743 ) echo 'selected' ; ?>>Re-Scan</option>
+  <option value="66" <?php if ($status == 66 ) echo 'selected' ; ?>>Completed</option>
+  <option value="68" <?php if ($status == 68 ) echo 'selected' ; ?>>Destruction Approval</option>
+  <option value="67" <?php if ($status == 67 ) echo 'selected' ; ?>>Dispositioned</option>
+</select>
+<br></br>
+
 <strong>Program Office:</strong><br />
 <?php
     $po_array = Patt_Custom_Func::fetch_program_office_array(); ?>
@@ -99,6 +116,7 @@ function wpsc_edit_box_details(){
 postvarspattboxid: jQuery("#pattboxid").val(),
 postvarsboxid: jQuery("#boxid").val(),
 postvarsdc: jQuery('#dc').val(),
+postvarsbs: jQuery('#box_status').val(),
 postvarspo: jQuery('#ProgramOfficeList [value="' + po_value + '"]').data('value'),
 postvarsrs: jQuery('#RecordScheduleList [value="' + rs_value + '"]').data('value')
 }, 

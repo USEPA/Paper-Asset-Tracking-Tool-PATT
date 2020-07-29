@@ -43,6 +43,8 @@ if ( ! class_exists( 'WPPATT_Actions' ) ) :
       add_action( 'wpppatt_after_recall_details_shipping', array( $this, 'recall_details_shipping' ), 10, 3); 
       add_action( 'wpppatt_after_recall_cancelled', array( $this, 'recall_cancelled' ), 10, 2); 
       add_action( 'wpppatt_after_recall_created', array( $this, 'recall_created' ), 10, 3); 
+      add_action( 'wpppatt_after_return_cancelled', array( $this, 'return_cancelled' ), 10, 2); 
+      add_action( 'wpppatt_after_return_created', array( $this, 'return_created' ), 10, 3);
       
     }
     
@@ -441,6 +443,38 @@ if ( ! class_exists( 'WPPATT_Actions' ) ) :
         $log_str = sprintf( __('%1$s has recalled %3$s. Recall ID: %2$s','supportcandy'), '<strong>'.$current_user->display_name.'</strong>','<strong>'. $recall_id .'</strong>', '<strong>'.$item_id.'</strong>' );
       } else {
         $log_str = sprintf( __('%1$s has been recalled. Recall ID: %2$s ','supportcandy'), '<strong>'.$item_id.'</strong>', '<strong>'.$recall_id.'</strong>' );
+      }
+      $args = array(
+        'ticket_id'      => $ticket_id,
+        'reply_body'     => $log_str,
+        'thread_type'    => 'log'
+      );
+      $args = apply_filters( 'wpsc_thread_args', $args );
+      $wpscfunction->submit_ticket_thread($args);
+    }
+    
+    function return_cancelled ( $ticket_id, $return_id ){
+      global $wpscfunction, $current_user;
+      if($current_user->ID){
+        $log_str = sprintf( __('%1$s cancelled the Return of: %2$s','supportcandy'), '<strong>'.$current_user->display_name.'</strong>','<strong>'. $return_id .'</strong>');
+      } else {
+        $log_str = sprintf( __('Return ID: %1$s has been cancelled.','supportcandy'), '<strong>'.$return_id.'</strong>' );
+      }
+      $args = array(
+        'ticket_id'      => $ticket_id,
+        'reply_body'     => $log_str,
+        'thread_type'    => 'log'
+      );
+      $args = apply_filters( 'wpsc_thread_args', $args );
+      $wpscfunction->submit_ticket_thread($args);
+    }
+    
+    function return_created ( $ticket_id, $return_id, $item_id ){
+      global $wpscfunction, $current_user;
+      if($current_user->ID){
+        $log_str = sprintf( __('%1$s has returned %3$s. Return ID: %2$s','supportcandy'), '<strong>'.$current_user->display_name.'</strong>','<strong>'. $return_id .'</strong>', '<strong>'.$item_id.'</strong>' );
+      } else {
+        $log_str = sprintf( __('%1$s has been returned. Return ID: %2$s ','supportcandy'), '<strong>'.$item_id.'</strong>', '<strong>'.$return_id.'</strong>' );
       }
       $args = array(
         'ticket_id'      => $ticket_id,

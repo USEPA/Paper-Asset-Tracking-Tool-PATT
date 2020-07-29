@@ -49,6 +49,16 @@ if ( ! class_exists( 'wppatt_Functions' ) ) :
 	    include WPPATT_ABSPATH . 'includes/admin/pages/recall_settings_pill.php';    
     }  
     
+    // Add settings pill for return statuses 
+    public function return_settings_pill(){
+	    include WPPATT_ABSPATH . 'includes/admin/pages/return_settings_pill.php';    
+    }  
+    
+    // Add settings pill for box statuses 
+    public function box_settings_pill(){
+	    include WPPATT_ABSPATH . 'includes/admin/pages/box_settings_pill.php';    
+    }      
+    
 }  
 endif;
 

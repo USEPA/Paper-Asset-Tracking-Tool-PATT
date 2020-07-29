@@ -29,8 +29,13 @@ ob_start();
     WHERE box_id = '" . $box_id . "'");
     $record_schedule = $box_record_schedule->record_schedule_number;
     
-    $box_dc = $wpdb->get_row("SELECT box_destroyed FROM wpqa_wpsc_epa_boxinfo WHERE id = '" . $box_id . "'");
+    $box_dc = $wpdb->get_row("SELECT a.box_destroyed, SUM(b.validation = 1) as validated, COUNT(b.validation) as validation_total
+FROM wpqa_wpsc_epa_boxinfo a
+INNER JOIN wpqa_wpsc_epa_folderdocinfo b ON a.id = b.box_id
+WHERE a.id = '" . $box_id . "'");
     $dc = $box_dc->box_destroyed;
+    $validated = $box_dc->validated;
+    $validation_total = $box_dc->validation_total;
     
     $box_status = $wpdb->get_row("SELECT wpqa_terms.term_id as box_status FROM wpqa_terms, wpqa_wpsc_epa_boxinfo WHERE wpqa_terms.term_id = wpqa_wpsc_epa_boxinfo.box_status AND wpqa_wpsc_epa_boxinfo.id = '" . $box_id . "'");
     $status = $box_status->box_status;
@@ -91,12 +96,15 @@ WHERE Record_Schedule_Number  = '" . $value . "'");
 
 <br></br>
 
+<?php
+if($validated == $validation_total && $status == 68) {
+?>
 <strong>Destruction Completed:</strong><br />
 <select id="dc" name="dc">
   <option value="1" <?php if ($dc == 1 ) echo 'selected' ; ?>>Yes</option>
   <option value="0" <?php if ($dc == 0 ) echo 'selected' ; ?>>No</option>
 </select></br></br>
-
+<? } ?>
 <input type="hidden" id="boxid" name="boxid" value="<?php echo $box_id; ?>">
 <input type="hidden" id="pattboxid" name="pattboxid" value="<?php echo $patt_box_id; ?>">
 </form>

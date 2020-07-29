@@ -79,14 +79,16 @@ if (preg_match("/^[0-9]{7}-[0-9]{1,3}$/", $GLOBALS['id']) && $GLOBALS['pid'] == 
 if (preg_match("/^[0-9]{7}-[0-9]{1,3}$/", $GLOBALS['id'])) {
 
 $convert_box_id = $wpdb->get_row(
-"SELECT a.id, sum(a.box_destroyed) as box_destroyed, sum(b.freeze) as freeze
+"SELECT a.id, sum(a.box_destroyed) as box_destroyed, sum(b.freeze) as freeze, c.name as box_status
 FROM wpqa_wpsc_epa_boxinfo a
 LEFT JOIN wpqa_wpsc_epa_folderdocinfo b ON a.id = b.box_id
+INNER JOIN wpqa_terms c ON a.box_status = c.term_id
 WHERE a.box_id = '" .  $GLOBALS['id'] . "'");
 
 $box_id = $convert_box_id->id;
 $box_destroyed = $convert_box_id->box_destroyed;
 $box_freeze = $convert_box_id->freeze;
+$box_status = $convert_box_id->box_status;
 ?>
 
   <div class="col-sm-8 col-md-9 wpsc_it_body">
@@ -661,6 +663,10 @@ jQuery('#freeze_alert').hide();
             }
             else {
                 echo '<div class="wpsp_sidebar_labels"><strong style="color:red">Record Schedule: REASSIGN IMMEDIATELY</strong> </div>';
+            }
+            
+            if(!empty($box_status)) {
+                echo '<div class="wpsp_sidebar_labels"><strong >Box Status: </strong>' . $box_status . '</div>';
             }
             
             if(!empty($location_digitization_center)) {

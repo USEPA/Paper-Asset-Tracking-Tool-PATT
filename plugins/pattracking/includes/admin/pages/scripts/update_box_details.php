@@ -8,7 +8,7 @@ include($path.'wp-load.php');
 if(
 !empty($_POST['postvarspo']) ||
 !empty($_POST['postvarsrs']) ||
-($_POST['postvarsdc'] == 0) || ($_POST['postvarsdc'] == 1) 
+($_POST['postvarsdc'] == 0) || ($_POST['postvarsdc'] == 1)
 ){
    //id in box table (e.g. 1)
    $box_id = $_POST['postvarsboxid'];
@@ -17,6 +17,7 @@ if(
    $po = $_POST['postvarspo'];
    $rs = $_POST['postvarsrs'];
    $dc = $_POST['postvarsdc'];
+   $bs = $_POST['postvarsbs'];
 
 $get_ticket_id = $wpdb->get_row("SELECT ticket_id FROM wpqa_wpsc_epa_boxinfo WHERE box_id = '" . $pattboxid . "'");
 
@@ -26,7 +27,15 @@ $table_name = 'wpqa_wpsc_epa_boxinfo';
 
 $old_box_dc = $wpdb->get_row("SELECT * FROM wpqa_wpsc_epa_boxinfo WHERE box_id = '" . $pattboxid . "'");
 $old_dc = $old_box_dc->box_destroyed;
+$old_bs = $old_box_status->box_status;
 
+//updates box status
+//NEED TO UPDATE HISTORY LOG
+$data_update = array('box_status' => $bs);
+$data_where = array('id' => $box_id);
+$wpdb->update($table_name , $data_update, $data_where);
+
+//updates destruction completed and adds to request history
 if($dc != $old_dc) {
 $data_update = array('box_destroyed' => $dc);
 $data_where = array('id' => $box_id);

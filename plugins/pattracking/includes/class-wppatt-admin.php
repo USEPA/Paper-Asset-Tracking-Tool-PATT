@@ -329,16 +329,17 @@ switch ($company_name) {
 	    die();
     }  
     
-
-     // No longer needed. Left over from old 'Return' button on Boxes page
-    // Added function to search and save recall returned date
-/*
-    public function ticket_initiate_return(){
-	    include WPPATT_ABSPATH . 'includes/ajax/return_editor.php';    
+    // Add edit Assign Agents modal 
+    public function edit_assign_agents(){
+	    include WPPATT_ABSPATH . 'includes/ajax/assign_agents_modal.php';    
 	    die();
-    }  
-*/
-
+    } 
+    
+    // Add edit Box Status modal 
+    public function change_box_status(){
+	    include WPPATT_ABSPATH . 'includes/ajax/change_box_status_modal.php';    
+	    die();
+    }     
     
     
   }

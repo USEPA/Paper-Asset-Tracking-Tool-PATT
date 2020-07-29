@@ -127,11 +127,24 @@ SELECT
 
 a.id as request_id,
 CONCAT(
-'<a href=\"admin.php?page=wpsc-tickets&id=',
-a.request_id,
-'\">',
-a.request_id,
-'</a>') as request_id_flag,
+'<a href=\"admin.php?page=wpsc-tickets&id=',a.request_id,'\">',a.request_id,'</a> ',
+
+CASE 
+WHEN sum(b.box_destroyed = 1) > 0 THEN CONCAT ('<span style=\"font-size: 1em; color: #FF0000;\"><i class=\"fas fa-ban\" title=\"Box Destroyed\"></i></span>')
+ELSE ''
+END,
+
+CASE
+WHEN sum(f.freeze = 1) > 0 THEN CONCAT (' <span style=\"font-size: 1em; color: #009ACD;\"><i class=\"fas fa-snowflake\" title=\"Freeze\"></i></span>')
+ELSE ''
+END,
+
+CASE
+WHEN sum(f.unauthorized_destruction = 1) > 0 THEN CONCAT(' <span style=\"font-size: 1em; color: #8b0000;\"><i class=\"fas fa-flag\" title=\"Unauthorized Destruction\"></i></span>')
+ELSE ''
+END
+) as request_id_flag,
+
 CONCAT(
 '<span class=\"wpsp_admin_label\" style=\"background-color:',
 (SELECT meta_value from wpqa_termmeta where meta_key = 'wpsc_status_background_color' AND term_id = a.ticket_status),
@@ -161,6 +174,7 @@ INNER JOIN wpqa_wpsc_epa_boxinfo as b ON a.id = b.ticket_id
 INNER JOIN wpqa_wpsc_epa_program_office as c ON b.program_office_id = c.office_code
 INNER JOIN wpqa_wpsc_epa_storage_location as d ON b.storage_location_id = d.id
 INNER JOIN wpqa_terms e ON e.term_id = d.digitization_center
+INNER JOIN wpqa_wpsc_epa_folderdocinfo f ON f.box_id = b.id
 WHERE 1 ".$searchQuery." AND active <> 0 group by request_id ".$searchHaving." order by ".$columnName." ".$columnSortOrder." limit ".$row.",".$rowperpage;
 
 $boxRecords = mysqli_query($con, $boxQuery);

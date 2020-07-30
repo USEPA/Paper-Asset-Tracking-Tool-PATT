@@ -396,6 +396,7 @@ $tbl .=  '<th class="datatable_header"></th>';
             },
          },
             { 'width': 100, 'targets': 3 },
+            { 'width': 5, 'targets': 5 },
             { 'width': 5, 'targets': 6 }
       ],
       'select': {	

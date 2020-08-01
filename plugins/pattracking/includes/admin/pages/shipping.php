@@ -103,7 +103,7 @@ color: rgb(255, 255, 255) !important;
 <input type="text" id="searchGeneric" class="form-control" name="custom_filter[s]" value="" autocomplete="off" placeholder="Search...">
 <i class="fa fa-search wpsc_search_btn wpsc_search_btn_sarch"></i>
 <br /><br />
-<table id="tbl_templates_folderfile" class="table table-striped table-bordered" cellspacing="5" cellpadding="5" width="100%">
+<table id="tbl_templates_shipping" class="table table-striped table-bordered" cellspacing="5" cellpadding="5" width="100%">
         <thead>
             <tr>
                 <?php		
@@ -141,7 +141,7 @@ color: rgb(255, 255, 255) !important;
 
 jQuery(document).ready(function(){
 
-  var dataTable = jQuery('#tbl_templates_folderfile').DataTable({
+  var dataTable = jQuery('#tbl_templates_shipping').DataTable({
     'processing': true,
     'serverSide': true,
     'serverMethod': 'post',
@@ -261,102 +261,21 @@ jQuery('#wpsc_individual_refresh_btn').on('click', function(e){
 	location.reload();
 });
 
-<?php		
-// BEGIN ADMIN BUTTONS
-if (($agent_permissions['label'] == 'Administrator'))
-{
-?>
-//reprint labels button		
-
-jQuery('#wpsc_individual_label_btn').on('click', function(e){
-     var form = this;
-     var rows_selected = dataTable.column(0).checkboxes.selected();
-     var arr = {};
-     
-     jQuery.post(
-   '<?php echo WPPATT_PLUGIN_URL; ?>includes/admin/pages/scripts/documentlabels_processing.php',{
-postvarsfolderdocid : rows_selected.join(",")
-}, 
-   function (response) {
-       
-       var folderdocinfo = response.split('|')[1];
-       var folderdocinfo_array = folderdocinfo.split(',');
-       var substring_false = "false";
-       var substring_warn = "warn";
-       var substring_true = "true";
-
-       if(response.indexOf(substring_false) >= 0) {
-       alert('Cannot print folder/file labels for documents that are not assigned to a location.');
-       }
-       
-       if(response.indexOf(substring_warn) >= 0) {
-       alert('One or more documents that you selected do not have an assigned location and it\'s label will not generate.');
-           // Loop through array
-    [].forEach.call(folderdocinfo_array, function(inst){
-        var x = inst.split("-")[2].substr(1);
-        // Check if arr already has an index x, if yes then push
-        if(arr.hasOwnProperty(x)) 
-            arr[x].push(inst);
-        // Or else create a new one with inst as the first element.
-        else 
-            arr[x] = [inst];
-    });
-if(Array.isArray(arr[1]) || Array.isArray(arr[2]) ) {
-if (Array.isArray(arr[1]) && arr[1].length) {
-window.open("<?php echo WPPATT_PLUGIN_URL; ?>includes/ajax/pdf/folder_separator_sheet.php?id="+arr[1].toString(), "_blank");
-}
-if (Array.isArray(arr[2]) && arr[2].length) {
-window.open("<?php echo WPPATT_PLUGIN_URL; ?>includes/ajax/pdf/file_separator_sheet.php?id="+arr[2].toString(), "_blank");
-}
-} else {
-alert('Please select a folder/file.');
-}
-       }
-       
-       if(response.indexOf(substring_true) >= 0) {
-       //alert('Success! All labels available.');
-           // Loop through array
-    [].forEach.call(folderdocinfo_array, function(inst){
-        var x = inst.split("-")[2].substr(1);
-        // Check if arr already has an index x, if yes then push
-        if(arr.hasOwnProperty(x)) 
-            arr[x].push(inst);
-        // Or else create a new one with inst as the first element.
-        else 
-            arr[x] = [inst];
-    });
-if(Array.isArray(arr[1]) || Array.isArray(arr[2]) ) {
-if (Array.isArray(arr[1]) && arr[1].length) {
-window.open("<?php echo WPPATT_PLUGIN_URL; ?>includes/ajax/pdf/folder_separator_sheet.php?id="+arr[1].toString(), "_blank");
-}
-if (Array.isArray(arr[2]) && arr[2].length) {
-window.open("<?php echo WPPATT_PLUGIN_URL; ?>includes/ajax/pdf/file_separator_sheet.php?id="+arr[2].toString(), "_blank");
-}
-} else {
-alert('Please select a folder/file.');
-}
-       }
-      
-   });
-
-});
-
-//validation button
-jQuery('#wpsc_individual_validation_btn').on('click', function(e){
+//shipped button
+jQuery('#wpsc_individual_shipped_btn').on('click', function(e){
      var form = this;
      var rows_selected = dataTable.column(0).checkboxes.selected();
 		   jQuery.post(
-   '<?php echo WPPATT_PLUGIN_URL; ?>includes/admin/pages/scripts/update_validate.php',{
-postvarsfolderdocid : rows_selected.join(","),
-postvarsuserid : <?php $user_ID = get_current_user_id(); echo $user_ID; ?>,
-postvarpage : jQuery('#page').val()
+   '<?php echo WPPATT_PLUGIN_URL; ?>includes/admin/pages/scripts/update_shipping.php',{
+postvarsdbid : rows_selected.join(","),
+postvartype : 1
 }, 
    function (response) {
       //if(!alert(response)){
       
-       wpsc_modal_open('Validation');
+       wpsc_modal_open('Shipped');
 		  var data = {
-		    action: 'wpsc_get_validate_ff',
+		    action: 'wpsc_get_shipping_sse',
 		    response_data: response
 		  };
 		  jQuery.post(wpsc_admin.ajax_url, data, function(response_str) {
@@ -371,21 +290,21 @@ postvarpage : jQuery('#page').val()
    });
 });
 
-//re-scan button
-jQuery('#wpsc_individual_rescan_btn').on('click', function(e){
+//delivered button
+jQuery('#wpsc_individual_delivered_btn').on('click', function(e){
      var form = this;
      var rows_selected = dataTable.column(0).checkboxes.selected();
 		   jQuery.post(
-   '<?php echo WPPATT_PLUGIN_URL; ?>includes/admin/pages/scripts/update_rescan.php',{
-postvarsfolderdocid : rows_selected.join(","),
-postvarpage : jQuery('#page').val()
+   '<?php echo WPPATT_PLUGIN_URL; ?>includes/admin/pages/scripts/update_shipping.php',{
+postvarsdbid : rows_selected.join(","),
+postvartype : 2
 }, 
    function (response) {
       //if(!alert(response)){
       
-       wpsc_modal_open('Re-scan');
+       wpsc_modal_open('Delivered');
 		  var data = {
-		    action: 'wpsc_get_rescan_ff',
+		    action: 'wpsc_get_shipping_sse',
 		    response_data: response
 		  };
 		  jQuery.post(wpsc_admin.ajax_url, data, function(response_str) {
@@ -399,86 +318,6 @@ postvarpage : jQuery('#page').val()
       //}
    });
 });
-
-//freeze button
-jQuery('#wpsc_individual_freeze_btn').on('click', function(e){
-     var form = this;
-     var rows_selected = dataTable.column(0).checkboxes.selected();
-		   jQuery.post(
-   '<?php echo WPPATT_PLUGIN_URL; ?>includes/admin/pages/scripts/update_freeze.php',{
-postvarsfolderdocid : rows_selected.join(","),
-postvarpage : jQuery('#page').val(),
-boxid : jQuery('#box_id').val()
-}, 
-   function (response) {
-      //if(!alert(response)){
-      
-             wpsc_modal_open('Freeze');
-		  var data = {
-		    action: 'wpsc_get_freeze_ff',
-		    response_data: response
-		  };
-		  jQuery.post(wpsc_admin.ajax_url, data, function(response_str) {
-		    var response = JSON.parse(response_str);
-		    jQuery('#wpsc_popup_body').html(response.body);
-		    jQuery('#wpsc_popup_footer').html(response.footer);
-		    jQuery('#wpsc_cat_name').focus();
-		  }); 
-		  
-       var substring = "removed";
-       dataTable.ajax.reload( null, false );
-       
-       if(response.indexOf(substring) !== -1) {
-       jQuery('#ud_alert').hide();
-       } else {
-       jQuery('#ud_alert').show(); 
-       }
-       
-      //}
-   });
-});
-
-//unauthorize destruction button
-jQuery('#wpsc_individual_destruction_btn').on('click', function(e){
-     var form = this;
-     var rows_selected = dataTable.column(0).checkboxes.selected();
-		   jQuery.post(
-   '<?php echo WPPATT_PLUGIN_URL; ?>includes/admin/pages/scripts/update_unauthorize_destruction.php',{
-postvarsfolderdocid : rows_selected.join(","),
-postvarpage : jQuery('#page').val(),
-boxid : jQuery('#box_id').val()
-}, 
-   function (response) {
-      //if(!alert(response)){
-      
-       wpsc_modal_open('Unauthorized Destruction');
-		  var data = {
-		    action: 'wpsc_unauthorized_destruction_ff',
-		    response_data: response
-		  };
-		  jQuery.post(wpsc_admin.ajax_url, data, function(response_str) {
-		    var response = JSON.parse(response_str);
-		    jQuery('#wpsc_popup_body').html(response.body);
-		    jQuery('#wpsc_popup_footer').html(response.footer);
-		    jQuery('#wpsc_cat_name').focus();
-		  }); 
-		  
-       var substring = "removed";
-       dataTable.ajax.reload( null, false );
-       
-       if(response.indexOf(substring) !== -1) {
-       jQuery('#ud_alert').hide();
-       } else {
-       jQuery('#ud_alert').show(); 
-       }
-       
-      //}
-   });
-});
-<?php
-}
-// END ADMIN BUTTONS
-?>
 
 jQuery("#searchByTN").tagsInput({
    'defaultText':'',
@@ -508,7 +347,7 @@ jQuery("#searchByTN_tag").on('paste',function(e){
 });
 
 // Code block for toggling edit buttons on/off when checkboxes are set
-	jQuery('#tbl_templates_folderfile tbody').on('click', 'input', function () {        
+	jQuery('#tbl_templates_shipping tbody').on('click', 'input', function () {        
 	// 	console.log('checked');
 		setTimeout(toggle_button_display, 1); //delay otherwise 
 	});

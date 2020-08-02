@@ -43,7 +43,7 @@ $edit_btn_css = 'background-color:'.$wpsc_appearance_individual_ticket_page['wps
         {
         ?>
             <button type="button" class="btn btn-sm wpsc_action_btn" id="wpsc_individual_shipped_btn" style="background-color:#FF5733 !important;color:#FFFFFF !important;"><i class="fas fa-check-circle"></i> Shipped</button></button>
-            <button type="button" class="btn btn-sm wpsc_action_btn" id="wpsc_individual_delivered_btn" style="background-color:#FF5733 !important;color:#FFFFFF !important;"><i class="fas fa-truck-loading"></i> Delivered</button></button>
+            <button type="button" class="btn btn-sm wpsc_action_btn" id="wpsc_individual_delivered_btn" style="background-color:#FF5733 !important;color:#FFFFFF !important;"><i class="fas fa-truck-loading"></i> Received</button></button>
         <?php
         }
         ?>
@@ -118,7 +118,7 @@ color: rgb(255, 255, 255) !important;
                 <th class="datatable_header">Shipping Company</th>
                 <th class="datatable_header">Status</th>
                 <th class="datatable_header">Shipped</th>
-                <th class="datatable_header">Delivered</th>
+                <th class="datatable_header">Received</th>
             </tr>
         </thead>
     </table>
@@ -286,6 +286,7 @@ postvartype : 1
 		  }); 
 		  
           dataTable.ajax.reload( null, false );
+          //dataTable.column(0).checkboxes.deselectAll();
       //}
    });
 });
@@ -315,6 +316,7 @@ postvartype : 2
 		  }); 
 		  
           dataTable.ajax.reload( null, false );
+          //dataTable.column(0).checkboxes.deselectAll();
       //}
    });
 });

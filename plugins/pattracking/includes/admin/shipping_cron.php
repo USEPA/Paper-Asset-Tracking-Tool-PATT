@@ -339,7 +339,7 @@ $status_id   	= $ticket_data['ticket_status'];
 $get_shipped_status = $wpdb->get_results(
  	"SELECT shipped
  FROM wpqa_wpsc_epa_shipping_tracking
- WHERE shipped = 1 AND ticket_id <> '-99999' AND ticket_id = " . $item->ticket_id
+ WHERE ticket_id <> '-99999' AND ticket_id = " . $item->ticket_id
  );
 
 foreach ($get_shipped_status as $shipped) {
@@ -353,14 +353,14 @@ $wpscfunction->change_status($item->ticket_id, 5);
 $get_delivered_status = $wpdb->get_results(
  	"SELECT delivered
  FROM wpqa_wpsc_epa_shipping_tracking
- WHERE delivered = 1 AND ticket_id <> '-99999' AND ticket_id = " . $item->ticket_id
+ WHERE ticket_id <> '-99999' AND ticket_id = " . $item->ticket_id
  );
 
 foreach ($get_delivered_status as $delivered) {
 	array_push($delivered_array, $delivered->delivered);
 	}
 	
-if (($status_id == 4) && (!in_array(0, $delivered_array))) {
+if (($status_id == 5) && (!in_array(0, $delivered_array))) {
 $wpscfunction->change_status($item->ticket_id, 63);   
 }
 	}

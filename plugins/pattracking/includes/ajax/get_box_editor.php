@@ -125,7 +125,7 @@ if($validated == $validation_total && $status_id == 68 && $destruction_approval 
 <select id="dc" name="dc">
   <option value="1" <?php if ($dc == 1 ) echo 'selected' ; ?>>Yes</option>
   <option value="0" <?php if ($dc == 0 ) echo 'selected' ; ?>>No</option>
-</select></br></br>
+</select>
 <?php 
     
 } else { 

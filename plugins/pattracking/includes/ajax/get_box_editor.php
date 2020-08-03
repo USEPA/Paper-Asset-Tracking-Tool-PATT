@@ -38,26 +38,48 @@ WHERE a.id = '" . $box_id . "'");
     $validation_total = $box_dc->validation_total;
     
     $box_status = $wpdb->get_row("SELECT wpqa_terms.term_id as box_status FROM wpqa_terms, wpqa_wpsc_epa_boxinfo WHERE wpqa_terms.term_id = wpqa_wpsc_epa_boxinfo.box_status AND wpqa_wpsc_epa_boxinfo.id = '" . $box_id . "'");
-    $status = $box_status->box_status;
+    $status_id = $box_status->box_status;
+    
+    $box_destruction_approval = $wpdb->get_row("SELECT destruction_approval FROM wpqa_wpsc_ticket, wpqa_wpsc_epa_boxinfo WHERE wpqa_wpsc_ticket.id = wpqa_wpsc_epa_boxinfo.ticket_id AND wpqa_wpsc_epa_boxinfo.id = '" . $box_id . "'");
+    $destruction_approval = $box_destruction_approval->destruction_approval;
 ?>   
 <!--converts program office and record schedules into a datalist-->
 <form autocomplete='off'>
 <strong>Box Status:</strong><br />
-<select id="box_status" name="box_status">
-  <option value="748" <?php if ($status == 748 ) echo 'selected' ; ?>>Pending</option>
-  <option value="672" <?php if ($status == 672 ) echo 'selected' ; ?>>Scanning Preparation</option>
-  <option value="671" <?php if ($status == 671 ) echo 'selected' ; ?>>Scanning/Digitization</option>
-  <option value="65" <?php if ($status == 65 ) echo 'selected' ; ?>>QA/QC</option>
-  <option value="6" <?php if ($status == 6 ) echo 'selected' ; ?>>Digitized - Not Validated</option>
-  <option value="673" <?php if ($status == 673 ) echo 'selected' ; ?>>Ingestion</option>
-  <option value="674" <?php if ($status == 674 ) echo 'selected' ; ?>>Validation</option>
-  <option value="743" <?php if ($status == 743 ) echo 'selected' ; ?>>Re-Scan</option>
-  <option value="66" <?php if ($status == 66 ) echo 'selected' ; ?>>Completed</option>
-  <option value="68" <?php if ($status == 68 ) echo 'selected' ; ?>>Destruction Approval</option>
-  <option value="67" <?php if ($status == 67 ) echo 'selected' ; ?>>Dispositioned</option>
-</select>
-<br></br>
 
+		<select id="box_status" name="box_status">
+			<?php
+// Register Box Status Taxonomy
+if( !taxonomy_exists('wpsc_box_statuses') ) {
+	$args = array(
+		'public' => false,
+		'rewrite' => false
+	);
+	register_taxonomy( 'wpsc_box_statuses', 'wpsc_ticket', $args );
+}
+
+$box_statuses = get_terms([
+	'taxonomy'   => 'wpsc_box_statuses',
+	'hide_empty' => false,
+	'orderby'    => 'meta_value_num',
+	'order'    	 => 'ASC',
+	'meta_query' => array('order_clause' => array('key' => 'wpsc_box_status_load_order')),
+]);
+
+      foreach ( $box_statuses as $status ) :
+
+if ($status_id == $status->term_id ) {
+    $selected = 'selected'; 
+} else {
+    $selected = ''; 
+}
+
+echo '<option '.$selected.' value="'.$status->term_id.'">'.$status->name.'</option>';
+			endforeach;
+			?>
+		</select>
+
+<br /><br />
 <strong>Program Office:</strong><br />
 <?php
     $po_array = Patt_Custom_Func::fetch_program_office_array(); ?>
@@ -94,17 +116,25 @@ WHERE Record_Schedule_Number  = '" . $value . "'");
      <?php } ?>
      </datalist>
 
+<?php
+if($validated == $validation_total && $status_id == 68 && $destruction_approval == 1) {
+?>
 <br></br>
 
-<?php
-if($validated == $validation_total && $status == 68) {
-?>
 <strong>Destruction Completed:</strong><br />
 <select id="dc" name="dc">
   <option value="1" <?php if ($dc == 1 ) echo 'selected' ; ?>>Yes</option>
   <option value="0" <?php if ($dc == 0 ) echo 'selected' ; ?>>No</option>
 </select></br></br>
-<? } ?>
+<?php 
+    
+} else { 
+
+?>
+
+<input type="hidden" id="dc" name="dc" value="<?php echo $dc; ?>">
+<?php } ?>
+
 <input type="hidden" id="boxid" name="boxid" value="<?php echo $box_id; ?>">
 <input type="hidden" id="pattboxid" name="pattboxid" value="<?php echo $patt_box_id; ?>">
 </form>

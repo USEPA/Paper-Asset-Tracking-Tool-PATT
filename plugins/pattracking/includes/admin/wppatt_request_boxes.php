@@ -207,12 +207,10 @@ $status_id_arr = array('3','670','69');
 
 <h4>Boxes Related to Request</h4>
 <?php
-$box_id = $wpdb->get_row("SELECT wpqa_wpsc_epa_boxinfo.id as id FROM wpqa_wpsc_epa_boxinfo WHERE wpqa_wpsc_epa_boxinfo.ticket_id = '" . $ticket_id . "'");
-$get_box_id = $box_id->id;
-
 $box_details = $wpdb->get_results("SELECT 
 wpqa_wpsc_epa_boxinfo.id as id, 
-(SELECT wpqa_terms.name FROM wpqa_wpsc_epa_boxinfo, wpqa_terms WHERE wpqa_wpsc_epa_boxinfo.box_status = wpqa_terms.term_id AND wpqa_wpsc_epa_boxinfo.id = '" . $get_box_id . "') as status,
+wpqa_wpsc_epa_boxinfo.id as box_data_id,
+(SELECT wpqa_terms.name FROM wpqa_wpsc_epa_boxinfo, wpqa_terms WHERE wpqa_wpsc_epa_boxinfo.box_status = wpqa_terms.term_id AND wpqa_wpsc_epa_boxinfo.id = box_data_id) as status,
 wpqa_wpsc_epa_boxinfo.box_status as status_id,
 wpqa_terms.name as status_name,
 (SELECT sum(unauthorized_destruction = 1) FROM wpqa_wpsc_epa_folderdocinfo WHERE box_id = wpqa_wpsc_epa_boxinfo.id) as ud,
@@ -220,8 +218,8 @@ wpqa_terms.name as status_name,
 (SELECT sum(freeze = 1) FROM wpqa_wpsc_epa_folderdocinfo WHERE box_id = wpqa_wpsc_epa_boxinfo.id) as freeze_sum,
 (SELECT count(id) FROM wpqa_wpsc_epa_folderdocinfo WHERE box_id = wpqa_wpsc_epa_boxinfo.id) as doc_total,
 wpqa_wpsc_epa_boxinfo.box_id as box_id, 
-(SELECT wpqa_terms.name FROM wpqa_terms, wpqa_wpsc_epa_boxinfo WHERE wpqa_wpsc_epa_storage_location.digitization_center = wpqa_terms.term_id AND wpqa_wpsc_epa_boxinfo.id = '" . $get_box_id . "') as digitization_center,
-(SELECT wpqa_terms.slug FROM wpqa_wpsc_epa_storage_location, wpqa_terms, wpqa_wpsc_epa_boxinfo WHERE wpqa_terms.term_id = wpqa_wpsc_epa_storage_location.digitization_center AND wpqa_wpsc_epa_storage_location.id = wpqa_wpsc_epa_boxinfo.storage_location_id and wpqa_wpsc_epa_boxinfo.id = '" . $get_box_id . "') as digitization_center_slug, 
+(SELECT wpqa_terms.name FROM wpqa_terms, wpqa_wpsc_epa_boxinfo, wpqa_wpsc_epa_storage_location WHERE wpqa_wpsc_epa_storage_location.digitization_center = wpqa_terms.term_id AND wpqa_wpsc_epa_boxinfo.storage_location_id = wpqa_wpsc_epa_storage_location.id AND wpqa_wpsc_epa_boxinfo.id = box_data_id) as digitization_center,
+(SELECT wpqa_terms.slug FROM wpqa_wpsc_epa_storage_location, wpqa_terms, wpqa_wpsc_epa_boxinfo WHERE wpqa_terms.term_id = wpqa_wpsc_epa_storage_location.digitization_center AND wpqa_wpsc_epa_storage_location.id = wpqa_wpsc_epa_boxinfo.storage_location_id and wpqa_wpsc_epa_boxinfo.id = box_data_id) as digitization_center_slug, 
 wpqa_wpsc_epa_storage_location.aisle as aisle, 
 wpqa_wpsc_epa_storage_location.bay as bay, 
 wpqa_wpsc_epa_storage_location.shelf as shelf, 
@@ -330,7 +328,7 @@ $tbl .=  '<th class="datatable_header"></th>';
             $tbl .= '<span style="font-size: 1.0em; color: #1d1f1d;margin-left:4px;" onclick="view_assigned_agents(\''. $boxlist_id .'\')" class="assign_agents_icon"><i class="fas fa-user-friends" title="Assigned Agents"></i></span></td>';
             $tbl .= '<td>' . $boxlist_status . '</td>';  
             $tbl .= '<td>' . $boxlist_physical_location . '</td>';   
-			if (($boxlist_unathorized_destruction == 0)&&($boxlist_box_destroyed == 0)&&($agent_permissions['label'] == 'Administrator') || ($agent_permissions['label'] == 'Agent'))
+			if (!(in_array($status_id, $status_id_arr)) && ($boxlist_unathorized_destruction == 0)&&($boxlist_box_destroyed == 0)&&($agent_permissions['label'] == 'Administrator') || ($agent_permissions['label'] == 'Agent'))
             {
             if ($boxlist_location != 'Currently Unassigned' || $boxlist_dc_location != 'Not Unassigned') {
             $tbl .= '<td>' . $boxlist_location;
@@ -338,8 +336,8 @@ $tbl .=  '<th class="datatable_header"></th>';
             $tbl .= ' <a href="#" onclick="wpsc_get_inventory_editor(' . $boxlist_dbid . ')"><i class="fas fa-edit"></i></a>';
             }
             $tbl .= '</td>';
+            
             $tbl .= '<td>' . $boxlist_dc_location . ' <a href="#" onclick="wpsc_get_digitization_editor_final(' . $boxlist_dbid . ')"><i class="fas fa-exchange-alt"></i></a></td>';
-
             
             } elseif ($boxlist_location == 'Currently Unassigned' && $boxlist_dc_location == 'Currently Unassigned') {
             $tbl .= '<td>' . $boxlist_location . '</td>';   

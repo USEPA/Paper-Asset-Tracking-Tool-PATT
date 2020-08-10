@@ -13,11 +13,13 @@ if (!isset($_SESSION)) {
 }
 
 $box_id = $_POST["box_id"];
-        
 ob_start();
-    
+
+$patt_box_id_arr = array();
+
     $box_patt_id = $wpdb->get_row("SELECT box_id FROM wpqa_wpsc_epa_boxinfo WHERE id = '" . $box_id . "'");
     $patt_box_id = $box_patt_id->box_id;
+    array_push($patt_box_id_arr,$patt_box_id);
     
     $box_program_office = $wpdb->get_row("SELECT b.office_acronym as acronym 
     FROM wpqa_wpsc_epa_boxinfo as a INNER JOIN wpqa_wpsc_epa_program_office as b ON a.program_office_id = b.office_code
@@ -45,6 +47,12 @@ WHERE a.id = '" . $box_id . "'");
 ?>   
 <!--converts program office and record schedules into a datalist-->
 <form autocomplete='off'>
+    
+<?php
+$status_list = Patt_Custom_Func::get_restricted_box_status_list( $patt_box_id_arr );
+$restriction_reason = $status_list['restriction_reason']; // string with warnings (multiple lines)
+?>
+<div id='alert_status' class=''></div> 
 <strong>Box Status:</strong><br />
 
 		<select id="box_status" name="box_status">
@@ -58,27 +66,23 @@ if( !taxonomy_exists('wpsc_box_statuses') ) {
 	register_taxonomy( 'wpsc_box_statuses', 'wpsc_ticket', $args );
 }
 
-$box_statuses = get_terms([
-	'taxonomy'   => 'wpsc_box_statuses',
-	'hide_empty' => false,
-	'orderby'    => 'meta_value_num',
-	'order'    	 => 'ASC',
-	'meta_query' => array('order_clause' => array('key' => 'wpsc_box_status_load_order')),
-]);
+$box_statuses = $status_list['box_statuses']; // list of acceptable statuses
 
-      foreach ( $box_statuses as $status ) :
+      foreach ( $box_statuses as $term=>$status ) :
 
-if ($status_id == $status->term_id ) {
+if ($status_id == $term ) {
     $selected = 'selected'; 
 } else {
     $selected = ''; 
 }
 
-echo '<option '.$selected.' value="'.$status->term_id.'">'.$status->name.'</option>';
+echo '<option '.$selected.' value="'.$term.'">'.$status.'</option>';
 			endforeach;
 			?>
 		</select>
-
+<?php
+// TESTING print_r($box_statuses);
+?>
 <br /><br />
 <strong>Program Office:</strong><br />
 <?php
@@ -144,7 +148,46 @@ ob_start();
 ?>
 <button type="button" class="btn wpsc_popup_close"  style="background-color:<?php echo $wpsc_appearance_modal_window['wpsc_close_button_bg_color']?> !important;color:<?php echo $wpsc_appearance_modal_window['wpsc_close_button_text_color']?> !important;"   onclick="wpsc_modal_close();"><?php _e('Close','wpsc-export-ticket');?></button>
 <button type="button" class="btn wpsc_popup_action" style="background-color:<?php echo $wpsc_appearance_modal_window['wpsc_action_button_bg_color']?> !important;color:<?php echo $wpsc_appearance_modal_window['wpsc_action_button_text_color']?> !important;" onclick="wpsc_edit_box_details();"><?php _e('Save','supportcandy');?></button>
+<style>
+.alert_spacing {
+	margin: 0px 0px 0px 0px;
+}
+
+</style>
+
 <script>
+	jQuery(document).ready(function(){
+		let restriction_reason = '<?php echo $restriction_reason ?>';		
+		
+		if( restriction_reason.length > 0 ) {
+			set_alert('warning', restriction_reason);				
+		}
+
+	});
+
+
+// Sets an alert
+function set_alert( type, message ) {
+	
+	let alert_style = '';
+	
+	switch( type ) {
+		case 'success':
+			alert_style = 'alert-success';		
+			break;
+		case 'warning':
+			alert_style = 'alert-warning';
+			break;
+		case 'danger':
+			alert_style = 'alert-danger';
+			break;		
+	}
+
+	jQuery('#alert_status').html('<div class=" alert '+alert_style+'">'+message+'</div>'); //badge badge-danger
+	jQuery('#alert_status').addClass('alert_spacing');	
+	
+}
+
 function wpsc_edit_box_details(){	
 
     var po_value = jQuery('#po').val();

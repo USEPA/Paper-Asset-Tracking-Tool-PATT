@@ -27,13 +27,19 @@ $table_name = 'wpqa_wpsc_epa_boxinfo';
 
 $old_box_dc = $wpdb->get_row("SELECT * FROM wpqa_wpsc_epa_boxinfo WHERE box_id = '" . $pattboxid . "'");
 $old_dc = $old_box_dc->box_destroyed;
+
+$old_box_status = $wpdb->get_row("SELECT wpqa_terms.name as box_status FROM wpqa_terms, wpqa_wpsc_epa_boxinfo WHERE wpqa_wpsc_epa_boxinfo.box_status = wpqa_terms.term_id AND box_id = '" . $pattboxid . "'");
 $old_bs = $old_box_status->box_status;
+
+$new_box_status = $wpdb->get_row("SELECT DISTINCT wpqa_terms.name as box_status FROM wpqa_terms, wpqa_wpsc_epa_boxinfo WHERE wpqa_wpsc_epa_boxinfo.box_status = wpqa_terms.term_id AND wpqa_wpsc_epa_boxinfo.box_status = '" . $bs . "'");
+$new_bs = $new_box_status->box_status;
 
 //updates box status
 //NEED TO UPDATE HISTORY LOG
 $data_update = array('box_status' => $bs);
 $data_where = array('id' => $box_id);
 $wpdb->update($table_name , $data_update, $data_where);
+array_push($metadata_array,'Box Status: '.$old_bs.' > '.$new_bs);
 
 //updates destruction completed and adds to request history
 if($dc != $old_dc) {

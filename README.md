@@ -987,3 +987,9 @@ $data['ticket_useage'] = $args["ticket_useage"];
 AFTER:
 $data['ticket_id'] = $ticket_id;
 $data['box_info'] = $args["box_info"];
+
+##### Remove the close button from the request details page
+comment out this line:
+```
+<button type="button" id="wpsc_individual_close_btn" onclick="wpsc_get_close_ticket(<?php echo $ticket_id?>)" class="btn btn-sm wpsc_action_btn" style="<?php echo $action_default_btn_css?>"><i class="fa fa-check"></i> <?php _e('Close','supportcandy')?></button>
+```

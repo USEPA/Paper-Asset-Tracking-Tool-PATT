@@ -1,17 +1,17 @@
 <?php
 
 //if ( ! defined( 'ABSPATH' ) ) {
-//	exit; // Exit if accessed directly
+	//exit; // Exit if accessed directly
 //}
 
 $path = preg_replace('/wp-content.*$/','',__DIR__);
 include($path.'wp-load.php');
 
-$subfolder_path = site_url( '', 'relative'); 
-
 global $current_user, $wpscfunction, $wpdb;
 
 // Obtain files to be transferred
+//ini_set('memory_limit','512M');
+
 
 $folderfile_query = $wpdb->get_results(
 "SELECT 
@@ -21,7 +21,9 @@ wpqa_wpsc_epa_folderdocinfo.folderdocinfo_id,
 wpqa_wpsc_epa_folderdocinfo.title, 
 wpqa_wpsc_epa_folderdocinfo.date,
 wpqa_wpsc_epa_folderdocinfo.close_date,
-wpqa_epa_record_schedule.Record_Schedule_Number as rsnum,
+wpqa_epa_record_schedule.Function_Number as fnum,
+wpqa_epa_record_schedule.Schedule_Number as snum,
+wpqa_epa_record_schedule.Disposition_Number as dnum,
 wpqa_wpsc_ticket.ticket_status,
 wpqa_users.user_login,
 wpqa_wpsc_epa_folderdocinfo.file_name, 
@@ -31,10 +33,12 @@ INNER JOIN wpqa_wpsc_epa_boxinfo ON  wpqa_wpsc_epa_folderdocinfo.box_id = wpqa_w
 INNER JOIN wpqa_epa_record_schedule ON wpqa_wpsc_epa_boxinfo.record_schedule_id = wpqa_epa_record_schedule.id
 INNER JOIN wpqa_wpsc_ticket ON  wpqa_wpsc_epa_boxinfo.box_id = wpqa_wpsc_ticket.id
 INNER JOIN wpqa_users ON wpqa_wpsc_epa_boxinfo.user_id = wpqa_users.ID
-WHERE wpqa_wpsc_epa_folderdocinfo.file_name IS NOT NULL AND wpqa_wpsc_epa_folderdocinfo.file_location LIKE '%temp_location%' AND wpqa_wpsc_ticket.ticket_status = 66"
+WHERE wpqa_wpsc_epa_folderdocinfo.file_name IS NOT NULL AND wpqa_wpsc_epa_folderdocinfo.file_location LIKE '%uploads%' AND wpqa_wpsc_epa_boxinfo.box_status = 673"
 );
 
 foreach ($folderfile_query as $item) {
+
+/*
 // Preliminary Test - to be commented out
 echo '<strong>Filename:</strong> '. $item->file_name . '<br />';
 echo '<strong>Title:</strong> '. $item->title . '<br />';
@@ -60,63 +64,152 @@ echo '<strong>Folder:</strong> '. $item->file_location . '<br />';
 echo '------------------------------------------------------------<br />';
 echo '<strong>Ticket DB ID:</strong> '. $item->ticket_id . '<br />';
 echo '<strong>Ticket Status (should always be 66 or completed):</strong> '. $item->ticket_status . '<br />';
-echo '<strong>Temp Storage Location & Filename:</strong> /'. $item->file_location . $item->file_name  . '<br />';
+echo '<strong>Temp Storage Location & Filename:</strong> http://086.info/wordpress3'. $item->file_location . $item->file_name  . '<br />';
 echo '<strong>PATT Folder/Document ID:</strong> '. $item->folderdocinfo_id;
 echo '<hr />';
-/*
-// POST to ECMS
-$curl = curl_init();
+*/
 
+//POST Request to Content Ingestion Endpoint
+$file_name_with_full_path = $_SERVER['DOCUMENT_ROOT'] . '/wordpress3/wp-content' . $item->file_location . $item->file_name;
+
+$curlFile = curl_file_create($file_name_with_full_path,mime_content_type($file_name_with_full_path));
+
+//$fileHandler = fopen($file_name_with_full_path, 'r');
+//$fileData = fread($fileHandler, filesize($file_name_with_full_path));
+
+
+//$file = fopen($file_name_with_full_path, 'r');
+//$len = 1024;
+//$fileData = fread( $file, $len );
+
+//while (!feof($file)) {
+//   $fileData .= fread( $file, $len );
+//}
+
+//fclose($file);
+
+$date = strtotime( $item->date );
+$date_formated = date( 'Y-m-d\\TH:i:s', $date );
+
+$event_date = strtotime( $item->close_date );
+$event_date_formated = date( 'Y-m-d\\TH:i:s', $event_date );
+
+if ($event_date_formated == '-0001-11-30T00:00:00') {
+$event_date_formated = '';
+} else {
+$event_date_formated = date( 'Y-m-d\\TH:i:s', $event_date );
+}
+
+$rs_num = $item->fnum . '_' .$item->snum . '_' . $item->dnum;
+
+$folderdocid = 'PATT_' . $item->folderdocinfo_id;
+
+// Temp switch of user for testing purposes switch to $item->user_login for production
+$temp_user = 'ayuen';
+
+$metadata = '
+{ 
+"properties":{ 
+"r_object_type":"erma_content",
+"object_name":"' .$item->file_name.'",
+"a_application_type":"PATT",
+"erma_content_title":"'.$item->title.'",
+"erma_content_unid":"' . $folderdocid.'",
+"erma_content_date":"'.$date_formated.'",
+"erma_content_schedule":"'.$rs_num.'",
+"erma_content_eventdate":"'.$event_date_formated.'",
+"erma_sensitivity_id":"",
+"erma_custodian":"'.$temp_user.'",
+"erma_folder_path":"'.$item->file_location.'"
+}
+}
+';
+
+//echo '<br />' . $file_name_with_full_path .'<br />';
+//echo $metadata;
+
+
+$curl = curl_init();
 curl_setopt_array($curl, array(
-  CURLOPT_URL => "http://lippizzan3.rtpnc.epa.gov:8080/apiman-gateway/ecms/save/1.2?apiKey=031a8c90-f025-4e80-ab47-e2bd577410d7",
+  CURLOPT_URL => "http://lippizzan3.rtpnc.epa.gov/ecms/save/1.2?apiKey=031a8c90-f025-4e80-ab47-e2bd577410d7",
   CURLOPT_RETURNTRANSFER => true,
   CURLOPT_ENCODING => "",
   CURLOPT_MAXREDIRS => 10,
   CURLOPT_TIMEOUT => 0,
   CURLOPT_FOLLOWLOCATION => true,
   CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+  CURLINFO_HEADER_OUT => true,
   CURLOPT_CUSTOMREQUEST => "POST",
-  CURLOPT_POSTFIELDS => array('metadata' => '{ 
-"properties":{ 
-"r_object_type":"erma_content",
-"object_name":"26553380_1_Inserted Digital Signature into a PDF Document Using PIV Card (2).pdf",
-"a_application_type":"PATT",
-"erma_content_title":"26553380_1_Inserted Digital Signature into a PDF Document Using PIV Card (2)",
-"erma_content_unid":"PATT_02312676",
-"erma_content_date":"2012-09-12T21:45:32",
-"erma_content_schedule":"000_000_a",
-"erma_content_eventdate":"2013-09-12T21:45:32",
-"erma_sensitivity_id":"3",
-"erma_custodian":"mnguyen",
-"erma_folder_path":"H:\\\\ECMS\\\\ECMS Share\\\\ Enhancements\\\\ECMS REST API\\\\VDD"
-}
-}
-','content'=> new CURLFILE('/C:/Users/mnguyen/Desktop/test pdf/26553380_1_Inserted  Digital Signature into a PDF Document Using PIV Card (2).pdf')),
+  CURLOPT_POSTFIELDS => array('metadata' => $metadata,'contents'=> $curlFile),
   CURLOPT_HTTPHEADER => array(
     "Authorization: Basic cGF0dF9hZG1pbjplY21zUGF0dDEyMw=="
   ),
 ));
 
-$response = curl_exec($curl);
+$result = curl_exec($curl);
+$retry = 0;
+$json = json_decode($result, true);
 
+date_default_timezone_set("America/New_York");
+$date = date('m/d/Y h:i:s a', time());
+
+//$information = curl_getinfo($curl);
+//print_r( $information);
+
+print_r($json);
+
+/*
+// Error Handling
+if (array_key_exists("status",$json) || array_key_exists("code",$json))
+  {
+while($json['status'] == 401 && $json['code'] == 'E_BAD_CREDENTIALS_ERROR' && $retry < 2){
+    $result = curl_exec($curl);
+    $retry++;
+}
+
+while($json['status'] == 401 || $json['status'] == 500){
+	$wpdb->insert('wpqa_epa_error_log', array(
+    'Status_Code' => $json['status'],
+    'Error_Message' => $json['code'],
+    'Service_Type' => 'PATT_ECMS_API',
+	'Timestamp' => $date,
+));
+
+}
+  }
+
+if(!$result){
+    die('Error: "' . curl_error($curl) . '" - Code: ' . curl_errno($curl));
+	
+	$wpdb->insert('wpqa_epa_error_log', array(
+    'Status_Code' => curl_errno($curl),
+    'Error_Message' => curl_error($curl),
+    'Service_Type' => 'PATT_ECMS_CURL',
+	'Timestamp' => $date,
+));
+}
+*/
 curl_close($curl);
-echo $response;
+//var_dump($result);
 
-
-// Parse response get object ID
-
+/*
 // Check Response success 
-if ($response = '') {
-
+if ($response = '123') {
 // Update Ticket Status
 $wpscfunction->change_status($item->ticket_id, 67);
 
 // Update Filelocation to ECMS URL
 $table_name = 'wpqa_wpsc_epa_folderdocinfo';
-$ecms_location = 'link to document in ecms';
+$ecms_location = '/ecms/...';
 $wpdb->update( $table_name, array( 'file_location' => $ecms_location),array('ID'=>$item->folderdocid));
 
-//Delete file from temp location 30 day check?
+
+// Delete record from temp storage
+    if (file_exists($file_name_with_full_path)) {
+        unlink($file_name_with_full_path);
+    } else {
+        // File not found.
+    }
 
 }
 */

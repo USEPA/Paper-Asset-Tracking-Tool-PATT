@@ -993,3 +993,38 @@ comment out this line:
 ```
 <button type="button" id="wpsc_individual_close_btn" onclick="wpsc_get_close_ticket(<?php echo $ticket_id?>)" class="btn btn-sm wpsc_action_btn" style="<?php echo $action_default_btn_css?>"><i class="fa fa-check"></i> <?php _e('Close','supportcandy')?></button>
 ```
+
+
+##### Restrict access to the critical status
+IN /wp-content/plugins/supportcandy/includes/admin/tickets/individual_ticket/get_change_ticket_status.php
+
+FIND $wpsc_custom_priority_localize = get_option('wpsc_custom_priority_localize');
+
+ADD BELOW
+//PATT BEGIN
+$agent_permissions = $wpscfunction->get_current_agent_permissions();
+$agent_permissions['label'];
+//PATT END
+
+FIND
+foreach ( $priorities as $priority ) :
+
+ADD ABOVE
+			//PATT BEGIN
+			$key = array_search('Critical', array_column($priorities, 'name'));
+			if ($agent_permissions['label'] == 'Agent')
+            {
+                 unset($priorities[$key]);
+            }
+			//PATT END
+FIND
+echo '<option '.$selected.' value="'.$priority->term_id.'">'.$wpsc_custom_priority_localize['custom_priority_'.$priority->term_id].'</option>';	
+
+REPLACE
+				//PATT BEGIN
+				if ($priority->term_id == 9) {
+				echo '<option '.$selected.' style="background: #FFD0C2; font-weight: bold;" value="'.$priority->term_id.'">'.$wpsc_custom_priority_localize['custom_priority_'.$priority->term_id].'</option>';
+				} else {
+				echo '<option '.$selected.' value="'.$priority->term_id.'">'.$wpsc_custom_priority_localize['custom_priority_'.$priority->term_id].'</option>';				
+				}
+				//PATT END

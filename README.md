@@ -1065,6 +1065,11 @@ postvarpage : page_id
 		    jQuery('#wpsc_popup_footer').html(response.footer);
 		    jQuery('#wpsc_cat_name').focus();
 		  }); 
+          dataTable.ajax.reload( null, false );
+          dataTable.column(0).checkboxes.deselectAll();
+      //}
+   });
+});
 	//PATT END
 	
 IN /wp-content/plugins/supportcandy/includes/class-wpsc-actions.php

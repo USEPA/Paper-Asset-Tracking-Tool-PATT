@@ -1042,14 +1042,12 @@ FIND
 	function wpsc_submit_reply( save_type ){
 ADD ABOVE
 	//PATT BEGIN
+//delete button
 jQuery('#wpsc_individual_delete_btn').on('click', function(e){
      var form = this;
-     var ticket_id = <?php echo $ticket; ?>;
-     var page_id = "wpsc-tickets";
 		   jQuery.post(
    '<?php echo WPPATT_PLUGIN_URL; ?>includes/admin/pages/scripts/delete_request.php',{
-postvarrequest_id : ticket_id,
-postvarpage : page_id
+postvarsrequest_id : <?php echo $ticket_id;?>
 }, 
    function (response) {
       //if(!alert(response)){
@@ -1065,8 +1063,7 @@ postvarpage : page_id
 		    jQuery('#wpsc_popup_footer').html(response.footer);
 		    jQuery('#wpsc_cat_name').focus();
 		  }); 
-          dataTable.ajax.reload( null, false );
-          dataTable.column(0).checkboxes.deselectAll();
+		  		  wpsc_open_ticket(<?php echo $ticket_id?>);
       //}
    });
 });

@@ -1087,9 +1087,9 @@ ADD ABOVE
     function recycle_request ( $ticket_id){
       global $wpscfunction, $current_user;
       if($current_user->ID){
-        $log_str = sprintf( __('Request ID: %1$s has been moved to the recycle bin','supportcandy'), '<strong>'. $ticket_id .'</strong>');
+        $log_str = sprintf( __('Request has been moved to the recycle bin by %1$s','supportcandy'), '<strong>'. $current_user->display_name .'</strong>');
       } else {
-        $log_str = sprintf( __('Request ID %1$s has been moved to the recycle bin','supportcandy'), '<strong>'.$ticket_id.'</strong>' );
+        $log_str = sprintf( __('Request has been moved to the recycle bin by %1$s','supportcandy'), '<strong>'.$current_user->display_name.'</strong>' );
       }
       $args = array(
         'ticket_id'      => $ticket_id,

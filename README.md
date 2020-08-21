@@ -1028,3 +1028,73 @@ REPLACE
 				echo '<option '.$selected.' value="'.$priority->term_id.'">'.$wpsc_custom_priority_localize['custom_priority_'.$priority->term_id].'</option>';				
 				}
 				//PATT END
+##### Redo Delete functions to ensure that only requests in a cancelled status or all boxes in a dispositioned status are deleted
+IN /wp-content/plugins/supportcandy/includes/admin/tickets/individual_ticket/load_individual_ticket.php
+
+FIND
+    	<button type="button" id="wpsc_individual_delete_btn" onclick="wpsc_get_delete_ticket(<?php echo $ticket_id ?>);" class="btn btn-sm wpsc_action_btn" style="<?php echo $action_default_btn_css?>"><i class="fa fa-trash"></i> <?php _e('Delete','supportcandy')?></button>
+
+REPLACE
+    	<button type="button" id="wpsc_individual_delete_btn" class="btn btn-sm wpsc_action_btn" style="<?php echo $action_default_btn_css?>"><i class="fa fa-trash"></i> <?php _e('Delete','supportcandy')?></button>
+	
+FIND
+// Submit note
+	function wpsc_submit_reply( save_type ){
+ADD ABOVE
+	//PATT BEGIN
+jQuery('#wpsc_individual_delete_btn').on('click', function(e){
+     var form = this;
+     var ticket_id = <?php echo $ticket; ?>;
+     var page_id = "wpsc-tickets";
+		   jQuery.post(
+   '<?php echo WPPATT_PLUGIN_URL; ?>includes/admin/pages/scripts/delete_request.php',{
+postvarrequest_id : ticket_id,
+postvarpage : page_id
+}, 
+   function (response) {
+      //if(!alert(response)){
+      
+       wpsc_modal_open('Delete Request');
+		  var data = {
+		    action: 'wpsc_delete_request',
+		    response_data: response
+		  };
+		  jQuery.post(wpsc_admin.ajax_url, data, function(response_str) {
+		    var response = JSON.parse(response_str);
+		    jQuery('#wpsc_popup_body').html(response.body);
+		    jQuery('#wpsc_popup_footer').html(response.footer);
+		    jQuery('#wpsc_cat_name').focus();
+		  }); 
+	//PATT END
+	
+IN /wp-content/plugins/supportcandy/includes/class-wpsc-actions.php
+
+FIND
+function load_actions() {
+
+ADD UNDER
+      //PATT BEGIN
+      add_action( 'wpsc_after_recycle', array($this,'recycle_request'), 10, 1 );
+      //PATT END
+FIND
+// Submit reply actions
+    function submit_reply($thread_id) {
+ADD ABOVE
+    //PATT BEGIN
+        // Recycle request
+    function recycle_request ( $ticket_id){
+      global $wpscfunction, $current_user;
+      if($current_user->ID){
+        $log_str = sprintf( __('Request ID: %1$s has been moved to the recycle bin','supportcandy'), '<strong>'. $ticket_id .'</strong>');
+      } else {
+        $log_str = sprintf( __('Request ID %1$s has been moved to the recycle bin','supportcandy'), '<strong>'.$ticket_id.'</strong>' );
+      }
+      $args = array(
+        'ticket_id'      => $ticket_id,
+        'reply_body'     => $log_str,
+        'thread_type'    => 'log'
+      );
+      $args = apply_filters( 'wpsc_thread_args', $args );
+      $wpscfunction->submit_ticket_thread($args);
+    }
+    //PATT END

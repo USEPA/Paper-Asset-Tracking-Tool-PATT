@@ -8,6 +8,7 @@ textarea {
 .column {
   float: left;
   padding: 10px;
+  width: 100%;
 }
 
 .left, .middle {
@@ -24,11 +25,18 @@ textarea {
   display: table;
   clear: both;
 }
-#scan_input:focus {  
-    outline: blue;
+
+#scan-input {
+  border-radius: 4px;
+  width: 91.2%;
 }
 
-/* Responsive layout - makes the two columns stack on top of each other instead of next to each other */
+.focused {  
+  border: 2px solid #0741AB;
+  box-shadow: 0 0 2px #00A0D2 ; 
+}
+
+/*  Responsive layout - makes the two columns stack on top of each other instead of next to each other */
 @media screen and (max-width: 600px) {
   .column {
     width: 100%;
@@ -47,17 +55,8 @@ textarea {
     padding: 10px 0;
     background-color: #1C5D8A;
 }
-#wpfooter {
-    left: 0;
-    right: 0;
-    padding: 10px 20px;
-    color: #555d66;
-    height: auto;
-    position: relative;
-    -webkit-font-smoothing: subpixel-antialiased;
-}
 
-div.justified {
+.justified {
     display: flex;
     justify-content: center;
 }
@@ -76,4 +75,45 @@ div.justified {
 .hidden { 
     display: none; 
     
+}
+
+.bootstrap-iso .col-md-8 {
+    float: left;
+}
+.bootstrap-iso .col-md-9 {
+    width: 75%;
+    float: left;
+}
+#wpfooter {
+    position: absolute;
+    left: 0;
+    right: 0;
+    padding: 10px 20px;
+    color: #555d66;
+}
+#boxid-textarea {
+    width: 100%;
+}
+input[type=search] {
+    -webkit-appearance: none;
+}
+
+.dvscanner-layer {
+  text-align: center;
+}
+
+.header-left { display: inline-flex; }
+.header-center { display: inline; }
+.header-right { float: right;}
+
+#resetscanbtn {
+        height: 30px;
+        margin: 0 auto;
+}
+#submitbtn {
+        height: 30px;
+        margin: 0 auto;
+}
+.dvsubmission_layer .wpsc-thread-log .confirmation{
+    width: 100%;
 }

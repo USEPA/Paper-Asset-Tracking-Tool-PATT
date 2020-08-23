@@ -4,7 +4,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 global $current_user, $wpdb;
-if (!($current_user->ID && $current_user->has_cap('manage_options'))) {exit;}
+if (!($current_user->ID && $current_user->has_cap('edit_published_posts'))) {exit;}
 
 $agent_name = isset($_POST) && isset($_POST['agent_name']) ? sanitize_text_field($_POST['agent_name']) : '';
 if (!$agent_name) {exit;}

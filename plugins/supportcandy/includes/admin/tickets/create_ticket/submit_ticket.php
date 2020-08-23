@@ -59,6 +59,8 @@ if(is_user_logged_in() && !$current_user->has_cap('wpsc_agent') ){
 $boxinfodata = $_POST["boxinfo"];
 $args['box_info'] = $boxinfodata;
 
+$useagedata = $_POST["are-these-documents-used-for-the-following"];
+$args['ticket_useage'] = $useagedata;
 
 // Subject
 $ticket_subject = isset($_POST['ticket_subject']) ? sanitize_text_field($_POST['ticket_subject']) : '';
@@ -155,14 +157,19 @@ $thankyou_html = apply_filters('wpsc_after_thankyou_page_button',$thankyou_html,
 $num = $ticket_id;
 $str_length = 7;
 $padded_request_id = substr("000000{$num}", -$str_length);
-$request_link = site_url().'/data/?id='.$padded_request_id;
+$qr_link = site_url().'/index.php/data/?id='.$padded_request_id;
+$request_link = site_url().'/wp-admin/admin.php?page=wpsc-tickets&id='.$padded_request_id;
 $thankyou_html = str_replace('{request_id}', $padded_request_id, $thankyou_html);
 $thankyou_html .= '<p><a target="_blank" href="'.$request_link .'">'.$request_link .'</a></p>';
+$thankyou_html .= '<p><img src="'.WPPATT_PLUGIN_URL.'asset/lib/qr/qrcode.php?s=qrl&d='.$qr_link.'"></p>';
+
 
 ob_start();
 ?>
 <div class="col-sm-12" style="margin-top:20px;">
-	<?php echo html_entity_decode(stripslashes($thankyou_html))?>
+	<?php 
+	echo html_entity_decode(stripslashes($thankyou_html));
+	?>
 </div>
 <?php
 $thankyou_html = ob_get_clean();

@@ -4,7 +4,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 global $current_user;
-if (!($current_user->ID && $current_user->has_cap('manage_options'))) {exit;}
+if (!($current_user->ID && $current_user->has_cap('edit_published_posts'))) {exit;}
 
 $cat_id = isset($_POST) && isset($_POST['cat_id']) ? intval($_POST['cat_id']) : 0;
 if (!$cat_id) {exit;}

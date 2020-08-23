@@ -7,9 +7,6 @@ global $wpdb, $current_user, $wpscfunction;
 
 $blog_id = get_current_blog_id();
 
-$filter             = $wpscfunction->get_current_filter();
-$saved_filters      = get_user_meta($current_user->ID, $blog_id.'_wpsc_filter',true);
-$saved_filters      = $saved_filters ? $saved_filters : array();
 $general_appearance = get_option('wpsc_appearance_general_settings');
 
 $create_ticket_btn_css       = 'background-color:'.$general_appearance['wpsc_crt_ticket_btn_action_bar_bg_color'].' !important;color:'.$general_appearance['wpsc_crt_ticket_btn_action_bar_text_color'].' !important;';
@@ -19,218 +16,608 @@ $wpsc_show_and_hide_filters  = get_option('wpsc_show_and_hide_filters');
 $wpsc_appearance_ticket_list = get_option('wpsc_appearance_ticket_list');
 
 $wpsc_on_and_off_auto_refresh = get_option('wpsc_on_and_off_auto_refresh');
-
-include WPSC_ABSPATH.'includes/admin/tickets/ticket_list/filters/get_label_count.php';
+$agent_permissions = $wpscfunction->get_current_agent_permissions();
+//include WPSC_ABSPATH.'includes/admin/tickets/ticket_list/filters/get_label_count.php';
 ?>
+<style>
+.bootstrap-iso label {
+    margin-top: 5px;
+}
+.datatable_header {
+background-color: rgb(66, 73, 73) !important; 
+color: rgb(255, 255, 255) !important; 
+}
+
+.bootstrap-tagsinput {
+   width: 100%;
+  }
+
+#searchGeneric {
+    padding: 0 30px !important;
+}
+
+.update-plugins {
+    display: inline-block;
+    vertical-align: top;
+    box-sizing: border-box;
+    margin: 1px 0 -1px 2px;
+    padding: 0 5px;
+    min-width: 18px;
+    height: 18px;
+    border-radius: 9px;
+    background-color: #ca4a1f;
+    color: #fff;
+    font-size: 11px;
+    line-height: 1.6;
+    text-align: center;
+    z-index: 26;
+}
+.remove-user {
+    padding-left:5px;
+}
+
+.staff-badge {
+	padding: 3px 3px 3px 5px;
+	font-size:1.0em !important;
+	vertical-align: middle;
+}
+
+.staff-close {
+	margin-left: 3px;
+	margin-right: 3px;
+}
+</style>
 <div class="row wpsc_tl_action_bar" style="background-color:<?php echo $general_appearance['wpsc_action_bar_color']?> !important;">
   <div class="col-sm-12">
-  	<?php if(apply_filters('wpsc_show_create_ticket_button',$flag = true)){?>
-    <button type="button" id="wpsc_load_list_new_ticket_btn" onclick="wpsc_get_create_ticket();" class="btn btn-sm wpsc_create_ticket_btn" style="<?php echo $create_ticket_btn_css?>"><i class="fa fa-plus"></i> <?php _e('New Ticket','supportcandy')?></button>
-	  <?php }
-		 if ($current_user->has_cap('wpsc_agent') && apply_filters('wpsc_show_agent_setting_button',true)):?>
-       <button type="button" id="wpsc_load_list_agent_setting_btn" onclick="wpsc_get_agent_setting();" class="btn btn-sm wpsc_action_btn" style="<?php echo $action_default_btn_css?>"><i class="fas fa-user-cog"></i> <?php _e('Agent Settings','supportcandy')?></button>
-		<?php endif;?>
-		<button type="button" class="btn btn-sm visible-xs visible-sm wpsc_action_btn" id="wpsc_load_list_show_filters_btn" onclick="toggle_wpsc_sm_filters(this);" style="<?php echo $action_default_btn_css?>"><i class="fa fa-filter"></i> <?php _e('Show Filters','supportcandy')?></button>
-		<?php if($wpsc_show_and_hide_filters){?>
-				<button type="button" class="btn btn-sm hidden-xs hidden-sm wpsc_action_btn" id="wpsc_load_list_hide_filters_btn" onclick="toggle_wpsc_md_filters(this);" style="<?php echo $action_default_btn_css?>"><i class="fa fa-filter"></i> <?php _e('Hide Filters','supportcandy')?></button>
-		<?php	}else{?>
-				<button type="button" class="btn btn-sm hidden-xs hidden-sm wpsc_action_btn" id="wpsc_load_list_hide_filters_btn" onclick="toggle_wpsc_md_filters(this);" style="<?php echo $action_default_btn_css?>"><i class="fa fa-filter"></i> <?php _e('Show Filters','supportcandy')?></button>
-			<?php } ?>	
-		<?php
-		    //Set agent default filter
-			$blog_id        = get_current_blog_id();
-			$default_filter = get_user_meta($current_user->ID,$blog_id.'_wpsc_user_default_filter',true);
-			$default_filter = ( $default_filter!='' && ($default_filter || $default_filter == 0) && $current_user->has_cap('wpsc_agent') ) ? $default_filter : 'all';
-			$reset_type     = $default_filter;
-		?>
-		<button type="button" class="btn btn-sm wpsc_action_btn" id="wpsc_load_list_reset_filters_btn" onclick="wpsc_set_default_filter('<?php echo $reset_type?>');" style="<?php echo $action_default_btn_css?>"><i class="fa fa-retweet"></i> <?php _e('Reset Filters','supportcandy')?></button>
-		<?php if ($current_user->has_cap('wpsc_agent')):?>
-			<button type="button" class="btn btn-sm wpsc_action_btn" id="wpsc_load_list_auto_refresh_btn" onclick="wpsc_set_toggle_auto_refresh();" style="<?php echo $action_default_btn_css?>"><i class="fas fa-sync-alt"></i> <span id="wpsc_autorefresh_btn_lbl"><?php _e('Auto Refresh : Off','supportcandy')?></span></button>
-		<?php endif;?>
-		<?php do_action('wpsc_add_btn_after_default_filter');?>
-		<?php if ($wpscfunction->has_permission('assign_agent')&& $wpscfunction->has_permission('change_agentonly_fields',$ticket_id)):?>
-    	<button type="button" class="btn btn-sm wpsc_btn_bulk_action wpsc_action_btn checkbox_depend hidden" id="btn_assign_agents" onclick="wpsc_get_bulk_assign_agent();" style="<?php echo $action_default_btn_css?>"><i class="fas fa-users"></i> <?php _e('Assign Agent','supportcandy')?></button>
-		<?php endif;?>
-		<?php if ($wpscfunction->has_permission('change_status') && $wpscfunction->has_permission('change_agentonly_fields',$ticket_id)):?>
-    	<button type="button" class="btn btn-sm wpsc_btn_bulk_action wpsc_action_btn checkbox_depend hidden" id="btn_change_statuses" onclick="wpsc_get_bulk_change_status()" style="<?php echo $action_default_btn_css?>"><i class="fa fa-arrow-circle-right"></i> <?php _e('Change Status','supportcandy')?></button>
-		<?php endif;?>
-		<?php if ($wpscfunction->has_permission('delete_ticket')):?>
-			<button type="button" class="btn btn-sm wpsc_btn_bulk_action wpsc_action_btn checkbox_depend hidden" id="btn_delete_tickets"  onclick="wpsc_get_delete_bulk_ticket()" style="<?php echo $action_default_btn_css?>"><i class="fa fa-trash"></i> <?php _e('Delete Tickets','supportcandy')?></button>
-			<button type="button" class="btn btn-sm wpsc_btn_bulk_action wpsc_action_btn checkbox_depend hidden" id="btn_restore_tickets"  onclick="wpsc_get_restore_bulk_ticket()" style="<?php echo $action_default_btn_css?>"><i class="fa fa-window-restore"></i> <?php _e('Restore Ticket','supportcandy')?></button>
-			<button type="button" class="btn btn-sm wpsc_btn_bulk_action wpsc_action_btn checkbox_depend hidden" id="btn_delete_permanently_bulk_ticket"  onclick="wpsc_get_delete_permanently_bulk_ticket();" style="<?php echo $action_default_btn_css?>"><i class="fa fa-trash"></i> <?php _e('Delete Tickets Permanently','supportcandy')?></button>
-		<?php endif;?>
-		<?php 
-		$wpsc_support_page_id = get_option('wpsc_support_page_id');
-		$support_page_url = get_permalink($wpsc_support_page_id);
-		$wpsc_allow_sign_out = get_option('wpsc_sign_out');
-		if($wpsc_allow_sign_out){?>
-			<button class="btn btn-sm pull-right" type="button" id="wpsc_sign_out" onclick="window.location.href='<?php echo wp_logout_url($support_page_url) ?>'" style=" <?php echo $logout_btn_css ?>"><i class="fas fa-sign-out-alt"></i> <?php _e('Log Out','supportcandy')?></button>
-		<?php  }?>
+  	        <button type="button" id="wpsc_load_new_create_ticket_btn" onclick="wpsc_get_create_ticket();" class="btn btn-sm wpsc_create_ticket_btn" style="<?php echo $create_ticket_btn_css?>"><i class="fa fa-plus"></i> <?php _e('New Ticket','supportcandy')?></button>
+        <button type="button" id="wpsc_individual_ticket_list_btn" onclick="location.href='admin.php?page=wpsc-tickets';" class="btn btn-sm wpsc_action_btn" style="<?php echo $action_default_btn_css?>"><i class="fa fa-list-ul"></i> <?php _e('Ticket List','supportcandy')?></button>
+		<button type="button" class="btn btn-sm wpsc_action_btn" id="wpsc_individual_refresh_btn" style="<?php echo $action_default_btn_css?>"><i class="fas fa-retweet"></i> <?php _e('Reset Filters','supportcandy')?></button>
+<?php		
+if (($agent_permissions['label'] == 'Administrator') || ($agent_permissions['label'] == 'Agent'))
+{
+?>
+<button type="button" class="btn btn-sm wpsc_btn_bulk_action wpsc_action_btn checkbox_depend" id="btn_delete_tickets" style="<?php echo $action_default_btn_css?>"><i class="fa fa-trash"></i> <?php _e('Delete Tickets','supportcandy')?></button>
+<?php
+}
+?>		
   </div>
 </div>
 
 <div class="row" style="background-color:<?php echo $general_appearance['wpsc_bg_color']?> !important;color:<?php echo $general_appearance['wpsc_text_color']?> !important;">
-	<div id="wpsc_md_filters" class="col-md-2 hidden-xs hidden-sm <?php echo $wpsc_show_and_hide_filters==0 ?'hidden':'visible'?> wpsc_sidebar">
-  	<div class="row" style="background-color:<?php echo $wpsc_appearance_ticket_list['wpsc_filter_widgets_bg_color']?> !important;color:<?php echo $wpsc_appearance_ticket_list['wpsc_filter_widgets_text_color']?> !important;border-color:<?php echo $wpsc_appearance_ticket_list['wpsc_filter_widgets_border_color']?> !important;">
-			<h4 class="widget_header"><i class="fa fa-filter"></i> <?php _e('Filters','supportcandy')?></h4>
-			<hr class="widget_divider">
-			<?php
-				$labels = $wpscfunction->get_ticket_filter_labels();
-				foreach ($labels as $key => $label) {				
-					if ( ($current_user->has_cap('wpsc_agent') && $label['visibility']=='agent') || (!$current_user->has_cap('wpsc_agent') && $label['visibility']=='customer') || $label['visibility']=='both' ) {
-						?>
-						<div onclick="wpsc_set_default_filter('<?php echo $key?>');" class="wpsp_sidebar_labels <?php echo $key?> <?php echo $filter['label']==$key?'active':''?>">
-							<?php echo $label['label'];
-							$badge_count = 0;
-							if($key == 'unresolved_agent'){
-								$badge_count = $label_counts['unresolved_agent'];
-							}
-							echo ($label['has_badge'] && $current_user->has_cap('wpsc_agent'))?' <span class="badge">'.$badge_count.'</span>':''?>
-						</div>
-						<?php
-					}
-				}
-				?>
-			</div>
-	    <div class="row wpsc_edit_custom_filter" style="background-color:<?php echo $wpsc_appearance_ticket_list['wpsc_filter_widgets_bg_color']?> !important;color:<?php echo $wpsc_appearance_ticket_list['wpsc_filter_widgets_text_color']?> !important;border-color:<?php echo $wpsc_appearance_ticket_list['wpsc_filter_widgets_border_color']?> !important;">
-	      <h4 class="widget_header"><i class="fa fa-filter"></i> <?php _e('Saved Filters','supportcandy')?></h4>
-				<hr class="widget_divider">
-				<?php
-				foreach ($saved_filters as $key => $label) {	
-					?>
-					<div class="wpsp_sidebar_labels" style="display:flex;align-items: center;">
-						<div style="flex-grow: 8">
-							<span onclick="wpsc_set_saved_filter('<?php echo $key?>');"class="wpsp_sidebar_labels <?php echo $key?> <?php echo isset($filter['save_label']) && $filter['save_label'] ==$label['save_label']?'active':''?>"><?php echo $label['save_label']?></span>
-						</div>
-						<div class='wpsc_list_filter_edit' style="flex-grow: 1; padding-right:2px;"><i class="far fa-edit" onclick="wpsc_edit_saved_filter('<?php echo $key?>');"></i></div>
-						<div class='wpsc_list_filter_delete' style="flex-grow: 1"><i class="fa fa-trash" onclick="wpsc_delete_saved_filter('<?php echo $key?>');"></i></div>
-					</div>
-					<?php
-				}
-				if(!$saved_filters) echo __('No filters found!','supportcandy').'<br><br>';
-				?>
-			</div>
-	  </div>
-	<div id="wpsc_sm_filters" class="col-sm-12 col-md-2 hidden wpsc_sidebar">
-		<div class="row">
-			<h4 class="widget_header"><i class="fa fa-filter"></i> <?php _e('Filters','supportcandy')?></h4>
-			<hr class="widget_divider">
-			<?php
-			foreach ($labels as $key => $label) {				
-				if ( ($current_user->has_cap('wpsc_agent') && $label['visibility']=='agent') || (!$current_user->has_cap('wpsc_agent') && $label['visibility']=='customer') || $label['visibility']=='both' ) {
-					?>
-					<div onclick="wpsc_set_default_filter('<?php echo $key?>');" class="wpsp_sidebar_labels <?php echo $key?> <?php echo $filter['label']==$key?'active':''?>">
-						<?php echo $label['label'];
-						$badge_count = 0;
-						if($key == 'unresolved_agent'){
-							$badge_count = $label_counts['unresolved_agent'];
-						}
-						
-						echo ($label['has_badge'])?' <span class="badge">'.$badge_count.'</span>':''?>
-					</div>
-					<?php
-				}
-			}
-			?>
-		</div>
-		<div class="row">
-			<h4 class="widget_header"><i class="fa fa-filter"></i> <?php _e('Saved Filters','supportcandy')?></h4>
-			<hr class="widget_divider">
-			<?php
-			foreach ($saved_filters as $key => $label) {									
-				?>
-				<div class="wpsp_sidebar_labels" style="display:flex;align-items: center;">
-					<div style="flex-grow: 8">
-						<span onclick="wpsc_set_saved_filter('<?php echo $key?>');"class="wpsp_sidebar_labels <?php echo $key?> <?php echo isset($filter['save_label']) && $filter['save_label'] ==$label['save_label']?'active':''?>"><?php echo $label['save_label']?></span>
-					</div>
-					<div>
-						<i class="far fa-edit wpsc_list_filter_edit" onclick="wpsc_edit_saved_filter('<?php echo $key?>');"></i>
-						<i class="fa fa-trash wpsc_list_filter_delete" onclick="wpsc_delete_saved_filter('<?php echo $key?>');"></i>
-					</div>
-				</div>
-				<?php
-			}
-			if(!$saved_filters) echo __('No filters found!','supportcandy').'<br><br>';
-			?>
-		</div>
-	</div>	
 
-<?php if(!$wpsc_show_and_hide_filters){ ?>
-			<div class="col-sm-12 col-md-12 wpsc_ticket_list_container table-responsive" >
-				<?php include WPSC_ABSPATH . 'includes/admin/tickets/ticket_list/get_ticket_list.php';?>
-			</div>
-<?php }
-else{?>
-	<div class="col-sm-12 col-md-10 wpsc_ticket_list_container table-responsive" >
-		<?php include WPSC_ABSPATH . 'includes/admin/tickets/ticket_list/get_ticket_list.php';?>
+	<div class="col-sm-4 col-md-3 wpsc_sidebar individual_ticket_widget">
+
+							<div class="row" id="wpsc_status_widget" style="background-color:<?php echo $wpsc_appearance_individual_ticket_page['wpsc_ticket_widgets_bg_color']?> !important;color:<?php echo $wpsc_appearance_individual_ticket_page['wpsc_ticket_widgets_text_color']?> !important;border-color:<?php echo $wpsc_appearance_individual_ticket_page['wpsc_ticket_widgets_border_color']?> !important;">
+					      <h4 class="widget_header"><i class="fa fa-filter"></i> Filters
+								</h4>
+								<hr class="widget_divider">
+
+	                            <div class="wpsp_sidebar_labels">
+Enter one or more Request IDs:<br />
+         <input type='text' id='searchByRequestID' class="form-control" data-role="tagsinput">
+<br />
+        <select id='searchByStatus'>
+           <option value=''>-- Select Status --</option>
+			<option value="3">New</option>
+			<option value="4">Initial Review Complete</option>
+			<option value="670">Initial Review Rejected</option>
+			<option value="5">Shipped</option>
+			<option value="63">Received</option>
+			<option value="69">Cancelled</option>
+         </select>
+<br /><br />
+        <select id='searchByPriority'>
+           <option value=''>-- Select Priority --</option>
+			<option value="621">Not Assigned</option>
+			<option value="7">Normal</option>
+			<option value="8">High</option>
+			<option value="9">Critical</option>
+         </select>
+<br /><br />
+        <select id='searchByDigitizationCenter'>
+           <option value=''>-- Select Digitization Center --</option>
+           <option value='East'>East</option>
+           <option value='East CUI'>East CUI</option>
+           <option value='West'>West</option>
+           <option value='West CUI'>West CUI</option>
+           <option value='Not Assigned'>Not Assigned</option>
+         </select>
+<br /><br />
+
+<?php		
+if (($agent_permissions['label'] == 'Administrator') || ($agent_permissions['label'] == 'Agent'))
+{
+?>
+				<select id='searchByUser'>
+					<option value=''>-- Select User --</option>
+					<option value='mine'>Mine</option>
+					<option value='not assigned'>All Requests</option>
+					<option value='search for user'>Search for User</option>
+				</select>
+
+	<br /><br />				
+				<form id="frm_get_ticket_assign_agent">
+					<div id="assigned_agent">
+						<div class="form-group wpsc_display_assign_agent ">
+						    <input class="form-control  wpsc_assign_agents ui-autocomplete-input "  name="assigned_agent"  type="text" autocomplete="off" placeholder="<?php _e('Search agent ...','supportcandy')?>" />
+							<ui class="wpsp_filter_display_container"></ui>
+						</div>
+					</div>
+					<div id="assigned_agents" class="form-group col-md-12 ">
+						<?php
+						    if($is_single_item) {
+							    foreach ( $assigned_agents as $agent ) {
+									$agent_name = get_term_meta( $agent, 'label', true);
+									 	
+										if($agent && $agent_name):
+						?>
+												<div class="form-group wpsp_filter_display_element wpsc_assign_agents ">
+<!-- 													<div class="flex-container searched-user " style="padding:5px;font-size:1.0em;">  -->
+													<div class="flex-container searched-user staff-badge" style=""> 
+														<?php echo htmlentities($agent_name)?><span class="remove-user staff-close"><i class="fa fa-times"></i></span>
+														  <input type="hidden" name="assigned_agent[]" value="<?php echo htmlentities($agent) ?>" />
+					<!-- 									  <input type="hidden" name="new_requestor" value="<?php echo htmlentities($agent) ?>" /> -->
+													</div>
+												</div>
+						<?php
+										endif;
+								}
+							}
+						?>
+				  </div>
+						<input type="hidden" name="action" value="wpsc_tickets" />
+						<input type="hidden" name="setting_action" value="set_change_assign_agent" />
+				</form>	
+
+<br /><?php		
+
+$get_pending_delete_count = $wpdb->get_row(
+"SELECT count(id) as count
+FROM wpqa_wpsc_ticket
+WHERE active = 0 AND id <> -99999"
+			);
+
+$pending_delete_count = $get_pending_delete_count->count;
+
+?>
+ <h4 class="widget_header"><i class="far fa-trash-alt"></i> <a href="admin.php?page=request_delete">Recycle Bin</a> <?php if ($pending_delete_count > 0) { ?><span class="update-plugins count-<?php echo $pending_delete_count ?>"><span class="update-count"><?php echo $pending_delete_count ?></span></span><?php }?></span></h4>
+<hr class="widget_divider">
+<?php		
+} else {
+?>
+<input type="hidden" id="searchByUser" name="searchByUser" value="mine">
+<?php		
+}
+?>	
+<input type="hidden" id="current_user" name="current_user" value="<?php wp_get_current_user(); echo $current_user->nickname; ?>">
+<input type="hidden" id="user_search" name="user_search" value="">
+	                            </div>
+			    		</div>
+	
 	</div>
-<?php } ?>			
+
+	
+  <div class="col-sm-8 col-md-9 wpsc_it_body">
+<div class="table-responsive" style="overflow-x:auto;">
+<input type="text" id="searchGeneric" class="form-control" name="custom_filter[s]" value="" autocomplete="off" placeholder="Search...">
+<i class="fa fa-search wpsc_search_btn wpsc_search_btn_sarch"></i>
+<br /><br />
+<table id="tbl_templates_requests" class="table table-striped table-bordered" cellspacing="5" cellpadding="5" width="100%">
+        <thead>
+            <tr>
+<?php		
+if (($agent_permissions['label'] == 'Administrator') || ($agent_permissions['label'] == 'Agent'))
+{
+?>
+                <th class="datatable_header"></th>
+<?php
+}
+?>
+                <th class="datatable_header">Request ID</th>
+                <th class="datatable_header">Status</th>
+                <th class="datatable_header">Name</th></th>
+                <th class="datatable_header">Location</th>
+                <th class="datatable_header">Priority</th>
+                <th class="datatable_header">Last Updated</th>
+            </tr>
+        </thead>
+    </table>
+<br /><br />
 </div>
-<?php do_action('wpsc_load_ticket_list'); ?>
 
 <script>
-var wpsc_autorefresh_status  = false;
-var wpsc_default_refresh_option = <?php echo $wpsc_on_and_off_auto_refresh ?>;
-if (wpsc_default_refresh_option){
-	jQuery(document).ready(function() {
-		wpsc_set_toggle_auto_refresh();
+
+jQuery(document).ready(function(){
+  
+  var dataTable = jQuery('#tbl_templates_requests').DataTable({
+    'autoWidth': false,
+    'processing': true,
+    'serverSide': true,
+    'stateSave': true,
+    'stateSaveParams': function(settings, data) {
+      data.ss = jQuery('#searchByStatus').val();
+      data.sp = jQuery('#searchByPriority').val();
+      data.sg = jQuery('#searchGeneric').val();
+      data.rid = jQuery('#searchByRequestID').val();
+      data.po = jQuery('#searchByProgramOffice').val();
+      data.dc = jQuery('#searchByDigitizationCenter').val();
+      data.sbu = jQuery('#searchByUser').val(); 
+	  data.aaVal = jQuery("input[name='assigned_agent[]']").map(function(){return jQuery(this).val();}).get();     
+	  data.aaName = jQuery(".searched-user").map(function(){return jQuery(this).text();}).get();  
+      
+    },
+    		'stateLoadParams': function(settings, data) {
+      jQuery('#searchByStatus').val(data.ss);
+      jQuery('#searchByPriority').val(data.sp);
+      jQuery('#searchGeneric').val(data.sg);
+      jQuery('#searchByRequestID').val(data.rid);
+      jQuery('#searchByProgramOffice').val(data.po);
+      jQuery('#searchByDigitizationCenter').val(data.dc);
+<?php		
+if (($agent_permissions['label'] == 'Administrator') || ($agent_permissions['label'] == 'Agent'))
+{
+?>
+			jQuery('#searchByUser').val(data.sbu);
+			jQuery('#user_search').val(data.aaName);
+			
+			// If data values aren't defined then set them as blank arrays.
+			if( typeof data.aaVal == 'undefined' ) {
+				//console.log('undefined!!!');
+				data.aaVal = [];
+				data.aaName = [];				
+				//console.log(data);
+			}
+			
+			data.aaVal.forEach( function(val, key) {
+				let html_str = get_display_user_html(data.aaName[key], val); 
+				jQuery('#assigned_agents').append(html_str);
+			});
+<?php } ?>
+		},
+    'serverMethod': 'post',
+    'searching': false, // Remove default Search Control
+    'ajax': {
+       'url':'<?php echo WPPATT_PLUGIN_URL; ?>includes/admin/pages/scripts/request_processing.php',
+       'data': function(data){
+          // Read values
+		  var sbu = jQuery('#searchByUser').val();  
+		  var aaVal = jQuery("input[name='assigned_agent[]']").map(function(){return jQuery(this).val();}).get();     
+		  var aaName = jQuery("#user_search").val();	 
+          var rs_user = jQuery('#current_user').val();
+          var ss = jQuery('#searchByStatus').val();
+          var sp = jQuery('#searchByPriority').val();
+          var sg = jQuery('#searchGeneric').val();
+          var requestid = jQuery('#searchByRequestID').val();
+          var dc = jQuery('#searchByDigitizationCenter').val();
+          
+          console.log('Names:');
+          console.log(aaName);
+          //console.log('Val:');
+          //console.log(aaVal);
+          
+          // Append to data
+          data.searchGeneric = sg;
+          data.searchByRequestID = requestid;
+          data.searchByStatus = ss;
+          data.searchByPriority = sp;
+          data.searchByDigitizationCenter = dc;
+          data.currentUser = rs_user;
+          data.searchByUser = sbu;
+		  data.searchByUserAAVal = aaVal;
+		  data.searchByUserAAName = aaName;
+       }
+    },
+    'lengthMenu': [[10, 25, 50, 100, 500, 1000], [10, 25, 50, 100, 500, 1000]],
+<?php		
+if (($agent_permissions['label'] == 'Administrator') || ($agent_permissions['label'] == 'Agent'))
+{
+?>
+    	    'columnDefs': [	
+         {	
+            'targets': 0,	
+            'checkboxes': {	
+               'selectRow': true	
+            }	
+         }
+      ],
+      'select': {	
+         'style': 'multi'	
+      },
+      'order': [[1, 'asc']],
+<?php
+}
+?>
+    'columns': [
+<?php		
+if (($agent_permissions['label'] == 'Administrator') || ($agent_permissions['label'] == 'Agent'))
+{
+?>
+       { data: 'request_id' }, 
+<?php
+}
+?>
+       { data: 'request_id_flag' },
+       { data: 'ticket_status' },
+       { data: 'customer_name' },
+       { data: 'location' },
+       { data: 'ticket_priority' },
+       { data: 'date_updated' },
+    ]
+  });
+    
+  jQuery( window ).unload(function() {
+  dataTable.column(0).checkboxes.deselectAll();
+});
+
+  jQuery(document).on('keypress',function(e) {
+    if(e.which == 13) {
+        dataTable.state.save();
+        dataTable.draw();
+    }
+});
+
+	jQuery("#searchByUser").change(function(){
+		dataTable.state.save();
+		dataTable.draw();
 	});
+
+jQuery("#searchByStatus").change(function(){
+    dataTable.state.save();
+    dataTable.draw();
+});
+
+  jQuery("#searchByPriority").change(function(){
+    dataTable.state.save();
+    dataTable.draw();
+});
+
+  jQuery("#searchByDigitizationCenter").change(function(){
+    dataTable.state.save();
+    dataTable.draw();
+});
+
+jQuery('#searchGeneric').on('input keyup paste', function () {
+            dataTable.state.save();
+            dataTable.draw();
+});
+
+
+function onAddTag(tag) {
+    dataTable.state.save();
+    dataTable.draw();
+
+    var target = jQuery("#searchByRequestID");
+    var tags = (tag).match(/id=(\d+)/);
+
+    if (tags != null) {
+        if (!target.tagExist(tags[1])) {
+            target.addTag(tags[1]);
+            target.removeTag(tag);
+
+        }
+    }
 }
 
-function toggle_wpsc_sm_filters(e){
-  if(jQuery('#wpsc_sm_filters').hasClass('hidden')){
-    jQuery('#wpsc_sm_filters').removeClass('hidden');
-    jQuery('#wpsc_sm_filters').addClass('visible-xs');
-    jQuery('#wpsc_sm_filters').addClass('visible-sm');
-    jQuery(e).html('<i class="fa fa-filter"></i> <?php _e('Hide Filters','supportcandy')?>');
-  } else {
-    jQuery('#wpsc_sm_filters').removeClass('visible-xs');
-    jQuery('#wpsc_sm_filters').removeClass('visible-sm');
-    jQuery('#wpsc_sm_filters').addClass('hidden');
-    jQuery(e).html('<i class="fa fa-filter"></i> <?php _e('Show Filters','supportcandy')?>');
-  }
+function onRemoveTag(tag) {
+    dataTable.state.save();
+    dataTable.draw();
 }
 
-function toggle_wpsc_md_filters(e){
-  if(jQuery('#wpsc_md_filters').hasClass('hidden')){
-    jQuery('#wpsc_md_filters').removeClass('hidden');
-    jQuery('#wpsc_md_filters').addClass('hidden-xs');
-    jQuery('#wpsc_md_filters').addClass('hidden-sm');
-		jQuery('.wpsc_ticket_list_container').removeClass('col-md-12');
-		jQuery('.wpsc_ticket_list_container').addClass('col-md-10');
-    jQuery(e).html('<i class="fa fa-filter"></i> <?php _e('Hide Filters','supportcandy')?>');
-  } else {
-    jQuery('#wpsc_md_filters').removeClass('hidden-xs');
-    jQuery('#wpsc_md_filters').removeClass('hidden-sm');
-    jQuery('#wpsc_md_filters').addClass('hidden');
-		jQuery('.wpsc_ticket_list_container').removeClass('col-md-10');
-		jQuery('.wpsc_ticket_list_container').addClass('col-md-12');
-    jQuery(e).html('<i class="fa fa-filter"></i> <?php _e('Show Filters','supportcandy')?>');
-  }
-}
+jQuery("#searchByRequestID").tagsInput({
+   'defaultText':'',
+   'onAddTag': onAddTag,
+   'onRemoveTag': onRemoveTag,
+   'width':'100%'
+});
 
-function wpsc_set_toggle_auto_refresh(){
-	if(wpsc_autorefresh_status){
-		wpsc_autorefresh_status = false;
-		jQuery('#wpsc_autorefresh_btn_lbl').text('<?php _e('Auto Refresh : Off','supportcandy')?>');
+jQuery("#searchByRequestID_tag").on('paste',function(e){
+    var element=this;
+    setTimeout(function () {
+        var text = jQuery(element).val();
+        var target=jQuery("#searchByRequestID");
+        var tags = (text).split(/[ ,]+/);
+        for (var i = 0, z = tags.length; i<z; i++) {
+              var tag = jQuery.trim(tags[i]);
+              if (!target.tagExist(tag)) {
+                    target.addTag(tag);
+              }
+              else
+              {
+                  jQuery("#searchByRequestID_tag").val('');
+              }
+                
+         }
+    }, 0);
+});
+
+
+jQuery('#wpsc_individual_refresh_btn').on('click', function(e){
+    jQuery('#searchByUser').val('');
+    jQuery('#searchByStatus').val('');
+    jQuery('#searchByPriority').val('');
+    jQuery('#searchGeneric').val('');
+    jQuery('#searchByProgramOffice').val('');
+    jQuery('#searchByDigitizationCenter').val('');
+    jQuery('#searchByBoxID').importTags('');
+    dataTable.column(0).checkboxes.deselectAll();
+	dataTable.state.clear();
+	dataTable.destroy();
+	location.reload();
+});
+
+//delete button
+jQuery('#btn_delete_tickets').on('click', function(e){
+     var form = this;
+     var rows_selected = dataTable.column(0).checkboxes.selected();
+		   jQuery.post(
+   '<?php echo WPPATT_PLUGIN_URL; ?>includes/admin/pages/scripts/delete_request.php',{
+postvarsrequest_id : rows_selected.join(",")
+}, 
+   function (response) {
+      //if(!alert(response)){
+      
+       wpsc_modal_open('Delete Request');
+		  var data = {
+		    action: 'wpsc_delete_request',
+		    response_data: response
+		  };
+		  jQuery.post(wpsc_admin.ajax_url, data, function(response_str) {
+		    var response = JSON.parse(response_str);
+		    jQuery('#wpsc_popup_body').html(response.body);
+		    jQuery('#wpsc_popup_footer').html(response.footer);
+		    jQuery('#wpsc_cat_name').focus();
+		  }); 
+		  
+          wpsc_get_ticket_list();
+          dataTable.column(0).checkboxes.deselectAll();
+      //}
+   });
+});
+
+	// User Search
+	jQuery('#frm_get_ticket_assign_agent').hide();
+	
+	jQuery('#searchByUser').change( function() {
+		if(jQuery(this).val() == 'search for user') {
+			jQuery('#frm_get_ticket_assign_agent').show();
+		} else {
+			jQuery('#frm_get_ticket_assign_agent').hide();
+		}
+	});
+	
+	// Show search box on page load - from save state
+	if( jQuery('#searchByUser').val() == 'search for user' ) {
+		jQuery('#frm_get_ticket_assign_agent').show();
+	}
+
+	// Autocomplete for user search
+	jQuery( ".wpsc_assign_agents" ).autocomplete({
+		minLength: 0,
+		appendTo: jQuery('.wpsc_assign_agents').parent(),
+		source: function( request, response ) {
+			var term = request.term;
+			console.log('term: ');
+			console.log(term);
+			request = {
+				action: 'wpsc_tickets',
+				setting_action : 'filter_autocomplete',
+				term : term,
+				field : 'assigned_agent',
+			}
+			jQuery.getJSON( wpsc_admin.ajax_url, request, function( data, status, xhr ) {
+				response(data);
+			});
+		},
+		select: function (event, ui) {
+			console.log('label: '+ui.item.label+' flag_val: '+ui.item.flag_val); 							
+			html_str = get_display_user_html(ui.item.label, ui.item.flag_val);
+// 			jQuery('#assigned_agents').append(html_str);	
+			
+			// when adding new item, event listener functon must be added. 
+			jQuery('#assigned_agents').append(html_str).on('click','.remove-user',function(){	
+				console.log('This click worked.');
+				wpsc_remove_filter(this);
+				jQuery('#user_search').val(jQuery(".searched-user").map(function(){return jQuery(this).text();}).get());
+				dataTable.state.save();
+				dataTable.draw();
+			});
+		    jQuery('#user_search').val(jQuery(".searched-user").map(function(){return jQuery(this).text();}).get());
+			dataTable.state.save();
+			dataTable.draw();
+			// ADD CODE to go through every status and make sure that there is at least one name per, and if so, show SAVE.
+			
+			jQuery("#button_agent_submit").show();
+		    jQuery(this).val(''); return false;
+		}
+	}).focus(function() {
+			jQuery(this).autocomplete("search", "");
+	});
+	
+	
+
+
+	jQuery('.searched-user').on('click','.remove-user', function(e){
+		console.log('Removed a user 1');
+		wpsc_remove_filter(this);
+		jQuery('#user_search').val(jQuery(".searched-user").map(function(){return jQuery(this).text();}).get());
+		dataTable.state.save();
+		dataTable.draw();
+	}); 
+
+// Code block for toggling edit buttons on/off when checkboxes are set
+	jQuery('#tbl_templates_requests tbody').on('click', 'input', function () {        
+	// 	console.log('checked');
+		setTimeout(toggle_button_display, 1); //delay otherwise 
+	});
+	
+	jQuery('.dt-checkboxes-select-all').on('click', 'input', function () {        
+	 	console.log('checked');
+		setTimeout(toggle_button_display, 1); //delay otherwise 
+	});
+	
+	jQuery('#btn_delete_tickets').attr('disabled', 'disabled');
+	
+	function toggle_button_display() {
+	//	var form = this;
+		var rows_selected = dataTable.column(0).checkboxes.selected();
+		if(rows_selected.count() > 0) {
+			jQuery('#btn_delete_tickets').removeAttr('disabled');		
+	  	} else {
+	    	jQuery('#btn_delete_tickets').attr('disabled', 'disabled');    	
+	  	}
+	}
+  
+});
+
+
+function get_display_user_html(user_name, termmeta_user_val) {
+	//console.log("in display_user");
+// 	var requestor_list = jQuery("input[name='assigned_agent[]']").map(function(){return jQuery(this).val();}).get();
+	var requestor_list = jQuery("input[name='assigned_agent[]']").map(function(){return jQuery(this).val();}).get();
+	
+	if( requestor_list.indexOf(termmeta_user_val.toString()) >= 0 ) {
+		console.log('termmeta_user_val: '+termmeta_user_val+' is already listed');
+		html_str = '';
 	} else {
-		wpsc_autorefresh_status = true;
-		jQuery('#wpsc_autorefresh_btn_lbl').text('<?php _e('Auto Refresh : On','supportcandy')?>');
-		wpsc_refresh_ticket_list();
+
+		var html_str = '<div class="form-group wpsp_filter_display_element wpsc_assign_agents ">'
+// 						+'<div class="flex-container searched-user" style="padding:5px;font-size:1.0em;">'
+						+'<div class="flex-container searched-user staff-badge" style="">'
+							+user_name
+							+'<span  class="remove-user staff-close" ><i class="fa fa-times"></i></span>' 
+						+'<input type="hidden" name="assigned_agent[]" value="'+termmeta_user_val+'" />'
+						+'</div>'
+					+'</div>';	
+
 	}
+			
+	return html_str;		
+
 }
 
-function wpsc_refresh_ticket_list(){
-	if(wpsc_autorefresh_status && jQuery(".wpsp_custom_filter_container").is(':hidden')){
-		var data = {
-	    action: 'wpsc_tickets',
-	    setting_action : 'get_ticket_list'
-	  };
-	  jQuery.post(wpsc_admin.ajax_url, data, function(response) {
-	    jQuery('.wpsc_ticket_list_container').html(response);
-			toggle_ticket_list_actions();
-		});
+
+function wpsc_remove_filterX(x) {
+	setTimeout(wpsc_remove_filter(x), 10);
+}
+
+
+function remove_user() {
+	//if zero users remove save
+	//if more than 1 user show save
+	var requestor_list = jQuery("input[name='assigned_agent[]']").map(function(){return jQuery(this).val();}).get();
+	let is_single_item = <?php echo json_encode($is_single_item); ?>;
+	//console.log('Remove user');
+	console.log(requestor_list);
+	console.log('length: '+requestor_list.length);
+	console.log('single item? '+is_single_item);
+	
+	if( is_single_item ) {
+		console.log('doing single item stuff');
+		if( requestor_list.length > 0 ) {
+			jQuery("#button_agent_submit").show();
+		} else {
+			jQuery("#button_agent_submit").hide();
+		}
 	}
-	setTimeout(wpsc_refresh_ticket_list,60000);
 }
 </script>

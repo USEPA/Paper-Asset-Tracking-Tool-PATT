@@ -68,7 +68,7 @@ $totalRecordwithFilter = $records['allcount'];
 $boxQuery = "SELECT a.Reader_Name, CONCAT('<a href=admin.php?page=boxdetails&pid=boxsearch&id=',a.box_id,'>',a.box_id,'</a>') as box_id, CONCAT('<a href=admin.php?page=wpsc-tickets&id=',c.request_id,'>',c.request_id,'</a>') as request_id, a.epc, a.DateAdded FROM wpqa_wpsc_epa_rfid_data as a
 INNER JOIN wpqa_wpsc_epa_boxinfo as b ON a.box_id = b.box_id
 INNER JOIN wpqa_wpsc_ticket as c ON b.ticket_id = c.id
-WHERE 1 ".$searchQuery." order by ".$columnName." ".$columnSortOrder." limit ".$row.",".$rowperpage;
+WHERE (c.active <> 0) AND 1 ".$searchQuery." order by ".$columnName." ".$columnSortOrder." limit ".$row.",".$rowperpage;
 $boxRecords = mysqli_query($con, $boxQuery);
 $data = array();
 

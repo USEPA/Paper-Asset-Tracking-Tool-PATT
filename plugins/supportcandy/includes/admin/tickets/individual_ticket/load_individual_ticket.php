@@ -77,13 +77,13 @@ if((in_array('register_user',$wpsc_allow_rich_text_editor) && !$current_user->ha
 		<?php endif;?>
 		<?php if ( ($customer_email == $current_user->user_email && get_option('wpsc_allow_customer_close_ticket')) || $wpscfunction->has_permission('change_status',$ticket_id) ):
 			if($ticket_status && ($status_id !=$wpsc_close_ticket_status)){?>
-				<button type="button" id="wpsc_individual_close_btn" onclick="wpsc_get_close_ticket(<?php echo $ticket_id?>)" class="btn btn-sm wpsc_action_btn" style="<?php echo $action_default_btn_css?>"><i class="fa fa-check"></i> <?php _e('Close','supportcandy')?></button>
+				<!--<button type="button" id="wpsc_individual_close_btn" onclick="wpsc_get_close_ticket(<?php echo $ticket_id?>)" class="btn btn-sm wpsc_action_btn" style="<?php echo $action_default_btn_css?>"><i class="fa fa-check"></i> <?php _e('Close','supportcandy')?></button>-->
      <?php
 			}?>
 		<?php endif;?>
 		
 		<?php if ($wpscfunction->has_permission('delete_ticket',$ticket_id) && $ticket_status):?>
-    	<button type="button" id="wpsc_individual_delete_btn" onclick="wpsc_get_delete_ticket(<?php echo $ticket_id ?>);" class="btn btn-sm wpsc_action_btn" style="<?php echo $action_default_btn_css?>"><i class="fa fa-trash"></i> <?php _e('Delete','supportcandy')?></button>
+    	<button type="button" id="wpsc_individual_delete_btn" class="btn btn-sm wpsc_action_btn" style="<?php echo $action_default_btn_css?>"><i class="fa fa-trash"></i> <?php _e('Delete','supportcandy')?></button>
 		<?php endif;?>
 		
 		<?php do_action('wpsc_after_indidual_ticket_action_btn',$ticket_id);?>
@@ -221,7 +221,7 @@ echo $padded_request_id;
 													<td>
 														<a class="wpsc_attachment_link" href="<?php echo $download_url?>" target="_blank">
 													  <span class="wpsc_attachment_file_name" style="padding: 7px;"><?php echo $attach['filename'];?></span></a>
-													  <?php if ($current_user->has_cap('manage_options')) { ?>
+													  <?php if ($current_user->has_cap('edit_published_posts')) { ?>
 															<i onclick="wpsc_thread_attachment_remove(this,<?php echo $attachment; ?>,<?php echo $thread->ID; ?>,<?php echo $ticket_id; ?>); " class="fa fa-times thread_action_btn" style="padding-top:3px;" aria-hidden="true" title="<?php _e('Delete attachment','supportcandy');?>"></i>
 														<?php } ?>
 
@@ -315,7 +315,7 @@ echo $padded_request_id;
 													<td>
 														<a class="wpsc_attachment_link" href="<?php echo $download_url?>" target="_blank">
 														<span class="wpsc_attachment_file_name" style="padding: 7px;"><?php echo $attach['filename'];?></span></a>
-														<?php if ($current_user->has_cap('manage_options')) { ?>
+														<?php if ($current_user->has_cap('edit_published_posts')) { ?>
 															<i onclick="wpsc_thread_attachment_remove(this,<?php echo $attachment; ?>,<?php echo $thread->ID; ?>,<?php echo $ticket_id; ?>); " class="fa fa-times thread_action_btn" style="padding-top:3px;" aria-hidden="true" title="<?php _e('Delete attachment','supportcandy');?>"></i>
 														<?php } ?>
 
@@ -407,7 +407,7 @@ echo $padded_request_id;
 													<td>
 														<a class="wpsc_attachment_link" href="<?php echo $download_url?>" target="_blank">
 													  <span class="wpsc_attachment_file_name" style="padding: 7px;"><?php echo $attach['filename'];?></span></a>
-													  <?php if ($current_user->has_cap('manage_options')) { ?>
+													  <?php if ($current_user->has_cap('edit_published_posts')) { ?>
 															<i onclick="wpsc_thread_attachment_remove(this,<?php echo $attachment; ?>,<?php echo $thread->ID; ?>,<?php echo $ticket_id; ?>); " class="fa fa-times thread_action_btn" style="padding-top:3px;" aria-hidden="true" title="<?php _e('Delete attachment','supportcandy');?>"></i>
 														<?php } ?>
 
@@ -529,7 +529,7 @@ PATT END */
 										</div>
 										<?php if($current_user->has_cap('wpsc_agent')){?>
 										<div class="wpsp_sidebar_labels" id="wpsc_user_add_info" style="font-size:20px; cursor:pointer;color:#a7a9ab;">
-											<i id="wpsc_user_all_tickets" onclick="wpsc_get_all_tickets_of_user(<?php echo $ticket_id ?>, '<?php echo stripslashes($customer_name) ?>');" class="fas fa-envelope wpsc_raised_by_action" title="<?php _e('All Tickets','supportcandy');?>"></i>
+											<i id="wpsc_user_all_tickets" onclick="window.open('mailto:<?php echo $customer_email ?>');" class="fas fa-envelope wpsc_raised_by_action" title="Email Requestor"></i>
 											<i id="wpsc_user_extra_info" onclick="wpsc_get_thread_info(<?php echo $ticket_id ?>,<?php echo $thread->ID ?>,'raised_by');" class="fas fa-info-circle wpsc_raised_by_action" title="<?php _e('Ticket Info','supportcandy');?>"></i>
 										</div>
 									<?php } ?>
@@ -584,7 +584,7 @@ PATT END */
 				<?php 
 					if ($ticket_widget->slug=="assign-agent" && $flag):
 						?>
-							<div class="row assigned_agent"  id="wpsc_assign_agent_widget" style="background-color:<?php echo $wpsc_appearance_individual_ticket_page['wpsc_ticket_widgets_bg_color']?> !important;color:<?php echo $wpsc_appearance_individual_ticket_page['wpsc_ticket_widgets_text_color']?> !important;border-color:<?php echo $wpsc_appearance_individual_ticket_page['wpsc_ticket_widgets_border_color']?> !important;">
+							<!--PATT <div class="row assigned_agent"  id="wpsc_assign_agent_widget" style="background-color:<?php echo $wpsc_appearance_individual_ticket_page['wpsc_ticket_widgets_bg_color']?> !important;color:<?php echo $wpsc_appearance_individual_ticket_page['wpsc_ticket_widgets_text_color']?> !important;border-color:<?php echo $wpsc_appearance_individual_ticket_page['wpsc_ticket_widgets_border_color']?> !important;">
 							      <h4 class="widget_header"><i class="fas fa-users"></i> <?php echo $ticket_widget_name;?>
 											<?php if ($wpscfunction->has_permission('assign_agent',$ticket_id) && $ticket_status):?>
 												<button id="wpsc_individual_change_assign_agent" onclick="wpsc_get_change_assign_agent(<?php echo $ticket_id ?>);" class="btn btn-sm wpsc_action_btn" style="<?php echo $edit_btn_css ?>" ><i class="fas fa-edit"></i></button>
@@ -618,7 +618,7 @@ PATT END */
 							          _e('None','supportcandy');
 							        }
 											?>
-									</div>
+									</div> END PATT-->
 						<?php
 					endif;
 				?>
@@ -892,6 +892,34 @@ $directionality = $wpscfunction->check_rtl();
 	    }
 		});
 	});
+
+	//PATT BEGIN
+//delete button
+jQuery('#wpsc_individual_delete_btn').on('click', function(e){
+     var form = this;
+		   jQuery.post(
+   '<?php echo WPPATT_PLUGIN_URL; ?>includes/admin/pages/scripts/delete_request.php',{
+postvarsrequest_id : <?php echo $ticket_id;?>
+}, 
+   function (response) {
+      //if(!alert(response)){
+      
+       wpsc_modal_open('Delete Request');
+		  var data = {
+		    action: 'wpsc_delete_request',
+		    response_data: response
+		  };
+		  jQuery.post(wpsc_admin.ajax_url, data, function(response_str) {
+		    var response = JSON.parse(response_str);
+		    jQuery('#wpsc_popup_body').html(response.body);
+		    jQuery('#wpsc_popup_footer').html(response.footer);
+		    jQuery('#wpsc_cat_name').focus();
+		  }); 
+		  		  wpsc_open_ticket(<?php echo $ticket_id?>);
+      //}
+   });
+});
+	//PATT END
 
 	// Submit note
 	function wpsc_submit_reply( save_type ){

@@ -121,7 +121,7 @@ if ( ! class_exists( 'WPSC_Admin' ) ) :
       
       add_menu_page( 
         __( 'Support', 'supportcandy' ),
-        __( 'Support','supportcandy'). " <span id='wpsc_ur_count' class='update-plugins count-{$unresolved_count}'><span class='theme-count'>" . number_format_i18n($unresolved_count) . "</span></span>",
+        __( 'Support','supportcandy'),
         'wpsc_agent',
         'wpsc-tickets',
         array($this,'tickets'),
@@ -151,7 +151,7 @@ do_action('wpsc_add_admin_page');
         'wpsc-tickets',
         __( 'Support Agents', 'supportcandy' ),
         __( 'Support Agents', 'supportcandy' ),
-        'manage_options',
+        'edit_published_posts',
         'wpsc-support-agents',
         array($this,'support_agents')
       );
@@ -159,7 +159,7 @@ do_action('wpsc_add_admin_page');
         'wpsc-tickets',
         __( 'Custom Fields', 'supportcandy' ),
         __( 'Custom Fields', 'supportcandy' ),
-        'manage_options',
+        'edit_published_posts',
         'wpsc-custom-fields',
         array($this,'custom_fields')
       );
@@ -167,7 +167,7 @@ do_action('wpsc_add_admin_page');
         'wpsc-tickets',
         __( 'Ticket List', 'supportcandy' ),
         __( 'Ticket List', 'supportcandy' ),
-        'manage_options',
+        'edit_published_posts',
         'wpsc-ticket-list',
         array($this,'ticket_list')
       );
@@ -175,7 +175,7 @@ do_action('wpsc_add_admin_page');
         'wpsc-tickets',
         __( 'Email Notifications', 'supportcandy' ),
         __( 'Email Notifications', 'supportcandy' ),
-        'manage_options',
+        'edit_published_posts',
         'wpsc-email-notifications',
         array($this,'email_notifications')
       );
@@ -183,7 +183,7 @@ do_action('wpsc_add_admin_page');
         'wpsc-tickets',
         __( 'Appearance', 'supportcandy' ),
         __( 'Appearance', 'supportcandy' ),
-        'manage_options',
+        'edit_published_posts',
         'wpsc-appearance',
         array($this,'appearance_settings')
       );
@@ -194,7 +194,7 @@ do_action('wpsc_add_admin_page');
         'wpsc-tickets',
         __( 'Settings', 'supportcandy' ),
         __( 'Settings', 'supportcandy' ),
-        'manage_options',
+        'edit_published_posts',
         'wpsc-settings',
         array($this,'settings')
       );
@@ -202,7 +202,7 @@ do_action('wpsc_add_admin_page');
         'wpsc-tickets',
         __( 'License', 'supportcandy' ),
         __( 'License', 'supportcandy' ),
-        'manage_options',
+        'edit_published_posts',
         'wpsc-license',
         array($this,'licenses')
       );
@@ -210,7 +210,7 @@ do_action('wpsc_add_admin_page');
         'wpsc-tickets',
         __( 'Addons', 'supportcandy' ),
         __( 'Addons', 'supportcandy' ),
-        'manage_options',
+        'edit_published_posts',
         'wpsc-add-ons',
         array($this,'addons')
       );
@@ -225,7 +225,7 @@ do_action('wpsc_add_admin_page');
       if( !($installed_db_version < WPSC_DB_VERSION) ){
         $wpscfunction->display_ad_banner();
         include WPSC_ABSPATH.'includes/admin/tickets/tickets.php';
-      } else if($current_user->has_cap('manage_options')) {
+      } else if($current_user->has_cap('edit_published_posts')) {
         include WPSC_ABSPATH.'includes/admin/db_upgrade/db_upgrade.php';
       }
     }

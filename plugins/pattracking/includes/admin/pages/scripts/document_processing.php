@@ -57,7 +57,12 @@ if($searchValue != ''){
 }
 
 ## Total number of records without filtering
-$sel = mysqli_query($con,"select count(*) as allcount from wpqa_wpsc_epa_folderdocinfo WHERE id <> -99999");
+$sel = mysqli_query($con,"select count(*) as allcount from wpqa_wpsc_epa_folderdocinfo as a 
+INNER JOIN wpqa_wpsc_epa_boxinfo as d ON a.box_id = d.id
+INNER JOIN wpqa_wpsc_ticket as b ON d.ticket_id = b.id
+WHERE a.id <> -99999 AND b.active <> 0
+");
+
 $records = mysqli_fetch_assoc($sel);
 $totalRecords = $records['allcount'];
 
@@ -68,7 +73,7 @@ INNER JOIN wpqa_wpsc_epa_storage_location as e ON d.storage_location_id = e.id
 INNER JOIN wpqa_wpsc_ticket as b ON d.ticket_id = b.id
 INNER JOIN wpqa_wpsc_epa_program_office as c ON d.program_office_id = c.office_code
 INNER JOIN wpqa_terms f ON f.term_id = e.digitization_center
-WHERE 1 ".$searchQuery);
+WHERE (b.active <> 0) AND (a.id <> -99999) AND 1 ".$searchQuery);
 $records = mysqli_fetch_assoc($sel);
 $totalRecordwithFilter = $records['allcount'];
 
@@ -93,6 +98,7 @@ CONCAT('<a href=admin.php?page=wpsc-tickets&id=',b.request_id,'>',b.request_id,'
 CONCAT(
 CASE 
 WHEN validation = 1 THEN CONCAT('<span style=\"font-size: 1.3em; color: #008000;\"><i class=\"fas fa-check-circle\" title=\"Validated\"></i></span> ',' (',(user_nicename),')')
+WHEN rescan = 1 THEN CONCAT('<span style=\"font-size: 1.3em; color: #8b0000;\"><i class=\"fas fa-times-circle\" title=\"Not Validated\"></i></span> ',' <span style=\"color: #FF0000;\"><strong>[Re-scan]</strong></span>')
 ELSE '<span style=\"font-size: 1.3em; color: #8b0000;\"><i class=\"fas fa-times-circle\" title=\"Not Validated\"></i></span> '
 END) as validation
 
@@ -104,7 +110,7 @@ INNER JOIN wpqa_wpsc_epa_storage_location as e ON d.storage_location_id = e.id
 INNER JOIN wpqa_wpsc_ticket as b ON d.ticket_id = b.id
 INNER JOIN wpqa_wpsc_epa_program_office as c ON d.program_office_id = c.office_code
 INNER JOIN wpqa_terms f ON f.term_id = e.digitization_center
-WHERE 1 ".$searchQuery." order by ".$columnName." ".$columnSortOrder." limit ".$row.",".$rowperpage;
+WHERE (b.active <> 0) AND (a.id <> -99999) AND 1 ".$searchQuery." order by ".$columnName." ".$columnSortOrder." limit ".$row.",".$rowperpage;
 $docRecords = mysqli_query($con, $docQuery);
 $data = array();
 

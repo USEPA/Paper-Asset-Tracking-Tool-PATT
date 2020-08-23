@@ -1,0 +1,8 @@
+[20-Aug-2020 20:03:16 UTC] PHP Fatal error:  Uncaught Error: Call to undefined method PDOStatement::fetchRow() in /home/acy3/public_html/wordpress3/wp-content/plugins/pattracking/includes/ajax/fetch_shipping_data_multi.php:142
+Stack trace:
+#0 {main}
+  thrown in /home/acy3/public_html/wordpress3/wp-content/plugins/pattracking/includes/ajax/fetch_shipping_data_multi.php on line 142
+[20-Aug-2020 20:03:36 UTC] PHP Fatal error:  Uncaught Error: Call to undefined method PDOStatement::fetchRow() in /home/acy3/public_html/wordpress3/wp-content/plugins/pattracking/includes/ajax/fetch_shipping_data_multi.php:142
+Stack trace:
+#0 {main}
+  thrown in /home/acy3/public_html/wordpress3/wp-content/plugins/pattracking/includes/ajax/fetch_shipping_data_multi.php on line 142

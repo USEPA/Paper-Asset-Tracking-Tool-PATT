@@ -1,4 +1,4 @@
- <?php
+<?php
     
     if ( ! defined( 'ABSPATH' ) ) {
     	exit; /* Exit if accessed directly */
@@ -41,9 +41,10 @@
 
     const reg_scanning = /^\b(SCN-\d\d-e|SCN-\d\d-w)\b$/i; 
     
-    var physicalLocation_count = 0;
+    var POST_count = 0;
     
     jQuery(document).ready(function() {
+
         
           jQuery("textarea#boxid-textarea").focus();
  
@@ -132,29 +133,28 @@
                 
                 var text_vals = jQuery(this).val().toLowerCase();
 
-                    jQuery.each(text_vals.split(/[\s,]+/).filter(Boolean), function(index, last_scan_val) {
+                  //  jQuery.each(text_vals.split(/[\s,]+/).filter(Boolean), function(index, last_scan_val) {
 
-                            if (reg_cartid.test(last_scan_val)){
+                            if (reg_cartid.test(text_vals)){
                                 
-                                scanid_values.push(last_scan_val);
+                                scanid_values.push(text_vals);
 
-                            }else if(reg_stagingarea.test(last_scan_val)){
+                            }else if(reg_stagingarea.test(text_vals)){
                                 
-                                 scanid_values.push(last_scan_val);
+                                 scanid_values.push(text_vals);
                                 
-                            }else if(reg_scanning.test(last_scan_val)){
+                            }else if(reg_scanning.test(text_vals)){
                                 
-                                 scanid_values.push(last_scan_val);
+                                 scanid_values.push(text_vals);
 
-                            }else if(reg_physicalLocation.test(last_scan_val)){
+                            }else if(reg_physicalLocation.test(text_vals)){
                                 
-                                physicalLocation_count = physicalLocation_count + 1;
-                                scanid_values.push(last_scan_val);
+                                scanid_values.push(text_vals);
 
                             }else{                 
-                                alert(last_scan_val + " is invalid.");
+                                alert(text_vals + " is invalid.");
                             }
-                    });
+                   // });
             });
 
             jQuery('input#scan-input').focus(function(){
@@ -176,25 +176,9 @@
 
             });
                 
-            jQuery('#back-to-textarea-btn').on('click', function (e) {
-                e.preventDefault();
+ 
                 
-                jQuery(this).next().find('#submitbtn').focus();
-                jQuery('#submitbtn').css('border', '');
-                jQuery('#submitbtn').css('box-shadow', '');
-                
-                var textarea = jQuery('#boxid-textarea');
-                textarea.focus();
-            }); 
-                
-            jQuery('#next-to-submit-btn').on('click', function (e) {
-                e.preventDefault();
-                
-                jQuery(this).next().find('#submitbtn').focus();
-                jQuery('#submitbtn').css('border', '2px solid #0741AB');
-                jQuery('#submitbtn').css('box-shadow', '0 0 2px #00a0d2');
-            });
-            
+            var counter=0;
             jQuery('form').on('submit',  function(e) {
                 e.preventDefault();
 
@@ -208,79 +192,50 @@
         		boxid_uniq = new Array(); 
         		
         		jQuery.each(lines,function(index, last_boxid_val){
-        
             			if (jQuery.inArray(last_boxid_val, boxid_uniq) ==-1)
             				boxid_uniq.push(last_boxid_val)
-
-        		});  
+        		});     
         		
         		/* Remove empty array elements */
                 boxid_uniq = boxid_uniq.filter(item => item);
 
                     if(boxid_uniq.length > 0 && scanid_uniq.length > 0){
-                        if(physicalLocation_count > 0){
-                            
-                                var response = "The change was not submitted. The <strong>Location Scan</strong> cannot be applied to multiple Box ID's.";
-                                var confmessage = '<div class="col-md-8 col-md-offset-2 wpsc_thread_log" style="background-color:#D6EAF8 !important;color:#000000 !important;border-color:#C3C3C3 !important;"><strong>Please try again. </strong>' + response + '</small></i></div>';
-                                jQuery('.confirmation').append(confmessage);
-                                jQuery('.confirmation').css('display', 'inline'); 
-                            
-                        }else{
 
-                                       jQuery.post(
+                        POST_count++;
+
+                        if(POST_count >= 1){
+    
+                            jQuery.post(
                                         '<?php echo WPPATT_PLUGIN_URL; ?>includes/admin/pages/scripts/update_scan_location.php',{ 
                                             postvarsboxid: boxid_uniq,
                                             postvarslocation: scanid_uniq
                                             }, 
-                                            function (data) {
-                                                if(!alert(data)){
-                                                    jQuery.each(boxid_uniq, function(index, boxid_value) {
-
+                                                function (data) {
+                                                    if(!alert(data)){
+        
                                                         var response = data;
-                                                        var confmessage = '<div class="col-md-8 col-md-offset-2 wpsc_thread_log" style="background-color:#D6EAF8 !important;color:#000000 !important;border-color:#C3C3C3 !important;">' + response + '</small></i></div>';
+                                                        var confmessage = '<div class="wpsc_thread_log" style="width: 100%;background-color:#D6EAF8 !important;color:#000000 !important;border-color:#C3C3C3 !important;">' + response + '</small></i></div>';
                                                         jQuery('.confirmation').append(confmessage);
                                                         jQuery('.confirmation').css('display', 'inline');  
-                                                    });
-                                                }else{
-                                                    var response = "<strong>Not Updated</strong>. There was problem updating the database. Please try again.";
-                                                    var confmessage = '<div class="col-md-8 col-md-offset-2 wpsc_thread_log" style="background-color:#D6EAF8 !important;color:#000000 !important;border-color:#C3C3C3 !important;"><strong>Please try again. </strong>' + response + '</small></i></div>';
-                                                    jQuery('.confirmation').append(confmessage);
-                                                    jQuery('.confirmation').css('display', 'inline'); 
-                                                    
-                                                }
-                                    });
-                                    
-                                    /*
-                                        jQuery.ajax({
-                                            type: "POST",
-                                            url: 'includes/admin/pages/scripts/update_scan_location.php', 
-                                            data: { postvarsboxid: boxid_uniq, postvarslocation: scanid_uniq },
-                                            type: 'get',
-                                            dataType:'JSON',
-                                            success: function(data) {
-                                                
-                                                    jQuery.each(boxid_uniq, function(index, boxid_value) {
-                                                       
-                                                        var response = data;
-                                                        var confmessage = '<div class="col-md-8 col-md-offset-2 wpsc_thread_log" style="background-color:#D6EAF8 !important;color:#000000 !important;border-color:#C3C3C3 !important;"><strong>Updated ' + response + '</small></i></div>';
+    
+                                                    }else{
+                                                        var response = "Not Updated. There was problem updating the database. Please try again.";
+                                                        var confmessage = '<div class="wpsc_thread_log" style="width: 100%;background-color:#D6EAF8 !important;color:#000000 !important;border-color:#C3C3C3 !important;">' + response + '</small></i></div>';
                                                         jQuery('.confirmation').append(confmessage);
-                                                        jQuery('.confirmation').css('display', 'inline');  
+                                                        jQuery('.confirmation').css('display', 'inline'); 
+                                                    }
+                                        });
 
-                                                    });
-                                            },
-                                            error: function(data) {
-                                                var response = data;
-                                                var confmessage = '<div class="col-md-8 col-md-offset-2 wpsc_thread_log" style="background-color:#D6EAF8 !important;color:#000000 !important;border-color:#C3C3C3 !important;"><strong>Please try again. </strong>' + response + '</small></i></div>';
-                                                jQuery('.confirmation').append(confmessage);
-                                                jQuery('.confirmation').css('display', 'inline'); 
-                                            }
-                                        });*/
                         }
                     }else{
-                                    var response = "The <strong>BoxID</strong> is missing or there are no <strong>Location Scan(s)</strong> to submit.";
-                                    var confmessage = '<div class="col-md-8 col-md-offset-2 wpsc_thread_log" style="background-color:#D6EAF8 !important;color:#000000 !important;border-color:#C3C3C3 !important;"><strong>Please try again. </strong>' + response + '</small></i></div>';
-                                    jQuery('.confirmation').append(confmessage);
-                                    jQuery('.confirmation').css('display', 'inline'); 
+                                    var response = "The BoxID is missing or there are no Location Scan(s) to submit.";
+                                    var confmessage = '<div class="wpsc_thread_log" id="missing_boxid" style="width: 100%;background-color:#D6EAF8 !important;color:#000000 !important;border-color:#C3C3C3 !important;">Please try again. ' + response + '</small></i></div>';
+                    if(counter<=0){
+                        jQuery('.confirmation').append(confmessage);
+                        jQuery('.confirmation').css('display', 'inline');  
+                        counter++;
+                     }
+
                     }
                     
                     return false;
@@ -430,100 +385,133 @@
             }
 
 </script>
-
-    <div class="bootstrap-iso">
+<style>
+	#scan-input {
+	    padding: 0 30px !important;
+	}
+</style>
+<div class="bootstrap-iso">
         
-        <div>
-            <H3>Barcode Scanning</H3>
+    <div>
+        <H3>Barcode Scanning</H3>
+    </div>
+
+    <div id="wpsc_tickets_container" class="row" style="border-color:#1C5D8A !important;"><div class="row wpsc_tl_action_bar" style="background-color:#1C5D8A !important;">
+        <div class="row wpsc_tl_action_bar" style="background-color:#1C5D8A !important;">
+            <div class="col-sm-12">            
+                <button class="btn btn-sm pull-right" type="button" id="wpsc_sign_out" onclick="window.location.href='http://086.info/wordpress3/wp-login.php?action=logout&amp;redirect_to=http%3A%2F%2F086.info%2Fwordpress3%2Fsupport-ticket%2F&amp;_wpnonce=fe1da2483c'" style=" background-color:#FF5733 !important;color:#FFFFFF !important;">
+                    <i class="fas fa-sign-out-alt">
+                    </i>    
+                        Log Out
+                </button>
+            </div>  
         </div>
+    </div>
+       
+<?php
 
-        <div id="wpsc_tickets_container" class="row" style="border-color:#1C5D8A !important;"><div class="row wpsc_tl_action_bar" style="background-color:#1C5D8A !important;">
-            <div class="row wpsc_tl_action_bar" style="background-color:#1C5D8A !important;">
-                <div class="col-sm-12">            
-                    <button class="btn btn-sm pull-right" type="button" id="wpsc_sign_out" onclick="window.location.href='http://086.info/wordpress3/wp-login.php?action=logout&amp;redirect_to=http%3A%2F%2F086.info%2Fwordpress3%2Fsupport-ticket%2F&amp;_wpnonce=fe1da2483c'" style=" background-color:#FF5733 !important;color:#FFFFFF !important;">
-                        <i class="fas fa-sign-out-alt">
-                        </i>    
-                            Log Out
-                    </button>
-                </div>  
-            </div>
+if (($agent_permissions['label'] == 'Administrator') || ($agent_permissions['label'] == 'Agent')){
+         /* echo "This is a message for managers of PATT.";
+         
+            echo '<label for="boxid-textarea">'; 
+            echo '</label>';
+        */
+         
+echo ' <div class="row" style="background-color:#FFFFFF !important;color:#000000 !important;"> ';
+	echo '<form id="scanform" action="#" method="post"> ';
+		echo ' <div class="col-sm-4 col-md-3 wpsc_sidebar individual_ticket_widget"> ';
+			echo ' <div class="row" id="wpsc_status_widget" style="background-color:#FFFFFF !important;color:#000000 !important;border-color:#C3C3C3 !important;"> ';
+				echo ' <h4 class="widget_header"><i class="fa fa-archive"></i> Assignment</h4>';
+				echo ' <hr class="widget_divider">';
+				echo ' <div class="wpsp_sidebar_labels">Enter one or more Box IDs:<br>';
+					echo '<div class="column" id="container-boxidinfo-border" style="background-color:#FFFFFF !important;color:#2C3E50 !important;border-color:#C3C3C3 !important;" >';
+						echo '<div class="justified" style="text-align:center">';
+							echo '<div class="dvboxid-layer" style="width: 100%;">';
+								echo '<div tabindex="-1">';
+									echo '<br/>';
+									echo '<textarea id="boxid-textarea" class="input" name="boxid-textarea" pattern="(\d\d\d\d\d\d\d-\d{1,})" title="The Box ID must consist of {<7 numbers>-<any number of digits>}." rows="15" cols="15">';
+									echo '</textarea>';  
+								echo '</div>';
+								echo '<br/>';
+								echo '<input id="resetboxidbtn" name="resetboxidbtn" type="button" class="btn" value="Reset" />';
+								echo '<input id="next-to-scan-btn" name="next-to-scan-btn" class="btn clnext" type="button" value="Next" />';
+							echo '</div>';
+						echo '</div>';
+					echo '</div>';
+
+					echo '<br><br>';
+					
+				echo '</div>';
+			echo ' </div>'; 
+		echo ' </div>';
+
+		echo ' <div class="col-sm-8 col-md-9 wpsc_it_body" style="padding: 12px" > ';
+			echo '<div class="row" id="scan_input_row">';
+				echo '<div id="container-scaninfo-border" style="background-color:#FFFFFF !important;color:#2C3E50 !important;border-color:#C3C3C3 !important;" >';
+					echo '<div class="justified" style="text-align:center; height: 37px;">';
+						echo '<div class="dvscanner-layer" style="width:100%" tabindex="1">';
+							echo '<div class="scaninput-bar">';
+							    echo '<div class="header-left">';
+								    //echo '<!--<h4><i class="fa fa-map-marker" aria-hidden="true"> </i></h4>-->';
+								echo '</div>';
+								//echo '<div class="header-center">';
+								    echo '
+
+<div>
+    <div class="col-xs-10">
+        <input type="text" id="scan-input" class="form-control" value="" name="scan-input" autocomplete="off" placeholder="Location...">
+<span><i class="fa fa-map-marker wpsc_search_btn wpsc_search_btn_sarch" aria-hidden="true"></i></span>
+    </div>
+    <div class="col-1">
+        <div class="input-group">
+        <input class="btn" id="resetscanbtn" name="resetscanbtn" type="button" value="Reset" />
+<input class="btn" action="#" id="submitbtn" name="submitbtn" type="submit" value="Submit" />
         </div>
-        
-      <?php
-           if (($agent_permissions['label'] == 'Administrator') || ($agent_permissions['label'] == 'Agent'))
-          {
-         /* echo "This is a message for managers of PATT."; */
+    </div>
+</div>';
+								//echo '</div>';
+								//echo '<div class="header-right">';
+								    //echo '<input id="resetscanbtn" name="resetscanbtn" type="button" value="Reset" />';
+								    //echo '<input action="#" id="submitbtn" name="submitbtn" type="submit" value="Submit" />';
+								//echo '</div>';
 
-     echo ' <form id="scanform" action="#" method="post"> ';
-          echo '<div class="row" id="scan_input_row">';
-                    
-              echo '<div class="column left" id="container-boxidinfo-border" style="background-color:#FFFFFF !important;color:#2C3E50 !important;border-color:#C3C3C3 !important;" >';
-                
-                  echo '<div class="justified" style="text-align:center">';
-                      echo '<div class="dvboxid-layer">';
-                          echo '<div tabindex="-1">';
-                              echo '<h2>';
-                                  echo '<label for="boxid-textarea">';
-                                    echo 'Box ID(s)';
-                                  echo '</label>';
-                              echo '</h2>';
-                              echo '<br/>';
-                              echo '<textarea id="boxid-textarea" class="input" name="boxid-textarea" pattern="(\d\d\d\d\d\d\d-\d{1,})" title="The Box ID must consist of {<7 numbers>-<any number of digits>}." rows="15" cols="15">';
+							echo '</div>';
+							echo '<br/>';
+							echo '<div style="text-align:center">';
 
-                              echo '</textarea>';  
-                          echo '</div>';
-                          echo '<br/>';
-                              echo '<input id="resetboxidbtn" name="resetboxidbtn" type="button" value="Reset" />';
-                              echo '<input id="next-to-scan-btn" name="next-to-scan-btn" class="clnext" type="button" value="Next" />';
-                      echo '</div>';
-                  echo '</div>';
-              echo '</div>';
-              echo '<div class="column middle" id="container-scaninfo-border" style="background-color:#FFFFFF !important;color:#2C3E50 !important;border-color:#C3C3C3 !important;" >';
-                        
-                  echo '<div class="justified" style="text-align:center">';
-                      echo '<div clas="dvscanner-layer">';
-                          echo '<div tabindex="1">';
-                              echo '<h2>';
-                                  echo '<label for="scan-input">';
-                                      echo 'Location';
-                                  echo '</label>';
-                              echo '</h2>';
-                              echo '<br/>';
-                              echo '<input id="scan-input" name="scan-input"/>'; 
-                          echo '</div>';
-                          echo '<br/>';
-                          echo '<div style="text-align:center">';
-                            echo '<input id="back-to-textarea-btn" name="back-to-textarea-btn" type="button" value="Back" />';
-                            echo '<input id="resetscanbtn" name="resetscanbtn" type="button" value="Reset" />';
-                            echo '<input id="next-to-submit-btn" name="next-to-submit-btn" class="clnext" type="button" value="Next" />';
+							echo '</div>';
+						echo '</div>';
+					echo '</div>';
+			echo '</div>';
+            echo '<br/>';
+			echo '<div id="submit-scan-border" style="background-color:#FFFFFF !important;color:#2C3E50 !important;border-color:#C3C3C3 !important;" >';
+				echo '<div class="justified" style="text-align:center">';
+					echo '<div class="dvsubmission_layer">';
 
-                          echo '</div>';
-                       echo '</div>';
-                  echo '</div>';
-              echo '</div>';
-              echo '<div class="column right" id="submit-scan-border" style="background-color:#FFFFFF !important;color:#2C3E50 !important;border-color:#C3C3C3 !important;" >';
-                
-                  echo '<div class="justified" style="text-align:center">';
-                      echo '<div class="dvsubmission_layer">';
-                          echo '<div style="text-align:left">';
-                              echo '<div style="text-align:center" tabindex="2">'; 
-                                  echo '<h2>';
-                                    echo 'Submission Status';
-                                  echo '</h2>';
-                                  echo '<br/>';
-                                  echo '<input action="#" id="submitbtn" name="submitbtn" type="submit" value="Submit">';
-                              echo '</div>'; 
-                              echo '<div id="dvconfirmation" class="confirmation">';
-                              echo '<hr/>';
+						echo '<div style="text-align:center" tabindex="2">'; 
+							echo '<h4>';
+							echo 'Submission Status';
+							echo '</h4>';
+							
+						echo '</div>'; 	
+						echo '<br/>';
+						echo '<div id="dvconfirmation" class="confirmation">';
+						
+                        echo '</div>';
 
-                                  
-                              echo '</div>';
-                          echo '</div>';
-                      echo '</div>';
-                  echo '</div>';
-              echo '</div>';
-          echo '</div>';
-      echo '</div>';
-  echo '</form>';
-  }?>
+					echo '</div>';
+				echo '</div>';
+	                echo '</div>';
+	        echo '</div>';   
+	echo '</form>';
+echo '</div>';
+}?>
 </div>
+
+
+
+
+
+
+
+

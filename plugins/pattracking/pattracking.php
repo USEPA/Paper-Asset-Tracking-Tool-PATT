@@ -2,7 +2,7 @@
 /**
  * Plugin Name: pattracking
  * Description: add-on to the support candy plugin specifically for the EPA Paper Asset Tracking Tool
- * Version: 2.1.1
+ * Version: 0.2.1
  * Requires at least: 4.4
  * Tested up to: 5.3
  * Text Domain: pattracking
@@ -18,7 +18,7 @@ if ( ! class_exists( 'Patt_Tracking' ) ) :
   final class Patt_Tracking {
   
       
-    public $version    = '2.1.1';
+    public $version    = '0.2.1';
     public $db_version = '2.0';
     
     public function __construct() {
@@ -88,6 +88,10 @@ if ( ! class_exists( 'Patt_Tracking' ) ) :
         add_shortcode('wppattquery', array($frontend, 'get_id_details'));
         // Add Shipping CRON
         add_action( 'wppatt_shipping_cron', array($frontend, 'wpatt_shipping_cron_schedule'));
+        // Add Recall Shipping CRON
+        add_action( 'wppatt_shipping_cron_recall', array($frontend, 'wppatt_recall_shipping_status_schedule'));
+        // Add Return Shipping CRON
+        add_action( 'wppatt_shipping_cron_return', array($frontend, 'wppatt_return_shipping_status_schedule'));
         // Add ECMS CRON
         add_action( 'wppatt_ecms_cron', array($frontend, 'wpatt_ecms_cron_schedule')); 
         
@@ -97,10 +101,11 @@ if ( ! class_exists( 'Patt_Tracking' ) ) :
           update_option('wpsc_tl_agent_unresolve_statuses',array(3,4,670,5,63,64,672,671,65));
           update_option('wpsc_tl_customer_unresolve_statuses',array(3,4,670,5,63,64,672,671,65));
 
-          update_option('wpsc_close_ticket_group',array(673,674,66,67,68,69));
+          update_option('wpsc_close_ticket_group',array(673,674,743,66,67,68,69));
           
           // PDF Label Add Button
           $backend  = new wppatt_Admin();
+          add_action('wpsc_after_indidual_ticket_action_btn', array($backend, 'box_status_assignment_btnAfterClone'));
           add_action('wpsc_after_indidual_ticket_action_btn', array($backend, 'pdflabel_btnAfterClone'));
           add_action('wp_ajax_wpsc_get_pdf_label_field', array($backend, 'get_pdf_label_field'));
           
@@ -129,36 +134,48 @@ if ( ! class_exists( 'Patt_Tracking' ) ) :
           // Add RFID Reader Modal
           add_action('wp_ajax_wpsc_get_clear_rfid', array($backend, 'get_clear_rfid'));
           add_action('wp_ajax_wpsc_get_rfid_box_editor', array($backend, 'get_rfid_box_editor'));
-        
-          // Add Destruction Completed Modal to Box Dashboard
-          add_action('wp_ajax_wpsc_get_destruction_completed_b', array($backend, 'get_alert_replacement'));
           
-          // Add Unathorized Destruction Modal to Box Details
-          add_action('wp_ajax_wpsc_get_unauthorized_destruction_bd', array($backend, 'get_alert_replacement'));
+          // Add Shipping Modal to Shipping Status Editor
+          add_action('wp_ajax_wpsc_get_shipping_sse', array($backend, 'get_alert_replacement'));	
+
+          // Add Destruction Completed Modal to Box Dashboard	
+          add_action('wp_ajax_wpsc_get_destruction_completed_b', array($backend, 'get_alert_replacement'));	
+          	
+          // Add Unathorized Destruction Modal to Box Details	
+          add_action('wp_ajax_wpsc_get_unauthorized_destruction_bd', array($backend, 'get_alert_replacement'));	
+          	
+          // Add Freeze Modal to Box Details	
+          add_action('wp_ajax_wpsc_get_freeze_bd', array($backend, 'get_alert_replacement'));	
+          	
+          // Add Validate Modal to Box Details	
+          add_action('wp_ajax_wpsc_get_validate_bd', array($backend, 'get_alert_replacement'));	
+            	
+          // Add Validate Modal on Folder File Dashboard	
+          add_action('wp_ajax_wpsc_get_validate_ff', array($backend, 'get_alert_replacement'));	
+    	  
+    	  // Add Re-Scan Modal on Folder File Dashboard	
+          add_action('wp_ajax_wpsc_get_rescan_ff', array($backend, 'get_alert_replacement'));	
+    	
+          // Add Freeze Modal on Folder File Dashboard	
+          add_action('wp_ajax_wpsc_get_freeze_ff', array($backend, 'get_alert_replacement'));	
+          	
+          // Add Unauthorized Destruction Modal on Folder File Dashboard	
+          add_action('wp_ajax_wpsc_unauthorized_destruction_ff', array($backend, 'get_alert_replacement'));	
+          	
+          // Add Validation Rescan to Folder File Details	
+          add_action('wp_ajax_wpsc_get_rescan_ffd', array($backend, 'get_alert_replacement'));
           
-          // Add Freeze Modal to Box Details
-          add_action('wp_ajax_wpsc_get_freeze_bd', array($backend, 'get_alert_replacement'));
-          
-          // Add Validate Modal to Box Details
-          add_action('wp_ajax_wpsc_get_validate_bd', array($backend, 'get_alert_replacement'));
-            
-          // Add Validate Modal on Folder File Dashboard
-          add_action('wp_ajax_wpsc_get_validate_ff', array($backend, 'get_alert_replacement'));
-    
-          // Add Freeze Modal on Folder File Dashboard
-          add_action('wp_ajax_wpsc_get_freeze_ff', array($backend, 'get_alert_replacement'));
-          
-          // Add Unauthorized Destruction Modal on Folder File Dashboard
-          add_action('wp_ajax_wpsc_unauthorized_destruction_ff', array($backend, 'get_alert_replacement'));
-          
-          // Add Validation Modal to Folder File Details
-          add_action('wp_ajax_wpsc_get_validate_ffd', array($backend, 'get_alert_replacement'));
-          
-          // Add Unauthorized Destruction to Folder File Details
-          add_action('wp_ajax_wpsc_unauthorized_destruction_ffd', array($backend, 'get_alert_replacement'));
-          
-          // Add Freeze to Folder File Details
+          // Add Validation Modal to Folder File Details	
+          add_action('wp_ajax_wpsc_get_validate_ffd', array($backend, 'get_alert_replacement'));	
+          	         	
+          // Add Unauthorized Destruction to Folder File Details	
+          add_action('wp_ajax_wpsc_unauthorized_destruction_ffd', array($backend, 'get_alert_replacement'));	
+          	
+          // Add Freeze to Folder File Details	
           add_action('wp_ajax_wpsc_get_freeze_ffd', array($backend, 'get_alert_replacement'));
+          
+          // Add Validate Modal on Folder File Dashboard	
+          add_action('wp_ajax_wpsc_delete_request', array($backend, 'get_alert_replacement'));	
           
           // Disable Show Agent Settings Button
           add_action('wpsc_show_agent_setting_button',false);
@@ -178,8 +195,8 @@ if ( ! class_exists( 'Patt_Tracking' ) ) :
           // Add Recall Edit Request Date Modal 
           add_action('wp_ajax_wppatt_recall_get_date', array($backend, 'recall_get_date'));
           
-          // Add Recall Edit Status Change Modal 
-          add_action('wp_ajax_wppatt_recall_status_change', array($backend, 'recall_status_change'));
+          // Add Recall Edit Status Change Modal - Feature removed as state machine is automatic, not manual. 
+          //add_action('wp_ajax_wppatt_recall_status_change', array($backend, 'recall_status_change'));
           
           // Add Recall Edit Shipping Multiple Items Modal 
           add_action('wp_ajax_wppatt_recall_shipping_change', array($backend, 'recall_edit_multi_shipping'));
@@ -191,15 +208,59 @@ if ( ! class_exists( 'Patt_Tracking' ) ) :
           add_action('wp_ajax_wppatt_get_recall_settings', array($backend, 'get_recall_settings'));
           
           // Add Recall Set Recall Settings Pill 
-          add_action('wp_ajax_wppatt_set_recall_settings', array($backend, 'set_recall_settings'));
+          //add_action('wp_ajax_wppatt_set_recall_settings', array($backend, 'set_recall_settings'));
           
+          // Add Recall Status Settings Edit Modal
+          add_action('wp_ajax_wppatt_get_edit_recall_status', array($backend, 'get_edit_recall_status')); 
+          
+          // Add Set Recall Status Settings via Modal
+          add_action('wp_ajax_wppatt_set_recall_status', array($backend, 'set_recall_status')); 
+                    
           // Add Return Edit Returned 
-          add_action('wp_ajax_wppatt_initiate_return', array($backend, 'ticket_initiate_return'));
+          //add_action('wp_ajax_wppatt_initiate_return', array($backend, 'ticket_initiate_return'));
           
           // Add Recall Cancel Modal 
-          add_action('wp_ajax_wppatt_recall_cancel', array($backend, 'recall_cancel'));
+          add_action('wp_ajax_wppatt_recall_cancel', array($backend, 'recall_cancel')); 
           
-
+          // Add Return Submit
+          add_action('wp_ajax_wppatt_return_submit', array($backend, 'return_submit')); 
+          
+		  // Add Return Setting Pill 
+          add_action('wpsc_after_setting_pills', array($frontend, 'return_settings_pill'));
+          
+          // Add Return Get Recall Settings Pill 
+          add_action('wp_ajax_wppatt_get_return_settings', array($backend, 'get_return_settings'));
+          
+          // Add Return Status Settings Edit Modal
+          add_action('wp_ajax_wppatt_get_edit_return_status', array($backend, 'get_edit_return_status')); 
+          
+          // Add Set Return Status Settings via Modal
+          add_action('wp_ajax_wppatt_set_return_status', array($backend, 'set_return_status'));   
+          
+          // Add Return Cancel Modal 
+          add_action('wp_ajax_wppatt_return_cancel', array($backend, 'return_cancel')); 
+          
+		      // Add Box Status Setting Pill 
+          add_action('wpsc_after_setting_pills', array($frontend, 'box_settings_pill'));
+          
+          // Add Box Status Get Settings Panel 
+          add_action('wp_ajax_wppatt_get_box_settings', array($backend, 'get_box_settings'));
+          
+          // Add Box Status Settings Edit Modal
+          add_action('wp_ajax_wppatt_get_edit_box_status', array($backend, 'get_edit_box_status')); 
+          
+          // Add Set Box Status Settings via Modal
+          add_action('wp_ajax_wppatt_set_box_status', array($backend, 'set_box_status')); 
+		  
+		  // Add Edit Shipping Modal 
+          add_action('wp_ajax_wppatt_change_shipping', array($backend, 'change_shipping'));
+          
+		      // Add Assign Agents Modal 
+          add_action('wp_ajax_wppatt_assign_agents', array($backend, 'edit_assign_agents'));
+          
+		      // Add Change Box Status Modal 
+          add_action('wp_ajax_wppatt_change_box_status', array($backend, 'change_box_status'));          
+		  
           // Set Barcode Scanning Page
           add_action( 'wpsc_add_admin_page', 'epa_admin_menu_items');
           
@@ -216,13 +277,28 @@ if ( ! class_exists( 'Patt_Tracking' ) ) :
           add_action( 'wpsc_add_submenu_page', 'main_menu_items');
 
           function main_menu_items() {
+            add_submenu_page( '', '', '', 'wpsc_agent', 'request_delete', 'request_delete_page' );
             add_submenu_page( 'wpsc-tickets', 'Box Dashboard', 'Box Dashboard', 'wpsc_agent', 'boxes', 'boxes_page' );
             add_submenu_page( 'wpsc-tickets', 'Folder/File Dashboard', 'Folder/File Dashboard', 'wpsc_agent', 'folderfile', 'folderfile_page' );
             add_submenu_page( '', '', '', 'wpsc_agent', 'boxdetails', 'box_details' );
             add_submenu_page( '', '', '', 'wpsc_agent', 'filedetails', 'file_details' );
-            add_submenu_page( 'wpsc-tickets', 'Recall Dashboard', 'Recall Dashboard', 'wpsc_agent', 'recall', 'recall_page' ); //Podbelski - LINE - Recall Tickets
-            add_submenu_page( '', '', '', 'wpsc_agent', 'recalldetails', 'recall_details' ); //Podbelski - LINE - Recall Tickets
-            add_submenu_page( '', '', '', 'wpsc_agent', 'recallcreate', 'recall_create' ); //Podbelski - LINE - Recall Tickets
+            add_submenu_page( 'wpsc-tickets', 'Recall Dashboard', 'Recall Dashboard', 'wpsc_agent', 'recall', 'recall_page' ); 
+            add_submenu_page( '', '', '', 'wpsc_agent', 'recalldetails', 'recall_details' ); 
+            add_submenu_page( '', '', '', 'wpsc_agent', 'recallcreate', 'recall_create' ); 
+            add_submenu_page( 'wpsc-tickets', 'Return Dashboard', 'Return Dashboard', 'wpsc_agent', 'return', 'return_page' ); 
+            add_submenu_page( '', '', '', 'wpsc_agent', 'returndetails', 'return_details' ); 
+            add_submenu_page( '', '', '', 'wpsc_agent', 'returncreate', 'return_create' ); 
+            add_submenu_page( 'wpsc-tickets', 'Shipping Status Editor', 'Shipping Status Editor', 'edit_posts', 'shipping', 'shipping_page' ); 
+            }
+
+            function shipping_page(){
+            include_once( WPPATT_ABSPATH . 'includes/admin/pages/shipping.php'
+            );
+            }
+            
+            function request_delete_page(){
+            include_once( WPPATT_ABSPATH . 'includes/admin/pages/request_delete.php'
+            );
             }
             
             function boxes_page(){
@@ -255,7 +331,7 @@ if ( ! class_exists( 'Patt_Tracking' ) ) :
             );
             }
             
-            // Podbelski - BEGIN - Recall Tickets
+
             function recall_page(){
             include_once( WPPATT_ABSPATH . 'includes/admin/pages/recall.php'
             );
@@ -270,7 +346,25 @@ if ( ! class_exists( 'Patt_Tracking' ) ) :
             include_once( WPPATT_ABSPATH . 'includes/admin/pages/recall-create.php'
             );
             }
-            // Podbelski - END - Recall Tickets
+            
+            function return_page(){
+            include_once( WPPATT_ABSPATH . 'includes/admin/pages/return.php'
+            );
+            }
+            
+            function return_details(){
+            include_once( WPPATT_ABSPATH . 'includes/admin/pages/return-details.php'
+            );
+            }
+            
+            function return_create(){
+            include_once( WPPATT_ABSPATH . 'includes/admin/pages/return-create.php'
+            );
+            }
+
+            include_once( WPPATT_ABSPATH . 'includes/class-wppatt-request-approval-widget.php' );
+            include_once( WPPATT_ABSPATH . 'includes/class-wppatt-new-request-litigation-letter.php' );
+
     
         }
         if ($this->is_request('frontend')) {

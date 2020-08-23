@@ -159,7 +159,7 @@ if(apply_filters('wpsc_print_create_ticket_html',true)):
 				</label>
 				<div id="assigned_agent">
 					<div class="form-group wpsc_display_assign_agent ">
-					    <input class="form-control  wpsc_assign_agents ui-autocomplete-input" name="assigned_agent"  type="text" autocomplete="off" placeholder="<?php _e('Search agent ...','supportcandy')?>" />
+					    <input id="requestor_input" class="form-control  wpsc_assign_agents ui-autocomplete-input" name="assigned_agent"  type="text" autocomplete="off" placeholder="<?php _e('Search agent ...','supportcandy')?>" onkeypress="check_color(this.id)" />
 							<ui class="wpsp_filter_display_container"></ui>
 					</div>
 				</div>
@@ -170,8 +170,9 @@ if(apply_filters('wpsc_print_create_ticket_html',true)):
 						if($agent_term_id && $agent_name):
 					?>
 							<div class="form-group wpsp_filter_display_element wpsc_assign_agents ">
-								<div class="flex-container" style="padding:10px;font-size:1.0em;">
-									<?php echo htmlentities($agent_name)?><span onclick="wpsc_remove_filter(this);remove_user();"><i class="fa fa-times"></i></span>
+<!-- 								<div class="flex-container" style="padding:10px;font-size:1.0em;"> -->
+								<div class="flex-container staff-badge" style=""> 									
+									<?php echo htmlentities($agent_name)?><span class="staff-close" onclick="wpsc_remove_filter(this);remove_user();"><i class="fa fa-times"></i></span>
 									  <input type="hidden" name="assigned_agent[]" value="<?php echo htmlentities($agent_term_id) ?>" />
 								</div>
 							</div>
@@ -190,6 +191,31 @@ if(apply_filters('wpsc_print_create_ticket_html',true)):
 		
 		<script>
 		jQuery(document).ready(function(){
+			
+			// Updates Admin Menu to highlight the submenu page that this page is under. 
+	        jQuery('#toplevel_page_wpsc-tickets').removeClass('wp-not-current-submenu'); 
+	        jQuery('#toplevel_page_wpsc-tickets').addClass('wp-has-current-submenu'); 
+	        jQuery('#toplevel_page_wpsc-tickets').addClass('wp-menu-open'); 
+	        jQuery('#toplevel_page_wpsc-tickets a:first').removeClass('wp-not-current-submenu');
+	        jQuery('#toplevel_page_wpsc-tickets a:first').addClass('wp-has-current-submenu'); 
+	        jQuery('#toplevel_page_wpsc-tickets a:first').addClass('wp-menu-open');
+	        jQuery('#menu-dashboard').removeClass('current');
+	        jQuery('#menu-dashboard a:first').removeClass('current');
+	     
+	        <?php
+	        if ($_GET['page'] == 'recallcreate') {
+	        ?>
+	             jQuery('.wp-submenu li:nth-child(5)').addClass('current');
+	        <?php
+	        }
+	        ?>
+	        <?php
+	        if ($_GET['page'] == 'recalldetails') {
+	        ?>
+	             jQuery('.wp-submenu li:nth-child(5)').addClass('current');
+	        <?php
+	        }
+	        ?>
 			
 			jQuery("input[name='assigned_agent']").keypress(function(e) {
 				//Enter key
@@ -254,9 +280,9 @@ if(apply_filters('wpsc_print_create_ticket_html',true)):
 			} else {
 		
 				var html_str = '<div class="form-group wpsp_filter_display_element wpsc_assign_agents ">'
-								+'<div class="flex-container" style="padding:10px;font-size:1.0em;">'
+								+'<div class="flex-container staff-badge" style="">'
 									+user_name
-									+'<span onclick="wpsc_remove_filter(this);remove_user();"><i class="fa fa-times"></i></span>'
+									+'<span class="staff-close" onclick="wpsc_remove_filter(this);remove_user();"><i class="fa fa-times"></i></span>'
 								+'<input type="hidden" name="assigned_agent[]" value="'+termmeta_user_val+'" />'
 								+'</div>'
 							+'</div>';	
@@ -297,11 +323,11 @@ if(apply_filters('wpsc_print_create_ticket_html',true)):
 		
 		
 		<div class="row create_ticket_fields_container">
-			<div  data-fieldtype="text" data-visibility="" class="<?php echo $form_field->col_class?> <?php echo $form_field->visibility? 'hidden':'visible'?> <?php echo $form_field->required? 'wpsc_required':''?> form-group wpsc_form_field <?php echo 'field_'.$field->term_id?>">
+			<div  data-fieldtype="text" data-visibility="" class="col-sm-6 <?php echo $form_field->visibility? 'hidden':'visible'?> <?php echo $form_field->required? 'wpsc_required':''?> form-group wpsc_form_field <?php echo 'field_'.$field->term_id?>">
 				<label class="wpsc_ct_field_label" for="<?php echo $form_field->slug;?>">
 					Search By ID <?php echo $required_html ?>
 				</label>
-				<input id="wppatt_search_id_box" type="search" class="form-control"  />
+				<input id="wppatt_search_id_box" type="search" class="form-control" onkeypress="check_color(this.id)" />
 				<button type="button" id="wppatt_search_id_button" onclick="wppatt_search_id();" class="btn"
 				style="background-color:<?php echo $wpsc_appearance_create_ticket['wpsc_reset_button_bg_color']?> !important;color:<?php echo $wpsc_appearance_create_ticket['wpsc_reset_button_text_color']?> !important;border-color:<?php echo $wpsc_appearance_create_ticket['wpsc_reset_button_border_color']?> !important;"> Search</button>
 				
@@ -309,12 +335,12 @@ if(apply_filters('wpsc_print_create_ticket_html',true)):
 			</div>
 		
 		
-			<div  data-fieldtype="textarea" data-visibility="" class="<?php echo $form_field->col_class?> <?php echo $form_field->visibility? 'hidden':'visible'?> <?php echo $form_field->required? 'wpsc_required':''?> form-group wpsc_form_field <?php echo 'field_'.$field->term_id?>">
+			<div  data-fieldtype="textarea" data-visibility="" class="col-sm-6 <?php echo $form_field->visibility? 'hidden':'visible'?> <?php echo $form_field->required? 'wpsc_required':''?> form-group wpsc_form_field <?php echo 'field_'.$field->term_id?>">
 				<label class="wpsc_ct_field_label" for="<?php echo $form_field->slug;?>">
 					Comment <?php echo $required_html ?>
 				</label>
 				
-				<textarea name="recall_comment" rows="3" cols="30" class="form-control " style="height: auto !important;" ></textarea>
+				<textarea name="recall_comment" rows="3" cols="30" class="form-control " style="height: auto !important;" onkeypress="check_color(this.id)" ></textarea>
 				 
 				
 				
@@ -330,6 +356,7 @@ if(apply_filters('wpsc_print_create_ticket_html',true)):
 <!-- 					<label class="wpsc_ct_field_label">Box/Folder/File ID: </label><span id="found_item_id" class="wpsc_required visible" ></span><br> -->
 					<div id="search_details">
 						<label id = "bff_id" class="wpsc_ct_field_label ">Box/Folder/File ID<?php echo $required_html ?>: </label>
+<!-- 						<label id = "bff_id" class="wpsc_ct_field_label ">Box/Folder/File ID</label><?php echo $required_html ?>:  -->
 							<input id="found_item_id" class=" " name="item_id" readonly /><br>
 						<label class="wpsc_ct_field_label">Title: </label><span id="title_from_id"></span><br>
 						<label class="wpsc_ct_field_label">Record Schedule: </label><span id="record_schedule_name"></span><br>
@@ -499,6 +526,41 @@ if(apply_filters('wpsc_print_create_ticket_html',true)):
 #alert_status {
 	
 }
+
+.fa-snowflake {
+	color: #009ACD;
+}
+
+.fa-flag {
+	color: #8b0000;
+}
+
+.fa-ban {
+	color: #FF0000;
+}
+
+.staff-badge {
+	padding: 3px 3px 3px 5px;
+	font-size:1.0em !important;
+	vertical-align: middle;
+}
+
+.staff-close {
+	margin-left: 3px;
+	margin-right: 3px;
+}
+
+#wppatt_search_id_button {
+	margin-top: 10px;
+}
+
+.form-group {
+	margin-bottom: 5px !important;
+}
+
+.blank_validation {
+	background-color: #E8C6C6 !important;
+}
 	
 </style>
 
@@ -507,28 +569,48 @@ if(apply_filters('wpsc_print_create_ticket_html',true)):
 <?php do_action('patt_custom_imports_tickets', WPSC_PLUGIN_URL); ?>
 
 <?php
-	$box_file_details = Patt_Custom_Func::get_box_file_details_by_id('0000288-1');
+	//$box_file_details = Patt_Custom_Func::get_box_file_details_by_id('0000288-1');
 	//print_r($box_file_details);	
 	//echo "<br>";
 // 	$box_file_details = Patt_Custom_Func::get_box_file_details_by_id('0000288-1-01-3'); 	0000240-3-01-17
-	$box_file_details = Patt_Custom_Func::get_box_file_details_by_id('0000240-3'); 	
+	//$box_file_details = Patt_Custom_Func::get_box_file_details_by_id('0000240-3'); 	
 	//print_r($box_file_details);
 	//echo "<br>";
-	$new_array = json_decode(json_encode($box_file_details), true);
+	//$new_array = json_decode(json_encode($box_file_details), true);
 	//print_r($new_array);
 	//echo "<br>";
 ?>
 <!-- END CAR - Added Custom PATT Action -->
 <script type="text/javascript">
 	
+	var subfolder = '<?php echo $subfolder_path ?>';
+	var style_normal = 'background-color: #ffffff !important';
+	var style_danger = 'background-color: #E8C6C6 !important';
+	
+	function check_color(id) {
+		console.log(id);
+		if( id == 'wppatt_search_id_box') {
+			jQuery('input#wppatt_search_id_box').attr('style', style_normal);	
+		} else if( id == '') {
+			jQuery('textarea[name="recall_comment"]').attr('style', style_normal);	
+		} else if( id == 'found_item_id') {
+			jQuery('input#found_item_id').attr('style', style_normal);						
+		} else if( id == 'requestor_input') {
+			jQuery('input#requestor_input').attr('style', style_normal);
+		} 
+		
+	}
+	
 	// Search for Doc Folder File ID
 	function wppatt_search_id() {
+		check_color('found_item_id');
 		search_id = jQuery('#wppatt_search_id_box').val().trim();
 		required_html = ' <span style="color:red;">*</span>';
 		//console.log("Search ID: "+search_id);
 		
 		if(search_id == '') {
 			search_failed('blank');
+								
 		} else {
 			jQuery('#found_item_id').html(wpsc_admin.loading_html);
 	
@@ -545,11 +627,13 @@ if(apply_filters('wpsc_print_create_ticket_html',true)):
 				dataType: "json",
 				cache: false,
 				success: function(response){
-					console.log("Ajax response: "+response);
 					console.log(response);
-					if(response) {
-						console.log("response not false");
-						update_recall_box_folder_file(response);
+					if(response) {												
+						if(response.search_error == true ) {
+							search_failed( 'notfound' );
+						} else {
+							update_recall_box_folder_file(response);
+						}
 					} else {
 						console.log("not a valid search ID");
 						search_failed( 'notfound' );
@@ -564,14 +648,17 @@ if(apply_filters('wpsc_print_create_ticket_html',true)):
 		var error_str = '';
 		if( failure_type == 'blank' ) {
 			error_str = 'Search Field Blank';
+			jQuery('input#found_item_id').attr('style', style_danger);	
+			jQuery('input#wppatt_search_id_box').attr('style', style_normal);	
 		} else if (failure_type == 'notfound' ) {
 			error_str = 'Box/Folder/File <b>"'+search_id+'"</b> Not Found';
+			jQuery('input#found_item_id').attr('style', style_danger);	
 		}
 		
 		jQuery('#alert_status').html('<span class=" alert alert-danger">'+error_str+'</span>'); //badge badge-danger
 		jQuery('#alert_status').addClass('alert_spacing');	
 		
-		jQuery('#bff_id').html('<b>No</b> Box/Folder/File ID'+required_html); 
+		jQuery('#bff_id').html('<b>No</b> Box/Folder/File ID'+required_html+': '); 
 		
 		//Clear out any old searches
 		jQuery('#found_item_id').val('');
@@ -587,13 +674,17 @@ if(apply_filters('wpsc_print_create_ticket_html',true)):
 		
 	function update_recall_box_folder_file(response) {
 		console.log("In update recall_box_folder_file ");
-		console.log(response);
+		//console.log(response);
 		
 		var the_id = "";
 		var title = "";
 		var box_fk = "";
 		var folderdoc_fk;
 		var db_null = -99999;
+		var icon_freeze = '<i class="fas fa-snowflake" title="Freeze"></i>';
+		var icon_ua_destruction = '<i class="fas fa-flag" title="Unauthorized Destruction"></i>';
+		var icon_box_destroyed = '<i class="fas fa-ban" title="Box Destroyed"></i>';
+		
 		
 		if(response.type == "Box") {
 			the_id = response.box_id;
@@ -602,15 +693,20 @@ if(apply_filters('wpsc_print_create_ticket_html',true)):
 			folderdoc_fk = db_null;
 			jQuery('#bff_id').html('Box ID'+required_html); 
 			jQuery('#alert_status').html('<span class=" alert alert-success">Box <b>'+search_id+'</b> Found</span>'); 
+			item_link = '<b><a href='+ subfolder + '/wp-admin/admin.php?pid=boxsearch&page=boxdetails&id='+the_id+' >' + the_id + '</a></b>'; 
+			
 
 		} else if(response.type == "Folder/Doc") {
 			the_id = response.Folderdoc_Info_id;
 			title = response.title;
 // 			box_fk = db_null; 
 			box_fk = response.Box_id_FK; 
+			box_id = response.box_id;
 			folderdoc_fk = response.Folderdoc_Info_id_FK;
 			jQuery('#bff_id').html('Folder/File ID'+required_html); 
-			jQuery('#alert_status').html('<span class=" alert alert-success">Folder/File <b>'+search_id+'</b> Found</span>'); 
+			jQuery('#alert_status').html('<span class=" alert alert-success">Folder/File <b>'+search_id+'</b> Found</span>');
+			item_link = '<b><a href="'+ subfolder + '/wp-admin/admin.php?pid=boxsearch&page=filedetails&id=' + the_id +'">'+the_id+'</a></b>';
+			containing_box_link = '<b><a href='+ subfolder + '/wp-admin/admin.php?pid=boxsearch&page=boxdetails&id='+box_id+' >' + box_id + '</a></b>'; 
 		}
 		
 		jQuery('#found_item_id').val(the_id);
@@ -627,22 +723,75 @@ if(apply_filters('wpsc_print_create_ticket_html',true)):
 		
 		console.log('destroyed: '+response.box_destroyed);
 		console.log('frozed: '+response.freeze);		
-		// IF box destroyed no update
+		
+		// IF box destroyed  // Cannot Recall
 		if ( response.box_destroyed == 1 ) {
 			jQuery('#found_item_id').val('');
-			jQuery('#alert_status').html('<span class=" alert alert-warning">Box <b>'+search_id+'</b> Destroyed - It cannot be recalled</span>'); 		
+			//var box_link = '<b><a href=/wp-admin/admin.php?pid=boxsearch&page=boxdetails&id='+the_id+' >' + the_id + '</a></b>'; //search_id
+			jQuery('#alert_status').html('<span class=" alert alert-danger">Box '+ item_link +' Destroyed - Cannot be Recalled. '+ icon_box_destroyed +'</span>'); 		
 		}
 		
-		//Check if the folder/file or containing box has already been recalled. 
-		if ( 1 ) {
+		// If folder/file is frozen no update // Warning
+		if ( response.freeze == 1 ) {
+			jQuery('#alert_status').html('<span class=" alert alert-success">Folder/File <b>'+item_link+'</b> Found. '+icon_freeze+'</span>'); 	
+		}
+		
+		// If Box Status is not recallable
+		if (response.error == 'Box Status Not Recallable' ) {
+			
+			jQuery('#found_item_id').val('');
+			jQuery('#alert_status').html('<span class=" alert alert-danger"> '+response.type+ ': ' +item_link +' status is '+response.box_status_name+' - Cannot be Recalled. </span>'); 
+			
+		}
+
+		
+		// If item is already recalled // Cannot Recall
+		if ( response.in_recall == true ) {
+			jQuery('#found_item_id').val('');
+			jQuery('#alert_status').html('<span class=" alert alert-danger">'+response.type+': '+item_link+' is currently Recalled. Recall # <b><a href="' 				+ subfolder+'/wp-admin/admin.php?page=recalldetails&id='+'R-'+response.in_recall_where+'">'+'R-'+response.in_recall_where+'</b> </span>'); 	
+		}
+		
+		// If box contains destroyed files // Warning
+		if (response.error_message == 'Box Contains Destroyed Files') {
+			
+			var link_str = '';
+			response.destroyed_files.forEach( function(file) {
+				link_str += '<b><a href="'+ subfolder + '/wp-admin/admin.php?pid=boxsearch&page=filedetails&id=' + file +'">'+file+'</a></b> ' + 							icon_ua_destruction +', ';
+			});
+			link_str = link_str.slice(0, -2); 
+			
+			var destroyed_file_num = response.destroyed_files.length;
+			
+			jQuery('#alert_status').html('<span class=" alert alert-warning">'+response.type+': '+ item_link +' contains ' + destroyed_file_num 
+				+ ' unauthorized destroyed file(s): ' + link_str + '</span>'); 
 			
 		}
 		
-		// If folder/file is frozen no update
-		if ( response.freeze == 1 ) {
-			//jQuery('#found_item_id').val('');
-			jQuery('#alert_status').html('<span class=" alert alert-warning">Folder/File <b>'+search_id+'</b> Frozen</span>'); 	
+				
+		// If Containing Box Status for Folder File is not recallable
+		if (response.error == 'Containing Box Status Not Recallable' ) {
+			
+			jQuery('#found_item_id').val('');
+			jQuery('#alert_status').html('<span class=" alert alert-danger"> '+response.type+ ': ' +item_link +' containing Box '+containing_box_link+' status is '+response.box_status_name+' - Cannot be Recalled. </span>'); 
+			
 		}
+		
+		// If Folder/File is flagged as unauthorized destruction // Cannot Recall
+		if (response.error_message == 'Folder/File Unauthorized Destruction') {
+			//console.log('inside recalled box');
+			jQuery('#found_item_id').val('');
+			jQuery('#alert_status').html('<span class=" alert alert-danger"> '+response.type+ ': ' +item_link +' flagged as Unauthorized Destruction - Cannot be Recalled. '+ icon_ua_destruction +'</span>'); 	
+			
+		}
+
+		// If Folder/File is in a Recalled Box // Cannot Recall
+		if (response.error_message == 'Folder/File in Recalled Box') {
+			//console.log('inside recalled box');
+			jQuery('#found_item_id').val('');
+			jQuery('#alert_status').html('<span class=" alert alert-danger">'+response.type+': '+ item_link +' is inside Recalled Box ' + 							containing_box_link + '. Recall # <b><a href="'+ subfolder +'/wp-admin/admin.php?page=recalldetails&id='+'R-'+ 											response.in_recall_where+'">'+'R-'+ response.in_recall_where+ '</b> </span>'); 
+			
+		}
+		
 		
 	}
 	
@@ -756,15 +905,25 @@ if(apply_filters('wpsc_print_create_ticket_html',true)):
 	function wppatt_submit_recall() {
 		//alert("submitting");
 		var validation = true;
+		//let validation_error_item = [];
+		let validation_error = [];
+/*
+		var style_normal = 'background-color: #ffffff !important';
+		var style_danger = 'background-color: #E8C6C6 !important';
+*/
 		
 		var new_requestors = jQuery("input[name='assigned_agent[]']").map(function(){return jQuery(this).val();}).get();
 		console.log('new requestors:');
 		console.log(new_requestors);	
 		
 		//If requestors have not been added
+		jQuery('input#requestor_input').attr('style', style_normal);						
 		if (!Array.isArray(new_requestors) || !new_requestors.length) {
 		  	console.log('you\'r in false territory ');
 			validation = false;
+			//validation_error_item = jQuery(this).find('input');
+			validation_error.push('Requestor Username');
+			jQuery('input#requestor_input').attr('style', style_danger);			
 		}
 		
 		/*
@@ -772,6 +931,7 @@ if(apply_filters('wpsc_print_create_ticket_html',true)):
 		*/
 		jQuery('.visible.wpsc_required').each(function (e) {
 			var field_type = jQuery(this).data('fieldtype');
+			
 			console.log('in validation');
 			console.log('field_type: '+field_type);
 			console.log(this);
@@ -780,29 +940,65 @@ if(apply_filters('wpsc_print_create_ticket_html',true)):
 				case 'text':
 					//console.log('in text');
 					//console.log(!jQuery(this).find('input').val() == '');
-					if (jQuery(this).find('input').val() == '') validation = false;
+					jQuery('input#wppatt_search_id_box').attr('style', style_normal);						
+					if (jQuery(this).find('input').val() == '') {
+						validation = false;
+						//validation_error_item.push( jQuery(this).find('input'));
+						validation_error.push( 'Search by ID');
+						jQuery('input#wppatt_search_id_box').attr('style', style_danger);						
+					}
 					break;
 				case 'textarea':
 					//console.log('in textarea');
 					//console.log(!jQuery(this).find('textarea').val() == '');
-					if (jQuery(this).find('textarea').val() == '') validation = false;
+					jQuery('textarea[name="recall_comment"]').attr('style', style_normal);
+					if (jQuery(this).find('textarea').val() == '') {
+						validation = false;
+						//validation_error_item.push( jQuery(this).find('textarea'));
+						validation_error.push('Comment');
+						jQuery('textarea[name="recall_comment"]').attr('style', style_danger);
+					}
 					break;
 				case 'email':
 					//console.log('in email');
 					//console.log(!jQuery(this).find('input').val() == '');
-					if (jQuery(this).find('input').val() == '') validation = false;
+/*
+					jQuery('input#wppatt_search_id_box').attr('style', style_normal);					
+					if (jQuery(this).find('input').val() == '') {
+						validation = false;
+						validation_error_item.push( jQuery(this).find('input'));
+						validation_error.push( 'Email');
+					}
+*/
 					break;
 				case 'number':
 				case 'date':
 				case 'search-results':
 					//console.log('in search-results');
 					//console.log(!jQuery(this).find('input').val() == '');
-					if (jQuery(this).find('input').val() == '') validation = false;
+					jQuery('input#found_item_id').attr('style', style_normal);					
+					if (jQuery(this).find('input').val() == '') {
+						validation = false;
+						//validation_error_item.push( jQuery(this).find('input'));
+						let error = jQuery('#bff_id').html();
+						error = error.replace('<span style="color:red;">*</span>: ', '');
+						error = error.replace('<b>', '');
+						error = error.replace('</b>', '');						
+						validation_error.push( error );
+						jQuery('input#found_item_id').attr('style', style_danger);
+					}
 					break;
 
 				case 'textarea':
-					if (jQuery(this).find('textarea').val() == '') validation = false;
+/*
+					jQuery('input#wppatt_search_id_box').attr('style', style_normal);				
+					if (jQuery(this).find('textarea').val() == '') {
+						validation = false;
+						validation_error_item.push( jQuery(this).find('input'));
+						validation_error.push( 'Comment 2');
+					}
 					break;
+*/
 			}
 
 			if (!validation) return;
@@ -810,9 +1006,40 @@ if(apply_filters('wpsc_print_create_ticket_html',true)):
 		
 		// If Not Valid
 		if (!validation) {
-			jQuery('#alert_status').html('<span class="alert alert-danger">Required fields cannot be empty.</span>');
+			
+// 			alert("<?php _e('Required fields cannot be empty.','supportcandy')?>");
+			let listed_error = '';
+			const num_of_errors = validation_error.length;
+			let i = 0;
+			validation_error.forEach(function(x) {
+				i++;
+				console.log(validation_error.length);
+				if( i == num_of_errors ) {
+					if( num_of_errors == 1 ) {
+						listed_error += x;
+					} else {
+						listed_error = listed_error.slice(0, -2); 
+						listed_error += ' & ' + x ;
+					}
+				} else {
+					listed_error += x + ', ';
+				}
+				
+			});
+//			listed_error = listed_error.slice(0, -2); 
+			if( num_of_errors == 1 ) {
+				listed_error += ' is empty.';
+			} else {
+				listed_error += ' are empty.';				
+			}
+
+			alert('Required fields cannot be empty. '+listed_error);
+			//console.log('Validation Error: '+listed_error);
+			//console.log(validation_error_item);
+			
+			jQuery('#alert_status').html('<span class="alert alert-danger">Required fields cannot be empty. '+listed_error+'</span>');
 			jQuery('#alert_status').addClass('alert_spacing');
-			alert("<?php _e('Required fields cannot be empty.','supportcandy')?>");
+			
 			return false;
 		}
 		

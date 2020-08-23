@@ -15,11 +15,12 @@ $folderdocarray = array();
 
 foreach($document_array as $key => $value) { 
     
-$get_document = $wpdb->get_row("SELECT folderdocinfo_id 
-FROM wpqa_wpsc_epa_folderdocinfo, wpqa_wpsc_epa_boxinfo, wpqa_wpsc_epa_storage_location
-WHERE wpqa_wpsc_epa_folderdocinfo.box_id = wpqa_wpsc_epa_boxinfo.id AND wpqa_wpsc_epa_storage_location.id = wpqa_wpsc_epa_boxinfo.storage_location_id AND 
-((aisle <> 0 AND bay <> 0 AND shelf <> 0 AND position <> 0 AND digitization_center <> 666) OR (freeze = 1)) AND
-folderdocinfo_id = '" . $value . "'");
+$get_document = $wpdb->get_row("SELECT a.folderdocinfo_id as folderdocinfo_id
+FROM wpqa_wpsc_epa_folderdocinfo a 
+INNER JOIN wpqa_wpsc_epa_boxinfo b ON a.box_id = b.id 
+INNER JOIN wpqa_wpsc_epa_storage_location c on b.storage_location_id = c.id 
+WHERE ((c.aisle <> 0 AND c.bay <> 0 AND c.shelf <> 0 AND c.position <> 0 AND c.digitization_center <> 666 AND b.box_destroyed = 0)) 
+AND a.folderdocinfo_id = '" . $value . "'");
 $document = $get_document->folderdocinfo_id;
 
 if ($document != '') {

@@ -102,6 +102,7 @@ $ticket_id = $wpscfunction->create_new_ticket($values);
 
 $data['ticket_id'] = $ticket_id;
 $data['box_info'] = $args["box_info"];
+$data['ticket_useage'] = $args["ticket_useage"];
 do_action('patt_process_boxinfo_records', $data);
 
 $wpscfunction->add_ticket_meta($ticket_id,'assigned_agent','0');

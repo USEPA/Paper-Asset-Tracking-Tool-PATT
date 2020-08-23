@@ -22,7 +22,7 @@ $ticket_auth_code = $wpscfunction->get_ticket_fields($ticket_id,'ticket_auth_cod
 
 // Check ticket in trash
 $ticket_status = $wpscfunction->get_ticket_status($ticket_id);
-if(!$ticket_status && $current_user && !$current_user->has_cap('manage_options')){
+if(!$ticket_status && $current_user && !$current_user->has_cap('edit_published_posts')){
 	_e('Ticket not found.','supportcandy');
 	die();
 }

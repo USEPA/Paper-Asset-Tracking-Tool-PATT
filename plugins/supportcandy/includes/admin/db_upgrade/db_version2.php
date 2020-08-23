@@ -8,7 +8,7 @@ global $current_user;
 /**
  * Exit if logged in user do not have administrator capabilities
  */
-if( !$current_user->has_cap('manage_options') ) exit();
+if( !$current_user->has_cap('edit_published_posts') ) exit();
 
 ?>
 

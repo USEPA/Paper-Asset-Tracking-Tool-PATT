@@ -4,7 +4,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 global $current_user, $wpscfunction;
-if (!($current_user->ID && $current_user->has_cap('manage_options'))) {exit;}
+if (!($current_user->ID && $current_user->has_cap('edit_published_posts'))) {exit;}
 
 $fields = get_terms([
 	'taxonomy'   => 'wpsc_ticket_custom_fields',

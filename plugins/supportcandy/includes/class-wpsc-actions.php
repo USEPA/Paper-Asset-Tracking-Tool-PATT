@@ -16,6 +16,10 @@ if ( ! class_exists( 'WPSC_Actions' ) ) :
     // Load actions
     function load_actions() {
       
+      //PATT BEGIN
+      add_action( 'wpsc_after_recycle', array($this,'recycle_request'), 10, 1 );
+      //PATT END
+      
       // Log Entry
       add_action( 'wpsc_after_submit_reply', array($this,'submit_reply') );
       add_action( 'wpsc_set_change_status', array($this,'change_status'), 10, 3 );
@@ -60,6 +64,26 @@ if ( ! class_exists( 'WPSC_Actions' ) ) :
       do_action('after_wpsc_actions_loaded');
       
     }
+    
+    //PATT BEGIN
+        // Recycle request
+    function recycle_request ( $ticket_id){
+      global $wpscfunction, $current_user;
+      if($current_user->ID){
+        $log_str = sprintf( __('Request has been moved to the recycle bin by %1$s','supportcandy'), '<strong>'. $current_user->display_name .'</strong>');
+      } else {
+        $log_str = sprintf( __('Request has been moved to the recycle bin by %1$s','supportcandy'), '<strong>'.$current_user->display_name.'</strong>' );
+      }
+      $args = array(
+        'ticket_id'      => $ticket_id,
+        'reply_body'     => $log_str,
+        'thread_type'    => 'log'
+      );
+      $args = apply_filters( 'wpsc_thread_args', $args );
+      $wpscfunction->submit_ticket_thread($args);
+    }
+    //PATT END
+    
     
     // Submit reply actions
     function submit_reply($thread_id) {

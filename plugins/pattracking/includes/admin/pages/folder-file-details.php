@@ -12,6 +12,7 @@ $GLOBALS['pid'] = $_GET['pid'];
 $GLOBALS['page'] = $_GET['page'];
 
 $agent_permissions = $wpscfunction->get_current_agent_permissions();
+$agent_permissions['label'];
 
 //include_once WPPATT_ABSPATH . 'includes/class-wppatt-functions.php';
 //$load_styles = new wppatt_Functions();
@@ -52,25 +53,28 @@ $edit_btn_css = 'background-color:'.$wpsc_appearance_individual_ticket_page['wps
 			//$folderfile_contract_number = $folderfile_details->contract_number;
 			//$folderfile_grant_number = $folderfile_details->grant_number;
 			$folderfile_file_location = $folderfile_details->file_location;
+			$folderfile_file_object_id = $folderfile_details->file_object_id;
 			$folderfile_file_name = $folderfile_details->file_name;
 			$folderfile_folderdocinfo_id = $folderfile_details->folderdocinfo_id;
 			
 			$folderfile_essential_record = $folderfile_details->essential_record;
 			$folderfile_validation = $folderfile_details->validation;
-			$folderfile_validation_user = $folderfile_details->validation_user_id;				
+			$folderfile_validation_user = $folderfile_details->validation_user_id;	
+			$folderfile_rescan = $folderfile_details->rescan;
 		    $folderfile_destruction = $folderfile_details->unauthorized_destruction;
 		    $folderfile_identifier = $folderfile_details->folder_identifier;
 		    $folderfile_freeze = $folderfile_details->freeze;
 
             $user = get_user_by( 'id', $folderfile_validation_user);
             
-		    $box_details = $wpdb->get_row("SELECT wpqa_wpsc_epa_boxinfo.id, wpqa_wpsc_epa_boxinfo.box_destroyed, wpqa_wpsc_ticket.request_id as request_id, wpqa_wpsc_epa_boxinfo.box_id as box_id, wpqa_wpsc_epa_boxinfo.ticket_id as ticket_id
+		    $box_details = $wpdb->get_row("SELECT wpqa_wpsc_epa_boxinfo.id, wpqa_wpsc_epa_boxinfo.box_status, wpqa_wpsc_epa_boxinfo.box_destroyed, wpqa_wpsc_ticket.request_id as request_id, wpqa_wpsc_epa_boxinfo.box_id as box_id, wpqa_wpsc_epa_boxinfo.ticket_id as ticket_id
 FROM wpqa_wpsc_epa_boxinfo, wpqa_wpsc_epa_folderdocinfo, wpqa_wpsc_ticket
 WHERE wpqa_wpsc_ticket.id = wpqa_wpsc_epa_boxinfo.ticket_id AND wpqa_wpsc_epa_folderdocinfo.box_id = wpqa_wpsc_epa_boxinfo.id AND wpqa_wpsc_epa_boxinfo.id = '" . $folderfile_boxid . "'");
             $box_boxid = $box_details->box_id;
 			$box_ticketid = $box_details->ticket_id;
 			$box_requestid = $box_details->request_id;
 			$box_destruction = $box_details->box_destroyed;
+			$box_status = $box_details->box_status;
 			$request_id = substr($box_boxid, 0, 7);
             
             //record schedule
@@ -119,9 +123,48 @@ WHERE wpqa_terms.term_id = wpqa_wpsc_epa_storage_location.digitization_center AN
         if (($agent_permissions['label'] == 'Administrator') || ($agent_permissions['label'] == 'Agent'))
         {
         ?>
-        <button type="button" class="btn btn-sm wpsc_action_btn" id="wpsc_individual_validation_btn" style="<?php echo $action_default_btn_css?>"><i class="fas fa-check-circle"></i> Validate</button></button>
-    	<button type="button" class="btn btn-sm wpsc_action_btn" id="wpsc_individual_destruction_btn" style="<?php echo $action_default_btn_css?>"><i class="fas fa-flag"></i> Unauthorize Destruction</button></button>
-    	<button type="button" class="btn btn-sm wpsc_action_btn" id="wpsc_individual_freeze_btn" style="<?php echo $action_default_btn_css?>"><i class="fas fa-snowflake"></i> Freeze</button></button>
+        <?php 
+        if ($box_status == 674 || $box_status == 743) {
+        ?>
+        <!-- language of buttons change based on 0 or 1 -->
+        <?php
+        if($folderfile_validation == 0) { ?>
+        <button type="button" class="btn btn-sm wpsc_action_btn" id="wpsc_individual_validation_btn" style="<?php echo $action_default_btn_css?>"<?php echo (($folderfile_rescan == 1 || $folderfile_destruction == 1) || ($folderfile_rescan == 1 && $box_destruction == 1) || $folderfile_destruction == 1 || $box_destruction == 1)? "disabled" : ""; ?>><i class="fas fa-check-circle"></i> Validate</button></button>
+        <?php
+        }
+        else { ?>
+        <button type="button" class="btn btn-sm wpsc_action_btn" id="wpsc_individual_validation_btn" style="<?php echo $action_default_btn_css?>"<?php echo (($folderfile_rescan == 1 || $folderfile_destruction == 1) || ($folderfile_rescan == 1 && $box_destruction == 1) || $folderfile_destruction == 1 || $box_destruction == 1)? "disabled" : ""; ?>><i class="fas fa-check-circle"></i> Un-Validate</button></button>
+        <?php
+        }
+        ?>
+        
+        <?php
+        if($folderfile_rescan == 0) { ?>
+        <button type="button" class="btn btn-sm wpsc_action_btn" id="wpsc_individual_rescan_btn" style="<?php echo $action_default_btn_css?>"<?php echo (($folderfile_validation == 1 || $folderfile_destruction == 1) || ($folderfile_validation == 1 && $box_destruction == 1) || $folderfile_destruction == 1 || $box_destruction == 1)? "disabled" : ""; ?>><i class="fas fa-times-circle"></i> Re-Scan</button></button>
+       	<?php }
+       	else { ?>
+       	<button type="button" class="btn btn-sm wpsc_action_btn" id="wpsc_individual_rescan_btn" style="<?php echo $action_default_btn_css?>"<?php echo (($folderfile_validation == 1 || $folderfile_destruction == 1) || ($folderfile_validation == 1 && $box_destruction == 1) || $folderfile_destruction == 1 || $box_destruction == 1)? "disabled" : ""; ?>><i class="fas fa-times-circle"></i> Undo Re-Scan</button></button>
+        <?php } ?>
+        
+        <?php 
+        }
+        ?>
+        
+       	<?php
+       	if($folderfile_destruction == 0) { ?>
+       	<button type="button" class="btn btn-sm wpsc_action_btn" id="wpsc_individual_destruction_btn" style="<?php echo $action_default_btn_css?>"<?php echo ($box_destruction == 1 || $folderfile_freeze == 1)? "disabled" : ""; ?>><i class="fas fa-flag"></i> Unauthorized Destruction</button></button>
+    	<?php }
+    	else { ?>
+    	<button type="button" class="btn btn-sm wpsc_action_btn" id="wpsc_individual_destruction_btn" style="<?php echo $action_default_btn_css?>"<?php echo ($box_destruction == 1 || $folderfile_freeze == 1)? "disabled" : ""; ?>><i class="fas fa-flag"></i> Undo Unauthorized Destruction</button></button>
+    	<?php } ?>
+    	
+    	<?php 
+    	if($folderfile_freeze == 0) { ?>
+    	<button type="button" class="btn btn-sm wpsc_action_btn" id="wpsc_individual_freeze_btn" style="<?php echo $action_default_btn_css?>"<?php echo ($folderfile_destruction == 1 || $box_destruction == 1)? "disabled" : ""; ?>><i class="fas fa-snowflake"></i> Freeze</button></button>
+        <?php }
+        else { ?>
+        <button type="button" class="btn btn-sm wpsc_action_btn" id="wpsc_individual_freeze_btn" style="<?php echo $action_default_btn_css?>"<?php echo ($folderfile_destruction == 1 || $box_destruction == 1)? "disabled" : ""; ?>><i class="fas fa-snowflake"></i> Un-Freeze</button></button>
+        <?php } ?>
         <?php
         }
         ?>	
@@ -184,21 +227,27 @@ is marked as frozen.
 ?>
 
 <?php
-if($folderfile_validation > 0){
+if($folderfile_validation > 0 && $folderfile_rescan == 0){
 echo '
 <div class="alert alert-success" role="alert">
 <span style="font-size: 1.3em; color: #008000;"><i class="fas fa-check-circle" title="Validated"></i></span>';
 if ($folderfile_index_level == '1') { echo' Folder validated ('.$user->user_login.').'; }else{ echo' File validated ('.$user->user_login.').'; }
+echo '</div>';
+} elseif ($folderfile_rescan == 1) {
+echo '
+<div class="alert alert-danger" role="alert">
+<span style="font-size: 1.3em; color: #8b0000;"><i class="fas fa-times-circle" title="Re-scan Needed"></i></span>';
+if ($folderfile_index_level == '1') { echo' Folder requires re-scanning.'; }else{ echo' File requires re-scanning.'; }
 echo '</div>';
 } else {
 echo '
 <div class="alert alert-danger" role="alert">
 <span style="font-size: 1.3em; color: #8b0000;"><i class="fas fa-times-circle" title="not validated"></i></span>';
 if ($folderfile_index_level == '1') { echo' Folder not validated.'; }else{ echo' File not validated.'; }
-echo '</div>';
+echo '</div>';    
 }
 ?>
-        
+
       <h3>
 	 	 <?php if(apply_filters('wpsc_show_hide_ticket_subject',true)){?>
 	 	 <?php if($box_destruction > 0 && $folderfile_freeze == 0){?>
@@ -210,8 +259,6 @@ echo '</div>';
 		  <?php } ?>		
 		  
 		  <?php 
-		  $agent_permissions = $wpscfunction->get_current_agent_permissions();
-          $agent_permissions['label'];
 		  if (($agent_permissions['label'] == 'Administrator') || ($agent_permissions['label'] == 'Agent'))
                 {
 			         echo '<a href="#" onclick="wpsc_get_folderfile_editor(' . $folderfile_id . ')"><i class="fas fa-edit fa-xs"></i></a>';
@@ -285,11 +332,68 @@ echo '</div>';
 			    echo "<strong>Essential Record:</strong> Yes <br />";
 			}
 			
-			if (!empty($folderfile_file_location) || !empty($folderfile_file_name)) {
-				echo '<strong>Link to File:</strong> <a href="' . $folderfile_file_location . '" target="_blank">' . $folderfile_file_name . '</a><br />';
-			}
-			
 ?>
+
+<?php 
+wp_get_current_user();
+
+$ticket_details = $wpdb->get_row("SELECT customer_name
+FROM wpqa_wpsc_ticket
+WHERE id = '" . $box_ticketid . "'");
+
+$ticket_user = $ticket_details->customer_name;
+
+if ((!empty($folderfile_file_location) || !empty($folderfile_file_name)) && (($agent_permissions['label'] == 'Administrator') || ($agent_permissions['label'] == 'Agent') || $current_user->nickname == $ticket_user)) {
+?>
+<h3>Links to digitized files in ECMS</h3>
+<style>
+.datatable_header {
+    background-color: rgb(66, 73, 73) !important;
+    color: rgb(255, 255, 255) !important;
+    width: 204px;
+}
+</style>
+<?php
+if ($folderfile_file_object_id != '') {
+?>
+<table class="table table-striped table-bordered dataTable no-footer">
+  <tr>
+    <th class="datatable_header">Title</th>
+    <th class="datatable_header">URL</th>
+  </tr>
+<?php
+$count = 0;
+if (strpos($folderfile_file_object_id, ',') == 0) {
+$tbl = '<tr>';
+$tbl .= '<td>'.$folderfile_title.'</td>';
+$tbl .= '<td><a href="https://lippizzan3.rtpnc.epa.gov/ecms/download/1.0?apiKey=031a8c90-f025-4e80-ab47-e2bd577410d7&object-id='. $folderfile_file_object_id . '">Click to download</a></td>';
+$tbl .= '</tr>';
+
+echo $tbl;
+} elseif(strpos($folderfile_file_object_id, ',') > 0) {
+$object_array = explode(',', $folderfile_file_object_id); //split string into array seperated by ', '
+
+foreach ($object_array as $obj_id) {
+$filename_array = explode(',', $folderfile_file_name); //split string into array seperated by ', '
+$count++;
+$tbl = '<tr>';
+$tbl .= '<td>'.$folderfile_title.' Part: '.$count.'</td>';
+$tbl .= '<td><a href="https://lippizzan3.rtpnc.epa.gov/ecms/download/1.0?apiKey=031a8c90-f025-4e80-ab47-e2bd577410d7&object-id='. $obj_id . '">Click to download</a></td>';
+$tbl .= '</tr>';
+
+echo $tbl;
+}
+}
+?>
+</table>
+<?php
+} else {
+echo "No url's from ECMS currently exist.";
+}
+}
+?>
+
+
 <form>
 <input type='hidden' id='doc_id' value='<?php echo $GLOBALS['id']; ?>' />
 <input type='hidden' id='page' value='<?php echo $GLOBALS['page']; ?>' />
@@ -325,6 +429,28 @@ echo '</div>';
 if (($agent_permissions['label'] == 'Administrator') || ($agent_permissions['label'] == 'Agent'))
 {
 ?>
+jQuery('#wpsc_individual_rescan_btn').on('click', function(e){
+		   jQuery.post(
+   '<?php echo WPPATT_PLUGIN_URL; ?>includes/admin/pages/scripts/update_rescan.php',{
+postvarsfolderdocid : jQuery('#doc_id').val(),
+postvarpage : jQuery('#page').val()
+}, 
+   function (response) {
+      //if(!alert(response)){window.location.reload();}
+      wpsc_modal_open('Re-scan');
+		  var data = {
+		    action: 'wpsc_get_rescan_ffd',
+		    response_data: response,
+		    response_page: '<?php echo $GLOBALS['page']; ?>'
+		  };
+		  jQuery.post(wpsc_admin.ajax_url, data, function(response_str) {
+		    var response = JSON.parse(response_str);
+		    jQuery('#wpsc_popup_body').html(response.body);
+		    jQuery('#wpsc_popup_footer').html(response.footer);
+		    jQuery('#wpsc_cat_name').focus();
+		  }); 
+   });
+});
 jQuery('#wpsc_individual_validation_btn').on('click', function(e){
 		   jQuery.post(
    '<?php echo WPPATT_PLUGIN_URL; ?>includes/admin/pages/scripts/update_validate.php',{

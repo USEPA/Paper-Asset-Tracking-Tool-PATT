@@ -8,7 +8,7 @@ global $wpscfunction, $current_user, $wpdb;
 /**
  * Exit if logged in user do not have administrator capabilities
  */
-if( !$current_user->has_cap('manage_options') ) exit();
+if( !$current_user->has_cap('edit_published_posts') ) exit();
 
 $post_per_page = 20;
 $page_no       = isset($_POST['page_no']) ? intval($_POST['page_no']) : 1;

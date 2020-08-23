@@ -12,7 +12,11 @@ ob_start();
 ?>
 <form id="frm_bulk_restore_ticket">
     <div class="form-group">
-        <p><?php _e('Are you sure to restore these tickets?','supportcandy');?></p>
+        <?php if ($ticket_id != '') { ?>
+        <p><?php _e('Are you sure you want to restore these tickets?','supportcandy');?></p>
+        <?php } else { ?>
+        <p>Please select a request to restore.</p>
+        <?php } ?>
     </div>
     
     <input type="hidden" name="action" value="wpsc_tickets" />
@@ -28,7 +32,9 @@ ob_start();
 
 ?>
 <button type="button" class="btn wpsc_popup_close" onclick="wpsc_modal_close();"><?php _e('Cancel','supportcandy');?></button>
-<button type="button" class="btn wpsc_popup_action" onclick="wpsc_set_bulk_restore_ticket();"><?php _e('Confirm','supportcandy');?></button>
+        <?php if ($ticket_id != '') { ?>
+        <button type="button" class="btn wpsc_popup_action" onclick="wpsc_set_bulk_restore_ticket();window.location.reload();"><?php _e('Confirm','supportcandy');?></button>
+        <?php } ?>
 <?php
 
 $footer = ob_get_clean();

@@ -10,6 +10,8 @@ if (!($current_user->ID && $current_user->has_cap('wpsc_agent'))) {
 		exit;
 }
 $ticket_id 	 = isset($_POST['ticket_id']) ? intval($_POST['ticket_id']) : 0 ;
+$ticket_data         = $wpscfunction->get_ticket($ticket_id);
+$status_id           = $ticket_data['ticket_status'];
 $raisedby_email = $wpscfunction->get_ticket_fields($ticket_id, 'customer_email');
 $wpsc_appearance_modal_window = get_option('wpsc_modal_window');
 $wpsc_appearance_ticket_list = get_option('wpsc_appearance_ticket_list');
@@ -96,6 +98,9 @@ width: 204px;
 .bootstrap-iso .alert {
     padding: 8px;
 }
+.assign_agents_icon {
+	cursor: pointer;
+}
 </style>
 <?php
 //unauthorized destruction notification
@@ -134,21 +139,87 @@ if($freeze_count > 0) {
 }
 ?>
 
-<h4>Boxes Related to Request</h4>
-
 <?php
-	//$box_details = Patt_Custom_Func::fetch_box_details($ticket_id);
+//Rescan
+$ticket_data = $wpscfunction->get_ticket($ticket_id);
+$status_id   	= $ticket_data['ticket_status'];
 
-$box_details = $wpdb->get_results(
-"SELECT 
+$get_request_id = $wpdb->get_row("SELECT request_id FROM wpqa_wpsc_ticket WHERE id = '".$ticket_id."'");
+$get_request_id_val = $get_request_id->request_id;
+
+$get_rescan_total = $wpdb->get_row("SELECT count(id) as totalcount FROM wpqa_wpsc_epa_folderdocinfo WHERE folderdocinfo_id LIKE '".$get_request_id_val."%'");
+$get_rescan_total_val = $get_rescan_total->totalcount;
+
+$get_rescan_count = $wpdb->get_row("SELECT count(id) as count FROM wpqa_wpsc_epa_folderdocinfo WHERE rescan = 0 AND folderdocinfo_id LIKE '".$get_request_id_val."%'");
+$get_rescan_count_val = $get_rescan_count->count;
+
+if ($status_id == 743 && ($get_rescan_total_val == $get_rescan_count_val)) {
+$wpscfunction->change_status($ticket_id, 674);   
+}
+
+if ($status_id == 674 && ($get_rescan_total_val != $get_rescan_count_val)) {
+$wpscfunction->change_status($ticket_id, 743);   
+}
+
+$box_rescan = $wpdb->get_row("SELECT count(wpqa_wpsc_epa_folderdocinfo.id) as count
+FROM wpqa_wpsc_epa_boxinfo
+INNER JOIN wpqa_wpsc_epa_folderdocinfo ON wpqa_wpsc_epa_boxinfo.id = wpqa_wpsc_epa_folderdocinfo.box_id
+WHERE wpqa_wpsc_epa_folderdocinfo.rescan = 1 AND wpqa_wpsc_epa_boxinfo.ticket_id = '" . $ticket_id . "'");
+$rescan_count = $box_rescan->count;
+
+if($rescan_count > 0) {
+?>
+<div class="alert alert-danger" role="alert">
+<span style="font-size: 1em; color: #8b0000;"><i class="fas fa-times-circle" title="Re-Scan"></i></span> <strong>The following folder/files require re-scanning</strong>
+</div>
+<table class="table table-striped table-bordered dataTable no-footer">
+  <tr>
+    <th class="datatable_header">Box ID</th>
+    <th class="datatable_header">Folder/File ID</th>
+    <th class="datatable_header">Title</th>
+  </tr>
+<?php
+$rescan_details = $wpdb->get_results("SELECT wpqa_wpsc_epa_boxinfo.box_id as box_id, wpqa_wpsc_epa_folderdocinfo.title as title, wpqa_wpsc_epa_folderdocinfo.folderdocinfo_id as folderdocinfo_id 
+FROM wpqa_wpsc_epa_boxinfo
+INNER JOIN wpqa_wpsc_epa_folderdocinfo ON wpqa_wpsc_epa_boxinfo.id = wpqa_wpsc_epa_folderdocinfo.box_id
+WHERE wpqa_wpsc_epa_folderdocinfo.rescan = 1 AND wpqa_wpsc_epa_boxinfo.ticket_id = '" . $ticket_id . "'");
+
+foreach ($rescan_details as $info) {
+
+$tbl = '<tr>';
+$tbl .= '<td><a href="' . $subfolder_path . '/wp-admin/admin.php?page=boxdetails&pid=requestdetails&id=' . $info->box_id . '">'.$info->box_id.'</a></td>';
+$tbl .= '<td><a href="' . $subfolder_path . '/wp-admin/admin.php?page=filedetails&pid=requestdetails&id=' . $info->folderdocinfo_id . '">'.$info->folderdocinfo_id.'</a></td>';
+$tbl .= '<td>'.$info->title.'</td>';
+$tbl .= '</tr>';
+
+echo $tbl;
+
+}
+?>
+</table>
+<?php
+}
+?>
+
+<?php 
+$status_id_arr = array('3','670','69');
+?>
+
+<h4>Boxes Related to Request</h4>
+<?php
+$box_details = $wpdb->get_results("SELECT 
 wpqa_wpsc_epa_boxinfo.id as id, 
+wpqa_wpsc_epa_boxinfo.id as box_data_id,
+(SELECT wpqa_terms.name FROM wpqa_wpsc_epa_boxinfo, wpqa_terms WHERE wpqa_wpsc_epa_boxinfo.box_status = wpqa_terms.term_id AND wpqa_wpsc_epa_boxinfo.id = box_data_id) as status,
+wpqa_wpsc_epa_boxinfo.box_status as status_id,
+wpqa_terms.name as status_name,
 (SELECT sum(unauthorized_destruction = 1) FROM wpqa_wpsc_epa_folderdocinfo WHERE box_id = wpqa_wpsc_epa_boxinfo.id) as ud,
 (SELECT sum(validation = 1) FROM wpqa_wpsc_epa_folderdocinfo WHERE box_id = wpqa_wpsc_epa_boxinfo.id) as val_sum,
 (SELECT sum(freeze = 1) FROM wpqa_wpsc_epa_folderdocinfo WHERE box_id = wpqa_wpsc_epa_boxinfo.id) as freeze_sum,
 (SELECT count(id) FROM wpqa_wpsc_epa_folderdocinfo WHERE box_id = wpqa_wpsc_epa_boxinfo.id) as doc_total,
 wpqa_wpsc_epa_boxinfo.box_id as box_id, 
-wpqa_terms.name as digitization_center, 
-wpqa_terms.slug as digitization_center_slug, 
+(SELECT wpqa_terms.name FROM wpqa_terms, wpqa_wpsc_epa_boxinfo, wpqa_wpsc_epa_storage_location WHERE wpqa_wpsc_epa_storage_location.digitization_center = wpqa_terms.term_id AND wpqa_wpsc_epa_boxinfo.storage_location_id = wpqa_wpsc_epa_storage_location.id AND wpqa_wpsc_epa_boxinfo.id = box_data_id) as digitization_center,
+(SELECT wpqa_terms.slug FROM wpqa_wpsc_epa_storage_location, wpqa_terms, wpqa_wpsc_epa_boxinfo WHERE wpqa_terms.term_id = wpqa_wpsc_epa_storage_location.digitization_center AND wpqa_wpsc_epa_storage_location.id = wpqa_wpsc_epa_boxinfo.storage_location_id and wpqa_wpsc_epa_boxinfo.id = box_data_id) as digitization_center_slug, 
 wpqa_wpsc_epa_storage_location.aisle as aisle, 
 wpqa_wpsc_epa_storage_location.bay as bay, 
 wpqa_wpsc_epa_storage_location.shelf as shelf, 
@@ -157,17 +228,23 @@ wpqa_wpsc_epa_location_status.locations as physical_location,
 wpqa_wpsc_epa_boxinfo.box_destroyed as bd
 FROM wpqa_wpsc_epa_boxinfo 
 INNER JOIN wpqa_wpsc_epa_storage_location ON wpqa_wpsc_epa_boxinfo.storage_location_id = wpqa_wpsc_epa_storage_location.id 
-INNER JOIN wpqa_wpsc_epa_location_status ON wpqa_wpsc_epa_boxinfo.location_status_id = wpqa_wpsc_epa_location_status.id 
-INNER JOIN wpqa_terms ON wpqa_terms.term_id = wpqa_wpsc_epa_storage_location.digitization_center 
-WHERE wpqa_wpsc_epa_boxinfo.ticket_id = '" . $ticket_id . "'"
-			);
+INNER JOIN wpqa_wpsc_epa_location_status ON wpqa_wpsc_epa_boxinfo.location_status_id = wpqa_wpsc_epa_location_status.id
+INNER JOIN wpqa_terms ON wpqa_terms.term_id = wpqa_wpsc_epa_boxinfo.box_status
+WHERE wpqa_wpsc_epa_boxinfo.ticket_id = '" . $ticket_id . "'");
 
 			$tbl = '
 <div class="table-responsive" style="overflow-x:auto;">
-	<table id="tbl_templates_boxes" class="table table-striped table-bordered" cellspacing="5" cellpadding="5">
+	<table id="tbl_templates_request_details" class="table table-striped table-bordered" cellspacing="5" cellpadding="5">
 <thead>
-  <tr>
-    	  			<th class="datatable_header">ID</th>
+  <tr>';
+  
+  
+if (!(in_array($status_id, $status_id_arr)) && (($agent_permissions['label'] == 'Administrator') || ($agent_permissions['label'] == 'Agent'))) {
+$tbl .=  '<th class="datatable_header"></th>';
+}     
+                    
+         $tbl .=   '<th class="datatable_header">Box ID</th>
+    	  			<th class="datatable_header">Box Status</th>
     	  			<th class="datatable_header">Physical Location</th>
     	  			<th class="datatable_header">Assigned Location</th>
     	  			<th class="datatable_header">Digitization Center</th>
@@ -179,6 +256,12 @@ WHERE wpqa_wpsc_epa_boxinfo.ticket_id = '" . $ticket_id . "'"
 			foreach ($box_details as $info) {
 			    $boxlist_dbid = $info->id;
 			    $boxlist_id = $info->box_id;
+			    $boxlist_status_id = $info->status_id;
+			    $status_background = get_term_meta($boxlist_status_id, 'wpsc_box_status_background_color', true);
+	            $status_color = get_term_meta($boxlist_status_id, 'wpsc_box_status_color', true);
+	            $status_style = "background-color:".$status_background.";color:".$status_color.";";
+	            $boxlist_status_name = $info->status_name;
+	            $boxlist_status = "<span class='wpsp_admin_label' style='".$status_style."'>".$boxlist_status_name."</span>";
 			    $boxlist_dc = $info->digitization_center;
 			    $boxlist_dc_val = strtoupper($info->digitization_center_slug);
 			    $boxlist_aisle = $info->aisle;
@@ -211,7 +294,11 @@ WHERE wpqa_wpsc_epa_boxinfo.ticket_id = '" . $ticket_id . "'"
 			}
 			*/
 			$tbl .= '<tr class="wpsc_tl_row_item">';
-			
+
+ if (!(in_array($status_id, $status_id_arr)) && (($agent_permissions['label'] == 'Administrator') || ($agent_permissions['label'] == 'Agent'))) {
+			$tbl .= '<td>'. $boxlist_id .'</td>';
+}    
+
             if($boxlist_box_destroyed > 0 && $boxlist_freeze_sum == 0) {
                  $tbl .= '
             <td><a href="' . $subfolder_path . '/wp-admin/admin.php?page=boxdetails&pid=requestdetails&id=' . $boxlist_id . '" style="color:#FF0000 !important; text-decoration: line-through;">' . $boxlist_id . '</a>';
@@ -237,11 +324,11 @@ WHERE wpqa_wpsc_epa_boxinfo.ticket_id = '" . $ticket_id . "'"
             if($boxlist_freeze_sum > 0) {
                 $tbl .= ' <span style="font-size: 1em; color: #009ACD;"><i class="fas fa-snowflake" title="Freeze"></i></span>';
             }
-            
-            $tbl .= '</td>';
-           
+   
+            $tbl .= '<span style="font-size: 1.0em; color: #1d1f1d;margin-left:4px;" onclick="view_assigned_agents(\''. $boxlist_id .'\')" class="assign_agents_icon"><i class="fas fa-user-friends" title="Assigned Agents"></i></span></td>';
+            $tbl .= '<td>' . $boxlist_status . '</td>';  
             $tbl .= '<td>' . $boxlist_physical_location . '</td>';   
-			if (($boxlist_unathorized_destruction == 0)&&($boxlist_box_destroyed == 0)&&($agent_permissions['label'] == 'Administrator') || ($agent_permissions['label'] == 'Agent'))
+			if (!(in_array($status_id, $status_id_arr)) && ($boxlist_unathorized_destruction == 0)&&($boxlist_box_destroyed == 0)&&($agent_permissions['label'] == 'Administrator') || ($agent_permissions['label'] == 'Agent'))
             {
             if ($boxlist_location != 'Currently Unassigned' || $boxlist_dc_location != 'Not Unassigned') {
             $tbl .= '<td>' . $boxlist_location;
@@ -249,8 +336,8 @@ WHERE wpqa_wpsc_epa_boxinfo.ticket_id = '" . $ticket_id . "'"
             $tbl .= ' <a href="#" onclick="wpsc_get_inventory_editor(' . $boxlist_dbid . ')"><i class="fas fa-edit"></i></a>';
             }
             $tbl .= '</td>';
+            
             $tbl .= '<td>' . $boxlist_dc_location . ' <a href="#" onclick="wpsc_get_digitization_editor_final(' . $boxlist_dbid . ')"><i class="fas fa-exchange-alt"></i></a></td>';
-
             
             } elseif ($boxlist_location == 'Currently Unassigned' && $boxlist_dc_location == 'Currently Unassigned') {
             $tbl .= '<td>' . $boxlist_location . '</td>';   
@@ -283,12 +370,126 @@ WHERE wpqa_wpsc_epa_boxinfo.ticket_id = '" . $ticket_id . "'"
 
 <link rel="stylesheet" type="text/css" href="<?php echo WPSC_PLUGIN_URL.'asset/lib/DataTables/datatables.min.css';?>"/>
 <script type="text/javascript" src="<?php echo WPSC_PLUGIN_URL.'asset/lib/DataTables/datatables.min.js';?>"></script>
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-tagsinput/1.3.3/jquery.tagsinput.css" crossorigin="anonymous">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-tagsinput/1.3.3/jquery.tagsinput.js" crossorigin="anonymous"></script>
+
+<link type="text/css" href="//gyrocode.github.io/jquery-datatables-checkboxes/1.2.11/css/dataTables.checkboxes.css" rel="stylesheet" />
+<script type="text/javascript" src="//gyrocode.github.io/jquery-datatables-checkboxes/1.2.11/js/dataTables.checkboxes.min.js"></script>
+
 <script>
  jQuery(document).ready(function() {
-	 jQuery('#tbl_templates_boxes').DataTable({
-		 "aLengthMenu": [[10, 20, 30, -1], [10, 20, 30, "All"]]
+	 var dataTable = jQuery('#tbl_templates_request_details').DataTable({
+	     "autoWidth": false,
+		 "aLengthMenu": [[10, 20, 30, -1], [10, 20, 30, "All"]],
+		 <?php
+		  if (!(in_array($status_id, $status_id_arr)) && (($agent_permissions['label'] == 'Administrator') || ($agent_permissions['label'] == 'Agent'))) {
+        ?>
+        'columnDefs': [	
+         {	
+            'width': 5,
+            'targets': 0,	
+            'checkboxes': {	
+               'selectRow': true	
+            },
+         },
+            { 'width': 100, 'targets': 3 },
+            { 'width': 5, 'targets': 5 },
+            { 'width': 5, 'targets': 6 }
+      ],
+      'select': {	
+         'style': 'multi'	
+      },	
+      'order': [[1, 'asc']],
+      <?php } ?>
 		});
-} );
+	// Code block for toggling edit buttons on/off when checkboxes are set
+	jQuery('#tbl_templates_request_details tbody').on('click', 'input', function () {        
+	// 	console.log('checked');
+		setTimeout(toggle_button_display, 1); //delay otherwise 
+	});
+	
+	jQuery('.dt-checkboxes-select-all').on('click', 'input', function () {        
+	 	console.log('checked');
+		setTimeout(toggle_button_display, 1); //delay otherwise 
+	});
+	
+	jQuery('#wppatt_change_status_btn').attr('disabled', 'disabled');
+	jQuery('#wppatt_assign_staff_btn').attr('disabled', 'disabled');
+	
+	function toggle_button_display() {
+	//	var form = this;
+		var rows_selected = dataTable.column(0).checkboxes.selected();
+		if(rows_selected.count() > 0) {
+			jQuery('#wppatt_change_status_btn').removeAttr('disabled');
+			jQuery('#wppatt_assign_staff_btn').removeAttr('disabled');
+	  	} else {
+	    	jQuery('#wppatt_change_status_btn').attr('disabled', 'disabled');  
+	    	jQuery('#wppatt_assign_staff_btn').attr('disabled', 'disabled');
+	  	}
+	}
+	
+	// Assign Box Status Button Click
+	jQuery('#wppatt_change_status_btn').click( function() {	
+	
+		let rows_selected = dataTable.column(0).checkboxes.selected();
+	    let arr = [];
+	
+	    // Loop through array
+	    [].forEach.call(rows_selected, function(inst){
+	        console.log('the inst: '+inst);
+	        arr.push(inst);
+	    });
+		
+		wpsc_modal_open('Edit Box Status');
+		
+		var data = {
+		    action: 'wppatt_change_box_status',
+		    item_ids: arr,
+		    type: 'edit'
+		};
+		jQuery.post(wpsc_admin.ajax_url, data, function(response_str) {
+		    var response = JSON.parse(response_str);
+	// 		    jQuery('#wpsc_popup_body').html(response_str);		    
+		    jQuery('#wpsc_popup_body').html(response.body);
+		    jQuery('#wpsc_popup_footer').html(response.footer);
+		    jQuery('#wpsc_cat_name').focus();
+		}); 
+	});
+	
+	
+	// Assign Staff Button Click
+	jQuery('#wppatt_assign_staff_btn').click( function() {	
+	
+		var rows_selected = dataTable.column(0).checkboxes.selected();
+	    var arr = [];
+	
+	    // Loop through array
+	    [].forEach.call(rows_selected, function(inst){
+	        console.log('the inst: '+inst);
+	        arr.push(inst);
+	    });
+	    
+	    console.log('arr: '+arr);
+	    console.log(arr);
+		
+		wpsc_modal_open('Edit Assigned Staff');
+		
+		var data = {
+		    action: 'wppatt_assign_agents',
+		    item_ids: arr,
+		    type: 'edit'
+		};
+		jQuery.post(wpsc_admin.ajax_url, data, function(response_str) {
+		    var response = JSON.parse(response_str);
+	// 		    jQuery('#wpsc_popup_body').html(response_str);		    
+		    jQuery('#wpsc_popup_body').html(response.body);
+		    jQuery('#wpsc_popup_footer').html(response.footer);
+		    jQuery('#wpsc_cat_name').focus();
+		}); 
+	});
+	
+});
 
 		function wpsc_get_digitization_editor_final(box_id){
 		  wpsc_modal_open('Re-assign Digitization Center');
@@ -317,5 +518,30 @@ WHERE wpqa_wpsc_epa_boxinfo.ticket_id = '" . $ticket_id . "'"
 		    jQuery('#wpsc_cat_name').focus();
 		  });  
 		}
-		
+	
+// Open Modal for viewing assigned staff
+function view_assigned_agents( box_id ) {	
+	
+	console.log('Icon!');
+    var arr = [box_id];
+    
+    console.log('arr: '+arr);
+    console.log(arr);
+	
+	wpsc_modal_open('View Assigned Staff');
+	
+	var data = {
+	    action: 'wppatt_assign_agents',
+	    item_ids: arr,
+	    type: 'view'
+	};
+	jQuery.post(wpsc_admin.ajax_url, data, function(response_str) {
+	    var response = JSON.parse(response_str);
+// 		    jQuery('#wpsc_popup_body').html(response_str);		    
+	    jQuery('#wpsc_popup_body').html(response.body);
+	    jQuery('#wpsc_popup_footer').html(response.footer);
+	    jQuery('#wpsc_cat_name').focus();
+	}); 
+// });
+}		
 	</script>

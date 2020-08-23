@@ -17,10 +17,15 @@ if ( ! class_exists( 'wppatt_Functions' ) ) :
     include WPPATT_ABSPATH . 'includes/admin/shipping_cron.php';
     }
     
-    // CRON for Recall Status Shipping
-    //public function wppatt_recall_shipping_status_schedule(){    
-    //include WPPATT_ABSPATH . 'includes/admin/recall_shipping_status_cron.php';
-    //}
+    // CRON for Recall Status Change from Shipping status
+    public function wppatt_recall_shipping_status_schedule(){    
+    include WPPATT_ABSPATH . 'includes/admin/recall_shipping_status_cron.php';
+    }
+    
+    // CRON for Return Status Change from Shipping status
+    public function wppatt_return_shipping_status_schedule(){    
+    include WPPATT_ABSPATH . 'includes/admin/return_shipping_status_cron.php';
+    }   
     
     // CRON for ecms
     public function wpatt_ecms_cron_schedule(){    
@@ -48,6 +53,16 @@ if ( ! class_exists( 'wppatt_Functions' ) ) :
     public function recall_settings_pill(){
 	    include WPPATT_ABSPATH . 'includes/admin/pages/recall_settings_pill.php';    
     }  
+    
+    // Add settings pill for return statuses 
+    public function return_settings_pill(){
+	    include WPPATT_ABSPATH . 'includes/admin/pages/return_settings_pill.php';    
+    }  
+    
+    // Add settings pill for box statuses 
+    public function box_settings_pill(){
+	    include WPPATT_ABSPATH . 'includes/admin/pages/box_settings_pill.php';    
+    }      
     
 }  
 endif;

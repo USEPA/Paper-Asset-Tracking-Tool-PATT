@@ -4,7 +4,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 global $current_user, $wpdb;
-if (!($current_user->ID && $current_user->has_cap('manage_options'))) {exit;}
+if (!($current_user->ID && $current_user->has_cap('edit_published_posts'))) {exit;}
 
 $priority_name = isset($_POST) && isset($_POST['priority_name']) ? sanitize_text_field($_POST['priority_name']) : '';
 if (!$priority_name) {exit;}

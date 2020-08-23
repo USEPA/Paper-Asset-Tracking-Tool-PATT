@@ -32,7 +32,7 @@ $url = "http://production.shippingapis.com/shippingAPI.dll";
 $service = "TrackV2";
 
 $xml = rawurlencode("
-<TrackRequest USERID='xxxxxxxx'>
+<TrackRequest USERID='558ENVIR2685'>
     <TrackID ID=\"".$trackingNumber."\"></TrackID>
     </TrackRequest>");
 
@@ -63,6 +63,7 @@ $wpdb->update( $table_name, array( 'status' => $deliveryStatus),array('ID'=>$ite
 
 if ( preg_match('('.implode('|',$status_delivered_array).')', strtoupper($deliveryStatus))){
 $wpdb->update( $table_name, array( 'delivered' => 1),array('ID'=>$item->id));
+$wpdb->update( $table_name, array( 'shipped' => 1),array('ID'=>$item->id));
 $wpdb->update( $table_name, array( 'status' => $deliveryStatus),array('ID'=>$item->id));
 }
 }
@@ -99,13 +100,13 @@ curl_setopt_array($curl, array(
   <TrackRequest>\r\n
   <WebAuthenticationDetail>\r\n
   <UserCredential>\r\n
-  <Key>xxxxxxxx</Key>\r\n
-  <Password>xxxxxxxx</Password>\r\n
+  <Key>boIG6fbcD6RJOIkv</Key>\r\n
+  <Password>zOOEILXEJ12hAulUAReepNILa</Password>\r\n
   </UserCredential>\r\n
   </WebAuthenticationDetail>\r\n
   <ClientDetail>\r\n
-  <AccountNumber>xxxxxxxx</AccountNumber>\r\n
-  <MeterNumber>xxxxxxxx</MeterNumber>\r\n
+  <AccountNumber>665106594</AccountNumber>\r\n
+  <MeterNumber>251762448</MeterNumber>\r\n
   </ClientDetail>\r\n
   <TransactionDetail>\r\n
   <CustomerTransactionId>Track By Number_v18</CustomerTransactionId>\r\n
@@ -157,6 +158,7 @@ $wpdb->update( $table_name, array( 'status' => $deliveryStatus),array('ID'=>$ite
 
 if ( preg_match('('.implode('|',$status_delivered_array).')', strtoupper($deliveryCode))){
 $wpdb->update( $table_name, array( 'delivered' => 1),array('ID'=>$item->id));
+$wpdb->update( $table_name, array( 'shipped' => 1),array('ID'=>$item->id));
 $wpdb->update( $table_name, array( 'status' => $deliveryStatus),array('ID'=>$item->id));
 }
 
@@ -181,8 +183,8 @@ if($item->shipped == 0) {
 $data ="<?xml version=\"1.0\"?>
         <AccessRequest xml:lang='en-US'>
                 <AccessLicenseNumber>9D8172DB2FD319B5</AccessLicenseNumber>
-                <UserId>xxxxxxxx</UserId>
-                <Password>xxxxxxxx</Password>
+                <UserId>EPAOMSOEIPERMD</UserId>
+                <Password>ApIK$9UPSE</Password>
         </AccessRequest>
         <?xml version=\"1.0\"?>
         <TrackRequest>
@@ -252,6 +254,7 @@ $wpdb->update( $table_name, array( 'status' => $deliveryStatus),array('ID'=>$ite
 
 if ( preg_match('('.implode('|',$status_delivered_array).')', strtoupper($deliveryCode))){
 $wpdb->update( $table_name, array( 'delivered' => 1),array('ID'=>$item->id));
+$wpdb->update( $table_name, array( 'shipped' => 1),array('ID'=>$item->id));
 $wpdb->update( $table_name, array( 'status' => $deliveryStatus),array('ID'=>$item->id));
 }
 
@@ -282,7 +285,7 @@ curl_setopt_array($curl, array(
   CURLOPT_CUSTOMREQUEST => "GET",
   CURLOPT_POSTFIELDS => "",
   CURLOPT_HTTPHEADER => array(
-    "DHL-API-Key: xxxxxxxx",
+    "DHL-API-Key: c0oD0sHe4eHTRRuW7YAUhjawjSNHAj92",
     "cache-control: no-cache"
   ),
 ));
@@ -311,6 +314,7 @@ $wpdb->update( $table_name, array( 'status' => $deliveryStatus),array('ID'=>$ite
 
 if ( preg_match('('.implode('|',$status_delivered_array).')', strtoupper($deliveryStatus))){
 $wpdb->update( $table_name, array( 'delivered' => 1),array('ID'=>$item->id));
+$wpdb->update( $table_name, array( 'shipped' => 1),array('ID'=>$item->id));
 $wpdb->update( $table_name, array( 'status' => $deliveryStatus),array('ID'=>$item->id));
 }
 }
@@ -339,7 +343,7 @@ $status_id   	= $ticket_data['ticket_status'];
 $get_shipped_status = $wpdb->get_results(
  	"SELECT shipped
  FROM wpqa_wpsc_epa_shipping_tracking
- WHERE ticket_id = " . $item->ticket_id
+ WHERE ticket_id <> '-99999' AND ticket_id = " . $item->ticket_id
  );
 
 foreach ($get_shipped_status as $shipped) {
@@ -349,23 +353,22 @@ foreach ($get_shipped_status as $shipped) {
 if (($status_id == 4) && (!in_array(0, $shipped_array))) {
 $wpscfunction->change_status($item->ticket_id, 5);   
 }
-	}
-	
-	print_r($shipped_array);
-	
+
 $get_delivered_status = $wpdb->get_results(
  	"SELECT delivered
  FROM wpqa_wpsc_epa_shipping_tracking
- WHERE ticket_id = " . $item->ticket_id
+ WHERE ticket_id <> '-99999' AND ticket_id = " . $item->ticket_id
  );
 
 foreach ($get_delivered_status as $delivered) {
 	array_push($delivered_array, $delivered->delivered);
 	}
 	
-if (($status_id == 4) && (!in_array(0, $delivered_array))) {
+if (($status_id == 4) || ($status_id == 5) && (!in_array(0, $delivered_array))) {
 $wpscfunction->change_status($item->ticket_id, 63);   
 }
+	}
 	
+	print_r($shipped_array);
 	print_r($delivered_array);
 ?>

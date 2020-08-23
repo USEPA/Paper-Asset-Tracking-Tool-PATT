@@ -13,7 +13,11 @@ ob_start();
 ?>
 <form id="frm_delete_bulk_ticket">
     <div class="form-group">
-        <p><?php _e('Are you sure to delete these tickets?','supportcandy');?></p>
+        <?php if ($ticket_id != '') { ?>
+        <p><?php _e('Are you sure you want to delete these tickets?','supportcandy');?></p>
+        <?php } else { ?>
+        <p>Please select a request to delete.</p>
+        <?php } ?>
     </div>
     
     <input type="hidden" name="action" value="wpsc_tickets" />
@@ -29,7 +33,9 @@ ob_start();
 
 ?>
 <button type="button" class="btn wpsc_popup_close" style="background-color:<?php echo $wpsc_appearance_modal_window['wpsc_close_button_bg_color']?> !important;color:<?php echo $wpsc_appearance_modal_window['wpsc_close_button_text_color']?> !important;"    onclick="wpsc_modal_close();"><?php _e('Cancel','supportcandy');?></button>
-<button type="button" class="btn wpsc_popup_action" style="background-color:<?php echo $wpsc_appearance_modal_window['wpsc_action_button_bg_color']?> !important;color:<?php echo $wpsc_appearance_modal_window['wpsc_action_button_text_color']?> !important;" onclick="wpsc_set_delete_bulk_ticket();"><?php _e('Confirm','supportcandy');?></button>
+        <?php if ($ticket_id != '') { ?>
+<button type="button" class="btn wpsc_popup_action" style="background-color:<?php echo $wpsc_appearance_modal_window['wpsc_action_button_bg_color']?> !important;color:<?php echo $wpsc_appearance_modal_window['wpsc_action_button_text_color']?> !important;" onclick="wpsc_set_delete_bulk_ticket();window.location.reload();"><?php _e('Confirm','supportcandy');?></button>
+        <?php } ?>
 <?php
 
 $footer = ob_get_clean();

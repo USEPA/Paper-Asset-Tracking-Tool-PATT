@@ -97,6 +97,7 @@ else title end as title,
 date,
 epa_contact_email,
 (CASE WHEN validation = 1 THEN CONCAT('<span style=\"font-size: 1.3em; color: #008000;\"><i class=\"fas fa-check-circle\" title=\"Validated\"></i></span>',' (',(SELECT user_nicename from wpqa_users WHERE ID = wpqa_wpsc_epa_folderdocinfo.validation_user_id),')')
+WHEN rescan = 1 THEN CONCAT('<span style=\"font-size: 1.3em; color: #8b0000;\"><i class=\"fas fa-times-circle\" title=\"Not Validated\"></i></span> ',' <br /><span style=\"color: #FF0000;\"><strong>[Re-scan]</strong></span>')
 ELSE '<span style=\"font-size: 1.3em; color: #8b0000;\"><i class=\"fas fa-times-circle\" title=\"Not Validated\"></i></span>'
 END) as validation
 FROM 

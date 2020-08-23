@@ -27,6 +27,8 @@ $wpsc_appearance_individual_ticket_page = get_option('wpsc_individual_ticket_pag
 
 $edit_btn_css = 'background-color:'.$wpsc_appearance_individual_ticket_page['wpsc_edit_btn_bg_color'].' !important;color:'.$wpsc_appearance_individual_ticket_page['wpsc_edit_btn_text_color'].' !important;border-color:'.$wpsc_appearance_individual_ticket_page['wpsc_edit_btn_border_color'].'!important';
 
+$agent_permissions = $wpscfunction->get_current_agent_permissions();
+
 ?>
 
 
@@ -42,9 +44,14 @@ $edit_btn_css = 'background-color:'.$wpsc_appearance_individual_ticket_page['wps
       <button type="button" id="wpsc_individual_ticket_list_btn" onclick="location.href='admin.php?page=recallcreate';" class="btn btn-sm wpsc_action_btn" style="<?php echo $create_recall_btn_css?>"><i class="fa fa-plus"></i> New Recall</button>
       
 <!--       <button type="button" id="wpsc_individual_ticket_list_btn" onclick="location.href='admin.php?page=boxdetails';" class="btn btn-sm wpsc_action_btn" style="<?php echo $action_default_btn_css?>"><i class="fas fa-cloud-download-alt"></i> Export</button> -->
-      
+<?php		
+if (($agent_permissions['label'] == 'Administrator') || ($agent_permissions['label'] == 'Agent'))
+{
+?>      
       <button type="button" id="wppatt_change_shipping_btn"  class="btn btn-sm wpsc_action_btn" style="<?php echo $action_default_btn_css?>"><i class="fa fa-truck"></i> Change Shipping Tracking Number</button>
-      
+<?php
+}
+?>	      
 <!--       <button type="button" id="wppatt_change_status_btn" class="btn btn-sm wpsc_action_btn" style="<?php echo $action_default_btn_css?>"><i class="fa fa-retweet"></i> Change Status</button>       -->
       
     <button type="button" class="btn btn-sm wpsc_action_btn" id="wpsc_individual_refresh_btn" style="<?php echo $action_default_btn_css?>"><i class="fas fa-retweet"></i> <?php _e('Reset Filters','supportcandy')?></button>
@@ -67,12 +74,26 @@ $edit_btn_css = 'background-color:'.$wpsc_appearance_individual_ticket_page['wps
             <hr class="widget_divider">
 			<div class="wpsp_sidebar_labels">Enter one or more Recall IDs:<br>
 				<input type='text' id='searchByRecallID' class="form-control" data-role="tagsinput"><br>
+				
+				
+				<?php
+					$po_array = Patt_Custom_Func::fetch_program_office_array(); 
+				?>
+				<input type="search" list="searchByProgramOfficeList" placeholder='Enter program office' id='searchByProgramOffice' autocomplete='off'/>
+				<datalist id='searchByProgramOfficeList'>
+					<?php foreach($po_array as $key => $value) { ?>
+					<option data-value='<?php echo $value; ?>' value='<?php echo preg_replace("/\([^)]+\)/","",$value); ?>'></option>
+					<?php } ?>
+				</datalist>
+				
+<!--
 				<?php $po_array = Patt_Custom_Func::fetch_program_office_array(); ?>
 				<select id='searchByProgramOffice'>
 					<option value=''>-- Select Program Office --</option>
 					<?php foreach($po_array as $key => $value) { ?>
 						<option value='<?php echo $value; ?>'><?php echo $value; ?></option>
 				<?php } ?></select>
+-->
 				<br><br>
 				<select id='searchByDigitizationCenter'>
 					<option value=''>-- Select Digitization Center --</option>
@@ -82,7 +103,22 @@ $edit_btn_css = 'background-color:'.$wpsc_appearance_individual_ticket_page['wps
 					<option value='West CUI'>West CUI</option>
 					<option value='Not Assigned'>Not Assigned</option>
 				</select>
-
+				
+				
+<?php		
+if (($agent_permissions['label'] == 'Administrator') || ($agent_permissions['label'] == 'Agent'))
+{
+?>
+<?php	
+} else {
+?>
+<input type="hidden" id="current_user" name="current_user" value="<?php wp_get_current_user(); echo $current_user->nickname; ?>">
+<input type="hidden" id="searchByUser" name="searchByUser" value="mine">
+<?php		
+}
+?>	
+				
+				
 			</div>
 		</div>
 	</div>
@@ -102,6 +138,10 @@ $edit_btn_css = 'background-color:'.$wpsc_appearance_individual_ticket_page['wps
 	#searchGeneric {
 	    padding: 0 30px !important;
 	}
+	
+	#searchByProgramOffice {
+		width: 83%;
+	}
 	</style>
     
 
@@ -113,7 +153,14 @@ $edit_btn_css = 'background-color:'.$wpsc_appearance_individual_ticket_page['wps
 <table id="tbl_templates_recall" class="table table-striped table-bordered" cellspacing="5" cellpadding="5">
         <thead>
             <tr>
+<?php		
+if (($agent_permissions['label'] == 'Administrator') || ($agent_permissions['label'] == 'Agent'))
+{
+?>
                 <th class="datatable_header"></th>
+<?php
+}
+?>
 	  			<th class="datatable_header">Recall ID</th>
 	  			<th class="datatable_header">Status</th>
 	  			<th class="datatable_header">Date Update</th>
@@ -135,7 +182,7 @@ FROM wpqa_wpsc_epa_boxinfo
 WHERE box_id = '" .  $GLOBALS['id'] . "'");
 
 $box_id = $convert_box_id->id;
-echo 'new box id: '.$box_id;
+//echo 'new box id: '.$box_id;
 ?>
 <input type='hidden' id='box_id' value='<?php echo $box_id; ?>' />
 <input type='hidden' id='page' value='<?php echo $GLOBALS['page']; ?>' />
@@ -156,22 +203,6 @@ echo 'new box id: '.$box_id;
 
 
 jQuery(document).ready(function(){
-
-
-/*
-	var data = {
-	    action: 'wppatt_recall_submit',
-	    title: 'this is real',	    		    
-	};
-*/
-	//console.log('title ');
-	//console.log(data);	
-/*
-	jQuery.post('<?php echo WPPATT_PLUGIN_URL; ?>includes/ajax/x_podbelski_test.php', data, function(response_str) {
-	    console.log("x Podbelski reponse_str: ");
-		console.log(response_str);
-	}); 
-*/
 
 
 
@@ -202,41 +233,81 @@ jQuery(document).ready(function(){
 	       'url':'<?php echo WPPATT_PLUGIN_URL; ?>includes/admin/pages/scripts/recall_processing.php',
 	       'data': function(data){
 	          // Read values
+	          var sbu = jQuery('#searchByUser').val();
+			  var rs_user = jQuery('#current_user').val();	          
 	          var po_value = jQuery('#searchByProgramOffice').val();
-	         // var po = jQuery('#searchByProgramOffice [value="' + po_value + '"]').data('value');
+	          var po = jQuery('#searchByProgramOfficeList [value="' + po_value + '"]').data('value'); 
 	          var sg = jQuery('#searchGeneric').val();
 	          var boxid = jQuery('#searchByRecallID').val();
 	          var dc = jQuery('#searchByDigitizationCenter').val();
 	          // Append to data
 	          data.searchGeneric = sg;
 	          data.searchByRecallID = boxid;
-	          data.searchByProgramOffice = po_value;
+// 	          data.searchByProgramOffice = po_value;
+	          data.searchByProgramOffice = po;
 	          data.searchByDigitizationCenter = dc;
+	          data.searchByUser = sbu;
+			  data.currentUser = rs_user;	          
 	       }
 	    },
+	    'drawCallback': function (settings) { 
+	        // Here the response
+	        var response = settings.json;
+	        console.log(response);
+    	},
+		'lengthMenu': [[10, 25, 50, 100, 500, 1000], [10, 25, 50, 100, 500, 1000]],
 	    'columnDefs': [
-	         {
-		     width: '5px',
+<?php		
+if (($agent_permissions['label'] == 'Administrator') || ($agent_permissions['label'] == 'Agent'))
+{
+?>	        
+	        {
+		    width: '2px',
 	            'targets': 0,
 	            'checkboxes': {
 	               'selectRow': true
-	            }
-	         },
-	      { width: '100px', targets: 1 },
+	            }	       
+	        },
+<?php
+}
+?>	        
+	      { width: '50px', targets: 1 },
 	      { width: '100px', targets: 2 },
-	      { width: '50px', targets: 3 },
-	      { width: '50px', targets: 4 },
+	      { width: '5px', targets: 3 },
+	      { width: '5px', targets: 4 },
 	      { width: '5px', targets: 5 },
 	      { width: '5px', targets: 6 },
 	      { width: '5px', targets: 7 },
+<?php		
+if (($agent_permissions['label'] == 'Administrator') || ($agent_permissions['label'] == 'Agent'))
+{
+?>		      
 	      { width: '5px', targets: 8 }
+<?php
+}
+?>		      
 	      ],
+<?php		
+if (($agent_permissions['label'] == 'Administrator') || ($agent_permissions['label'] == 'Agent'))
+{
+?>
+	      
 	      'select': {
 	         'style': 'multi'
 	      },
 	      'order': [[1, 'asc']],
+<?php
+}
+?>	      
 	    'columns': [
+<?php		
+if (($agent_permissions['label'] == 'Administrator') || ($agent_permissions['label'] == 'Agent'))
+{
+?>		    
 	       { data: 'recall_id_flag' },
+<?php
+}
+?>	       
 	       { data: 'recall_id' },	       
 	       { data: 'status' }, 
 	       { data: 'updated_date' },
@@ -250,176 +321,181 @@ jQuery(document).ready(function(){
 	});
   
   
-  jQuery('#toplevel_page_wpsc-tickets').removeClass('wp-not-current-submenu'); 
-  jQuery('#toplevel_page_wpsc-tickets').addClass('wp-has-current-submenu'); 
-  jQuery('#toplevel_page_wpsc-tickets').addClass('wp-menu-open'); 
-  jQuery('#toplevel_page_wpsc-tickets a:first').removeClass('wp-not-current-submenu');
-  jQuery('#toplevel_page_wpsc-tickets a:first').addClass('wp-has-current-submenu'); 
-  jQuery('#toplevel_page_wpsc-tickets a:first').addClass('wp-menu-open');
-  jQuery('#menu-dashboard').removeClass('current');
-  jQuery('#menu-dashboard a:first').removeClass('current');
+	jQuery('#toplevel_page_wpsc-tickets').removeClass('wp-not-current-submenu'); 
+	jQuery('#toplevel_page_wpsc-tickets').addClass('wp-has-current-submenu'); 
+	jQuery('#toplevel_page_wpsc-tickets').addClass('wp-menu-open'); 
+	jQuery('#toplevel_page_wpsc-tickets a:first').removeClass('wp-not-current-submenu');
+	jQuery('#toplevel_page_wpsc-tickets a:first').addClass('wp-has-current-submenu'); 
+	jQuery('#toplevel_page_wpsc-tickets a:first').addClass('wp-menu-open');
+	jQuery('#menu-dashboard').removeClass('current');
+	jQuery('#menu-dashboard a:first').removeClass('current');
   
 
-//
-// Code block for toggling edit buttons on/off when checkboxes are set
-//
-jQuery('#tbl_templates_recall tbody').on('click', 'input', function () {        
-// 	console.log('checked');
-	setTimeout(toggle_button_display, 1); //delay otherwise 
-});
-
-/* //Old code works with predefine table
-jQuery('.dt-checkboxes').on('click', function(e){
-	console.log('checked');
-	setTimeout(toggle_button_display, 10); //delay otherwise 
-});
-*/
-
-jQuery('#wppatt_change_status_btn').attr('disabled', 'disabled');
-jQuery('#wppatt_change_shipping_btn').attr('disabled', 'disabled');
-jQuery('#wppatt_return_btn').attr('disabled', 'disabled');
-
-function toggle_button_display() {
-//	var form = this;
-	var rows_selected = dataTable.column(0).checkboxes.selected();
-	if(rows_selected.count() > 0) {
-    	//console.log('boxes checked '+rows_selected.count());
-		jQuery('#wppatt_change_status_btn').removeAttr('disabled');
-		jQuery('#wppatt_change_shipping_btn').removeAttr('disabled');
-		jQuery('#wppatt_return_btn').removeAttr('disabled');		
-  	} else {
-    	//console.log('no checks boxed '+rows_selected.count());
-    	jQuery('#wppatt_change_status_btn').attr('disabled', 'disabled');
-    	jQuery('#wppatt_change_shipping_btn').attr('disabled', 'disabled');    	
-    	jQuery('#wppatt_return_btn').attr('disabled', 'disabled');    	    	
-  	}
-}
-
-
-// function wppatt_get_status_editor() {
-jQuery('#wppatt_change_status_btn').click( function() {		
+	//
+	// Code block for toggling edit buttons on/off when checkboxes are set
+	//
+	jQuery('#tbl_templates_recall tbody').on('click', 'input', function () {        
+	// 	console.log('checked');
+		setTimeout(toggle_button_display, 1); //delay otherwise 
+	});
 	
-	var rows_selected = dataTable.column(0).checkboxes.selected();
-    var arr = [];
-
-    // Loop through array
-    [].forEach.call(rows_selected, function(inst){
-        console.log('the inst: '+inst);
-        arr.push(inst);
-    });
-
-    
-    console.log('arr: '+arr);
-    console.log(arr);
+	// removes checkboxes when page is reloaded
+	jQuery( window ).unload(function() {
+		dataTable.column(0).checkboxes.deselectAll();
+	});
 	
-	wpsc_modal_open('Edit Status Details');
+	// allows the 'select all' checkbox to toggle the buttons	
+	jQuery('.dt-checkboxes-select-all').on('click', 'input', function () {        
+	 	console.log('checked');
+		setTimeout(toggle_button_display, 1); //delay otherwise 
+	});
+
+
+
+	jQuery('#wppatt_change_status_btn').attr('disabled', 'disabled');
+	jQuery('#wppatt_change_shipping_btn').attr('disabled', 'disabled');
+	jQuery('#wppatt_return_btn').attr('disabled', 'disabled');
 	
-	var data = {
-	    action: 'wppatt_recall_status_change',
-	    recall_ids: arr
-	};
-	jQuery.post(wpsc_admin.ajax_url, data, function(response_str) {
-	    var response = JSON.parse(response_str);
-// 		    jQuery('#wpsc_popup_body').html(response_str);		    
-	    jQuery('#wpsc_popup_body').html(response.body);
-	    jQuery('#wpsc_popup_footer').html(response.footer);
-	    jQuery('#wpsc_cat_name').focus();
-	    //window.location.reload();
-	}); 
-});
+	function toggle_button_display() {
+	//	var form = this;
+		var rows_selected = dataTable.column(0).checkboxes.selected();
+		if(rows_selected.count() > 0) {
+	    	//console.log('boxes checked '+rows_selected.count());
+			jQuery('#wppatt_change_status_btn').removeAttr('disabled');
+			jQuery('#wppatt_change_shipping_btn').removeAttr('disabled');
+			jQuery('#wppatt_return_btn').removeAttr('disabled');		
+	  	} else {
+	    	//console.log('no checks boxed '+rows_selected.count());
+	    	jQuery('#wppatt_change_status_btn').attr('disabled', 'disabled');
+	    	jQuery('#wppatt_change_shipping_btn').attr('disabled', 'disabled');    	
+	    	jQuery('#wppatt_return_btn').attr('disabled', 'disabled');    	    	
+	  	}
+	}
 
 
-
-jQuery('#wppatt_change_shipping_btn').click( function() {	
-
-	var rows_selected = dataTable.column(0).checkboxes.selected();
-    var arr = [];
-
-    // Loop through array
-    [].forEach.call(rows_selected, function(inst){
-        console.log('the inst: '+inst);
-        arr.push(inst);
-    });
-    
-    console.log('arr: '+arr);
-    console.log(arr);
+	// function wppatt_get_status_editor() {
+	jQuery('#wppatt_change_status_btn').click( function() {		
+		
+		var rows_selected = dataTable.column(0).checkboxes.selected();
+	    var arr = [];
 	
-	wpsc_modal_open('Edit Shipping Details');
+	    // Loop through array
+	    [].forEach.call(rows_selected, function(inst){
+	        console.log('the inst: '+inst);
+	        arr.push(inst);
+	    });
 	
-	var data = {
-	    action: 'wppatt_recall_shipping_change',
-	    recall_ids: arr
-	};
-	jQuery.post(wpsc_admin.ajax_url, data, function(response_str) {
-	    var response = JSON.parse(response_str);
-// 		    jQuery('#wpsc_popup_body').html(response_str);		    
-	    jQuery('#wpsc_popup_body').html(response.body);
-	    jQuery('#wpsc_popup_footer').html(response.footer);
-	    jQuery('#wpsc_cat_name').focus();
-	}); 
-});
-
-
-jQuery('#wppatt_return_btn').click( function() {	
-
-	var rows_selected = dataTable.column(0).checkboxes.selected();
-    var arr = [];
-
-    // Loop through array
-    [].forEach.call(rows_selected, function(inst){
-        console.log('the inst: '+inst);
-        arr.push(inst);
-    });
-    
-    console.log('arr: '+arr);
-    console.log(arr);
+	    
+	    console.log('arr: '+arr);
+	    console.log(arr);
+		
+		wpsc_modal_open('Edit Status Details');
+		
+		var data = {
+		    action: 'wppatt_recall_status_change',
+		    recall_ids: arr
+		};
+		jQuery.post(wpsc_admin.ajax_url, data, function(response_str) {
+		    var response = JSON.parse(response_str);
+	// 		    jQuery('#wpsc_popup_body').html(response_str);		    
+		    jQuery('#wpsc_popup_body').html(response.body);
+		    jQuery('#wpsc_popup_footer').html(response.footer);
+		    jQuery('#wpsc_cat_name').focus();
+		    //window.location.reload();
+		}); 
+	});
 	
-	wpsc_modal_open('Initiate Return');
 	
-	var data = {
-	    action: 'wppatt_initiate_return',
-	    return_ids: arr
-	};
-	jQuery.post(wpsc_admin.ajax_url, data, function(response_str) {
-	    var response = JSON.parse(response_str);
-// 		    jQuery('#wpsc_popup_body').html(response_str);		    
-	    jQuery('#wpsc_popup_body').html(response.body);
-	    jQuery('#wpsc_popup_footer').html(response.footer);
-	    jQuery('#wpsc_cat_name').focus();
-	}); 		
-
-});
-
-
-
-
-
-
-
-
-
-
-jQuery(document).on('keypress',function(e) {
-    if(e.which == 13) {
-        dataTable.draw();
-    }
-});
-
-jQuery("#searchByProgramOffice").change(function(){
-    dataTable.draw();
-});
-
-jQuery("#searchByDigitizationCenter").change(function(){
-    dataTable.draw();
-});
-
-jQuery('#searchGeneric').on('input keyup paste', function () {
-    var hasValue = jQuery.trim(this.value).length;
-       if(hasValue == 0) {
-            dataTable.state.save();
-            dataTable.draw();
-        }
-});
+	
+	jQuery('#wppatt_change_shipping_btn').click( function() {	
+	
+		var rows_selected = dataTable.column(0).checkboxes.selected();
+	    var arr = [];
+	
+	    // Loop through array
+	    [].forEach.call(rows_selected, function(inst){
+	        console.log('the inst: '+inst);
+	        arr.push(inst);
+	    });
+	    
+	    console.log('arr: '+arr);
+	    console.log(arr);
+		
+		wpsc_modal_open('Edit Shipping Details');
+		
+		var data = {
+		    action: 'wppatt_recall_shipping_change',
+		    recall_ids: arr,
+		    from_page: 'recall-dashboard'
+		};
+		jQuery.post(wpsc_admin.ajax_url, data, function(response_str) {
+		    var response = JSON.parse(response_str);
+	// 		    jQuery('#wpsc_popup_body').html(response_str);		    
+		    jQuery('#wpsc_popup_body').html(response.body);
+		    jQuery('#wpsc_popup_footer').html(response.footer);
+		    jQuery('#wpsc_cat_name').focus();
+		}); 
+	});
+	
+	
+	jQuery('#wppatt_return_btn').click( function() {	
+	
+		var rows_selected = dataTable.column(0).checkboxes.selected();
+	    var arr = [];
+	
+	    // Loop through array
+	    [].forEach.call(rows_selected, function(inst){
+	        console.log('the inst: '+inst);
+	        arr.push(inst);
+	    });
+	    
+	    console.log('arr: '+arr);
+	    console.log(arr);
+		
+		wpsc_modal_open('Initiate Return');
+		
+		var data = {
+		    action: 'wppatt_initiate_return',
+		    return_ids: arr
+		};
+		jQuery.post(wpsc_admin.ajax_url, data, function(response_str) {
+		    var response = JSON.parse(response_str);
+	// 		    jQuery('#wpsc_popup_body').html(response_str);		    
+		    jQuery('#wpsc_popup_body').html(response.body);
+		    jQuery('#wpsc_popup_footer').html(response.footer);
+		    jQuery('#wpsc_cat_name').focus();
+		}); 		
+	
+	});
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	jQuery(document).on('keypress',function(e) {
+	    if(e.which == 13) {
+	        dataTable.draw();
+	    }
+	});
+	
+	jQuery("#searchByProgramOffice").change(function(){
+	    dataTable.state.save();
+	    dataTable.draw();
+	});
+	
+	jQuery("#searchByDigitizationCenter").change(function(){
+	    dataTable.draw();
+	});
+	
+	jQuery('#searchGeneric').on('input keyup paste', function () {
+	            dataTable.state.save();
+	            dataTable.draw();
+	});
 
 
     function onAddTag(tag) {
@@ -430,49 +506,49 @@ jQuery('#searchGeneric').on('input keyup paste', function () {
     }
 
 
-jQuery("#searchByRecallID").tagsInput({
-   'defaultText':'',
-   'onAddTag': onAddTag,
-   'onRemoveTag': onRemoveTag,
-   'width':'100%'
-});
-
-jQuery("#searchByRecallID_tag").on('paste',function(e){
-    var element=this;
-    setTimeout(function () {
-        var text = jQuery(element).val();
-        var target=jQuery("#searchByRecallID");
-        var tags = (text).split(/[ ,]+/);
-        for (var i = 0, z = tags.length; i<z; i++) {
-              var tag = jQuery.trim(tags[i]);
-              if (!target.tagExist(tag)) {
-                    target.addTag(tag);
-              }
-              else
-              {
-                  jQuery("#searchByRecallID_tag").val('');
-              }
-                
-         }
-    }, 0);
-});
-
-
-jQuery('#wpsc_individual_refresh_btn').on('click', function(e){
-    jQuery('#searchGeneric').val('');
-    jQuery('#searchByProgramOffice').val('');
-    jQuery('#searchByDigitizationCenter').val('');
-    jQuery('#searchByRecallID').importTags('');
-    jQuery('tbl_templates_boxes_length').val('10');
-    dataTable.column(0).checkboxes.deselectAll();
-	dataTable.state.clear();
-	dataTable.draw();
-	return false;
-});
-  
-
-
-// Handle form submission event 
+	jQuery("#searchByRecallID").tagsInput({
+	   'defaultText':'',
+	   'onAddTag': onAddTag,
+	   'onRemoveTag': onRemoveTag,
+	   'width':'100%'
+	});
+	
+	jQuery("#searchByRecallID_tag").on('paste',function(e){
+	    var element=this;
+	    setTimeout(function () {
+	        var text = jQuery(element).val();
+	        var target=jQuery("#searchByRecallID");
+	        var tags = (text).split(/[ ,]+/);
+	        for (var i = 0, z = tags.length; i<z; i++) {
+	              var tag = jQuery.trim(tags[i]);
+	              if (!target.tagExist(tag)) {
+	                    target.addTag(tag);
+	              }
+	              else
+	              {
+	                  jQuery("#searchByRecallID_tag").val('');
+	              }
+	                
+	         }
+	    }, 0);
+	});
+	
+	
+	jQuery('#wpsc_individual_refresh_btn').on('click', function(e){
+	    jQuery('#searchGeneric').val('');
+	    jQuery('#searchByProgramOffice').val('');
+	    jQuery('#searchByDigitizationCenter').val('');
+	    jQuery('#searchByRecallID').importTags('');
+	    jQuery('tbl_templates_boxes_length').val('10');
+	    dataTable.column(0).checkboxes.deselectAll();
+		dataTable.state.clear();
+		dataTable.draw();
+		return false;
+	});
+	  
+	
+	
+	// Handle form submission event 
    jQuery('#frm-example').on('submit', function(e){
       var form = this;
       console.log('this is never used, right - frm-example submit');

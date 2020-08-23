@@ -5,9 +5,9 @@ global $wpdb, $current_user, $wpscfunction;
 $path = preg_replace('/wp-content.*$/','',__DIR__);
 include($path.'wp-load.php');
 
-if(isset($_POST['postvarsboxids'])){
+if(isset($_POST['postvarsboxid'])){
     
-$box_ids = $_POST['postvarsboxids'];
+$box_ids = $_POST['postvarsboxid'];
 
 $box_arr = explode(",", $box_ids);
 

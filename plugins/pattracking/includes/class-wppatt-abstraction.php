@@ -168,7 +168,9 @@ abstract class PATT_DB {
 					//print_r($cond);
 					if($i == 1){
 						if($column && $column == 'custom'){
-							$where = " WHERE {$cond[0]}";
+//							$where = " WHERE {$cond[0]}";
+							$where = " WHERE {$cond}";								
+											
 						} else {
 							$cond[2] = isset($cond[2]) ? $cond[2] : ' = ';
 							$cond[2] = ($cond[2] == 'AND' || $cond[2] == 'OR') ? $cond[3] : ' = ';

@@ -37,14 +37,14 @@ $wpsc_appearance_individual_ticket_page = get_option('wpsc_individual_ticket_pag
         if (($agent_permissions['label'] == 'Administrator') || ($agent_permissions['label'] == 'Agent'))
         {
         ?>
-		<button type="button" class="btn btn-sm wpsc_action_btn" id="wpsc_individual_validation_btn" style="<?php echo $action_default_btn_css?>"><i class="fas fa-check-circle"></i> Validate</button></button>
-		<button type="button" class="btn btn-sm wpsc_action_btn" id="wpsc_individual_destruction_btn" style="<?php echo $action_default_btn_css?>"><i class="fas fa-flag"></i> Unauthorize Destruction</button></button>
-		<button type="button" class="btn btn-sm wpsc_action_btn" id="wpsc_individual_freeze_btn" style="<?php echo $action_default_btn_css?>"><i class="fas fa-snowflake"></i> Freeze</button></button>
-		<button type="button" class="btn btn-sm wpsc_action_btn" id="wpsc_individual_label_btn" style="<?php echo $action_default_btn_css?>"><i class="fas fa-tags"></i> Reprint Labels</button></button>
+		<!--<button type="button" class="btn btn-sm wpsc_action_btn" id="wpsc_individual_validation_btn" style="<?php echo $action_default_btn_css?>"><i class="fas fa-check-circle"></i> Validate</button>-->
+		<button type="button" class="btn btn-sm wpsc_action_btn" id="wpsc_individual_destruction_btn" style="<?php echo $action_default_btn_css?>"><i class="fas fa-flag"></i> Unauthorized Destruction</button>
+		<button type="button" class="btn btn-sm wpsc_action_btn" id="wpsc_individual_freeze_btn" style="<?php echo $action_default_btn_css?>"><i class="fas fa-snowflake"></i> Freeze</button>
+		<button type="button" class="btn btn-sm wpsc_action_btn" id="wpsc_individual_label_btn" style="<?php echo $action_default_btn_css?>"><i class="fas fa-tags"></i> Reprint Labels</button>
 		<?php
         }
         ?>
-	    <button type="button" class="btn btn-sm wpsc_action_btn" id="wpsc_individual_refresh_btn" style="<?php echo $action_default_btn_css?>"><i class="fas fa-retweet"></i> <?php _e('Reset Filters','supportcandy')?></button></button>
+	    <button type="button" class="btn btn-sm wpsc_action_btn" id="wpsc_individual_refresh_btn" style="<?php echo $action_default_btn_css?>"><i class="fas fa-retweet"></i> <?php _e('Reset Filters','supportcandy')?></button>
 
 <?php
 if (preg_match("/^[0-9]{7}-[0-9]{1,3}$/", $GLOBALS['id']) && $GLOBALS['pid'] == 'requestdetails') {
@@ -63,7 +63,7 @@ if (preg_match("/^[0-9]{7}-[0-9]{1,3}$/", $GLOBALS['id']) && $GLOBALS['pid'] == 
 <?php
 if (preg_match("/^[0-9]{7}-[0-9]{1,3}$/", $GLOBALS['id']) && $GLOBALS['pid'] == 'docsearch') {
 ?>
-<button type="button" class="btn btn-sm wpsc_action_btn" id="wpsc_individual_refresh_btn" onclick="location.href='admin.php?page=folderfile';" style="<?php echo $action_default_btn_css?>"><i class="fas fa-chevron-circle-left"></"></i> Back to Folder/File Dashboard</button>
+<button type="button" class="btn btn-sm wpsc_action_btn" id="wpsc_individual_refresh_btn" onclick="location.href='admin.php?page=folderfile';" style="<?php echo $action_default_btn_css?>"><i class="fas fa-chevron-circle-left"></i> Back to Folder/File Dashboard</button>
 <?php
 }
 ?>
@@ -79,14 +79,25 @@ if (preg_match("/^[0-9]{7}-[0-9]{1,3}$/", $GLOBALS['id']) && $GLOBALS['pid'] == 
 if (preg_match("/^[0-9]{7}-[0-9]{1,3}$/", $GLOBALS['id'])) {
 
 $convert_box_id = $wpdb->get_row(
-"SELECT a.id, sum(a.box_destroyed) as box_destroyed, sum(b.freeze) as freeze
+"SELECT a.id, sum(a.box_destroyed) as box_destroyed, sum(b.freeze) as freeze, c.name as box_status, a.box_status as box_status_id, a.box_id
 FROM wpqa_wpsc_epa_boxinfo a
 LEFT JOIN wpqa_wpsc_epa_folderdocinfo b ON a.id = b.box_id
+INNER JOIN wpqa_terms c ON a.box_status = c.term_id
 WHERE a.box_id = '" .  $GLOBALS['id'] . "'");
 
+
+$the_real_box_id = $convert_box_id->box_id;
 $box_id = $convert_box_id->id;
 $box_destroyed = $convert_box_id->box_destroyed;
 $box_freeze = $convert_box_id->freeze;
+$box_status_id = $convert_box_id->box_status_id;
+
+$status_background = get_term_meta($box_status_id, 'wpsc_box_status_background_color', true);
+$status_color = get_term_meta($box_status_id, 'wpsc_box_status_color', true);
+$status_style = "background-color:".$status_background.";color:".$status_color.";";
+$box_status_name = $convert_box_id->box_status;
+$box_status = "<span class='wpsp_admin_label' style='".$status_style."'>".$box_status_name."</span>";
+	            
 ?>
 
   <div class="col-sm-8 col-md-9 wpsc_it_body">
@@ -107,10 +118,11 @@ $box_freeze = $convert_box_id->freeze;
 
     </div>
 <style>
+	
 .datatable_header {
-background-color: rgb(66, 73, 73) !important; 
-color: rgb(255, 255, 255) !important; 
-width: 204px;
+	background-color: rgb(66, 73, 73) !important; 
+	color: rgb(255, 255, 255) !important; 
+	width: 204px;
 }
 .bootstrap-iso .alert {
     padding: 8px;
@@ -118,6 +130,12 @@ width: 204px;
 #searchGeneric {
     padding: 0 30px !important;
 }
+
+.assign_agents_icon {
+	cursor: pointer;
+	margin: 0px 0px 5px 0px;
+}
+
 </style>
 
 <div class="alert alert-danger" role="alert" id="ud_alert">
@@ -251,11 +269,8 @@ jQuery(document).ready(function(){
 });
 
 jQuery('#searchGeneric').on('input keyup paste', function () {
-    var hasValue = jQuery.trim(this.value).length;
-    if(hasValue == 0) {
             dataTable.state.save();
             dataTable.draw();
-        }
 });
 
 
@@ -308,7 +323,34 @@ postvarpage : jQuery('#page').val()
       //}
    });
 });
-
+// Code block for toggling edit buttons on/off when checkboxes are set
+	jQuery('#tbl_templates_box_details tbody').on('click', 'input', function () {        
+	// 	console.log('checked');
+		setTimeout(toggle_button_display, 1); //delay otherwise 
+	});
+	
+	jQuery('.dt-checkboxes-select-all').on('click', 'input', function () {        
+	 	console.log('checked');
+		setTimeout(toggle_button_display, 1); //delay otherwise 
+	});
+	
+	jQuery('#wpsc_individual_destruction_btn').attr('disabled', 'disabled');
+	jQuery('#wpsc_individual_freeze_btn').attr('disabled', 'disabled');
+	jQuery('#wpsc_individual_label_btn').attr('disabled', 'disabled');
+	
+	function toggle_button_display() {
+	//	var form = this;
+		var rows_selected = dataTable.column(0).checkboxes.selected();
+		if(rows_selected.count() > 0) {
+			jQuery('#wpsc_individual_destruction_btn').removeAttr('disabled');
+			jQuery('#wpsc_individual_freeze_btn').removeAttr('disabled');
+        	jQuery('#wpsc_individual_label_btn').removeAttr('disabled');
+	  	} else {
+	    	jQuery('#wpsc_individual_destruction_btn').attr('disabled', 'disabled');  
+	    	jQuery('#wpsc_individual_freeze_btn').attr('disabled', 'disabled');
+        	jQuery('#wpsc_individual_label_btn').attr('disabled', 'disabled');
+	  	}
+	}
 //unauthorized destruction button
 jQuery('#wpsc_individual_destruction_btn').on('click', function(e){
      var form = this;
@@ -557,6 +599,47 @@ jQuery('#freeze_alert').hide();
     
     $general_box_location = $wpdb->get_row("SELECT locations FROM wpqa_wpsc_epa_location_status, wpqa_wpsc_epa_boxinfo WHERE wpqa_wpsc_epa_boxinfo.location_status_id = wpqa_wpsc_epa_location_status.id AND wpqa_wpsc_epa_boxinfo.box_id = '" . $GLOBALS['id'] . "'");
     $location_general = $general_box_location->locations;
+    
+    
+    //
+    // Box Statuses
+    //
+    
+    // Register Box Status Taxonomy
+	if( !taxonomy_exists('wpsc_box_statuses') ) {
+		$args = array(
+			'public' => false,
+			'rewrite' => false
+		);
+		register_taxonomy( 'wpsc_box_statuses', 'wpsc_ticket', $args );
+	}
+	
+	// $box_statuses = get_tax();
+	
+	// Get List of Box Statuses
+	$box_statuses = get_terms([
+		'taxonomy'   => 'wpsc_box_statuses',
+		'hide_empty' => false,
+		'orderby'    => 'meta_value_num',
+		'order'    	 => 'ASC',
+		'meta_query' => array('order_clause' => array('key' => 'wpsc_box_status_load_order')),
+	]);
+	
+	// List of box status that do not need agents assigned.
+	$ignore_box_status = ['Pending', 'Ingestion', 'Completed', 'Dispositioned'];
+	
+	$term_id_array = array();
+	foreach( $box_statuses as $key=>$box ) {
+		if( in_array( $box->name, $ignore_box_status ) ) {
+			unset($box_statuses[$key]);
+			
+		} else {
+			$term_id_array[] = $box->term_id;
+		}
+	}
+	array_values($box_statuses);
+    
+    
  ?>
  
 	<div class="col-sm-4 col-md-3 wpsc_sidebar individual_ticket_widget">
@@ -576,8 +659,13 @@ jQuery('#freeze_alert').hide();
 			<hr class="widget_divider">
 			<!--error handling implemented, will not display a field if it is empty/null-->
 			<?php 
+				
             if(!empty($location_request_id)) {
                 echo "<div class='wpsp_sidebar_labels'><strong>Request ID: </strong> <a href='admin.php?page=wpsc-tickets&id=" . $location_request_id . "'>" . $location_request_id . "</a></div>";
+            }
+            
+            if(!empty($box_status)) {
+                echo '<div class="wpsp_sidebar_labels"><strong >Box Status: </strong>' . $box_status . '</div>';
             }
             
             if(!empty($location_program_office)) {
@@ -611,8 +699,39 @@ jQuery('#freeze_alert').hide();
             }
 			?>
 			
+			
 	</div>
 	</div>
+	
+	
+	
+	
+	<div class="col-sm-4 col-md-3 wpsc_sidebar individual_ticket_widget">
+		<div class="row" id="wpsc_status_widget" style="background-color:<?php echo $wpsc_appearance_individual_ticket_page['wpsc_ticket_widgets_bg_color']?> !important;color:<?php echo $wpsc_appearance_individual_ticket_page['wpsc_ticket_widgets_text_color']?> !important;border-color:<?php echo $wpsc_appearance_individual_ticket_page['wpsc_ticket_widgets_border_color']?> !important;">
+      <h4 class="widget_header"><i class="fa fa-user-plus"></i> Edit Assigned Staff
+			<!--only admins/agents have the ability to edit box details-->
+			<?php
+			    $agent_permissions = $wpscfunction->get_current_agent_permissions();
+                $agent_permissions['label'];
+                if (($agent_permissions['label'] == 'Administrator') || ($agent_permissions['label'] == 'Agent'))
+                {
+                  echo '<button id="wpsc_individual_change_ticket_status" onclick="wpsc_get_assigned_staff_editor(\''.$the_real_box_id.'\');" class="btn btn-sm wpsc_action_btn" style="background-color:#FFFFFF !important;color:#000000 !important;border-color:#C3C3C3!important"><i class="fas fa-edit"></i></button>';
+                } 
+			?>
+			
+			</h4>
+			<hr class="widget_divider">
+			<div style="font-size: 1.0em; color: #1d1f1d;" onclick="view_assigned_agents( '<?php echo $the_real_box_id ?>' )" class="assign_agents_icon"><i class="fas fa-user-friends" title="Assigned Agents"></i>    View Assigned Staff</div>
+			<!--error handling implemented, will not display a field if it is empty/null-->
+<!--
+			<?php 
+		        foreach($box_statuses as $status ) {
+		            echo '<div class="wpsp_sidebar_labels"><strong>'.$status->name.': </strong>'.'[name]'.'</div>';
+		        }
+            ?>	
+-->		
+	</div>
+	</div>	
 	
 <?php
 } else {
@@ -644,18 +763,58 @@ echo '<span style="padding-left: 10px">Please pass a valid Box ID</span>';
 <!-- Pop-up snippet end -->
 
 <script>
-		function wpsc_get_box_editor(box_id){
+function wpsc_get_box_editor(box_id){
 
-		  wpsc_modal_open('Edit Box Details');
-		  var data = {
-		    action: 'wpsc_get_box_editor',
-		    box_id: box_id
-		  };
-		  jQuery.post(wpsc_admin.ajax_url, data, function(response_str) {
-		    var response = JSON.parse(response_str);
-		    jQuery('#wpsc_popup_body').html(response.body);
-		    jQuery('#wpsc_popup_footer').html(response.footer);
-		    jQuery('#wpsc_cat_name').focus();
-		  });  
-		}
+	wpsc_modal_open('Edit Box Details');
+	var data = {
+		action: 'wpsc_get_box_editor',
+		box_id: box_id
+	};
+	jQuery.post(wpsc_admin.ajax_url, data, function(response_str) {
+		var response = JSON.parse(response_str);
+		jQuery('#wpsc_popup_body').html(response.body);
+		jQuery('#wpsc_popup_footer').html(response.footer);
+		jQuery('#wpsc_cat_name').focus();
+	});  
+}
+
+function wpsc_get_assigned_staff_editor(box_id){
+	
+	let arr = [box_id];
+	console.log('The Arr');
+	console.log(arr);
+	
+	wpsc_modal_open('Edit Assigned Staff');
+	var data = {
+		action: 'wppatt_assign_agents',
+	    item_ids: arr,
+	    type: 'edit'
+	};
+	jQuery.post(wpsc_admin.ajax_url, data, function(response_str) {
+		var response = JSON.parse(response_str);
+		jQuery('#wpsc_popup_body').html(response.body);
+		jQuery('#wpsc_popup_footer').html(response.footer);
+		jQuery('#wpsc_cat_name').focus();
+	});  
+}
+
+// Open Modal for viewing assigned staff
+function view_assigned_agents( box_id ) {	
+	
+    var arr = [box_id];
+	
+	wpsc_modal_open('View Assigned Staff');
+	
+	var data = {
+	    action: 'wppatt_assign_agents',
+	    item_ids: arr,
+	    type: 'view'
+	};
+	jQuery.post(wpsc_admin.ajax_url, data, function(response_str) {
+	    var response = JSON.parse(response_str);
+	    jQuery('#wpsc_popup_body').html(response.body);
+	    jQuery('#wpsc_popup_footer').html(response.footer);
+	    jQuery('#wpsc_cat_name').focus();
+	}); 
+}
 </script>

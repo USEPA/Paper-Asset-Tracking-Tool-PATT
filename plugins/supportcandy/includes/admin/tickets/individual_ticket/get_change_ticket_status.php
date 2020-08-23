@@ -16,61 +16,17 @@ $wpsc_appearance_modal_window = get_option('wpsc_modal_window');
 $wpsc_custom_status_localize   = get_option('wpsc_custom_status_localize');
 $wpsc_custom_category_localize = get_option('wpsc_custom_category_localize');
 $wpsc_custom_priority_localize = get_option('wpsc_custom_priority_localize');
+
+//PATT BEGIN
+$agent_permissions = $wpscfunction->get_current_agent_permissions();
+$agent_permissions['label'];
+//PATT END
 ob_start();
 ?>
 <form id="frm_get_ticket_change_status" method="post">
 <?php
 //PATT BEGIN
-$get_assigned = $wpdb->get_row("SELECT sum(meta_value) as assigned_val FROM wpqa_wpsc_ticketmeta WHERE ticket_id = '" . $ticket_id . "' AND meta_key = 'assigned_agent' ORDER BY ticket_id DESC");
-$assigned_val = $get_assigned->assigned_val.',';
-
-$get_sum_total = $wpdb->get_row("select sum(a.total_count) as sum_total_count
-    from (
-SELECT (SELECT count(id) FROM wpqa_wpsc_epa_folderdocinfo WHERE box_id = a.id) as total_count FROM wpqa_wpsc_epa_boxinfo as a INNER JOIN wpqa_wpsc_ticket as b ON a.ticket_id = b.id WHERE b.id = '" . $ticket_id . "'
-    ) a");
-$sum_total_val = $get_sum_total->sum_total_count;
-
-$get_sum_validation = $wpdb->get_row("select sum(a.validation) as sum_validation
-    from (
-SELECT (SELECT sum(validation = 1) FROM wpqa_wpsc_epa_folderdocinfo WHERE box_id = a.id) as validation FROM wpqa_wpsc_epa_boxinfo as a INNER JOIN wpqa_wpsc_ticket as b ON a.ticket_id = b.id WHERE b.id = '" . $ticket_id . "'
-    ) a");
-$sum_validation = $get_sum_validation->sum_validation;
-
-$get_sum_destruction = $wpdb->get_row("select count(id) as count_destruction
-    from wpqa_wpsc_epa_boxinfo where ticket_id = '" . $ticket_id . "' and box_destroyed = 1");
-$count_destruction = $get_sum_destruction->count_destruction;
-
-$get_sum_boxes = $wpdb->get_row("select count(id) as box_count
-    from wpqa_wpsc_epa_boxinfo where ticket_id = '" . $ticket_id . "'");
-$count_boxes = $get_sum_boxes->box_count;
-
-$validated = '';
-$assigned = '';
-$destruction = '';
-
-if($sum_total_val == $sum_validation) {
-$validated = 1;
-} else {
-$validated = 0;
-}
-
-$validated_array = array(66,68,67,69);
-
-if($assigned_val > 0) {
-$assigned = 1;
-} else {
-$assigned = 0;
-}
-
-$assigned_array = array(3,4,670,5,63);
-
-if($count_boxes == $count_destruction) {
-$destruction = 1;
-} else {
-$destruction = 0;
-}
-
-$destruction_array = array(3,4,670,5,63,64,672,671,65,6,673,674,66);
+$shipping_array = array(5,63);
 //PATT END
 ?>
 	<div class="form-group">
@@ -86,19 +42,11 @@ $destruction_array = array(3,4,670,5,63,64,672,671,65,6,673,674,66);
 			]);
       foreach ( $statuses as $status ) :
 				$selected = $status_id == $status->term_id ? 'selected="selected"' : '';
-
 //PATT BEGIN
 $disabled = '';
-if (in_array($status->term_id, $validated_array) && $validated == 0) {
+if (in_array($status->term_id, $shipping_array)) {
     $disabled = 'disabled';
 }
-if (in_array($status->term_id, $assigned_array) && $assigned == 1) {
-    $disabled = 'disabled';
-}
-if (in_array($status->term_id, $destruction_array) && $destruction == 1) {
-    $disabled = 'disabled';
-}
-//PATT END
 
 echo '<option '.$selected.' value="'.$status->term_id.'" '.$disabled.'>'.$wpsc_custom_status_localize['custom_status_'.$status->term_id].'</option>';
 			endforeach;
@@ -169,9 +117,24 @@ echo '<input type="hidden" name="category" value="'.Patt_Custom_Func::get_defaul
 				'order'    	 => 'ASC',
 				'meta_query' => array('order_clause' => array('key' => 'wpsc_priority_load_order')),
 			]);
+			
+			//PATT BEGIN
+			$key = array_search('Critical', array_column($priorities, 'name'));
+			if ($agent_permissions['label'] == 'Agent')
+            {
+                 unset($priorities[$key]);
+            }
+			//PATT END
+			
 			foreach ( $priorities as $priority ) :
 				$selected = $priority_id == $priority->term_id ? 'selected="selected"' : '';
-				echo '<option '.$selected.' value="'.$priority->term_id.'">'.$wpsc_custom_priority_localize['custom_priority_'.$priority->term_id].'</option>';
+				//PATT BEGIN
+				if ($priority->term_id == 9) {
+				echo '<option '.$selected.' style="background: #FFD0C2; font-weight: bold;" value="'.$priority->term_id.'">'.$wpsc_custom_priority_localize['custom_priority_'.$priority->term_id].'</option>';
+				} else {
+				echo '<option '.$selected.' value="'.$priority->term_id.'">'.$wpsc_custom_priority_localize['custom_priority_'.$priority->term_id].'</option>';				
+				}
+				//PATT END
 			endforeach;
 			?>
 		</select>
@@ -193,7 +156,20 @@ ob_start();
 <script>
 // PATT BEGIN
 jQuery(document).ready(function() {
+
+
+var request_status = jQuery('[name=status]').val();
+
+jQuery('[name=status]').on('change', function() {
+request_status = jQuery('[name=status]').val();
+});
+
+
 jQuery(".wpsc_popup_action").click(function () {
+
+if(request_status == 3 || request_status == 670 || request_status == 69) {
+    alert('No automatic shelf assignments made.');
+} else {
 jQuery.post(
 '<?php echo WPPATT_PLUGIN_URL; ?>includes/admin/pages/scripts/auto_assignment.php',{
 postvartktid: '<?php echo $ticket_id ?>',
@@ -204,7 +180,11 @@ if(jQuery("select[name='category']").val()) {
 alert(response);
 }
 });
+}
+
 });
+
+
 });
 // PATT END
 </script>

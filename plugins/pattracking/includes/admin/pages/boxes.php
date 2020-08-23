@@ -127,7 +127,11 @@ if (($agent_permissions['label'] == 'Administrator') || ($agent_permissions['lab
 				<input type="search" list="searchByProgramOfficeList" placeholder='Enter program office' id='searchByProgramOffice' autocomplete='off'/>
 				<datalist id='searchByProgramOfficeList'>
 					<?php foreach($po_array as $key => $value) { ?>
-					<option data-value='<?php echo $value; ?>' value='<?php echo preg_replace("/\([^)]+\)/","",$value); ?>'></option>
+					<?php 
+					    $program_office = $wpdb->get_row("SELECT office_name FROM wpqa_wpsc_epa_program_office WHERE office_acronym  = '" . $value . "'");
+					    $office_name = $program_office->office_name;
+					?>
+					<option data-value='<?php echo $value; ?>' value='<?php echo preg_replace("/\([^)]+\)/","",$value) . ' : ' . $office_name; ?>'></option>
 					<?php } ?>
 				</datalist>
 				
@@ -354,7 +358,7 @@ jQuery(document).ready(function(){
 		'drawCallback': function (settings) { 
 	        // Here the response
 	        var response = settings.json;
-	        //console.log(response);
+	        console.log(response);
     	},
 		'lengthMenu': [[10, 25, 50, 100, 500, 1000], [10, 25, 50, 100, 500, 1000]],
 		'fixedColumns': true,
@@ -475,6 +479,8 @@ jQuery(document).ready(function(){
 	    jQuery('#searchGeneric').val('');
 	    jQuery('#searchByProgramOffice').val('');
 	    jQuery('#searchByDigitizationCenter').val('');
+	    jQuery('#searchByUser').val('');
+        jQuery('#searchByStatus').val('');
 	    jQuery('#searchByBoxID').importTags('');
 	    dataTable.column(0).checkboxes.deselectAll();
 		dataTable.state.clear();
@@ -559,8 +565,8 @@ jQuery(document).ready(function(){
 	        arr.push(inst);
 	    });
 	    
-	    //console.log('arr: '+arr);
-	    //console.log(arr);
+	    console.log('arr: '+arr);
+	    console.log(arr);
 		
 		wpsc_modal_open('Edit Assigned Staff');
 		

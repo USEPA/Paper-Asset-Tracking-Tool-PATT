@@ -42,7 +42,7 @@ $edit_btn_css = 'background-color:'.$wpsc_appearance_individual_ticket_page['wps
         if (($agent_permissions['label'] == 'Administrator') || ($agent_permissions['label'] == 'Agent'))
         {
         ?>
-    		<button type="button" class="btn btn-sm wpsc_action_btn" id="wpsc_individual_destruction_btn" style="<?php echo $action_default_btn_css?>"><i class="fas fa-flag"></i> Unauthorize Destruction</button></button>
+    		<button type="button" class="btn btn-sm wpsc_action_btn" id="wpsc_individual_destruction_btn" style="<?php echo $action_default_btn_css?>"><i class="fas fa-flag"></i> Unauthorized Destruction</button></button>
     		<button type="button" class="btn btn-sm wpsc_action_btn" id="wpsc_individual_freeze_btn" style="<?php echo $action_default_btn_css?>"><i class="fas fa-snowflake"></i> Freeze</button></button>
     		<button type="button" class="btn btn-sm wpsc_action_btn" id="wpsc_individual_label_btn" style="<?php echo $action_default_btn_css?>"><i class="fas fa-tags"></i> Reprint Labels</button></button>
         <?php
@@ -76,11 +76,17 @@ Enter one or more Document IDs:<br />
          <input type='text' id='searchByDocID' class="form-control" data-role="tagsinput">
 <br />
          <?php
-    $po_array = Patt_Custom_Func::fetch_program_office_array(); ?>
+    $po_array = Patt_Custom_Func::fetch_program_office_array();
+    ?>
     <input type="text" list="searchByProgramOfficeList" name="program_office" placeholder='Enter program office' id="searchByProgramOffice"/>
     <datalist id='searchByProgramOfficeList'>
      <?php foreach($po_array as $key => $value) { ?>
-        <option data-value='<?php echo $value; ?>' value='<?php echo preg_replace("/\([^)]+\)/","",$value); ?>'></option>
+      
+    <?php 
+        $program_office = $wpdb->get_row("SELECT office_name FROM wpqa_wpsc_epa_program_office WHERE office_acronym  = '" . $value . "'");
+        $office_name = $program_office->office_name;
+    ?>
+        <option data-value='<?php echo $value; ?>' value='<?php echo preg_replace("/\([^)]+\)/","",$value) . ' : ' . $office_name; ?>'></option>
      <?php } ?>
      </datalist>
      
@@ -94,26 +100,6 @@ Enter one or more Document IDs:<br />
            <option value='Not Assigned'>Not Assigned</option>
          </select>
 <br /><br />
-
-<?php		
-if (($agent_permissions['label'] == 'Administrator') || ($agent_permissions['label'] == 'Agent'))
-{
-?>
-				<select id='searchByUser'>
-					<option value=''>-- Select User --</option>
-					<option value='mine'>Mine</option>
-					<option value='not assigned'>All Documents</option>
-					<option value='search for user'>Search for User</option>
-				</select>
-<?php }
-else {
-?>
-<input type="hidden" id="searchByUser" name="searchByUser" value="mine">
-<?php		
-}
-?>	
-<input type="hidden" id="current_user" name="current_user" value="<?php wp_get_current_user(); echo $current_user->nickname; ?>">
-<input type="hidden" id="user_search" name="user_search" value="">
 
 	                            </div>
 			    		</div>
@@ -290,13 +276,9 @@ jQuery(document).ready(function(){
 });
 
 jQuery('#searchGeneric').on('input keyup paste', function () {
-    var hasValue = jQuery.trim(this.value).length;
-    if(hasValue == 0) {
         dataTable.state.save();
         dataTable.draw();
-        }
 });
-
 
 		function onAddTag(tag) {
 		    dataTable.state.save();
@@ -343,11 +325,11 @@ postvarsfolderdocid : rows_selected.join(",")
        var substring_true = "true";
 
        if(response.indexOf(substring_false) >= 0) {
-       alert('Cannot print folder/file labels for documents that are not assigned to a location.');
+       alert('Cannot print folder/file labels for documents that are destroyed or not assigned to a location.');
        }
        
        if(response.indexOf(substring_warn) >= 0) {
-       alert('One or more documents that you selected do not have an assigned location and it\'s label will not generate.');
+       alert('One or more documents that you selected has been destroyed or does not have an assigned location and it\'s label will not generate.');
            // Loop through array
     [].forEach.call(folderdocinfo_array, function(inst){
         var x = inst.split("-")[2].substr(1);
@@ -499,6 +481,7 @@ boxid : jQuery('#box_id').val()
 jQuery('#wpsc_individual_destruction_btn').on('click', function(e){
      var form = this;
      var rows_selected = dataTable.column(0).checkboxes.selected();
+     console.log(rows_selected);
 		   jQuery.post(
    '<?php echo WPPATT_PLUGIN_URL; ?>includes/admin/pages/scripts/update_unauthorize_destruction.php',{
 postvarsfolderdocid : rows_selected.join(","),

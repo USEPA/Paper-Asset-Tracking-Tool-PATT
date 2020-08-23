@@ -103,22 +103,22 @@ $statuses = get_terms([
 <h4>
 <!-- 	<?php _e('Ticket Statuses','supportcandy');?> -->
 	Recall Statuses
-	<button style="margin-left:10px;" class="btn btn-success btn-sm" onclick="wpsc_get_add_status();"><?php _e('+Add New','supportcandy');?></button>
+<!-- 	<button style="margin-left:10px;" class="btn btn-success btn-sm" onclick="wpsc_get_add_status();"><?php _e('+Add New','supportcandy');?></button> -->
 </h4>
 
 <div class="wpsc_padding_space"></div>
 
-<ul class="wpsc-sortable">
+<ul class="">
 	<?php foreach ( $statuses as $status ) :
     $color = get_term_meta( $status->term_id, 'wppatt_recall_status_color', true);
     $backgound_color = get_term_meta( $status->term_id, 'wppatt_recall_status_background_color', true);
     ?>
 		<li class="ui-state-default" data-id="<?php echo $status->term_id?>">
 			<div class="wpsc-flex-container" style="background-color:<?php echo $backgound_color?>;color:<?php echo $color?>;">
-				<div class="wpsc-sortable-handle"><i class="fa fa-bars"></i></div>
+				<div class=""><i class="fa fa-bars"></i></div>
 				<div class="wpsc-sortable-label"><?php echo $status->name?></div>
 				<div class="wpsc-sortable-edit" onclick="wpsc_get_edit_status(<?php echo $status->term_id?>);"><i class="fa fa-edit"></i></div>
-				<div class="wpsc-sortable-delete" onclick="wpsc_delete_status(<?php echo $status->term_id?>);"><i class="fa fa-trash"></i></div>
+<!-- 				<div class="wpsc-sortable-delete" onclick="wpsc_delete_status(<?php echo $status->term_id?>);"><i class="fa fa-trash"></i></div> -->
 			</div>
 		</li>
 	<?php endforeach;?>
@@ -146,6 +146,7 @@ $statuses = get_terms([
 		});
 	});
 	
+/*
 	function wpsc_get_add_status(){
 		wpsc_modal_open(wpsc_admin.add_new_status);
 		var data = {
@@ -159,7 +160,9 @@ $statuses = get_terms([
 			jQuery('#wpsc_cat_name').focus();
 		});
 	}
+*/
 	
+/*
 	function wpsc_set_add_status(){
 		var status_name = jQuery('#wpsc_status_name').val().trim();
 		if (status_name.length == 0) {
@@ -198,12 +201,14 @@ $statuses = get_terms([
 			}
 		});
 	}
+*/
 	
 	function wpsc_get_edit_status(status_id){
-		wpsc_modal_open(wpsc_admin.edit_status);
+// 		wpsc_modal_open(wpsc_admin.edit_status);
+		wpsc_modal_open('Edit Recall Status');
+		console.log(status_id);
 		var data = {
-			action: 'wpsc_settings',
-			setting_action : 'get_edit_status',
+			action: 'wppatt_get_edit_recall_status',
 			status_id : status_id
 		};
 		jQuery.post(wpsc_admin.ajax_url, data, function(response_str) {
@@ -215,11 +220,13 @@ $statuses = get_terms([
 	}
 	
 	function wpsc_set_edit_status(status_id){
-		var status_name = jQuery('#wpsc_status_name').val().trim();
+		//var status_name = jQuery('#wpsc_status_name').val().trim();
+/*
 		if (status_name.length == 0) {
 			jQuery('#wpsc_status_name').val('').focus();
 			return;
 		}
+*/
 		var status_color = jQuery('#wpsc_status_color').val().trim();
 		if (status_color.length == 0) {
 			status_color = '#ffffff';
@@ -230,11 +237,14 @@ $statuses = get_terms([
 		}
 		jQuery('.wpsc_popup_action').text('<?php _e('Please wait ...','supportcandy')?>');
 		jQuery('.wpsc_popup_action, #wpsc_popup_body input').attr("disabled", "disabled");
+		console.log('status id: '+status_id);
+		console.log('status color: '+status_color);
+		console.log('status background: '+status_bg_color);
 		var data = {
-			action: 'wpsc_settings',
-			setting_action : 'set_edit_status',
+			action: 'wppatt_set_recall_status',
+// 			setting_action : 'set_edit_status',
 			status_id : status_id,
-			status_name : status_name,
+			//status_name : status_name,
 			status_color: status_color,
 			status_bg_color: status_bg_color
 		};
@@ -242,13 +252,33 @@ $statuses = get_terms([
 			wpsc_modal_close();
 			var response = JSON.parse(response_str);
 			if (response.sucess_status=='1') {
-				wpsc_get_status_settings();
+				wppatt_get_recall_status_settings();
 			} else {
 				jQuery('#wpsc_alert_error .wpsc_alert_text').text(response.messege);
 				jQuery('#wpsc_alert_error').slideDown('fast',function(){});
 				setTimeout(function(){ jQuery('#wpsc_alert_error').slideUp('fast',function(){}); }, 3000);
 			}
 		});
+	}
+	
+	/*
+	 * Status Settings
+	 */
+	function wppatt_get_recall_status_settings(){
+	  
+	  jQuery('.wpsc_setting_pills li').removeClass('active');
+	  jQuery('#wppatt_settings_recall').addClass('active');
+	  jQuery('.wpsc_setting_col2').html(wpsc_admin.loading_html);
+	  
+	  var data = {
+	    action: 'wppatt_get_recall_settings'
+// 	    setting_action : 'get_status_settings'
+	  };
+	
+	  jQuery.post(wpsc_admin.ajax_url, data, function(response) {
+	    jQuery('.wpsc_setting_col2').html(response);
+	  });
+	  
 	}
 	
 	function wpsc_delete_status(status_id){

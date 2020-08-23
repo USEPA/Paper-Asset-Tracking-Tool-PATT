@@ -290,8 +290,8 @@ if (($agent_permissions['label'] == 'Administrator') || ($agent_permissions['lab
           var requestid = jQuery('#searchByRequestID').val();
           var dc = jQuery('#searchByDigitizationCenter').val();
           
-          //console.log('Names:');
-          //console.log(aaName);
+          console.log('Names:');
+          console.log(aaName);
           //console.log('Val:');
           //console.log(aaVal);
           
@@ -445,29 +445,34 @@ jQuery('#wpsc_individual_refresh_btn').on('click', function(e){
 	location.reload();
 });
 
-function wpsc_get_delete_bulk_ticket_1(){
-    wpsc_modal_open(wpsc_admin.delete_tickets);
-      var form = this;
-      var rows_selected = dataTable.column(0).checkboxes.selected();
-
-        var ticket_id=String(rows_selected.join(","));
-
-        var data = {
-            action: 'wpsc_tickets',
-            setting_action : 'get_delete_bulk_ticket',
-            ticket_id: ticket_id
-        }
-
-        jQuery.post(wpsc_admin.ajax_url, data, function(response_str) {
-         var response = JSON.parse(response_str);
-         jQuery('#wpsc_popup_body').html(response.body);
-         jQuery('#wpsc_popup_footer').html(response.footer);
-       });
-    }
-
-   jQuery('#btn_delete_tickets').on('click', function(e){
-    wpsc_get_delete_bulk_ticket_1();
-      });
+//delete button
+jQuery('#btn_delete_tickets').on('click', function(e){
+     var form = this;
+     var rows_selected = dataTable.column(0).checkboxes.selected();
+		   jQuery.post(
+   '<?php echo WPPATT_PLUGIN_URL; ?>includes/admin/pages/scripts/delete_request.php',{
+postvarsrequest_id : rows_selected.join(",")
+}, 
+   function (response) {
+      //if(!alert(response)){
+      
+       wpsc_modal_open('Delete Request');
+		  var data = {
+		    action: 'wpsc_delete_request',
+		    response_data: response
+		  };
+		  jQuery.post(wpsc_admin.ajax_url, data, function(response_str) {
+		    var response = JSON.parse(response_str);
+		    jQuery('#wpsc_popup_body').html(response.body);
+		    jQuery('#wpsc_popup_footer').html(response.footer);
+		    jQuery('#wpsc_cat_name').focus();
+		  }); 
+		  
+          wpsc_get_ticket_list();
+          dataTable.column(0).checkboxes.deselectAll();
+      //}
+   });
+});
 
 	// User Search
 	jQuery('#frm_get_ticket_assign_agent').hide();

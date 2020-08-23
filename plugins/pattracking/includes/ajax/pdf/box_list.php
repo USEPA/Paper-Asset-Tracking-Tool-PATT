@@ -174,7 +174,7 @@ $request_id = substr("000000{$GLOBALS['id']}", -$str_length);
 
 //$key = $request_key->ticket_auth_code;
 
-$url = 'http://' . $_SERVER['SERVER_NAME'] . $subfolder_path .'/index.php/data/?id=' . $request_id;
+$url = 'http://' . $_SERVER['SERVER_NAME'] . $subfolder_path .'/data/?id=' . $request_id;
 
 $request_id_barcode =  $obj_pdf->serializeTCPDFtagParameters(array($url, 'QRCODE,H', '', '', '', 30, $style_barcode, 'N'));
 

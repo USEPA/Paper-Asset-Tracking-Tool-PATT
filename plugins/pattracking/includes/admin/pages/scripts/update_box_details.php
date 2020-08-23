@@ -35,11 +35,12 @@ $new_box_status = $wpdb->get_row("SELECT DISTINCT wpqa_terms.name as box_status 
 $new_bs = $new_box_status->box_status;
 
 //updates box status
-//NEED TO UPDATE HISTORY LOG
 $data_update = array('box_status' => $bs);
 $data_where = array('id' => $box_id);
 $wpdb->update($table_name , $data_update, $data_where);
+if($old_bs != $new_bs) {
 array_push($metadata_array,'Box Status: '.$old_bs.' > '.$new_bs);
+}
 
 //updates destruction completed and adds to request history
 if($dc != $old_dc) {
@@ -138,7 +139,9 @@ $wpdb->update($table_name , $data_update, $data_where);
 
 $get_new_acronym = $wpdb->get_row("SELECT office_acronym FROM wpqa_wpsc_epa_program_office WHERE office_code = '" . $po . "'");
 $po_new_acronym = $get_new_acronym->office_acronym;
+if($po_old_acronym != $po_new_acronym) {
 array_push($metadata_array,'Program Office: '.$po_old_acronym.' > '.$po_new_acronym);
+}
 }
 
 if(!empty($rs)) {
@@ -152,14 +155,18 @@ $wpdb->update($table_name , $data_update, $data_where);
 
 $get_new_rs = $wpdb->get_row("SELECT Record_Schedule_Number FROM wpqa_epa_record_schedule WHERE id = '" . $rs . "'");
 $rs_new_num = $get_new_rs->Record_Schedule_Number;
+if($rs_old_num != $rs_new_num) {
 array_push($metadata_array,'Record Schedule: '.$rs_old_num.' > '.$rs_new_num);
+}
 }
 
 $metadata = implode (", ", $metadata_array);
 
+if( ($old_bs != $new_bs) || ($dc != $old_dc) || ($po_old_acronym != $po_new_acronym) || ($rs_old_num != $rs_new_num) ) {
 do_action('wpppatt_after_box_metadata', $ticket_id, $metadata, $pattboxid);
+}
 echo "Box ID #: " . $pattboxid . " has been updated.";
- 
+
 } else {
     echo $pattboxid;
    echo "Please make an edit.";

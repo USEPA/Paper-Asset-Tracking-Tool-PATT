@@ -42,6 +42,7 @@ $edit_btn_css = 'background-color:'.$wpsc_appearance_individual_ticket_page['wps
         if (($agent_permissions['label'] == 'Administrator'))
         {
         ?>
+            <button type="button" id="wppatt_change_shipping_btn"  class="btn btn-sm wpsc_action_btn" style="background-color:#FF5733 !important;color:#FFFFFF !important;"><i class="fa fa-truck"></i> Change Shipping Tracking Number</button>
             <button type="button" class="btn btn-sm wpsc_action_btn" id="wpsc_individual_shipped_btn" style="background-color:#FF5733 !important;color:#FFFFFF !important;"><i class="fas fa-check-circle"></i> Shipped</button></button>
             <button type="button" class="btn btn-sm wpsc_action_btn" id="wpsc_individual_delivered_btn" style="background-color:#FF5733 !important;color:#FFFFFF !important;"><i class="fas fa-truck-loading"></i> Received</button></button>
         <?php
@@ -71,7 +72,8 @@ Enter one or more Tracking Numbers:<br />
          </select>
 <br /><br />
         <select id='searchByDelivered'>
-           <option value=''>-- Delivered --</option>
+<!--            <option value=''>-- Delivered --</option> -->
+           <option value=''>-- Received --</option>
            <option value='1'>Yes</option>
            <option value='0'>No</option>
          </select>
@@ -97,6 +99,10 @@ color: rgb(255, 255, 255) !important;
 #searchGeneric {
     padding: 0 30px !important;
 }
+
+.edit_shipping_icon {
+	cursor: pointer;
+}
 </style>
 
 <div class="table-responsive" style="overflow-x:auto;">
@@ -114,6 +120,7 @@ color: rgb(255, 255, 255) !important;
                 <?php
                 }
                 ?>
+                <th class="datatable_header">ID</th>
                 <th class="datatable_header">Tracking Number</th>
                 <th class="datatable_header">Shipping Company</th>
                 <th class="datatable_header">Status</th>
@@ -175,17 +182,28 @@ jQuery(document).ready(function(){
        }
     },
     'lengthMenu': [[10, 25, 50, 100, 500, 1000], [10, 25, 50, 100, 500, 1000]],
+    'drawCallback': function (settings) { 
+        // Here the response
+        var response = settings.json;
+        console.log(response);
+	},
     <?php		
     if (($agent_permissions['label'] == 'Administrator'))
     {
     ?>
         'columnDefs': [	
-         {	
+        {	
             'targets': 0,	
             'checkboxes': {	
                'selectRow': true	
             }	
-         }
+        },
+		{ width: '30px', targets: 1 },
+		{ width: '70px', targets: 2 },
+		{ width: '20px', targets: 3 },
+		{ width: '90px', targets: 4 },
+		{ width: '20px', targets: 5 },
+		{ width: '20px', targets: 6 },
       ],	
       'select': {	
          'style': 'multi'	
@@ -203,6 +221,7 @@ jQuery(document).ready(function(){
        <?php
         }
         ?>
+       { data: 'item_id' },
        { data: 'tracking_number' }, 
        { data: 'company_name' },
        { data: 'status' },
@@ -233,11 +252,8 @@ jQuery(document).ready(function(){
 });
 
 jQuery('#searchGeneric').on('input keyup paste', function () {
-    var hasValue = jQuery.trim(this.value).length;
-    if(hasValue == 0) {
         dataTable.state.save();
         dataTable.draw();
-        }
 });
 
 
@@ -348,7 +364,7 @@ jQuery("#searchByTN_tag").on('paste',function(e){
     }, 0);
 });
 
-// Code block for toggling edit buttons on/off when checkboxes are set
+	// Code block for toggling edit buttons on/off when checkboxes are set
 	jQuery('#tbl_templates_shipping tbody').on('click', 'input', function () {        
 	// 	console.log('checked');
 		setTimeout(toggle_button_display, 1); //delay otherwise 
@@ -358,9 +374,9 @@ jQuery("#searchByTN_tag").on('paste',function(e){
 	 	console.log('checked');
 		setTimeout(toggle_button_display, 1); //delay otherwise 
 	});
-	
 	jQuery('#wpsc_individual_shipped_btn').attr('disabled', 'disabled');
 	jQuery('#wpsc_individual_delivered_btn').attr('disabled', 'disabled');
+	jQuery('#wppatt_change_shipping_btn').attr('disabled', 'disabled');	
 	
 	function toggle_button_display() {
 	//	var form = this;
@@ -368,13 +384,77 @@ jQuery("#searchByTN_tag").on('paste',function(e){
 		if(rows_selected.count() > 0) {
 			jQuery('#wpsc_individual_shipped_btn').removeAttr('disabled');
 			jQuery('#wpsc_individual_delivered_btn').removeAttr('disabled');
+			jQuery('#wppatt_change_shipping_btn').removeAttr('disabled');		
 	  	} else {
 	    	jQuery('#wpsc_individual_shipped_btn').attr('disabled', 'disabled');  
 	    	jQuery('#wpsc_individual_delivered_btn').attr('disabled', 'disabled');
+    		jQuery('#wppatt_change_shipping_btn').attr('disabled', 'disabled');
 	  	}
 	}
+	
+	
+	jQuery('#wppatt_change_shipping_btn').click( function() {	
+	
+		var rows_selected = dataTable.column(0).checkboxes.selected();
+	    var arr = [];
+	
+	    // Loop through array
+	    [].forEach.call(rows_selected, function(inst){
+	        console.log('the inst: '+inst);
+	        arr.push(inst);
+	    });
+	    
+	    console.log('arr: '+arr);
+	    console.log(arr);
+		
+		wpsc_modal_open('Edit Shipping Details');
+		
+		var data = {
+		    action: 'wppatt_recall_shipping_change',
+		    recall_ids: arr,
+		    return_ids: arr,
+		    shipping_table_ids: arr,
+		    from_page: 'shipping-dashboard',
+		    category: 'shipping-status-editor'
+		};
+		jQuery.post(wpsc_admin.ajax_url, data, function(response_str) {
+		    var response = JSON.parse(response_str);
+		    console.log('The Response: ');
+		    console.log(response);
+	// 		    jQuery('#wpsc_popup_body').html(response_str);		    
+		    jQuery('#wpsc_popup_body').html(response.body);
+		    jQuery('#wpsc_popup_footer').html(response.footer);
+		    jQuery('#wpsc_cat_name').focus();
+		});
+		
+		//dataTable.ajax.reload( null, false );
+		
+		 
+	});
 
 });
+
+// Open Modal for editing shipping info
+function edit_shipping_info( dbid ) {	
+
+    var arr = [dbid];
+    //console.log(arr);
+	wpsc_modal_open('Edit Shipping Information');
+	
+	var data = {
+	    action: 'wppatt_change_shipping',
+	    db_id: arr,
+	    type: 'view'
+	};
+	jQuery.post(wpsc_admin.ajax_url, data, function(response_str) {
+	    var response = JSON.parse(response_str);
+// 		    jQuery('#wpsc_popup_body').html(response_str);		    
+	    jQuery('#wpsc_popup_body').html(response.body);
+	    jQuery('#wpsc_popup_footer').html(response.footer);
+	    jQuery('#wpsc_cat_name').focus();
+	}); 
+// });
+}
 
 </script>
 

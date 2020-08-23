@@ -8,6 +8,7 @@ global $wpdb, $current_user, $wpscfunction;
 // $GLOBALS['id'] = $_GET['id'];
 $GLOBALS['recall_id'] = $_GET['id'];
 $GLOBALS['pid'] = $_GET['pid'];
+$subfolder_path = site_url( '', 'relative'); 
 
 //TEST DATA 
 //$GLOBALS['recall_id'] = 19;
@@ -94,10 +95,12 @@ $edit_btn_css = 'background-color:'.$wpsc_appearance_individual_ticket_page['wps
 				$recall_type = "Box";
 				$title = "[Boxes Do Not Have Titles]";
 				$recall_item_id = $recall_obj->box_id;
+				$recall_item_id_link = '<a href="'.$subfolder_path.'/wp-admin/admin.php?pid=boxsearch&page=boxdetails&id='.$recall_item_id.'" >' .$recall_item_id. '</a>';
 			} elseif ($recall_obj->box_id > 0 && $recall_obj->folderdoc_id !== $db_null ) {
 				$recall_type = "Folder/File";
 				$title = $recall_obj->title;
 				$recall_item_id = $recall_obj->folderdoc_id;
+				$recall_item_id_link = '<a href="'.$subfolder_path.'/wp-admin/admin.php?pid=boxsearch&page=filedetails&id='.$recall_item_id.'" >' .$recall_item_id. '</a>';			
 			} elseif( $recall_obj->box_id > 0 && $recall_obj->folderdoc_id > 0 ) {
 				$recall_type = "Test Data";
 				$title = $recall_obj->title;	
@@ -132,7 +135,8 @@ $edit_btn_css = 'background-color:'.$wpsc_appearance_individual_ticket_page['wps
 			//echo "<br>status style: ".$status_style."<br>";
 			
 			//Tracking Info
-			$tracking_num = $recall_obj->tracking_number;
+			$tracking_url = Patt_Custom_Func::get_tracking_url($recall_obj->tracking_number);
+			$tracking_num = '<a href="' . $tracking_url.'" target="_blank">'.$recall_obj->tracking_number.'</a>';
 			if ($tracking_num == $db_empty) {
 				$tracking_num = "[No Tracking Number]";
 			}
@@ -258,7 +262,8 @@ $edit_btn_css = 'background-color:'.$wpsc_appearance_individual_ticket_page['wps
 		</div>
 		<div class="">
 			<label class="wpsc_ct_field_label"><?php echo $recall_type; ?> ID: </label>
-			<span id="recall_type" class=""><?php echo $recall_item_id; ?></span>
+			<span id="recall_type" class=""><?php echo $recall_item_id_link; ?></span> 
+<!-- 			<span id="recall_type" class=""><?php echo $recall_item_id; ?></span>  -->
 		</div>
 		<div class="">
 			<label class="wpsc_ct_field_label">Title: </label>
@@ -447,6 +452,8 @@ $edit_btn_css = 'background-color:'.$wpsc_appearance_individual_ticket_page['wps
 <script type="text/javascript" src="<?php echo WPSC_PLUGIN_URL.'asset/lib/DataTables/datatables.min.js';?>"></script>
 <script>
  jQuery(document).ready(function() {
+	 
+	 // Updates Admin Menu to highlight the submenu page that this page is under. 
 	 jQuery('#toplevel_page_wpsc-tickets').removeClass('wp-not-current-submenu'); 
 	 jQuery('#toplevel_page_wpsc-tickets').addClass('wp-has-current-submenu'); 
 	 jQuery('#toplevel_page_wpsc-tickets').addClass('wp-menu-open'); 
@@ -456,6 +463,22 @@ $edit_btn_css = 'background-color:'.$wpsc_appearance_individual_ticket_page['wps
 	 jQuery('#menu-dashboard').removeClass('current');
 	 jQuery('#menu-dashboard a:first').removeClass('current');
 	 
+	 <?php
+    if ($_GET['page'] == 'recallcreate') {
+    ?>
+         jQuery('.wp-submenu li:nth-child(5)').addClass('current');
+    <?php
+    }
+    ?>
+    <?php
+    if ($_GET['page'] == 'recalldetails') {
+    ?>
+         jQuery('.wp-submenu li:nth-child(5)').addClass('current');
+    <?php
+    }
+    ?>
+	 
+	 
 	 // disable cancel if status not recalled. Or is user doesn't have role. 
 	 jQuery('#wppatt_recall_cancel').attr('disabled', 'disabled');
 	 console.log(jQuery('#status').html());
@@ -464,29 +487,10 @@ $edit_btn_css = 'background-color:'.$wpsc_appearance_individual_ticket_page['wps
 		jQuery('#wppatt_recall_cancel').removeAttr('disabled');	 
 	 }
 
-/*
-<?php
-if (preg_match("/^[0-9]{7}-[0-9]{1,3}-[0-9]{2}-[0-9]{1,3}$/", $GLOBALS['id']) && $GLOBALS['pid'] == 'requestdetails') {
-?>
-	 jQuery('.wp-first-item').addClass('current'); 
-<?php
-}
-?>
-<?php
-if (preg_match("/^[0-9]{7}-[0-9]{1,3}-[0-9]{2}-[0-9]{1,3}$/", $GLOBALS['id']) && $GLOBALS['pid'] == 'boxsearch') {
-?>
-	 jQuery('.wp-submenu li:nth-child(3)').addClass('current');
-<?php
-}
-?>
-<?php
-if (preg_match("/^[0-9]{7}-[0-9]{1,3}-[0-9]{2}-[0-9]{1,3}$/", $GLOBALS['id']) && $GLOBALS['pid'] == 'docsearch') {
-?>
-	 jQuery('.wp-submenu li:nth-child(4)').addClass('current');
-<?php
-}
-?>
-*/
+
+
+	     
+	        
 } );
 
 		function wpsc_get_folderfile_editor(doc_id){
@@ -611,7 +615,8 @@ Recall Editing
 		    recall_ids: [recall_id],
 		    shipping_tracking: shipping_tracking,
 		    shipping_carrier: shipping_carrier,
-		    ticket_id: ticket_id
+		    ticket_id: ticket_id,
+		    from_page: 'recall-details'		    
 		};
 		jQuery.post(wpsc_admin.ajax_url, data, function(response_str) {
 		    var response = JSON.parse(response_str);

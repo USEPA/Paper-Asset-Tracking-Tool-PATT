@@ -20,7 +20,7 @@ foreach ($fields as $field) {
 $wpsc_appearance_individual_ticket_page = get_option('wpsc_individual_ticket_page');
 $reply_to_close_ticket = get_option('wpsc_allow_reply_to_close_ticket');
 $allow_reply = true;
-if(($current_user->has_cap('wpsc_agent') && !$current_user->has_cap('manage_options') && $status_id==$wpsc_close_ticket_status && !in_array('agents', $reply_to_close_ticket) )){
+if(($current_user->has_cap('wpsc_agent') && !$current_user->has_cap('edit_published_posts') && $status_id==$wpsc_close_ticket_status && !in_array('agents', $reply_to_close_ticket) )){
 	$allow_reply = false;
 }elseif((!$current_user->has_cap('wpsc_agent') && $status_id==$wpsc_close_ticket_status && !in_array('customer', $reply_to_close_ticket) )){
 	$allow_reply = false;
@@ -44,7 +44,7 @@ if($allow_reply){
 					<?php 
 					$notice_flag = false;
 					if( (in_array('customers',$wpsc_allow_attach_reply_form) && is_user_logged_in() && !$current_user->has_cap('wpsc_agent')) ||
-							(in_array('agents',$wpsc_allow_attach_reply_form) && $current_user->has_cap('wpsc_agent')) || $current_user->has_cap('manage_options') ){
+							(in_array('agents',$wpsc_allow_attach_reply_form) && $current_user->has_cap('wpsc_agent')) || $current_user->has_cap('edit_published_posts') ){
 								$notice_flag = true;
 						?>
 						<span onclick="wpsc_attachment_upload('<?php echo 'attach_'.$term_id?>','desc_attachment');"><?php _e('Attach file','supportcandy')?></span>

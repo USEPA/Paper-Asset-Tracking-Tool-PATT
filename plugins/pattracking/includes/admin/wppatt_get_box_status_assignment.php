@@ -32,8 +32,8 @@ if($flag_btn):
     if (($agent_permissions['label'] == 'Administrator') || ($agent_permissions['label'] == 'Agent'))
     {
     ?>
-	<button type="button" class="btn btn-sm wpsc_action_btn" id="wpsc_box_status_label_btn" style="<?php echo $action_default_btn_css ?>" onclick="#"><i class="fas fa-heartbeat"></i> Assign Box Status</button>
-	<button type="button" class="btn btn-sm wpsc_action_btn" id="wpsc_box_assign_label_btn" style="<?php echo $action_default_btn_css ?>" onclick="#"><i class="fas fa-user-plus"></i> Assign Staff</button>
+	<button type="button" class="btn btn-sm wpsc_action_btn" id="wppatt_assign_staff_btn" style="<?php echo $action_default_btn_css ?>" ><i class="fas fa-user-plus"></i> Assign Staff</button>
+	<button type="button" class="btn btn-sm wpsc_action_btn" id="wppatt_change_status_btn" style="<?php echo $action_default_btn_css ?>" ><i class="fas fa-heartbeat"></i> Assign Box Status</button>
     <?php
     }
     ?>

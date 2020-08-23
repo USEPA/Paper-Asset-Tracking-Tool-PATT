@@ -58,7 +58,7 @@ do_action('wpsc_before_create_ticket');
 if(apply_filters('wpsc_print_create_ticket_html',true)):
 ?>
 <div id="create_ticket_body" class="row" style="background-color:<?php echo $general_appearance['wpsc_bg_color']?> !important;color:<?php echo $general_appearance['wpsc_text_color']?> !important;">
-	<form id="wpsc_frm_create_ticket" onsubmit="return wpsc_submit_ticket();" method="post">
+	<form id="wpsc_frm_create_ticket" onsubmit="return wpsc_submit_ticket();" method="post" enctype="multipart/form-data">
 		<div class="row create_ticket_fields_container">
 			<?php 
 			foreach ($fields as $field) {
@@ -147,6 +147,9 @@ if(apply_filters('wpsc_print_create_ticket_html',true)):
 			</div>
 			<?php  
 		  }
+
+		do_action('pattracking_request_litigation_letter', WPSC_PLUGIN_URL);
+
 		?>
 		
 		<div class="row create_ticket_frm_submit">
@@ -539,16 +542,50 @@ if(apply_filters('wpsc_print_create_ticket_html',true)):
 		
 		if (validation) {
 // 			var dataform = new FormData(jQuery('#wpsc_frm_create_ticket')[0]);
-					// CR - SCroll To Top
-					jQuery("html, body").animate({ scrollTop: 0 }, "slow");
+			// CR - SCroll To Top
+			jQuery("html, body").animate({ scrollTop: 0 }, "slow");
 // 			                        //New get DataTable data in the form of an
-                        var data = jQuery('#boxinfodatatable').DataTable().rows().data().toArray();
+            var data = jQuery('#boxinfodatatable').DataTable().rows().data().toArray();
 
-                        var data = JSON.stringify(jQuery('#boxinfodatatable').toJson());
+            var data = JSON.stringify(jQuery('#boxinfodatatable').toJson());
 
-                        var dataform = new FormData(jQuery('#wpsc_frm_create_ticket')[0]);
+            var dataform = new FormData(jQuery('#wpsc_frm_create_ticket')[0]);
 
-                        dataform.append('boxinfo', data);
+            dataform.append('boxinfo', data);
+
+			var request_form_dropdown_flag = 0
+			/* Litigation letter files */
+			var litigation_letter_element = document.querySelector("#litigation-letter-dropzone").dropzone.files;
+			if( litigation_letter_element.length > 0 ) {
+				request_form_dropdown_flag = 1;
+				litigation_letter_element.forEach( function( _file ) {
+					dataform.append( 'litigation_letter_files[]', _file );
+				} );
+			}
+
+			/* Congressional files */
+			var congressional_element = document.querySelector("#congressional-dropzone").dropzone.files;
+			if( congressional_element.length > 0 ) {
+				request_form_dropdown_flag = 1;
+				congressional_element.forEach( function( _file ) {
+					dataform.append( 'congressional_files[]', _file );
+				} );
+			}
+
+			/* Foia files */
+			var foia_element = document.querySelector("#foia-dropzone").dropzone.files;
+			if( foia_element.length > 0 ) {
+				request_form_dropdown_flag = 1;
+				foia_element.forEach( function( _file ) {
+					dataform.append( 'foia_files[]', _file );
+				} );
+			}
+
+			if( request_form_dropdown_flag == 0 ) {
+				var selected_val = jQuery( '#are-these-documents-used-for-the-following' ).val();
+				alert('Please upload the '+ selected_val +' files');
+				return false;
+			}
 			
 			var is_tinymce = true;
 			<?php

@@ -197,11 +197,13 @@ function print_ticket_desc($field){
 				<?php 
 				if($this->extra_info['custom_fields_extra_info_'.$field->term_id]){?><p class="help-block" style="<?php echo $extra_info_css?>"><?php echo $this->extra_info['custom_fields_extra_info_'.$field->term_id];?></p><?php }?>
 				<select id="<?php echo $this->slug;?>" class="form-control wpsc_drop_down" name="<?php echo $this->slug;?>" >
-					<option value=""></option>
+					<option value=""><?php esc_html_e( 'Please Select', 'supportcandy' ); ?></option>
 					<?php
 					foreach ( $this->options as $key => $value ) :
 						$selected = $selected_value == $value ? 'selected="selected"' : '' ;
-						echo '<option '.$selected. 'value="'.str_replace('"','&quot;',$value).'">'.$value.'</option>';
+						if ( 'N/A' !== $value ) {
+							echo '<option '.$selected. 'value="'.str_replace('"','&quot;',$value).'">'.$value.'</option>';
+						}
 					endforeach;
 					?>
 				</select>
@@ -530,7 +532,7 @@ function print_ticket_desc($field){
 								$notice_flag = false;
 								if( (in_array('customers',$wpsc_allow_attach_create_ticket) && is_user_logged_in() && !$current_user->has_cap('wpsc_agent')) ||
 										(in_array('agents',$wpsc_allow_attach_create_ticket) && $current_user->has_cap('wpsc_agent')) || 
-										(in_array('guests',$wpsc_allow_attach_create_ticket) && !is_user_logged_in()) || $current_user->has_cap('manage_options')){
+										(in_array('guests',$wpsc_allow_attach_create_ticket) && !is_user_logged_in()) || $current_user->has_cap('edit_published_posts')){
 											$notice_flag = true;
 									?>
 									<span onclick="wpsc_attachment_upload('<?php echo 'attach_'.$field->term_id?>','desc_attachment');"><?php _e('Attach file','supportcandy')?></span>

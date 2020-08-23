@@ -5,6 +5,9 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 global $current_user, $wpscfunction, $wpdb;
 
+$agent_permissions = $wpscfunction->get_current_agent_permissions(); 
+$agent_permissions['label']; 
+
 $subfolder_path = site_url( '', 'relative');
 //echo 'subfolder_path';
 
@@ -13,6 +16,7 @@ if (!isset($_SESSION)) {
 }
 
 $box_id = $_POST["box_id"];
+//need to pass ticket id to push metadata      
 ob_start();
 
 $patt_box_id_arr = array();
@@ -83,48 +87,11 @@ echo '<option '.$selected.' value="'.$term.'">'.$status.'</option>';
 <?php
 // TESTING print_r($box_statuses);
 ?>
-<br /><br />
-<strong>Program Office:</strong><br />
-<?php
-    $po_array = Patt_Custom_Func::fetch_program_office_array(); ?>
-    <input type="search" list="ProgramOfficeList" placeholder='Enter program office' id='po'/>
-    <datalist id = 'ProgramOfficeList'>
-     <?php foreach($po_array as $key => $value) { 
-     
-    $program_office = $wpdb->get_row("SELECT office_code
-FROM wpqa_wpsc_epa_program_office 
-WHERE office_acronym  = '" . $value . "'");
-    
-    $program_office_id = $program_office->office_code;
-    ?>
-        <option data-value='<?php echo $program_office_id; ?>' value='<?php echo preg_replace("/\([^)]+\)/","",$value); ?>'></option>
-     <?php } ?>
-     </datalist>
-
-<br></br>
-
-<strong>Record Schedule:</strong><br />
-<?php
-    $rs_array = Patt_Custom_Func::fetch_record_schedule_array(); ?>
-    <input type="search" list="RecordScheduleList" placeholder='Enter record schedule' id='rs'/>
-    <datalist id = 'RecordScheduleList'>
-     <?php foreach($rs_array as $key => $value) { 
-     
-     $record_schedule = $wpdb->get_row("SELECT id
-FROM wpqa_epa_record_schedule 
-WHERE Record_Schedule_Number  = '" . $value . "'");
-    
-    $record_schedule_id = $record_schedule->id;
-     ?>
-        <option data-value='<?php echo $record_schedule_id; ?>' value='<?php echo $value; ?>'></option>
-     <?php } ?>
-     </datalist>
 
 <?php
 if($validated == $validation_total && $status_id == 68 && $destruction_approval == 1) {
 ?>
-<br></br>
-
+<br /><br />
 <strong>Destruction Completed:</strong><br />
 <select id="dc" name="dc">
   <option value="1" <?php if ($dc == 1 ) echo 'selected' ; ?>>Yes</option>
@@ -137,8 +104,64 @@ if($validated == $validation_total && $status_id == 68 && $destruction_approval 
 ?>
 
 <input type="hidden" id="dc" name="dc" value="<?php echo $dc; ?>">
-<?php } ?>
+<?php } 
 
+if ($agent_permissions['label'] == 'Administrator') { 
+?>
+<br /><br />
+
+
+<div class="accordion">
+    
+<div class="section">
+<strong><a class="section-title" style="text-decoration: none;" href="#accordion-1">Edit More</a></strong>
+<div id="accordion-1" class="section-content">
+<p>
+<strong>Program Office:</strong><br />
+<?php
+    $po_array = Patt_Custom_Func::fetch_program_office_array(); ?>
+    <input type="search" list="ProgramOfficeList" placeholder='Enter program office' id='po'/>
+    <datalist id = 'ProgramOfficeList'>
+     <?php foreach($po_array as $key => $value) { 
+     
+    $program_office = $wpdb->get_row("SELECT office_code, office_name
+FROM wpqa_wpsc_epa_program_office 
+WHERE office_acronym  = '" . $value . "'");
+    $program_office_id = $program_office->office_code;
+    $program_office_name = $program_office->office_name;
+    ?>
+        <option data-value='<?php echo $program_office_id; ?>' value='<?php echo preg_replace("/\([^)]+\)/","",$value) . ' : ' . $program_office_name; ?>'></option>
+     <?php } ?>
+     </datalist>
+
+<br></br>
+
+<strong>Record Schedule:</strong><br />
+<?php
+    $rs_array = Patt_Custom_Func::fetch_record_schedule_array(); ?>
+    <input type="search" list="RecordScheduleList" placeholder='Enter record schedule' id='rs'/>
+    <datalist id = 'RecordScheduleList'>
+     <?php foreach($rs_array as $key => $value) { 
+     
+     $record_schedule = $wpdb->get_row("SELECT id, Schedule_Title
+FROM wpqa_epa_record_schedule 
+WHERE Ten_Year = 1 AND Record_Schedule_Number = '" . $value . "'");
+    $record_schedule_id = $record_schedule->id;
+    $record_schedule_title = $record_schedule->Schedule_Title;
+     ?>
+        <option data-value='<?php echo $record_schedule_id; ?>' value='<?php echo $value . ' : ' . $record_schedule_title; ?>'></option>
+     <?php } ?>
+     </datalist>
+</p>
+</div><!-- section-content end -->
+</div><!-- section end -->
+   
+</div><!-- accordion end -->
+<?php 
+}
+?>
+ 
+ 
 <input type="hidden" id="boxid" name="boxid" value="<?php echo $box_id; ?>">
 <input type="hidden" id="pattboxid" name="pattboxid" value="<?php echo $patt_box_id; ?>">
 </form>
@@ -153,10 +176,85 @@ ob_start();
 	margin: 0px 0px 0px 0px;
 }
 
+/* Accordion */
+.accordion, .accordion * {
+    box-sizing:border-box;
+    -webkit-box-sizing:border-box;
+    -moz-box-sizing:border-box;
+}
+ 
+.accordion {
+    overflow:hidden;
+    box-shadow:0px 1px 3px rgba(0,0,0,0.25);
+    border-radius:3px;
+    background:#f6f6f6;
+}
+ 
+/* Section Title */
+.section-title {
+    background:#AFAFAF;
+    display:inline-block;
+    border-bottom:1px solid #1a1a1a;
+    width:100%;
+    padding:15px;
+    transition:all linear 0.15s;
+    color:#fff;
+}
+ 
+.section-title.active,
+.section-title:hover {
+    background:#AFAFAF;
+}
+ 
+.section:last-child .section-title {
+    border-bottom:none;
+}
+ 
+.section-title:after {
+/* Unicode character for "plus" sign (+) */ 
+    content: '\02795';
+    font-size: 13px;
+    color: #FFF;
+    float: right;
+    margin-left: 5px;
+}
+ 
+.section-title.active:after {
+/* Unicode character for "minus" sign (-) */
+    content: "\2796";
+}
+ 
+/* Section Content */
+.section-content {
+    display:none;
+    padding:20px;
+}
 </style>
+
 
 <script>
 	jQuery(document).ready(function(){
+	    
+	jQuery('.section-title').click(function(e) {
+    // Get current link value
+    var currentLink = jQuery(this).attr('href');
+    if(jQuery(e.target).is('.active')) {
+     close_section();
+    }else {
+     close_section();
+    // Add active class to section title
+    jQuery(this).addClass('active');
+    // Display the hidden content
+    jQuery('.accordion ' + currentLink).slideDown(350).addClass('open');
+    }
+e.preventDefault();
+});
+ 
+function close_section() {
+    jQuery('.accordion .section-title').removeClass('active');
+    jQuery('.accordion .section-content').removeClass('open').slideUp(350);
+}
+
 		let restriction_reason = '<?php echo $restriction_reason ?>';		
 		
 		if( restriction_reason.length > 0 ) {

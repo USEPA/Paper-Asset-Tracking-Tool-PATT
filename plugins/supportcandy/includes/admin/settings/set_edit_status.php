@@ -4,7 +4,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 global $current_user;
-if (!($current_user->ID && $current_user->has_cap('manage_options'))) {exit;}
+if (!($current_user->ID && $current_user->has_cap('edit_published_posts'))) {exit;}
 
 $status_id = isset($_POST) && isset($_POST['status_id']) ? sanitize_text_field($_POST['status_id']) : '';
 if (!$status_id) {exit;}

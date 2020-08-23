@@ -19,12 +19,228 @@ global $wpdb;
 			<br/>
 
 <?php
-	echo '<hr/>';
+		echo "<hr>";
+		echo "Accession Count for a Request<br/>";
+		$ticket_id = 1;
+		$accession_count = Patt_Custom_Func::get_accession_count($ticket_id);
+        echo 'Accession count for Request # 0000001: ' . $accession_count;
 
-			echo "PATT BOX ID to PATT REQUEST ID<br/>";
+
+		echo "<hr>";
+		echo "Acceptable Box Status given item IDs<br/>";
+
+		$item_ids = ["0000001-2", "0000003-2", "0000003-3"];
+		//$item_ids = ["0000001-3", "0000003-2", "0000009-2"];		
+		//$item_ids = ["0000009-1", "0000003-2"];		
+
+		$box_statuses = Patt_Custom_Func::get_restricted_box_status_list( $item_ids );
+		
+		echo '<pre>';
+		print_r($box_statuses);
+		echo '</pre>';
+		echo "<hr>";
+		
+		
+		echo "<hr>";
+		echo "Get All Statuses From Taxonomy<br/>";
+
+		$tax = 'wpsc_box_statuses';
+		$tax = 'wpsc_box_statuses';
+		$tax = 'wppatt_return_statuses';
+						
+		$status_list = Patt_Custom_Func::get_all_status_from_tax($tax);
+		
+		echo '<pre>';
+		print_r($status_list);
+		echo '</pre>';
+		echo "<hr>";
+		
+		echo "<hr>";
+		echo "Insert return data<br/>";
+
+// 		$num = rand ( 10000 , 99999 ); // $ticket_id
+// 		$str_length = 7;
+// 		$return_id = substr("000000{$num}", -$str_length);
+
+		$data = [
+// 			'return_id' => "$return_id",
+			'box_id' => [2,3,6,7],
+			'folderdoc_id' => [8],
+			'shipping_tracking_info' => [
+    			'tracking_number' => 3, //working: [2,3,17,21,31,33,34,35,39,42,43,45] //Not Working: [0,1,4-16,18-20,22,30,32,36,37,38,40,41,44,46]
+    			'company_name' => 'USPS',
+			 ],
+			'user_id' => 2, //[2,5,67,5]
+			'return_reason_id' => 5,
+			'return_date' => '2020-06-02 00:00:00',
+			'return_receipt_date' => '2020-06-02 00:00:00',
+			'expiration_date' => '2020-06-02 00:00:00',
+			'comments' => 'test insert comment',
+		];
+
+//  		$return_insert_id = Patt_Custom_Func::insert_return_data($data);
+		echo '<pre>';
+		print_r($return_insert_id);
+		echo '</pre>';
+		echo '<hr/>';
+        //  die();
+		
+		
+		echo "Get Ticket ID from Box Folder File ID<br/>";
+		/**
+		 * Get all status from wp_terms
+		 */
+		$where = ['box_folder_file_id' => '0000001-2' ];
+		$ticket_id = Patt_Custom_Func::get_ticket_id_from_box_folder_file( $where );
+		echo '<pre>';
+		print_r($ticket_id);
+		echo '</pre>';
+		echo '<hr/>';
+
+
+
+		echo "Show all the statuses<br/>";
+		/**
+		 * Get all status from wp_terms
+		 */
+		$ignore_status = ['Pending', 'Ingestion', 'Completed', 'Dispositioned'];
+		$get_all_status = Patt_Custom_Func::get_all_status();
+		echo '<pre>';
+		print_r($get_all_status);
+		echo '</pre>';
+		echo '<hr/>';
+		// die();
+
+ 		echo "Update user status<br/>";
+		$data = [
+			'box_id' => 2,
+			'status' => [
+					672 => [6]
+				]
+		]; 
+
+		$update_status_by_id = Patt_Custom_Func::update_status_by_id($data);
+		echo '<pre>';
+		print_r($update_status_by_id);
+		echo '</pre>';
+		echo '<hr/>';
+		
+		echo "Get all user status data<br/>";
+		/**
+		 * Pass variables
+		 */
+		$where = [
+			// 'box_id' => 2,
+			// 'user_id' => 2,
+			// 'status_id' => 672	
+		];
+		$get_user_status_data = Patt_Custom_Func::get_user_status_data($where);
+		echo '<pre>';
+		print_r($get_user_status_data);
+		echo '</pre>';
+		echo '<hr/>';
+		// die();
+
+ 		echo "Insert user status<br/>";
+/*
+		$data = [
+			'box_id' => 2,
+			'status' => [
+					621 => [2]
+				]
+		];
+*/
+		
+		$data = [
+			'box_id' => 2,
+			'status' => [
+					672 => [2,3,4]
+				]
+		];  
+
+		//$user_status_insert = Patt_Custom_Func::user_status_insert($data);
+		echo '<pre>';
+		print_r($user_status_insert);
+		echo '</pre>';
+		echo '<hr/>';
+
+
+
+				
+		echo '<hr/>';
+
+		echo "PATT BOX ID to PATT REQUEST ID<br/>";
 		$patt_request_id = Patt_Custom_Func::convert_box_request_id('0000001-1');
 		echo $patt_request_id;
 		
+		
+		echo "Update return user data<br/>";
+
+		$data = [
+			'return_id' => 4,
+			'user_id' => [4, 5, 6, 2, 7],
+		];
+
+		$date_updated = Patt_Custom_Func::update_return_user_by_id($data);
+		echo '<pre>';
+		print_r($date_updated);
+		echo '</pre>';
+		echo '<hr/>';
+
+	    echo "Get all return data<br/>";
+		/**
+		 * Passing single return ID, multiple IDs, status id, programe office id or digitization center
+		 */
+		$where = [
+			// 'id' => 19,
+			// 'id' => [19, 20],
+			// 'return_id' => 19,
+			// 'return_id' => ['19', '20'],
+			// 'return_status_id' => 5,
+			// 'program_office_id' => 2,
+			// 'digitization_center' => 'East' ,
+			'filter' => [
+				// 'records_per_page' => 3,
+				// 'paged' => 2,
+				'orderby' => 'return_id',
+				'order' => 'ASC',
+			],
+		];
+		$return_array = Patt_Custom_Func::get_return_data($where);
+		echo '<pre>';
+		print_r($return_array);
+		echo '</pre>';
+		echo '<hr/>';
+
+
+/*
+       echo "Insert return data<br/>";
+
+// 		$num = rand ( 10000 , 99999 ); // $ticket_id
+// 		$str_length = 7;
+// 		$return_id = substr("000000{$num}", -$str_length);
+
+		$data = [
+// 			'return_id' => "$return_id",
+			'box_id' => [1,2],
+			'folderdoc_id' => [2],
+			'shipping_tracking_id' => 3,
+			'user_id' => 2, //[2,5,67,5]
+			'return_reason_id' => 5,
+			'return_date' => '2020-06-02 00:00:00',
+			'return_receipt_date' => '2020-06-02 00:00:00',
+			'expiration_date' => '2020-06-02 00:00:00',
+			'comments' => 'dfbdfbd',
+		];
+
+		$return_insert_id = Patt_Custom_Func::insert_return_data($data);
+		echo '<pre>';
+		print_r($return_insert_id);
+		echo '</pre>';
+		echo '<hr/>';
+*/
+
+
 		
 		echo "Update reacall user data<br/>";
 

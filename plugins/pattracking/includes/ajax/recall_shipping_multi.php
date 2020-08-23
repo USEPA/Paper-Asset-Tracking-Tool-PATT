@@ -9,10 +9,15 @@ if (!$current_user->ID) die();
 
 $setting_action = isset($_POST['setting_action']) ? sanitize_text_field($_POST['setting_action']) : '';
 //$recall_id = isset($_POST['recall_id']) ? sanitize_text_field($_POST['recall_id']) : '';
-$recall_ids = $_REQUEST['recall_ids']; 
+$recall_ids = $_REQUEST['recall_ids'];
+$return_ids = $_REQUEST['return_ids'];
+$shipping_table_ids = $_REQUEST['shipping_table_ids'];
+$category = isset($_POST['category']) ? sanitize_text_field($_POST['category']) : '';
+$called_on_page = isset($_POST['from_page']) ? sanitize_text_field($_POST['from_page']) : '';
+ 
 //$GLOBALS['recall_ids'] = 'TESTTTT';
 $num_of_recalls = count($recall_ids);
-$ticket_id = '0000001';
+$ticket_id = '0000001'; // Not actually used. Passed along via AJAX, but not used there either. 
 
 $subfolder_path = site_url( '', 'relative'); 
 
@@ -71,6 +76,39 @@ print_r($recall_ids);
 
 <script>
 jQuery(document).ready(function() {
+    
+    var category = '<?php echo $category ?>';
+    var ticket_id = <?php echo $ticket_id; ?>; 
+	var subfolder = '<?php echo $subfolder_path; ?>';
+	var recall_ids = <?php echo json_encode($recall_ids); ?>;
+	var return_ids = <?php echo json_encode($return_ids); ?>;	
+	var shipping_table_ids = <?php echo json_encode($shipping_table_ids); ?>;
+    var get_link = '';
+    var put_link = '';
+    var title = '';
+    
+    console.log('The Category: ');
+    console.log(category);
+    
+    if( category == 'return') {
+	    get_link = subfolder+"/wp-content/plugins/pattracking/includes/ajax/fetch_shipping_data_multi.php?ticket_id="+ticket_id+"&return_ids="+return_ids
+	    						+"&category=return";
+	    put_link = subfolder+"/wp-content/plugins/pattracking/includes/ajax/fetch_shipping_data_multi.php?ticket_id="+ticket_id+"&category=return";
+	    title = 'Return ID';
+    } else if( category == 'recall') {
+	    get_link = subfolder+"/wp-content/plugins/pattracking/includes/ajax/fetch_shipping_data_multi.php?ticket_id="+ticket_id+"&recall_ids="+recall_ids;
+	    put_link = subfolder+"/wp-content/plugins/pattracking/includes/ajax/fetch_shipping_data_multi.php?ticket_id="+ticket_id;
+	    title = 'Recall ID';
+    } else if( category == 'shipping-status-editor') {
+	    get_link = subfolder+"/wp-content/plugins/pattracking/includes/ajax/fetch_shipping_data_multi.php?ticket_id="+ticket_id+"&shipping_table_ids="+shipping_table_ids+"&category=shipping-status-editor";
+	    put_link = subfolder+"/wp-content/plugins/pattracking/includes/ajax/fetch_shipping_data_multi.php?ticket_id="+ticket_id+"&category=shipping-status-editor";
+	    title = 'ID';
+    } else {
+	    get_link = subfolder+"/wp-content/plugins/pattracking/includes/ajax/fetch_shipping_data_multi.php?ticket_id="+ticket_id+"&recall_ids="+recall_ids;
+	    put_link = subfolder+"/wp-content/plugins/pattracking/includes/ajax/fetch_shipping_data_multi.php?ticket_id="+ticket_id;	    
+	    title = 'Recall ID';	    
+    }
+     
            
 	jQuery('#grid_table').jsGrid({
 		width: "auto",
@@ -87,15 +125,26 @@ jQuery(document).ready(function() {
 		deleteConfirm: "Do you really want to delete this tracking number?",
 		controller: {
 			loadData: function(filter){
+/*
 				var ticket_id = <?php echo $ticket_id; ?>; 
 				var subfolder = '<?php echo $subfolder_path; ?>';
 				var recall_ids = <?php echo json_encode($recall_ids); ?>;
+*/
 				console.log('recall ids:::');
 				console.log(recall_ids);
+				console.log('return ids:::');
+				console.log(return_ids);
 				console.log(subfolder);
+				console.log('The Category 2: ');
+				console.log(category);
+				console.log(get_link);
+				console.log('filter: ');
+				console.log(filter);
 				return jQuery.ajax({
 					type: "GET",
-					url: subfolder+"/wp-content/plugins/pattracking/includes/ajax/fetch_shipping_data_multi.php?ticket_id="+ticket_id+"&recall_ids="+recall_ids,
+					category: category,
+					url: get_link,
+//					url: subfolder+"/wp-content/plugins/pattracking/includes/ajax/fetch_shipping_data_multi.php?ticket_id="+ticket_id+"&recall_ids="+recall_ids,
 // 					url: subfolder+"/wp-content/plugins/pattracking/includes/ajax/fetch_shipping_data.php",
 					data: filter
 				});
@@ -115,10 +164,20 @@ jQuery(document).ready(function() {
 				var ticket_id = <?php echo $ticket_id; ?>; 
 				var subfolder = '<?php echo $subfolder_path; ?>';
 				//var recall_ids = <?php echo json_encode($recall_ids); ?>;
+				console.log('update item');
+				console.log(category);
+				console.log(put_link);
+				console.log(item);				
 				return jQuery.ajax({
 					type: "PUT",
-					url: subfolder+"/wp-content/plugins/pattracking/includes/ajax/fetch_shipping_data_multi.php?ticket_id="+ticket_id,
-					data: item
+					category: category,
+					url: put_link,
+					//url: subfolder+"/wp-content/plugins/pattracking/includes/ajax/fetch_shipping_data_multi.php?ticket_id="+ticket_id,
+					data: item,
+					success: function(response) {
+						console.log('Shipping Update Success');
+						console.log(response);
+					}
 				});
 			},
 /*
@@ -141,9 +200,10 @@ jQuery(document).ready(function() {
 		},
 		{
 			name: "recall_id",
-			title: "Recall ID",
+// 			title: "Recall ID",
+			title: title,
 			type: "text",
-			width: 40	,
+			width: 50	,
 			editing: false,
 			inserting: false 
 		},
@@ -160,7 +220,24 @@ jQuery(document).ready(function() {
 			title: "Tracking Number",
 			type: "text", 
 			width: 130, 
-			validate: "required",
+// 			validate: "required",
+			validate: function(value, item) { 
+			    
+			    var isTrue = '';
+			    if (/\b(1Z ?[0-9A-Z]{3} ?[0-9A-Z]{3} ?[0-9A-Z]{2} ?[0-9A-Z]{4} ?[0-9A-Z]{3} ?[0-9A-Z]|T\d{3} ?\d{4} ?\d{3})\b/i.test(value)
+			    || /\b((420 ?\d{5} ?)?(91|92|93|94|01|03|04|70|23|13)\d{2} ?\d{4} ?\d{4} ?\d{4} ?\d{4}( ?\d{2,6})?)\b/i.test(value)
+			    || /\b((M|P[A-Z]?|D[C-Z]|LK|E[A-C]|V[A-Z]|R[A-Z]|CP|CJ|LC|LJ) ?\d{3} ?\d{3} ?\d{3} ?[A-Z]?[A-Z]?)\b/i.test(value)
+			    || /\b(82 ?\d{3} ?\d{3} ?\d{2})\b/i.test(value)
+			    || /\b(((96\d\d|6\d)\d{3} ?\d{4}|96\d{2}|\d{4}) ?\d{4} ?\d{4}( ?\d{3})?)\b/i.test(value)
+			    || /\b(\d{4}[- ]?\d{4}[- ]?\d{2}|\d{3}[- ]?\d{8}|[A-Z]{3}\d{7})\b/i.test(value)) {
+			    var isTrue = true;
+			    } else {
+			    var isTrue = false;
+			    }
+			    
+			    return isTrue;      
+        },
+
 			formatter: function (cellvalue, options, rowObject) {
 		    	return "<a href='javascript:void(0);' class='anchor usergroup_name link'>" + cellvalue + '</a>';
 		    }
@@ -206,9 +283,9 @@ jQuery(document).ready(function() {
 $body = ob_get_clean();
 ob_start();
 ?>
-<button type="button" class="btn wpsc_popup_close"  style="background-color:<?php echo $wpsc_appearance_modal_window['wpsc_close_button_bg_color']?> !important;color:<?php echo $wpsc_appearance_modal_window['wpsc_close_button_text_color']?> !important;"   onclick="wpsc_modal_close();window.location.reload();"><?php _e('Close','wpsc-export-ticket');?></button>
+<!-- <button type="button" class="btn wpsc_popup_close"  style="background-color:<?php echo $wpsc_appearance_modal_window['wpsc_close_button_bg_color']?> !important;color:<?php echo $wpsc_appearance_modal_window['wpsc_close_button_text_color']?> !important;"   onclick="wpsc_modal_close();window.location.reload();"><?php _e('Close','wpsc-export-ticket');?></button> -->
 
-<!-- <button type="button" id="button_shipping_multi_submit" class="btn wpsc_popup_action" style="background-color:<?php echo $wpsc_appearance_modal_window['wpsc_action_button_bg_color']?> !important;color:<?php echo $wpsc_appearance_modal_window['wpsc_action_button_text_color']?> !important;" onclick="wppatt_set_recall_shipping_multi();"><?php _e('Save','supportcandy');?></button> -->
+<button type="button" class="btn wpsc_popup_close"  style="background-color:<?php echo $wpsc_appearance_modal_window['wpsc_close_button_bg_color']?> !important;color:<?php echo $wpsc_appearance_modal_window['wpsc_close_button_text_color']?> !important;"   onclick="reset_datatable();wpsc_modal_close();<?php if($called_on_page == 'recall-details' || $called_on_page == 'return-details' ) { ?>window.location.reload();<?php } ?>"><?php _e('Close','wpsc-export-ticket');?></button>
 
 
 <script>
@@ -244,6 +321,18 @@ ob_start();
 	
 	    });
 */
+	}
+	
+	function reset_datatable() {
+		let the_page = '<?php echo $called_on_page ?>';
+		
+		if( the_page == 'return-dashboard') {
+			jQuery('#tbl_templates_return').DataTable().ajax.reload();
+		}
+		
+		if( the_page == 'recall-dashboard') {
+			jQuery('#tbl_templates_recall').DataTable().ajax.reload();
+		}
 	}
 	
 </script>

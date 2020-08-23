@@ -16,10 +16,19 @@ $wpsc_appearance_modal_window = get_option('wpsc_modal_window');
 $wpsc_custom_status_localize   = get_option('wpsc_custom_status_localize');
 $wpsc_custom_category_localize = get_option('wpsc_custom_category_localize');
 $wpsc_custom_priority_localize = get_option('wpsc_custom_priority_localize');
+
+//PATT BEGIN
+$agent_permissions = $wpscfunction->get_current_agent_permissions();
+$agent_permissions['label'];
+//PATT END
 ob_start();
 ?>
 <form id="frm_get_ticket_change_status" method="post">
-
+<?php
+//PATT BEGIN
+$shipping_array = array(5,63);
+//PATT END
+?>
 	<div class="form-group">
 		<label for="wpsc_default_ticket_status"><?php _e('Ticket Status','supportcandy');?></label>
 		<select class="form-control" name="status">
@@ -33,8 +42,13 @@ ob_start();
 			]);
       foreach ( $statuses as $status ) :
 				$selected = $status_id == $status->term_id ? 'selected="selected"' : '';
+//PATT BEGIN
+$disabled = '';
+if (in_array($status->term_id, $shipping_array)) {
+    $disabled = 'disabled';
+}
 
-echo '<option '.$selected.' value="'.$status->term_id.'">'.$wpsc_custom_status_localize['custom_status_'.$status->term_id].'</option>';
+echo '<option '.$selected.' value="'.$status->term_id.'" '.$disabled.'>'.$wpsc_custom_status_localize['custom_status_'.$status->term_id].'</option>';
 			endforeach;
 			?>
 		</select>
@@ -103,9 +117,24 @@ echo '<input type="hidden" name="category" value="'.Patt_Custom_Func::get_defaul
 				'order'    	 => 'ASC',
 				'meta_query' => array('order_clause' => array('key' => 'wpsc_priority_load_order')),
 			]);
+			
+			//PATT BEGIN
+			$key = array_search('Critical', array_column($priorities, 'name'));
+			if ($agent_permissions['label'] == 'Agent')
+            {
+                 unset($priorities[$key]);
+            }
+			//PATT END
+			
 			foreach ( $priorities as $priority ) :
 				$selected = $priority_id == $priority->term_id ? 'selected="selected"' : '';
-				echo '<option '.$selected.' value="'.$priority->term_id.'">'.$wpsc_custom_priority_localize['custom_priority_'.$priority->term_id].'</option>';
+				//PATT BEGIN
+				if ($priority->term_id == 9) {
+				echo '<option '.$selected.' style="background: #FFD0C2; font-weight: bold;" value="'.$priority->term_id.'">'.$wpsc_custom_priority_localize['custom_priority_'.$priority->term_id].'</option>';
+				} else {
+				echo '<option '.$selected.' value="'.$priority->term_id.'">'.$wpsc_custom_priority_localize['custom_priority_'.$priority->term_id].'</option>';				
+				}
+				//PATT END
 			endforeach;
 			?>
 		</select>

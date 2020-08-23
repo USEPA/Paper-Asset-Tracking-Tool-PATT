@@ -4,7 +4,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 global $current_user,$wpscfunction,$wpdb;
-if (!($current_user->ID && $current_user->has_cap('manage_options'))) {
+if (!($current_user->ID && $current_user->has_cap('edit_published_posts'))) {
 	exit;
 }
 

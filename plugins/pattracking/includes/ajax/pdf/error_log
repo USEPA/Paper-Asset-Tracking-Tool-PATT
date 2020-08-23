@@ -1,0 +1,2 @@
+[20-Aug-2020 13:15:00 UTC] WordPress database error Unknown column 'wpqa_wpsc_epa_program_office.office_acronym' in 'field list' for query SELECT DISTINCT wpqa_wpsc_epa_program_office.office_acronym as program_office FROM wpqa_wpsc_ticket   WHERE id = 1 LIMIT 1; made by PATT_DB->get_row
+[20-Aug-2020 13:15:00 UTC] WordPress database error Unknown column 'wpqa_wpsc_epa_program_office.office_acronym' in 'field list' for query SELECT DISTINCT wpqa_wpsc_epa_program_office.office_acronym as program_office FROM wpqa_wpsc_ticket   WHERE id = 1 LIMIT 1; made by PATT_DB->get_row

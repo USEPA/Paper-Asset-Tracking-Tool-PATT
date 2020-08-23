@@ -1,0 +1,509 @@
+<?php
+$WP_PATH = implode("/", (explode("/", $_SERVER["PHP_SELF"], -8)));
+require_once($_SERVER['DOCUMENT_ROOT'].$WP_PATH.'/wp-config.php');
+	
+$host = DB_HOST; /* Host name */
+$user = DB_USER; /* User */
+$password = DB_PASSWORD; /* Password */
+$dbname = DB_NAME; /* Database name */
+
+$subfolder_path = site_url( '', 'relative'); 
+
+$con = mysqli_connect($host, $user, $password,$dbname);
+// Check connection
+if (!$con) {
+  die("Connection failed: " . mysqli_connect_error());
+}
+
+## Read value
+$draw = $_POST['draw'];
+$row = $_POST['start'];
+$rowperpage = $_POST['length']; // Rows display per page
+$columnIndex = $_POST['order'][0]['column']; // Column index
+$columnName = $_POST['columns'][$columnIndex]['data']; // Column name
+$columnSortOrder = $_POST['order'][0]['dir']; // asc or desc
+$searchValue = $_POST['search']['value']; // Search value
+
+$searchByUser = $_POST['searchByUser'];
+$currentUser = $_POST['currentUser'];
+$searchByDigitizationCenter = $_POST['searchByDigitizationCenter'];
+$searchByProgramOffice = $_POST['searchByProgramOffice'];
+if($_POST['searchByRecallID']) {
+	$searchByRecallID = explode(',',$_POST['searchByRecallID']);
+	// Allow for filtering by full Recall ID number (i.e. R-0000001)
+	$recall_ID_array_stripped = array();
+	foreach( $searchByRecallID as $id ) {
+		if( substr($id, 0, 1)=='r' ) {
+			$recall_ID_array_stripped[] = str_replace('r-', '', $id);
+		} else {
+			$recall_ID_array_stripped[] = str_replace('R-', '', $id);
+		}	
+	}
+}
+
+$searchGeneric = trim($_POST['searchGeneric']);
+
+if( strpos($searchGeneric, 'R-') !== false || strpos($searchGeneric, 'r-') !== false ) {
+	$searchGeneric = str_replace('r-', '', $searchGeneric);
+	$searchGeneric = str_replace('R-', '', $searchGeneric);	
+}
+
+// OLD METHOD - START	
+	
+## Custom Field value
+
+
+## Recall ID Filter
+$searchQuery = " ";
+
+
+if( $recall_ID_array_stripped ) {
+	$recall_id_str = implode('\',\'',$recall_ID_array_stripped);
+	$recall_id_str = "'".$recall_id_str."'";
+	$searchQuery .= " AND recall_id IN (".$recall_id_str.") ";
+}
+
+## Filter - Digitization Center
+if ( $searchByDigitizationCenter != '' ) {
+	$searchQuery .= " AND digitization_center = '".$searchByDigitizationCenter."' ";
+}
+
+## Filter - Program Office
+if ( $searchByProgramOffice != '' ) {
+	$searchQuery .= " AND office_acronym = '".$searchByProgramOffice."' ";
+}
+
+
+
+## Search 
+
+if($searchGeneric != ''){
+	
+	$date_search = false;
+	if( strpos($searchGeneric, '/') !== false ) {
+		$date_search = true;
+	}
+	
+	if( $date_search ) {
+// 		$searchQuery .= " and ( DATE(wpqa_wpsc_epa_recallrequest.request_date) = '".$searchGeneric."' ) ";
+
+		$searchDate = date_create($searchGeneric);
+		
+		$searchDate = date_format($searchDate,"Y-m-d");
+		
+		//$date = date_create('08/12/2020');
+		//echo date_format($date,"Y-m-d");
+		
+		$searchQuery .= " and ( DATE(innerTable.request_date) = '".$searchDate."' ) ";
+		
+		
+	} else {
+		
+		$searchQuery .= " and (innerTable.recall_id like '%".$searchGeneric."%' or 
+			all_titles like '%".$searchGeneric."%' or 
+			innerTable.office_acronym like '%".$searchGeneric."%' or
+			innerTable.digitization_center like '%".$searchGeneric."%') ";
+/*
+	   	$searchQuery .= " and (wpqa_wpsc_epa_recallrequest.recall_id like '%".$searchGeneric."%' or 
+			wpqa_wpsc_epa_program_office.office_acronym like '%".$searchGeneric."%' or
+			T2.name like '%".$searchGeneric."%') ";
+*/
+			
+
+			
+		
+	}
+}
+
+/*
+if($searchValue != ''){
+   $searchQuery .= " and (folderdocinfo_id like '%".$searchValue."%' or 
+      title  like '%".$searchValue."%' or 
+      date like '%".$searchValue."%' or
+      epa_contact_email like '%".$searchValue."%') ";
+}
+*/
+
+## Total number of records without filtering
+$query = "select count(*) as allcount from wpqa_wpsc_epa_recallrequest WHERE id > 0";
+
+
+$sel = mysqli_query($con,$query);
+// echo json_encode($_POST);
+// return;
+// dd($sel);
+$records = mysqli_fetch_assoc($sel);
+$totalRecords = $records['allcount'];
+
+## Total number of records with filtering
+$query_2 = "select count(*) as allcount FROM 
+    wpqa_wpsc_epa_recallrequest
+LEFT JOIN wpqa_wpsc_epa_boxinfo ON wpqa_wpsc_epa_boxinfo.id = wpqa_wpsc_epa_recallrequest.box_id
+LEFT JOIN wpqa_wpsc_epa_recallrequest_users ON wpqa_wpsc_epa_recallrequest_users.recallrequest_id = wpqa_wpsc_epa_recallrequest.id
+LEFT JOIN wpqa_wpsc_epa_folderdocinfo ON wpqa_wpsc_epa_folderdocinfo.id = wpqa_wpsc_epa_recallrequest.folderdoc_id
+LEFT JOIN wpqa_wpsc_epa_program_office ON wpqa_wpsc_epa_program_office.id = wpqa_wpsc_epa_recallrequest.program_office_id
+LEFT JOIN wpqa_wpsc_epa_shipping_tracking ON wpqa_wpsc_epa_shipping_tracking.id = wpqa_wpsc_epa_recallrequest.shipping_tracking_id
+LEFT JOIN wpqa_epa_record_schedule ON wpqa_epa_record_schedule.id = wpqa_wpsc_epa_recallrequest.record_schedule_id
+LEFT JOIN wpqa_terms T1 ON T1.term_id = wpqa_wpsc_epa_recallrequest.recall_status_id
+LEFT JOIN wpqa_wpsc_ticket ON wpqa_wpsc_ticket.id = wpqa_wpsc_epa_boxinfo.ticket_id
+LEFT JOIN wpqa_terms T2 ON T2.term_id = wpqa_wpsc_ticket.ticket_category WHERE wpqa_wpsc_epa_recallrequest.id > 0 ";
+//.$searchQuery;
+
+$outterQuery_start = "SELECT * FROM (";    
+$outterQuery_end = ") AS innerTable WHERE 1 ";
+
+$query_3 = $outterQuery_start.$query_2.$outterQuery_end.$searchQuery;
+
+
+
+//$sel = mysqli_query($con, $query_2);
+$sel = mysqli_query($con, $query_3);
+$records = mysqli_fetch_assoc($sel);
+$totalRecordwithFilter = $records['allcount'];
+
+
+
+
+/*
+$baseQuery = "
+SELECT
+    wpqa_wpsc_epa_recallrequest.id,
+    wpqa_wpsc_epa_recallrequest.recall_id,
+    wpqa_wpsc_epa_recallrequest.expiration_date,
+    wpqa_wpsc_epa_recallrequest.request_date,
+    wpqa_wpsc_epa_recallrequest.request_receipt_date,
+    wpqa_wpsc_epa_recallrequest.return_date,
+    wpqa_wpsc_epa_recallrequest.updated_date,
+    wpqa_wpsc_epa_recallrequest.comments,
+    wpqa_wpsc_epa_recallrequest.recall_status_id,
+    wpqa_wpsc_epa_boxinfo.ticket_id,
+    wpqa_wpsc_ticket.ticket_category, 
+    T2.name AS digitization_center,
+    wpqa_wpsc_epa_boxinfo.box_id,
+    wpqa_wpsc_epa_boxinfo.storage_location_id,
+    wpqa_wpsc_epa_boxinfo.location_status_id,
+    wpqa_wpsc_epa_boxinfo.box_destroyed,
+    wpqa_wpsc_epa_boxinfo.date_created,
+    wpqa_wpsc_epa_boxinfo.date_updated,
+    wpqa_wpsc_epa_folderdocinfo.title,
+    wpqa_wpsc_epa_folderdocinfo.folderdocinfo_id AS folderdoc_id,
+    wpqa_wpsc_epa_program_office.office_acronym,
+    wpqa_wpsc_epa_shipping_tracking.company_name AS shipping_carrier,
+    wpqa_wpsc_epa_shipping_tracking.tracking_number,
+    wpqa_wpsc_epa_shipping_tracking.status,
+    CONCAT(
+        wpqa_epa_record_schedule.Record_Schedule_Number,
+        ': ',
+        wpqa_epa_record_schedule.Schedule_Title
+    ) AS Record_Schedule,
+    CONCAT(
+        wpqa_epa_record_schedule.Record_Schedule_Number,
+        ': ',
+        wpqa_epa_record_schedule.Schedule_Title
+    ) AS Record_Schedule_Number,
+    CONCAT(
+        wpqa_epa_record_schedule.Record_Schedule_Number,
+        ': ',
+        wpqa_epa_record_schedule.Schedule_Title
+    ) AS Schedule_Title,
+    T1.name AS recall_status,
+    GROUP_CONCAT(
+        wpqa_wpsc_epa_recallrequest_users.user_id
+    ) AS user_id
+FROM
+    wpqa_wpsc_epa_recallrequest
+LEFT JOIN wpqa_wpsc_epa_boxinfo ON wpqa_wpsc_epa_boxinfo.id = wpqa_wpsc_epa_recallrequest.box_id
+LEFT JOIN wpqa_wpsc_epa_recallrequest_users ON wpqa_wpsc_epa_recallrequest_users.recallrequest_id = wpqa_wpsc_epa_recallrequest.id
+LEFT JOIN wpqa_wpsc_epa_folderdocinfo ON wpqa_wpsc_epa_folderdocinfo.id = wpqa_wpsc_epa_recallrequest.folderdoc_id
+LEFT JOIN wpqa_wpsc_epa_program_office ON wpqa_wpsc_epa_program_office.id = wpqa_wpsc_epa_recallrequest.program_office_id
+LEFT JOIN wpqa_wpsc_epa_shipping_tracking ON wpqa_wpsc_epa_shipping_tracking.id = wpqa_wpsc_epa_recallrequest.shipping_tracking_id
+LEFT JOIN wpqa_epa_record_schedule ON wpqa_epa_record_schedule.id = wpqa_wpsc_epa_recallrequest.record_schedule_id
+LEFT JOIN wpqa_terms T1 ON T1.term_id = wpqa_wpsc_epa_recallrequest.recall_status_id
+LEFT JOIN wpqa_wpsc_ticket ON wpqa_wpsc_ticket.id = wpqa_wpsc_epa_boxinfo.ticket_id
+LEFT JOIN wpqa_terms T2 ON T2.term_id = wpqa_wpsc_ticket.ticket_category
+WHERE
+    wpqa_wpsc_epa_recallrequest.recall_id > 0";
+*/
+    
+$baseQuery = "
+SELECT
+    wpqa_wpsc_epa_recallrequest.id,
+    wpqa_wpsc_epa_recallrequest.recall_id,
+    wpqa_wpsc_epa_recallrequest.expiration_date,
+    wpqa_wpsc_epa_recallrequest.request_date,
+    wpqa_wpsc_epa_recallrequest.request_receipt_date,
+    wpqa_wpsc_epa_recallrequest.return_date,
+    wpqa_wpsc_epa_recallrequest.updated_date,
+    wpqa_wpsc_epa_recallrequest.comments,
+    wpqa_wpsc_epa_recallrequest.recall_status_id,
+    wpqa_wpsc_epa_boxinfo.ticket_id,
+    wpqa_wpsc_ticket.ticket_category, 
+    T2.name AS digitization_center,
+    wpqa_wpsc_epa_boxinfo.box_id,
+    wpqa_wpsc_epa_boxinfo.storage_location_id,
+    wpqa_wpsc_epa_boxinfo.location_status_id,
+    wpqa_wpsc_epa_boxinfo.box_destroyed,
+    wpqa_wpsc_epa_boxinfo.date_created,
+    wpqa_wpsc_epa_boxinfo.date_updated,
+    wpqa_wpsc_epa_folderdocinfo.title,
+    wpqa_wpsc_epa_folderdocinfo.folderdocinfo_id AS folderdoc_id,
+    wpqa_wpsc_epa_program_office.office_acronym,
+    wpqa_wpsc_epa_shipping_tracking.company_name AS shipping_carrier,
+    wpqa_wpsc_epa_shipping_tracking.tracking_number,
+    wpqa_wpsc_epa_shipping_tracking.status,
+    CONCAT(
+        wpqa_epa_record_schedule.Record_Schedule_Number,
+        ': ',
+        wpqa_epa_record_schedule.Schedule_Title
+    ) AS Record_Schedule,
+    CONCAT(
+        wpqa_epa_record_schedule.Record_Schedule_Number,
+        ': ',
+        wpqa_epa_record_schedule.Schedule_Title
+    ) AS Record_Schedule_Number,
+    CONCAT(
+        wpqa_epa_record_schedule.Record_Schedule_Number,
+        ': ',
+        wpqa_epa_record_schedule.Schedule_Title
+    ) AS Schedule_Title,
+    T1.name AS recall_status,
+    GROUP_CONCAT(
+        wpqa_wpsc_epa_recallrequest_users.user_id
+    ) AS user_id,
+    CASE
+        WHEN folderdoc_id = -99999 THEN 
+             GROUP_CONCAT(
+                 FDI.title
+             ) 
+        ELSE  wpqa_wpsc_epa_folderdocinfo.title 
+        END AS all_titles
+    
+FROM
+    wpqa_wpsc_epa_recallrequest
+LEFT JOIN wpqa_wpsc_epa_boxinfo ON wpqa_wpsc_epa_boxinfo.id = wpqa_wpsc_epa_recallrequest.box_id
+LEFT JOIN wpqa_wpsc_epa_recallrequest_users ON wpqa_wpsc_epa_recallrequest_users.recallrequest_id = wpqa_wpsc_epa_recallrequest.id
+LEFT JOIN wpqa_wpsc_epa_folderdocinfo ON wpqa_wpsc_epa_folderdocinfo.id = wpqa_wpsc_epa_recallrequest.folderdoc_id
+LEFT JOIN wpqa_wpsc_epa_program_office ON wpqa_wpsc_epa_program_office.id = wpqa_wpsc_epa_recallrequest.program_office_id
+LEFT JOIN wpqa_wpsc_epa_shipping_tracking ON wpqa_wpsc_epa_shipping_tracking.id = wpqa_wpsc_epa_recallrequest.shipping_tracking_id
+LEFT JOIN wpqa_epa_record_schedule ON wpqa_epa_record_schedule.id = wpqa_wpsc_epa_recallrequest.record_schedule_id
+LEFT JOIN wpqa_terms T1 ON T1.term_id = wpqa_wpsc_epa_recallrequest.recall_status_id
+LEFT JOIN wpqa_wpsc_ticket ON wpqa_wpsc_ticket.id = wpqa_wpsc_epa_boxinfo.ticket_id
+LEFT JOIN wpqa_terms T2 ON T2.term_id = wpqa_wpsc_ticket.ticket_category
+LEFT JOIN wpqa_wpsc_epa_folderdocinfo FDI ON FDI.box_id = wpqa_wpsc_epa_boxinfo.id
+WHERE
+    wpqa_wpsc_epa_recallrequest.recall_id > 0";
+    
+$outterQuery_start = "SELECT * FROM (";    
+$outterQuery_end = ") AS innerTable WHERE 1 ";
+
+$groupAndOrderBy = " GROUP BY wpqa_wpsc_epa_recallrequest.recall_id order by ".$columnName." ".$columnSortOrder." limit ".$row.",".$rowperpage;
+        
+//$recallQuery = $baseQuery.$searchQuery." GROUP BY wpqa_wpsc_epa_recallrequest.recall_id order by ".$columnName." ".$columnSortOrder." limit ".$row.",".$rowperpage;
+
+$recallQuery = $outterQuery_start.$baseQuery.$groupAndOrderBy.$outterQuery_end.$searchQuery;
+
+$recallRecords = mysqli_query($con, $recallQuery);
+
+
+
+// echo json_encode($recallQuery);
+// return;
+// dd($recallQuery);
+
+## Row Data
+
+$data = array();
+
+while ($row = mysqli_fetch_assoc($recallRecords)) {
+
+   	// Makes the Status column pretty
+	$status_term_id = $row['recall_status_id'];
+	$status_background = get_term_meta($status_term_id, 'wppatt_recall_status_background_color', true);
+	$status_color = get_term_meta($status_term_id, 'wppatt_recall_status_color', true);
+	$status_style = "background-color:".$status_background.";color:".$status_color.";";
+	
+	// Tracking Number link
+/*
+	$shipping_link_start = "<a href='".Patt_Custom_Func::get_tracking_url($row['tracking_number'])."' target='_blank' />";
+	$shipping_link_end = "</a>";
+	$track = $shipping_link_start.$row['tracking_number'].$shipping_link_end;
+*/
+   
+   	$data[] = array(
+		"recall_id"=>"<a href='".$subfolder_path."/wp-admin/admin.php?page=recalldetails&id=R-".$row['recall_id']."' >R-".$row['recall_id']."</a>", 		
+		"recall_id_flag"=>$row['recall_id'],
+		"status"=>"<span class='wpsp_admin_label' style='".$status_style."'>".$row['recall_status']."</span>", 
+		"updated_date"=>human_time_diff(strtotime($row['updated_date'])),
+		"request_date"=> date('m/d/Y', strtotime( $row['request_date'] )),
+		"return_date"=> (strtotime( $row['return_date']) > 0) ? date('m/d/Y', strtotime( $row['return_date'])) : 'N/A', 
+		"request_receipt_date"=> (strtotime( $row['request_receipt_date']) > 0) ? date('m/d/Y', strtotime( $row['request_receipt_date'])) : 'N/A', 		
+		"expiration_date"=>"90 Days", //date('m/d/Y', strtotime( $date_expiration)), 
+		"tracking_number"=>$row['tracking_number'],
+// 		"tracking_number"=>$track,
+   );
+   
+
+/*
+   $data[] = array(
+     "folderdocinfo_id"=>$row['folderdocinfo_id'],
+     "recall_id_flag"=>$row['recall_id_flag'],
+     "title"=>$row['title'],
+     "date"=>$row['date'],
+     "epa_contact_email"=>$row['epa_contact_email'],
+     "validation"=>$row['validation']
+   );
+*/
+}
+
+
+## Response
+$response = array(
+  "draw" => intval($draw),
+  "iTotalRecords" => $totalRecords,
+  "iTotalDisplayRecords" => $totalRecordwithFilter,
+//  "iTotalRecords" => count($recall_total_records) - 1, //$totalRecords,
+//  "iTotalDisplayRecords" => count($recall_total_records) - 1, // $totalRecordwithFilter,
+//   "aaData" => $data2,
+  "aaData" => $data,  
+  "request" => $_REQUEST,
+//   "query" => $recall_array['query'],
+  "query" => $recallQuery,  
+  "Search Generic" => $searchGeneric,
+  "Search Query" => $searchQuery,
+  "Where" => $where['custom'],
+  "Random Data - DC" => $searchByDigitizationCenter,
+  "Random Data 2 - PO" => $searchByProgramOffice,
+  "Filtered item query" => $query_3
+);
+
+
+
+// OLD METHOD - END
+
+/*
+// NEW METHOD - START
+$data2 = array();
+
+//$where = [];
+
+##
+$where = [
+    // 'id' => 19,
+    // 'id' => [19, 20],
+    // 'recall_id' => 19,
+    //     'recall_id' => ['0000001', '0000002'],
+    //     'recall_id' => '',
+    // 'recall_status_id' => 5,
+    // 'program_office_id' => 2,
+    //     'digitization_center' => 'East',
+    //    'digitization_center' => $searchByDigitizationCenter,
+    'filter' => [
+        'records_per_page' => $rowperpage,
+        'paged' => $row,
+        'orderby' => $columnName,
+        'order' => $columnSortOrder,
+    ],
+];
+
+if($searchByDigitizationCenter) {
+	$where['digitization_center'] = '"'.$searchByDigitizationCenter.'"';
+}
+
+if ($searchByProgramOffice) {
+    $where['program_office_id'] = '"'.$searchByProgramOffice.'"';
+}
+
+//if($searchByUser == 'mine') {
+//  	//$searchQuery .= " and (a.customer_name ='".$currentUser."') ";    
+//    $where['user_id'] = '"'.$currentUser.'"';   
+//}
+
+if(count($searchByRecallID) > 0){
+// 	$where['recall_id'] = $searchByRecallID;
+	$where['recall_id'] = $recall_ID_array_stripped;	
+}
+
+
+if ($searchGeneric != '') {
+	global $wpdb;
+
+	if ( strpos($searchGeneric, 'R-') !== false ) {
+	    $searchGeneric = str_replace('R-', '', $searchGeneric);
+	}
+	
+	$where['custom'] = " ({$wpdb->prefix}wpsc_epa_recallrequest.recall_id like '%" . $searchGeneric . "%' or
+      {$wpdb->prefix}wpsc_epa_folderdocinfo.title like '%" . $searchGeneric . "%' or
+      {$wpdb->prefix}wpsc_epa_recallrequest.request_date like '%" . $searchGeneric . "%') ";
+}
+
+
+$recall_array = Patt_Custom_Func::get_recall_data($where);
+$display_filter = $where;
+$display_filter['filter']['records_per_page'] = -1;
+$recall_total_records = Patt_Custom_Func::get_recall_data($display_filter);
+
+
+
+
+foreach($recall_array as $row) {
+	if($row->id < 1) continue;
+//	$status_term_obj = get_term_by('name', $row->recall_status, 'wppatt_recall_statuses');
+	
+//	$status_style = "background-color:"..";color:"..";";
+
+	$status_term_id = $row->recall_status_id;
+	$status_background = get_term_meta($status_term_id, 'wppatt_recall_status_background_color', true);
+	$status_color = get_term_meta($status_term_id, 'wppatt_recall_status_color', true);
+	$status_style = "background-color:".$status_background.";color:".$status_color.";";
+
+
+
+	$date_expiration = $row->expiration_date;
+	$date_expiration = "90 Days";
+	
+//	$req_uri = $_SERVER['REQUEST_URI'];
+//	$path = substr($req_uri,0,strrpos($req_uri,'/'));
+	
+	$data2[] = array(
+// 		"recall_id"=>"<a href='/wordpress3/wp-admin/admin.php?page=recalldetails&id=R-".$row->recall_id."' >R-".$row->recall_id."</a>",
+		"recall_id"=>"<a href='".$subfolder_path."/wp-admin/admin.php?page=recalldetails&id=R-".$row->recall_id."' >R-".$row->recall_id."</a>", 		
+		"recall_id_flag"=>$row->recall_id,
+		"status"=>"<span class='wpsp_admin_label' style='".$status_style."'>".$row->recall_status."</span>", 
+// 		"status"=>"<span class='wpsp_admin_label' style=''>".$row->recall_status."</span>", 
+		"updated_date"=>human_time_diff(strtotime($row->updated_date)),
+		"request_date"=> date('m/d/Y', strtotime( $row->request_date )),
+		"return_date"=> (strtotime( $row->return_date) > 0) ? date('m/d/Y', strtotime( $row->return_date)) : 'N/A', 
+		"request_receipt_date"=> (strtotime( $row->request_receipt_date) > 0) ? date('m/d/Y', strtotime( $row->request_receipt_date)) : 'N/A', 		
+		"expiration_date"=>"90 Days", //date('m/d/Y', strtotime( $date_expiration)), 
+		"tracking_number"=>$row->tracking_number,
+   );
+
+
+}
+
+## Response
+$response = array(
+  "draw" => intval($draw),
+  "iTotalRecords" => count($recall_total_records) - 1, //$totalRecords,
+  "iTotalDisplayRecords" => count($recall_total_records) - 1, // $totalRecordwithFilter,
+  "aaData" => $data2,
+//   "aaData" => $data,  
+  "request" => $_REQUEST,
+  "query" => $recall_array['query'],
+//   "query" => $recallQuery,  
+  "search Generic" => $searchGeneric,
+  "Where" => $where['custom']
+);
+*/
+
+
+
+// NEW METHOD - END
+
+
+
+
+
+
+// print_r($_POST); 
+echo json_encode($response);

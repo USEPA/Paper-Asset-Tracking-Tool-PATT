@@ -17,10 +17,15 @@ if ( ! class_exists( 'wppatt_Functions' ) ) :
     include WPPATT_ABSPATH . 'includes/admin/shipping_cron.php';
     }
     
-    // CRON for Recall Status Shipping
-    //public function wppatt_recall_shipping_status_schedule(){    
-    //include WPPATT_ABSPATH . 'includes/admin/recall_shipping_status_cron.php';
-    //}
+    // CRON for Recall Status Change from Shipping status
+    public function wppatt_recall_shipping_status_schedule(){    
+    include WPPATT_ABSPATH . 'includes/admin/recall_shipping_status_cron.php';
+    }
+    
+    // CRON for Return Status Change from Shipping status
+    public function wppatt_return_shipping_status_schedule(){    
+    include WPPATT_ABSPATH . 'includes/admin/return_shipping_status_cron.php';
+    }   
     
     // CRON for ecms
     public function wpatt_ecms_cron_schedule(){    

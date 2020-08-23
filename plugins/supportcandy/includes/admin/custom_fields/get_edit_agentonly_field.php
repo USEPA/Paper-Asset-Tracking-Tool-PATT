@@ -4,7 +4,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 global $current_user, $wpscfunction;
-if (!($current_user->ID && $current_user->has_cap('manage_options'))) {exit;}
+if (!($current_user->ID && $current_user->has_cap('edit_published_posts'))) {exit;}
 
 $field_id = isset($_POST) && isset($_POST['field_id']) ? intval($_POST['field_id']) : 0;
 if (!$field_id) {exit;}

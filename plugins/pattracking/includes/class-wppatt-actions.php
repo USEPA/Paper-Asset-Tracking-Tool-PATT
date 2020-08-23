@@ -40,11 +40,15 @@ if ( ! class_exists( 'WPPATT_Actions' ) ) :
       add_action( 'wpppatt_after_recall_received_date', array( $this, 'recall_received_date' ), 10, 3); 
       add_action( 'wpppatt_after_recall_returned_date', array( $this, 'recall_returned_date' ), 10, 3); 
       add_action( 'wpppatt_after_recall_requestor', array( $this, 'recall_requestor' ), 10, 3); 
-      add_action( 'wpppatt_after_recall_details_shipping', array( $this, 'recall_details_shipping' ), 10, 3); 
+      add_action( 'wpppatt_after_recall_details_shipping', array( $this, 'recall_details_shipping' ), 10, 3);  
       add_action( 'wpppatt_after_recall_cancelled', array( $this, 'recall_cancelled' ), 10, 2); 
       add_action( 'wpppatt_after_recall_created', array( $this, 'recall_created' ), 10, 3); 
       add_action( 'wpppatt_after_return_cancelled', array( $this, 'return_cancelled' ), 10, 2); 
       add_action( 'wpppatt_after_return_created', array( $this, 'return_created' ), 10, 3);
+      add_action( 'wpppatt_after_box_status_update', array( $this, 'box_status_update' ), 10, 3);      
+      add_action( 'wpppatt_after_box_status_agents', array( $this, 'box_status_agents_update' ), 10, 3);             
+      add_action( 'wpppatt_after_return_details_shipping', array( $this, 'return_details_shipping' ), 10, 3);        
+      
       
     }
     
@@ -351,7 +355,7 @@ if ( ! class_exists( 'WPPATT_Actions' ) ) :
       $wpscfunction->submit_ticket_thread($args);
     }
     
-    // NEW recall_received_date
+    
     function recall_received_date ( $ticket_id, $recall_id, $received_date ){
       global $wpscfunction, $current_user;
       if($current_user->ID){
@@ -368,7 +372,7 @@ if ( ! class_exists( 'WPPATT_Actions' ) ) :
       $wpscfunction->submit_ticket_thread($args);
     }
     
-    // NEW recall_returned_date
+    
     function recall_returned_date ( $ticket_id, $recall_id, $returned_date ){
       global $wpscfunction, $current_user;
       if($current_user->ID){
@@ -385,7 +389,7 @@ if ( ! class_exists( 'WPPATT_Actions' ) ) :
       $wpscfunction->submit_ticket_thread($args);
     }
     
-    // NEW recall_requestor
+    
     function recall_requestor ( $ticket_id, $recall_id, $recall_requestors ){
       global $wpscfunction, $current_user;
       if($current_user->ID){
@@ -402,7 +406,6 @@ if ( ! class_exists( 'WPPATT_Actions' ) ) :
       $wpscfunction->submit_ticket_thread($args);
     }
     
-    // NEW recall_details_shipping
     function recall_details_shipping ( $ticket_id, $recall_id, $new_shipping_tracking_carrier_string ){
       global $wpscfunction, $current_user;
       if($current_user->ID){
@@ -419,7 +422,7 @@ if ( ! class_exists( 'WPPATT_Actions' ) ) :
       $wpscfunction->submit_ticket_thread($args);
     }
         
-    // NEW Recall Cancelled - 
+    
     function recall_cancelled ( $ticket_id, $recall_id ){
       global $wpscfunction, $current_user;
       if($current_user->ID){
@@ -475,6 +478,54 @@ if ( ! class_exists( 'WPPATT_Actions' ) ) :
         $log_str = sprintf( __('%1$s has returned %3$s. Return ID: %2$s','supportcandy'), '<strong>'.$current_user->display_name.'</strong>','<strong>'. $return_id .'</strong>', '<strong>'.$item_id.'</strong>' );
       } else {
         $log_str = sprintf( __('%1$s has been returned. Return ID: %2$s ','supportcandy'), '<strong>'.$item_id.'</strong>', '<strong>'.$return_id.'</strong>' );
+      }
+      $args = array(
+        'ticket_id'      => $ticket_id,
+        'reply_body'     => $log_str,
+        'thread_type'    => 'log'
+      );
+      $args = apply_filters( 'wpsc_thread_args', $args );
+      $wpscfunction->submit_ticket_thread($args);
+    }
+    
+    function box_status_update ( $ticket_id, $status, $item_id ){
+      global $wpscfunction, $current_user;
+      if($current_user->ID){
+        $log_str = sprintf( __('%1$s has changed the status of Box: %3$s from %2$s.','supportcandy'), '<strong>'.$current_user->display_name.'</strong>','<strong>'. $status .'</strong>', '<strong>'.$item_id.'</strong>' );
+      } else {
+        $log_str = sprintf( __('%1$s status has been changed from %2$s.','supportcandy'), '<strong>'.$item_id.'</strong>', '<strong>'.$status.'</strong>' );
+      }
+      $args = array(
+        'ticket_id'      => $ticket_id,
+        'reply_body'     => $log_str,
+        'thread_type'    => 'log'
+      );
+      $args = apply_filters( 'wpsc_thread_args', $args );
+      $wpscfunction->submit_ticket_thread($args);
+    }
+    
+    function box_status_agents_update ( $ticket_id, $status_and_users, $item_id ){
+      global $wpscfunction, $current_user;
+      if($current_user->ID){
+        $log_str = sprintf( __('%1$s has changed the Assigned Staff of Box: %3$s. Assigned Staff per status: %2$s.','supportcandy'), '<strong>'.$current_user->display_name.'</strong>','<strong>'. $status_and_users .'</strong>', '<strong>'.$item_id.'</strong>' );
+      } else {
+        $log_str = sprintf( __('Box: %1$s Assigned Staff has been changed to %2$s.','supportcandy'), '<strong>'.$item_id.'</strong>', '<strong>'.$status_and_users.'</strong>' );
+      }
+      $args = array(
+        'ticket_id'      => $ticket_id,
+        'reply_body'     => $log_str,
+        'thread_type'    => 'log'
+      );
+      $args = apply_filters( 'wpsc_thread_args', $args );
+      $wpscfunction->submit_ticket_thread($args);
+    }
+    
+    function return_details_shipping ( $ticket_id, $return_id, $new_shipping_tracking_carrier_string ){
+      global $wpscfunction, $current_user;
+      if($current_user->ID){
+        $log_str = sprintf( __('%1$s changed Return Shipping Details of Return ID: %2$s to %3$s','supportcandy'), '<strong>'.$current_user->display_name.'</strong>','<strong>'. $return_id .'</strong>','<strong>'. $new_shipping_tracking_carrier_string .'</strong>');
+      } else {
+        $log_str = sprintf( __('Return ID: %1$s Return Shipping Details have changed to %2$s ','supportcandy'), '<strong>'.$return_id.'</strong>','<strong>'. $new_shipping_tracking_carrier_string .'</strong>' );
       }
       $args = array(
         'ticket_id'      => $ticket_id,

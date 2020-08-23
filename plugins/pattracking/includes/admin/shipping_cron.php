@@ -63,6 +63,7 @@ $wpdb->update( $table_name, array( 'status' => $deliveryStatus),array('ID'=>$ite
 
 if ( preg_match('('.implode('|',$status_delivered_array).')', strtoupper($deliveryStatus))){
 $wpdb->update( $table_name, array( 'delivered' => 1),array('ID'=>$item->id));
+$wpdb->update( $table_name, array( 'shipped' => 1),array('ID'=>$item->id));
 $wpdb->update( $table_name, array( 'status' => $deliveryStatus),array('ID'=>$item->id));
 }
 }
@@ -157,6 +158,7 @@ $wpdb->update( $table_name, array( 'status' => $deliveryStatus),array('ID'=>$ite
 
 if ( preg_match('('.implode('|',$status_delivered_array).')', strtoupper($deliveryCode))){
 $wpdb->update( $table_name, array( 'delivered' => 1),array('ID'=>$item->id));
+$wpdb->update( $table_name, array( 'shipped' => 1),array('ID'=>$item->id));
 $wpdb->update( $table_name, array( 'status' => $deliveryStatus),array('ID'=>$item->id));
 }
 
@@ -252,6 +254,7 @@ $wpdb->update( $table_name, array( 'status' => $deliveryStatus),array('ID'=>$ite
 
 if ( preg_match('('.implode('|',$status_delivered_array).')', strtoupper($deliveryCode))){
 $wpdb->update( $table_name, array( 'delivered' => 1),array('ID'=>$item->id));
+$wpdb->update( $table_name, array( 'shipped' => 1),array('ID'=>$item->id));
 $wpdb->update( $table_name, array( 'status' => $deliveryStatus),array('ID'=>$item->id));
 }
 
@@ -311,6 +314,7 @@ $wpdb->update( $table_name, array( 'status' => $deliveryStatus),array('ID'=>$ite
 
 if ( preg_match('('.implode('|',$status_delivered_array).')', strtoupper($deliveryStatus))){
 $wpdb->update( $table_name, array( 'delivered' => 1),array('ID'=>$item->id));
+$wpdb->update( $table_name, array( 'shipped' => 1),array('ID'=>$item->id));
 $wpdb->update( $table_name, array( 'status' => $deliveryStatus),array('ID'=>$item->id));
 }
 }
@@ -360,7 +364,7 @@ foreach ($get_delivered_status as $delivered) {
 	array_push($delivered_array, $delivered->delivered);
 	}
 	
-if (($status_id == 5) && (!in_array(0, $delivered_array))) {
+if (($status_id == 4) || ($status_id == 5) && (!in_array(0, $delivered_array))) {
 $wpscfunction->change_status($item->ticket_id, 63);   
 }
 	}

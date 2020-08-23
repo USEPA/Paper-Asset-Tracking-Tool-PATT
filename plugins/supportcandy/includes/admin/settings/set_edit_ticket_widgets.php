@@ -5,7 +5,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 global $current_user,$wpscfunction;
 
-if (!($current_user->ID && $current_user->has_cap('manage_options'))) {exit;}
+if (!($current_user->ID && $current_user->has_cap('edit_published_posts'))) {exit;}
 
 $ticket_widget_id = isset($_POST) && isset($_POST['ticket_widget_id']) ? sanitize_text_field($_POST['ticket_widget_id']) : '';
 if (!$ticket_widget_id) {exit;}

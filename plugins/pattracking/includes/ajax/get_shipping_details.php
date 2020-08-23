@@ -117,7 +117,25 @@ ob_start();
        title: "Tracking Number",
     type: "text", 
     width: 150, 
-    validate: "required",
+
+    validate: function(value, item) { 
+    
+    var isTrue = '';
+    if (/\b(1Z ?[0-9A-Z]{3} ?[0-9A-Z]{3} ?[0-9A-Z]{2} ?[0-9A-Z]{4} ?[0-9A-Z]{3} ?[0-9A-Z]|T\d{3} ?\d{4} ?\d{3})\b/i.test(value)
+    || /\b((420 ?\d{5} ?)?(91|92|93|94|01|03|04|70|23|13)\d{2} ?\d{4} ?\d{4} ?\d{4} ?\d{4}( ?\d{2,6})?)\b/i.test(value)
+    || /\b((M|P[A-Z]?|D[C-Z]|LK|E[A-C]|V[A-Z]|R[A-Z]|CP|CJ|LC|LJ) ?\d{3} ?\d{3} ?\d{3} ?[A-Z]?[A-Z]?)\b/i.test(value)
+    || /\b(82 ?\d{3} ?\d{3} ?\d{2})\b/i.test(value)
+    || /\b(((96\d\d|6\d)\d{3} ?\d{4}|96\d{2}|\d{4}) ?\d{4} ?\d{4}( ?\d{3})?)\b/i.test(value)
+    || /\b(\d{4}[- ]?\d{4}[- ]?\d{2}|\d{3}[- ]?\d{8}|[A-Z]{3}\d{7})\b/i.test(value)) {
+    var isTrue = true;
+    } else {
+    var isTrue = false;
+    }
+    
+    return isTrue;
+            
+            
+        },
     formatter: function (cellvalue, options, rowObject) {
                     return "<a href='javascript:void(0);' class='anchor usergroup_name link'>" +
                            cellvalue + '</a>';

@@ -53,6 +53,7 @@ $edit_btn_css = 'background-color:'.$wpsc_appearance_individual_ticket_page['wps
 			//$folderfile_contract_number = $folderfile_details->contract_number;
 			//$folderfile_grant_number = $folderfile_details->grant_number;
 			$folderfile_file_location = $folderfile_details->file_location;
+			$folderfile_file_object_id = $folderfile_details->file_object_id;
 			$folderfile_file_name = $folderfile_details->file_name;
 			$folderfile_folderdocinfo_id = $folderfile_details->folderdocinfo_id;
 			
@@ -66,13 +67,14 @@ $edit_btn_css = 'background-color:'.$wpsc_appearance_individual_ticket_page['wps
 
             $user = get_user_by( 'id', $folderfile_validation_user);
             
-		    $box_details = $wpdb->get_row("SELECT wpqa_wpsc_epa_boxinfo.id, wpqa_wpsc_epa_boxinfo.box_destroyed, wpqa_wpsc_ticket.request_id as request_id, wpqa_wpsc_epa_boxinfo.box_id as box_id, wpqa_wpsc_epa_boxinfo.ticket_id as ticket_id
+		    $box_details = $wpdb->get_row("SELECT wpqa_wpsc_epa_boxinfo.id, wpqa_wpsc_epa_boxinfo.box_status, wpqa_wpsc_epa_boxinfo.box_destroyed, wpqa_wpsc_ticket.request_id as request_id, wpqa_wpsc_epa_boxinfo.box_id as box_id, wpqa_wpsc_epa_boxinfo.ticket_id as ticket_id
 FROM wpqa_wpsc_epa_boxinfo, wpqa_wpsc_epa_folderdocinfo, wpqa_wpsc_ticket
 WHERE wpqa_wpsc_ticket.id = wpqa_wpsc_epa_boxinfo.ticket_id AND wpqa_wpsc_epa_folderdocinfo.box_id = wpqa_wpsc_epa_boxinfo.id AND wpqa_wpsc_epa_boxinfo.id = '" . $folderfile_boxid . "'");
             $box_boxid = $box_details->box_id;
 			$box_ticketid = $box_details->ticket_id;
 			$box_requestid = $box_details->request_id;
 			$box_destruction = $box_details->box_destroyed;
+			$box_status = $box_details->box_status;
 			$request_id = substr($box_boxid, 0, 7);
             
             //record schedule
@@ -121,6 +123,9 @@ WHERE wpqa_terms.term_id = wpqa_wpsc_epa_storage_location.digitization_center AN
         if (($agent_permissions['label'] == 'Administrator') || ($agent_permissions['label'] == 'Agent'))
         {
         ?>
+        <?php 
+        if ($box_status == 674 || $box_status == 743) {
+        ?>
         <!-- language of buttons change based on 0 or 1 -->
         <?php
         if($folderfile_validation == 0) { ?>
@@ -141,12 +146,16 @@ WHERE wpqa_terms.term_id = wpqa_wpsc_epa_storage_location.digitization_center AN
        	<button type="button" class="btn btn-sm wpsc_action_btn" id="wpsc_individual_rescan_btn" style="<?php echo $action_default_btn_css?>"<?php echo (($folderfile_validation == 1 || $folderfile_destruction == 1) || ($folderfile_validation == 1 && $box_destruction == 1) || $folderfile_destruction == 1 || $box_destruction == 1)? "disabled" : ""; ?>><i class="fas fa-times-circle"></i> Undo Re-Scan</button></button>
         <?php } ?>
         
+        <?php 
+        }
+        ?>
+        
        	<?php
        	if($folderfile_destruction == 0) { ?>
-       	<button type="button" class="btn btn-sm wpsc_action_btn" id="wpsc_individual_destruction_btn" style="<?php echo $action_default_btn_css?>"<?php echo ($box_destruction == 1 || $folderfile_freeze == 1)? "disabled" : ""; ?>><i class="fas fa-flag"></i> Unauthorize Destruction</button></button>
+       	<button type="button" class="btn btn-sm wpsc_action_btn" id="wpsc_individual_destruction_btn" style="<?php echo $action_default_btn_css?>"<?php echo ($box_destruction == 1 || $folderfile_freeze == 1)? "disabled" : ""; ?>><i class="fas fa-flag"></i> Unauthorized Destruction</button></button>
     	<?php }
     	else { ?>
-    	<button type="button" class="btn btn-sm wpsc_action_btn" id="wpsc_individual_destruction_btn" style="<?php echo $action_default_btn_css?>"<?php echo ($box_destruction == 1 || $folderfile_freeze == 1)? "disabled" : ""; ?>><i class="fas fa-flag"></i> Undo Unauthorize Destruction</button></button>
+    	<button type="button" class="btn btn-sm wpsc_action_btn" id="wpsc_individual_destruction_btn" style="<?php echo $action_default_btn_css?>"<?php echo ($box_destruction == 1 || $folderfile_freeze == 1)? "disabled" : ""; ?>><i class="fas fa-flag"></i> Undo Unauthorized Destruction</button></button>
     	<?php } ?>
     	
     	<?php 
@@ -334,7 +343,7 @@ WHERE id = '" . $box_ticketid . "'");
 
 $ticket_user = $ticket_details->customer_name;
 
-if ((!empty($folderfile_file_location) || !empty($folderfile_file_name)) && ($agent_permissions['label'] == 'Administrator') || ($agent_permissions['label'] == 'Agent') || $current_user->nickname == $ticket_user) {
+if ((!empty($folderfile_file_location) || !empty($folderfile_file_name)) && (($agent_permissions['label'] == 'Administrator') || ($agent_permissions['label'] == 'Agent') || $current_user->nickname == $ticket_user)) {
 ?>
 <h3>Links to digitized files in ECMS</h3>
 <style>
@@ -345,7 +354,7 @@ if ((!empty($folderfile_file_location) || !empty($folderfile_file_name)) && ($ag
 }
 </style>
 <?php
-if (preg_match('/(http|https)/', $folderfile_file_location)) {
+if ($folderfile_file_object_id != '') {
 ?>
 <table class="table table-striped table-bordered dataTable no-footer">
   <tr>
@@ -354,21 +363,22 @@ if (preg_match('/(http|https)/', $folderfile_file_location)) {
   </tr>
 <?php
 $count = 0;
-if (strpos($folderfile_file_location, ',') == 0) {
+if (strpos($folderfile_file_object_id, ',') == 0) {
 $tbl = '<tr>';
 $tbl .= '<td>'.$folderfile_title.'</td>';
-$tbl .= '<td><a href="'. $folderfile_file_location . '">'.$folderfile_file_location.'</a></td>';
+$tbl .= '<td><a href="https://lippizzan3.rtpnc.epa.gov/ecms/download/1.0?apiKey=031a8c90-f025-4e80-ab47-e2bd577410d7&object-id='. $folderfile_file_object_id . '">Click to download</a></td>';
 $tbl .= '</tr>';
 
 echo $tbl;
-} elseif(strpos($folderfile_file_location, ',') > 0) {
-$array = explode(', ', $folderfile_file_location); //split string into array seperated by ', '
+} elseif(strpos($folderfile_file_object_id, ',') > 0) {
+$object_array = explode(',', $folderfile_file_object_id); //split string into array seperated by ', '
 
-foreach ($array as $url) {
+foreach ($object_array as $obj_id) {
+$filename_array = explode(',', $folderfile_file_name); //split string into array seperated by ', '
 $count++;
 $tbl = '<tr>';
 $tbl .= '<td>'.$folderfile_title.' Part: '.$count.'</td>';
-$tbl .= '<td><a href="'. $url . '">'.$url.'</a></td>';
+$tbl .= '<td><a href="https://lippizzan3.rtpnc.epa.gov/ecms/download/1.0?apiKey=031a8c90-f025-4e80-ab47-e2bd577410d7&object-id='. $obj_id . '">Click to download</a></td>';
 $tbl .= '</tr>';
 
 echo $tbl;

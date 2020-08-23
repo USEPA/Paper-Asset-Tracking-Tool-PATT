@@ -120,24 +120,30 @@ if ($status_id != 3) {
     $tracking_num_display = mb_strimwidth($tracking_num, 0, 25, "...");
     $company_name = $row->company_name;
 
-    if ($row->shipped == 1 || $row->delivered == 1) {
-        $shipped_status = ' <i class="fa fa-check-circle" style="color:#008000;"></i>';
+    if ($row->shipped == 1) {
+        $shipped_status = ' <i class="fa fa-check-circle" style="color:#008000;" title="Shipped"></i>';
     } else {
         $shipped_status = '';
+    }
+    
+    if ($row->delivered == 1) {
+        $delivered_status = ' <i class="fas fa-truck-loading" style="color:#008000;" title="Received"></i>';
+    } else {
+        $delivered_status = '';
     }
 
 switch ($company_name) {
     case "ups":
-        echo '<li><i class="fab fa-ups fa-lg"></i> <a href="https://www.ups.com/track?loc=en_US&tracknum=' . $tracking_num . '" target="_blank">'. $tracking_num_display .'</a>' . $shipped_status . '</li>';
+        echo '<li><i class="fab fa-ups fa-lg"></i> <a href="'.Patt_Custom_Func::get_tracking_url($tracking_num_display).'" target="_blank">'. $tracking_num_display .'</a>' . $shipped_status . $delivered_status . '</li>';
         break;
     case "fedex":
-        echo '<li><i class="fab fa-fedex fa-lg"></i> <a href="https://www.fedex.com/apps/fedextrack/?tracknumbers=' . $tracking_num . '" target="_blank">'. $tracking_num_display .'</a>' . $shipped_status . '</li>';
+        echo '<li><i class="fab fa-fedex fa-lg"></i> <a href="'.Patt_Custom_Func::get_tracking_url($tracking_num_display).'" target="_blank">'. $tracking_num_display .'</a>' . $shipped_status . $delivered_status . '</li>';
         break;
     case "usps":
-        echo '<li><i class="fab fa-usps fa-lg"></i> <a href="https://tools.usps.com/go/TrackConfirmAction?qtc_tLabels1=' . $tracking_num . '" target="_blank">'. $tracking_num_display .'</a>' . $shipped_status . '</li>';
+        echo '<li><i class="fab fa-usps fa-lg"></i> <a href="'.Patt_Custom_Func::get_tracking_url($tracking_num_display).'" target="_blank">'. $tracking_num_display .'</a>' . $shipped_status . $delivered_status . '</li>';
         break;
     case "dhl":
-        echo '<li><i class="fab fa-dhl fa-lg"></i> <a href="https://www.logistics.dhl/global-en/home/tracking.html?tracking-id=' . $tracking_num . '" target="_blank">'. $tracking_num_display .'</a>' . $shipped_status . '</li>';
+        echo '<li><i class="fab fa-dhl fa-lg"></i> <a href="'.Patt_Custom_Func::get_tracking_url($tracking_num_display).'" target="_blank">'. $tracking_num_display .'</a>' . $shipped_status . $delivered_status . '</li>';
         break;
     default:
         echo $tracking_num;
@@ -312,6 +318,12 @@ switch ($company_name) {
 	    die();
     }  
     
+    // Add file to cancel Return on Return details page 
+    public function return_cancel(){
+	    include WPPATT_ABSPATH . 'includes/ajax/return_cancel.php';    
+	    die();
+    }
+    
     // Add settings panel for box statuses 
     public function get_box_settings(){
 	    include WPPATT_ABSPATH . 'includes/admin/pages/get_box_settings.php';    
@@ -328,6 +340,12 @@ switch ($company_name) {
 	    include WPPATT_ABSPATH . 'includes/admin/pages/set_box_status_settings.php';    
 	    die();
     }  
+    
+    // Add edit Shipping modal 
+    public function change_shipping(){
+	    include WPPATT_ABSPATH . 'includes/ajax/change_shipping_info.php';    
+	    die();
+    } 
     
     // Add edit Assign Agents modal 
     public function edit_assign_agents(){

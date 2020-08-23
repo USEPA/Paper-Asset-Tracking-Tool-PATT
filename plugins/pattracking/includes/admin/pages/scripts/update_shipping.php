@@ -48,10 +48,10 @@ $wpdb->update($table_name , $data_update, $data_where);
 } 
 
 if (($type == 1) && ($get_delievered_val == 1)) {
-echo "<strong>Tracking # " . $get_tn_val . "</strong> - Cannot be updated as it is already marked as received.<br />";
+echo "<strong>Tracking # " . $get_tn_val . "</strong> - Shipped flag cannot be updated. Already marked as received.<br />";
 }
 
-if ($type == 2){
+if (($type == 2) && ($get_shipped_val == 1)){
 
 if ($get_delievered_val == 1) {
 $data_update = array('delivered' => 0);
@@ -63,6 +63,10 @@ echo "<strong>Tracking # " . $get_tn_val . "</strong> - Received flag updated.<b
 
 $data_where = array('id' => $key);
 $wpdb->update($table_name , $data_update, $data_where);
+}
+
+if (($type == 2) && ($get_shipped_val != 1)) {
+echo "<strong>Tracking # " . $get_tn_val . "</strong> - Received flag cannot be updated. Item has not been marked as shipped.<br />";
 }
 
 }

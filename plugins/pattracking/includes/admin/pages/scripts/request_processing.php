@@ -52,6 +52,8 @@ $currentUser = $_POST['currentUser'];
 $searchByUser = $_POST['searchByUser'];
 $searchByUserAAVal = $_POST['searchByUserAAVal'];
 $searchByUserAAName = str_replace(",", "|", $_POST['searchByUserAAName']);
+$searchByUserAANameQuoted = str_replace(",", "','", $_POST['searchByUserAAName']);
+$searchByUserAANameQuoted = "'".$searchByUserAANameQuoted."'";
 
 ## Search 
 $searchQuery = " ";
@@ -63,7 +65,39 @@ if($searchByUser == 'mine') {
 }
 
 if($searchByUser == 'search for user') {
-   $searchQuery .= " and (a.customer_name REGEXP '^(".$searchByUserAAName.")$' ) ";      
+	
+	if( strlen($searchByUserAAName) == 0  ) {
+		//$searchQuery .= "";
+	} else {
+		$searchQuery .= " and (a.customer_name IN (".$searchByUserAANameQuoted.")) ";	
+	}
+	
+		
+	
+	//OLD search when looking at the agents assigned the box statuses
+    //$searchQuery .= " and (a.customer_name REGEXP '^(".$searchByUserAAName.")$' ) ";
+/*
+   	$array_of_wp_user_id = Patt_Custom_Func::translate_user_id($searchByUserAAVal, 'wp_user_id');
+   	$user_id_str = '';
+	foreach( $array_of_wp_user_id as $id ) {
+		$user_id_str .= $id.', ';
+	}
+	$user_id_str = substr($user_id_str, 0, -2);
+	
+	$box_ids_for_users = '';
+	$mini_query = "select distinct box_id from wpqa_wpsc_epa_boxinfo_userstatus where user_id IN (".$user_id_str.")";
+	$mini_records = mysqli_query($con, $mini_query);
+	while ($rox = mysqli_fetch_assoc($mini_records)) {
+		$box_ids_for_users .= $rox['box_id'].", ";
+	}
+	$box_ids_for_users = substr($box_ids_for_users, 0, -2);
+	
+	if( $user_id_str == '' ) {
+
+	} else {
+		$searchQuery .= " and (a.id IN (".$box_ids_for_users.")) ";	
+	}      
+*/
 }
 
 
@@ -103,7 +137,13 @@ if(in_array(strtolower($searchGeneric), $locationarray)){
 }
 
 ## Total number of records without filtering Filter out inactive (initially deleted tickets)
-$sel = mysqli_query($con,"select count(*) as allcount from wpqa_wpsc_ticket WHERE id <> -99999 AND active <> 0");
+$sel = mysqli_query($con,"select count(*) as allcount FROM (select COUNT(DISTINCT a.request_id) as allcount, GROUP_CONCAT(DISTINCT e.name ORDER BY e.name ASC SEPARATOR ', ') as location
+FROM wpqa_wpsc_ticket as a
+INNER JOIN wpqa_wpsc_epa_boxinfo as b ON a.id = b.ticket_id
+INNER JOIN wpqa_wpsc_epa_program_office as c ON b.program_office_id = c.office_code
+INNER JOIN wpqa_wpsc_epa_storage_location as d ON b.storage_location_id = d.id
+INNER JOIN wpqa_terms e ON e.term_id = d.digitization_center
+WHERE a.id <> -99999 AND a.active <> 0 group by a.request_id) t");
 $records = mysqli_fetch_assoc($sel);
 $totalRecords = $records['allcount'];
 
@@ -114,7 +154,7 @@ INNER JOIN wpqa_wpsc_epa_boxinfo as b ON a.id = b.ticket_id
 INNER JOIN wpqa_wpsc_epa_program_office as c ON b.program_office_id = c.office_code
 INNER JOIN wpqa_wpsc_epa_storage_location as d ON b.storage_location_id = d.id
 INNER JOIN wpqa_terms e ON e.term_id = d.digitization_center
-WHERE 1 ".$searchQuery." AND active <> 0 group by a.request_id ".$searchHaving.") t");
+WHERE 1 ".$searchQuery." AND a.active <> 0 AND a.id <> -99999 group by a.request_id ".$searchHaving.") t");
 
 $records = mysqli_fetch_assoc($sel);
 $totalRecordwithFilter = $records['allcount'];
@@ -175,7 +215,7 @@ INNER JOIN wpqa_wpsc_epa_program_office as c ON b.program_office_id = c.office_c
 INNER JOIN wpqa_wpsc_epa_storage_location as d ON b.storage_location_id = d.id
 INNER JOIN wpqa_terms e ON e.term_id = d.digitization_center
 INNER JOIN wpqa_wpsc_epa_folderdocinfo f ON f.box_id = b.id
-WHERE 1 ".$searchQuery." AND active <> 0 group by request_id ".$searchHaving." order by ".$columnName." ".$columnSortOrder." limit ".$row.",".$rowperpage;
+WHERE 1 ".$searchQuery." AND active <> 0 AND a.id <> -99999 group by request_id ".$searchHaving." order by ".$columnName." ".$columnSortOrder." limit ".$row.",".$rowperpage;
 
 $boxRecords = mysqli_query($con, $boxQuery);
 $data = array();

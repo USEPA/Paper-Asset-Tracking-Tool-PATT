@@ -33,8 +33,11 @@ $sum_total_val = $get_sum_total->sum_total_count;
 $get_sum_validation = $wpdb->get_row("select sum(validation) as sum_validation from wpqa_wpsc_epa_folderdocinfo where validation = 1 AND box_id = '".$box_db_id."'");
 $sum_validation = $get_sum_validation->sum_validation;
 
-$get_status = $wpdb->get_row("select b.ticket_status as status from wpqa_wpsc_epa_boxinfo a INNER JOIN wpqa_wpsc_ticket b ON a.ticket_id = b.id where a.id = '".$box_db_id."'");
+$get_status = $wpdb->get_row("select box_status as status from wpqa_wpsc_epa_boxinfo where id = '".$box_db_id."'");
 $request_status = $get_status->status;
+
+$get_destruction_auth_status = $wpdb->get_row("select a.destruction_approval as da from wpqa_wpsc_ticket a INNER JOIN wpqa_wpsc_epa_boxinfo b ON a.id = b.ticket_id where b.id = '".$box_db_id."'");
+$destruction_auth_status = $get_destruction_auth_status->da;
 
 $get_storage_id = $wpdb->get_row("
 SELECT id, storage_location_id FROM wpqa_wpsc_epa_boxinfo 
@@ -73,10 +76,9 @@ $box_storage_status_remaining = $box_storage_status->remaining;
 $box_storage_status_remaining_added = $box_storage_status->remaining + 1;
 
 
-if(($sum_total_val != $sum_validation) || ($request_status != 68)) {
+if(($sum_total_val != $sum_validation) || ($request_status != 68) || ($destruction_auth_status == 0)) {
     echo '<strong>'.$key.'</strong> : ';
-    echo 'Please ensure all documents are validated and the request status is approved for destruction before destroying the box.';
-    
+    echo 'Please ensure all documents are validated, the box status is approved for destruction, and the destruction approval has been recevied before destroying the box.';
 if ($counter > 0) {
 echo '<br />';
 echo '<br />';

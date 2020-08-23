@@ -146,9 +146,21 @@ if ($get_destruction_val == 1 && $destruction_violation == 0){
 $destruction_reversal = 1;
 
 if($folder_file_count_sum == $destruction_count_sum) {
-$data_update = array('unauthorized_destruction' => 0, 'location_status_id' => '-99999');
+$data_update = array('unauthorized_destruction' => 0);
 $data_where = array('folderdocinfo_id' => $key);
 $wpdb->update($table_name , $data_update, $data_where);
+
+//Reverse the destruction
+$table_box_name = 'wpqa_wpsc_epa_boxinfo';
+$data_update_d = array('box_destroyed' => 0);
+$data_where_d = array('id' => $box_id);
+$wpdb->update($table_box_name, $data_update_d, $data_where_d);
+
+//Reset the physical location
+$data_update_pl = array('location_status_id' => -99999);
+$data_where_pl = array('id' => $box_id);
+$wpdb->update($table_box_name, $data_update_pl, $data_where_pl);
+
 } else {
 $data_update = array('unauthorized_destruction' => 0);
 $data_where = array('folderdocinfo_id' => $key);
@@ -162,6 +174,20 @@ if ($get_destruction_val == 0 && $destruction_violation == 0){
 $data_update = array('unauthorized_destruction' => 1);
 $data_where = array('folderdocinfo_id' => $key);
 $wpdb->update($table_name , $data_update, $data_where);
+
+$destruction_count = $wpdb->get_row(
+"SELECT 
+count(id) as sum
+FROM wpqa_wpsc_epa_folderdocinfo
+WHERE unauthorized_destruction = 1 AND box_id = '" . $box_id . "'"
+			);
+
+$destruction_count_sum = $destruction_count->sum;
+
+//echo 'des val -'.$get_destruction_val .'-';
+//echo 'des vio -'.$destruction_violation;
+//echo 'fold count -'.$folder_file_count_sum .'-';
+//echo 'destruct count -'.$destruction_count_sum;
 
 if($folder_file_count_sum == $destruction_count_sum) {
 //SET PHYSICAL LOCATION TO DESTROYED
@@ -202,6 +228,12 @@ echo "A frozen folder/file has been selected and cannot be flagged as unauthoriz
 
 if($page_id == 'filedetails') {
 
+$get_box_id = $wpdb->get_row("
+SELECT box_id FROM wpqa_wpsc_epa_folderdocinfo 
+WHERE folderdocinfo_id = '" . $key . "'
+");
+$box_id = $get_box_id->box_id;
+
 $get_destruction = $wpdb->get_row("SELECT unauthorized_destruction FROM wpqa_wpsc_epa_folderdocinfo WHERE folderdocinfo_id = '".$folderdocid_string."'");
 
 $get_destruction_val = $get_destruction->unauthorized_destruction;
@@ -219,6 +251,21 @@ WHERE box_id = '" . $box_id . "'"
 
 $folder_file_count_sum = $folder_file_count->sum;
 
+if ($get_destruction_val == 1 && $destruction_violation == 0){
+$destruction_reversal = 1;
+
+$data_update = array('unauthorized_destruction' => 0);
+$data_where = array('folderdocinfo_id' => $folderdocid_string);
+$wpdb->update($table_name , $data_update, $data_where);
+
+do_action('wpppatt_after_unauthorized_destruction_unflag', $ticket_id, $folderdocid_string);
+}
+
+if ($get_destruction_val == 0 && $destruction_violation == 0){
+$data_update = array('unauthorized_destruction' => 1);
+$data_where = array('folderdocinfo_id' => $folderdocid_string);
+$wpdb->update($table_name , $data_update, $data_where);
+
 $destruction_count = $wpdb->get_row(
 "SELECT 
 count(id) as sum
@@ -228,21 +275,11 @@ WHERE unauthorized_destruction = 1 AND box_id = '" . $box_id . "'"
 
 $destruction_count_sum = $destruction_count->sum;
 
-if ($get_destruction_val == 1 && $destruction_violation == 0){
-$destruction_reversal = 1;
-
-$data_update = array('unauthorized_destruction' => 0);
-$data_where = array('folderdocinfo_id' => $folderdocid_string);
-$wpdb->update($table_name , $data_update, $data_where);
-
-
-do_action('wpppatt_after_unauthorized_destruction_unflag', $ticket_id, $folderdocid_string);
-}
-
-if ($get_destruction_val == 0 && $destruction_violation == 0){
-$data_update = array('unauthorized_destruction' => 1);
-$data_where = array('folderdocinfo_id' => $folderdocid_string);
-$wpdb->update($table_name , $data_update, $data_where);
+//echo $box_id;
+//echo 'des val -'.$get_destruction_val .'-';
+//echo 'des vio -'.$destruction_violation;
+//echo 'fold count -'.$folder_file_count_sum .'-';
+//echo 'destruct count -'.$destruction_count_sum;
 
 if($folder_file_count_sum == $destruction_count_sum) {
 //SET PHYSICAL LOCATION TO DESTROYED

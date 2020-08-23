@@ -2,7 +2,7 @@
 /**
  * Plugin Name: pattracking
  * Description: add-on to the support candy plugin specifically for the EPA Paper Asset Tracking Tool
- * Version: 2.1.1
+ * Version: 0.2.1
  * Requires at least: 4.4
  * Tested up to: 5.3
  * Text Domain: pattracking
@@ -18,7 +18,7 @@ if ( ! class_exists( 'Patt_Tracking' ) ) :
   final class Patt_Tracking {
   
       
-    public $version    = '2.1.1';
+    public $version    = '0.2.1';
     public $db_version = '2.0';
     
     public function __construct() {
@@ -88,6 +88,10 @@ if ( ! class_exists( 'Patt_Tracking' ) ) :
         add_shortcode('wppattquery', array($frontend, 'get_id_details'));
         // Add Shipping CRON
         add_action( 'wppatt_shipping_cron', array($frontend, 'wpatt_shipping_cron_schedule'));
+        // Add Recall Shipping CRON
+        add_action( 'wppatt_shipping_cron_recall', array($frontend, 'wppatt_recall_shipping_status_schedule'));
+        // Add Return Shipping CRON
+        add_action( 'wppatt_shipping_cron_return', array($frontend, 'wppatt_return_shipping_status_schedule'));
         // Add ECMS CRON
         add_action( 'wppatt_ecms_cron', array($frontend, 'wpatt_ecms_cron_schedule')); 
         
@@ -131,7 +135,9 @@ if ( ! class_exists( 'Patt_Tracking' ) ) :
           add_action('wp_ajax_wpsc_get_clear_rfid', array($backend, 'get_clear_rfid'));
           add_action('wp_ajax_wpsc_get_rfid_box_editor', array($backend, 'get_rfid_box_editor'));
           
-          	        	
+          // Add Shipping Modal to Shipping Status Editor
+          add_action('wp_ajax_wpsc_get_shipping_sse', array($backend, 'get_alert_replacement'));	
+
           // Add Destruction Completed Modal to Box Dashboard	
           add_action('wp_ajax_wpsc_get_destruction_completed_b', array($backend, 'get_alert_replacement'));	
           	
@@ -167,6 +173,9 @@ if ( ! class_exists( 'Patt_Tracking' ) ) :
           	
           // Add Freeze to Folder File Details	
           add_action('wp_ajax_wpsc_get_freeze_ffd', array($backend, 'get_alert_replacement'));
+          
+          // Add Validate Modal on Folder File Dashboard	
+          add_action('wp_ajax_wpsc_delete_request', array($backend, 'get_alert_replacement'));	
           
           // Disable Show Agent Settings Button
           add_action('wpsc_show_agent_setting_button',false);
@@ -211,7 +220,7 @@ if ( ! class_exists( 'Patt_Tracking' ) ) :
           //add_action('wp_ajax_wppatt_initiate_return', array($backend, 'ticket_initiate_return'));
           
           // Add Recall Cancel Modal 
-          add_action('wp_ajax_wppatt_recall_cancel', array($backend, 'recall_cancel'));
+          add_action('wp_ajax_wppatt_recall_cancel', array($backend, 'recall_cancel')); 
           
           // Add Return Submit
           add_action('wp_ajax_wppatt_return_submit', array($backend, 'return_submit')); 
@@ -228,7 +237,10 @@ if ( ! class_exists( 'Patt_Tracking' ) ) :
           // Add Set Return Status Settings via Modal
           add_action('wp_ajax_wppatt_set_return_status', array($backend, 'set_return_status'));   
           
-		  // Add Box Status Setting Pill 
+          // Add Return Cancel Modal 
+          add_action('wp_ajax_wppatt_return_cancel', array($backend, 'return_cancel')); 
+          
+		      // Add Box Status Setting Pill 
           add_action('wpsc_after_setting_pills', array($frontend, 'box_settings_pill'));
           
           // Add Box Status Get Settings Panel 
@@ -240,6 +252,14 @@ if ( ! class_exists( 'Patt_Tracking' ) ) :
           // Add Set Box Status Settings via Modal
           add_action('wp_ajax_wppatt_set_box_status', array($backend, 'set_box_status')); 
 		  
+		  // Add Edit Shipping Modal 
+          add_action('wp_ajax_wppatt_change_shipping', array($backend, 'change_shipping'));
+          
+		      // Add Assign Agents Modal 
+          add_action('wp_ajax_wppatt_assign_agents', array($backend, 'edit_assign_agents'));
+          
+		      // Add Change Box Status Modal 
+          add_action('wp_ajax_wppatt_change_box_status', array($backend, 'change_box_status'));          
 		  
           // Set Barcode Scanning Page
           add_action( 'wpsc_add_admin_page', 'epa_admin_menu_items');
@@ -257,6 +277,7 @@ if ( ! class_exists( 'Patt_Tracking' ) ) :
           add_action( 'wpsc_add_submenu_page', 'main_menu_items');
 
           function main_menu_items() {
+            add_submenu_page( '', '', '', 'wpsc_agent', 'request_delete', 'request_delete_page' );
             add_submenu_page( 'wpsc-tickets', 'Box Dashboard', 'Box Dashboard', 'wpsc_agent', 'boxes', 'boxes_page' );
             add_submenu_page( 'wpsc-tickets', 'Folder/File Dashboard', 'Folder/File Dashboard', 'wpsc_agent', 'folderfile', 'folderfile_page' );
             add_submenu_page( '', '', '', 'wpsc_agent', 'boxdetails', 'box_details' );
@@ -267,6 +288,17 @@ if ( ! class_exists( 'Patt_Tracking' ) ) :
             add_submenu_page( 'wpsc-tickets', 'Return Dashboard', 'Return Dashboard', 'wpsc_agent', 'return', 'return_page' ); 
             add_submenu_page( '', '', '', 'wpsc_agent', 'returndetails', 'return_details' ); 
             add_submenu_page( '', '', '', 'wpsc_agent', 'returncreate', 'return_create' ); 
+            add_submenu_page( 'wpsc-tickets', 'Shipping Status Editor', 'Shipping Status Editor', 'edit_posts', 'shipping', 'shipping_page' ); 
+            }
+
+            function shipping_page(){
+            include_once( WPPATT_ABSPATH . 'includes/admin/pages/shipping.php'
+            );
+            }
+            
+            function request_delete_page(){
+            include_once( WPPATT_ABSPATH . 'includes/admin/pages/request_delete.php'
+            );
             }
             
             function boxes_page(){
@@ -329,6 +361,9 @@ if ( ! class_exists( 'Patt_Tracking' ) ) :
             include_once( WPPATT_ABSPATH . 'includes/admin/pages/return-create.php'
             );
             }
+
+            include_once( WPPATT_ABSPATH . 'includes/class-wppatt-request-approval-widget.php' );
+            include_once( WPPATT_ABSPATH . 'includes/class-wppatt-new-request-litigation-letter.php' );
 
     
         }

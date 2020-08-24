@@ -802,6 +802,54 @@ ADD AFTER
 ```
 wpsc_open_ticket(<?php echo htmlentities($ticket_id)?>);
 ```
+### New Request Document Uploads
+###### /supportcandy/includes/admin/tickets/create_ticket/load_create_ticket.php
+FIND
+```
+dataform.append('boxinfo', data);
+
+			var request_form_dropdown_flag = 0
+```
+ADD BELOW
+```
+/* Litigation letter files */
+var litigation_letter_element = document.querySelector("#litigation-letter-dropzone").dropzone.files;
+if( litigation_letter_element.length > 0 ) {
+  request_form_dropdown_flag = 1;
+  litigation_letter_element.forEach( function( _file ) {
+    dataform.append( 'litigation_letter_files[]', _file );
+  } );
+}
+
+/* Congressional files */
+var congressional_element = document.querySelector("#congressional-dropzone").dropzone.files;
+if( congressional_element.length > 0 ) {
+  request_form_dropdown_flag = 1;
+  congressional_element.forEach( function( _file ) {
+    dataform.append( 'congressional_files[]', _file );
+  } );
+}
+
+/* Foia files */
+var foia_element = document.querySelector("#foia-dropzone").dropzone.files;
+if( foia_element.length > 0 ) {
+  request_form_dropdown_flag = 1;
+  foia_element.forEach( function( _file ) {
+    dataform.append( 'foia_files[]', _file );
+  } );
+}
+```
+###### /supportcandy/includes/admin/tickets/create_ticket/class-ticket-form-field-format.php
+FIND
+```
+$selected = $selected_value == $value ? 'selected="selected"' : '' ;
+```
+ADD BELOW
+```
+if ( 'N/A' !== $value ) {
+  echo '<option '.$selected. 'value="'.str_replace('"','&quot;',$value).'">'.$value.'</option>';
+}
+```
 ### Box List Ingestion Changes
 ###### /supportcandy/includes/admin/tickets/create_ticket/load_create_ticket.php
 FIND

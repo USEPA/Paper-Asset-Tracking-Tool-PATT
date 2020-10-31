@@ -1,0 +1,161 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: wpsc-canned-reply\n"
+"POT-Creation-Date: 2020-09-25 20:18+0000\n"
+"PO-Revision-Date: 2020-09-25 20:33+0000\n"
+"Last-Translator: \n"
+"Language-Team: English (United States)\n"
+"Language: en_US\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Loco https://localise.biz/\n"
+"X-Poedit-Basepath: ../www/custom/plugins/canned-reply\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Poedit-SourceCharset: UTF-8\n"
+"X-Poedit-KeywordsList: __;_e\n"
+"X-Poedit-SearchPath-0: .\n"
+"Report-Msgid-Bugs-To: \n"
+"X-Loco-Version: 2.4.2; wp-5.5.1"
+
+#: includes/ajax/get_canned_reply.php:38
+msgid "Tag"
+msgstr ""
+
+#: includes/ajax/get_canned_reply.php:39
+msgid "Category"
+msgstr ""
+
+#: includes/ajax/get_canned_reply.php:40
+msgid "Actions"
+msgstr "System Messages"
+
+#: includes/ajax/get_canned_reply.php:59
+msgid "Uncategorized"
+msgstr ""
+
+#: includes/ajax/get_canned_reply.php:125
+msgid "Close"
+msgstr ""
+
+#: includes/admin/register_post_type.php:8
+msgctxt "taxonomy general name"
+msgid "Canned Reply"
+msgstr ""
+
+#: includes/admin/register_post_type.php:9
+msgctxt "taxonomy general name"
+msgid "Canned Replies"
+msgstr ""
+
+#: includes/admin/register_post_type.php:10 includes/admin/canned_reply.php:15
+msgid "Canned Reply"
+msgstr "System Messages"
+
+#: includes/admin/register_post_type.php:11
+#: includes/admin/register_post_type.php:13
+msgid "Add New"
+msgstr ""
+
+#: includes/admin/register_post_type.php:12
+msgid "All Items"
+msgstr ""
+
+#: includes/admin/register_post_type.php:14
+msgid "Edit"
+msgstr ""
+
+#: includes/admin/register_post_type.php:15
+msgid "New"
+msgstr ""
+
+#: includes/admin/register_post_type.php:16
+msgid "View"
+msgstr ""
+
+#: includes/admin/register_post_type.php:17
+msgid "Search"
+msgstr ""
+
+#: includes/admin/register_post_type.php:18
+msgid "No items found"
+msgstr ""
+
+#: includes/admin/register_post_type.php:19
+msgid "No items found in trash"
+msgstr ""
+
+#: includes/admin/register_post_type.php:20
+msgid "Parent Item"
+msgstr ""
+
+#: includes/admin/register_post_type.php:41
+msgctxt "taxonomy general name"
+msgid "Categories"
+msgstr ""
+
+#: includes/admin/register_post_type.php:42
+msgctxt "taxonomy singular name"
+msgid "Category"
+msgstr ""
+
+#: includes/admin/register_post_type.php:43
+msgid "Search Categories"
+msgstr ""
+
+#: includes/admin/register_post_type.php:44
+msgid "All Categories"
+msgstr ""
+
+#: includes/admin/register_post_type.php:45
+msgid "Parent Category"
+msgstr ""
+
+#: includes/admin/register_post_type.php:46
+msgid "Parent Category:"
+msgstr ""
+
+#: includes/admin/register_post_type.php:47
+msgid "Edit Category"
+msgstr ""
+
+#: includes/admin/register_post_type.php:48
+msgid "Update Category"
+msgstr ""
+
+#: includes/admin/register_post_type.php:49
+msgid "Add New Category"
+msgstr ""
+
+#: includes/admin/register_post_type.php:50
+msgid "New Category Name"
+msgstr ""
+
+#: includes/admin/register_post_type.php:51
+msgid "Categories"
+msgstr ""
+
+#: includes/admin/wpsc_submit_canned_reply_post.php:25
+msgid "Add Canned Reply"
+msgstr ""
+
+#: includes/admin/wpsc_canned_reply.php:8
+msgid "Visible All Agents"
+msgstr ""
+
+#. Name of the plugin
+msgid "SupportCandy - Canned Reply"
+msgstr ""
+
+#. Description of the plugin
+msgid "Canned Reply add-on for SupportCandy"
+msgstr ""
+
+#. URI of the plugin
+#. Author URI of the plugin
+msgid "https://supportcandy.net/"
+msgstr ""
+
+#. Author of the plugin
+msgid "Support Candy"
+msgstr ""

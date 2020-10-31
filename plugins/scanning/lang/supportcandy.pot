@@ -1,0 +1,4291 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: supportcandy\n"
+"POT-Creation-Date: 2020-02-17 10:14+0530\n"
+"PO-Revision-Date: 2020-02-17 10:14+0530\n"
+"Last-Translator: \n"
+"Language-Team: \n"
+"Language: en\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Poedit 2.0.6\n"
+"X-Poedit-Basepath: ../www/custom/plugins/supportcandy\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Poedit-SourceCharset: UTF-8\n"
+"X-Poedit-KeywordsList: __;_e\n"
+"X-Poedit-SearchPath-0: .\n"
+"X-Poedit-SearchPath-1: .\n"
+
+#: includes/EDD_SL_Plugin_Updater.php:236
+#, php-format
+msgid ""
+"There is a new version of %1$s available. %2$sView version %3$s details%4$s."
+msgstr ""
+
+#: includes/EDD_SL_Plugin_Updater.php:244
+#, php-format
+msgid ""
+"There is a new version of %1$s available. %2$sView version %3$s details%4$s "
+"or %5$supdate now%6$s."
+msgstr ""
+
+#: includes/EDD_SL_Plugin_Updater.php:487
+msgid "You do not have permission to install plugin updates"
+msgstr ""
+
+#: includes/EDD_SL_Plugin_Updater.php:487
+msgid "Error"
+msgstr ""
+
+#: includes/admin/appearance_settings/appearance_ajax.php:79
+#: includes/admin/custom_fields/custom_fields_ajax.php:64
+#: includes/admin/email_notifications/email_notifications_ajax.php:43
+#: includes/admin/settings/settings_ajax.php:168
+#: includes/admin/support_agents/support_agents_ajax.php:43
+#: includes/admin/ticket_list/ticket_list_ajax.php:88
+#: includes/admin/tickets/init.php:21
+#: includes/admin/tickets/tickets_ajax.php:218
+msgid "Invalid Action"
+msgstr ""
+
+#: includes/admin/appearance_settings/appearance_settings.php:11
+msgid "Appearance Settings"
+msgstr ""
+
+#: includes/admin/appearance_settings/appearance_settings.php:12
+#: includes/admin/custom_fields/custom_fields.php:12
+#: includes/admin/email_notifications/email_notifications.php:12
+#: includes/admin/license/addons.php:11 includes/admin/license/license.php:20
+#: includes/admin/settings/settings.php:12
+#: includes/admin/support_agents/support_agents.php:12
+#: includes/admin/ticket_list/ticket_list.php:12
+msgid "Need Help? Click Here!"
+msgstr ""
+
+#: includes/admin/appearance_settings/appearance_settings.php:20
+#: includes/admin/settings/settings.php:19 includes/class-wppatt-install.php:182
+msgid "General"
+msgstr ""
+
+#: includes/admin/appearance_settings/appearance_settings.php:21
+#: includes/admin/settings/get_advanced_settings.php:221
+#: includes/admin/ticket_list/ticket_list.php:11
+#: includes/admin/tickets/create_ticket/load_create_ticket.php:52
+#: includes/admin/tickets/individual_ticket/load_individual_ticket.php:67
+#: includes/class-wppatt-admin.php:130 includes/class-wppatt-admin.php:154
+#: includes/class-wppatt-admin.php:155
+msgid "Ticket List"
+msgstr ""
+
+#: includes/admin/appearance_settings/appearance_settings.php:22
+msgid " Individual Ticket Page"
+msgstr ""
+
+#: includes/admin/appearance_settings/appearance_settings.php:23
+msgid "Create Ticket Page"
+msgstr ""
+
+#: includes/admin/appearance_settings/appearance_settings.php:24
+msgid "Modal Window (Popup Screen)"
+msgstr ""
+
+#: includes/admin/appearance_settings/appearance_settings.php:25
+msgid "Login Form"
+msgstr ""
+
+#: includes/admin/appearance_settings/appearance_settings.php:26
+#: includes/admin/settings/get_general_settings.php:264
+msgid "User Registration"
+msgstr ""
+
+#: includes/admin/appearance_settings/appearance_settings.php:52
+#: includes/admin/custom_fields/custom_fields.php:44
+#: includes/admin/custom_fields/get_add_agentonly_field.php:115
+#: includes/admin/custom_fields/get_add_form_field.php:289
+#: includes/admin/custom_fields/get_edit_agentonly_field.php:145
+#: includes/admin/custom_fields/get_edit_default_form_field.php:117
+#: includes/admin/custom_fields/get_edit_form_field.php:373
+#: includes/admin/email_notifications/email_notifications.php:44
+#: includes/admin/license/license.php:46
+#: includes/admin/settings/get_add_agent_role.php:330
+#: includes/admin/settings/get_add_category.php:20
+#: includes/admin/settings/get_add_priority.php:35
+#: includes/admin/settings/get_add_status.php:35
+#: includes/admin/settings/get_edit_agent_role.php:343
+#: includes/admin/settings/get_edit_category.php:25
+#: includes/admin/settings/get_edit_priority.php:42
+#: includes/admin/settings/get_edit_status.php:42
+#: includes/admin/settings/get_templates.php:94
+#: includes/admin/settings/settings.php:58
+#: includes/admin/support_agents/get_add_support_agent.php:62
+#: includes/admin/support_agents/get_agent_setting.php:188
+#: includes/admin/support_agents/get_edit_support_agent.php:31
+#: includes/admin/support_agents/support_agents.php:44
+#: includes/admin/ticket_list/get_add_agent_list_field.php:43
+#: includes/admin/ticket_list/get_add_agent_ticket_filters.php:43
+#: includes/admin/ticket_list/get_add_customer_list_field.php:43
+#: includes/admin/ticket_list/get_add_customer_ticket_filters.php:43
+#: includes/admin/ticket_list/ticket_list.php:51
+#: includes/admin/tickets/individual_ticket/get_add_ticket_users.php:37
+#: includes/admin/tickets/individual_ticket/get_all_tickets_of_user.php:141
+#: includes/admin/tickets/individual_ticket/get_bulk_assign_agent.php:74
+#: includes/admin/tickets/individual_ticket/get_bulk_change_status.php:89
+#: includes/admin/tickets/individual_ticket/get_change_agent_fields.php:55
+#: includes/admin/tickets/individual_ticket/get_change_assign_agent.php:98
+#: includes/admin/tickets/individual_ticket/get_change_raised_by.php:91
+#: includes/admin/tickets/individual_ticket/get_change_ticket_fields.php:60
+#: includes/admin/tickets/individual_ticket/get_change_ticket_status.php:91
+#: includes/admin/tickets/individual_ticket/get_create_ticket_thread.php:44
+#: includes/admin/tickets/individual_ticket/get_edit_thread.php:81
+#: includes/admin/tickets/individual_ticket/get_edit_ticket_subject.php:34
+#: includes/admin/tickets/individual_ticket/get_thread_info.php:84
+#: includes/admin/tickets/individual_ticket/load_individual_ticket.php:80
+#: includes/admin/tickets/ticket_list/filters/get_save_ticket_filter.php:20
+#: includes/admin/tickets/ticket_list/filters/get_update_filter.php:313
+#: includes/admin/tickets/ticket_list/get_ticket_list.php:427
+#: includes/admin/tickets/tickets.php:37
+#: includes/frontend/create_ticket_shortcode.php:43
+#: includes/frontend/shortcode.php:56
+msgid "Close"
+msgstr ""
+
+#: includes/admin/appearance_settings/appearance_settings.php:53
+#: includes/admin/appearance_settings/get_appearance_create_ticket.php:76
+#: includes/admin/appearance_settings/get_appearance_general_settings.php:90
+#: includes/admin/appearance_settings/get_appearance_individual_ticket_page.php:178
+#: includes/admin/appearance_settings/get_appearance_login_form.php:65
+#: includes/admin/appearance_settings/get_appearance_modal_window.php:68
+#: includes/admin/appearance_settings/get_appearance_signup.php:57
+#: includes/admin/appearance_settings/get_appearance_ticket_list.php:116
+#: includes/admin/custom_fields/custom_fields.php:45
+#: includes/admin/email_notifications/email_notifications.php:45
+#: includes/admin/email_notifications/get_add_ticket_notification.php:107
+#: includes/admin/email_notifications/get_edit_ticket_notification.php:119
+#: includes/admin/email_notifications/get_en_general_setting.php:63
+#: includes/admin/license/license.php:47
+#: includes/admin/settings/get_advanced_settings.php:311
+#: includes/admin/settings/get_attachment_settings.php:107
+#: includes/admin/settings/get_captcha_settings.php:82
+#: includes/admin/settings/get_cron_setup_settings.php:43
+#: includes/admin/settings/get_edit_category.php:26
+#: includes/admin/settings/get_edit_ticket_widget.php:63
+#: includes/admin/settings/get_general_settings.php:304
+#: includes/admin/settings/get_rest_api_settings.php:35
+#: includes/admin/settings/get_terms_and_condition_settings.php:98
+#: includes/admin/settings/get_thankyou_settings.php:43
+#: includes/admin/settings/get_tinymce_settings.php:50
+#: includes/admin/settings/settings.php:59
+#: includes/admin/support_agents/support_agents.php:45
+#: includes/admin/ticket_list/get_ticket_list_additional_settings.php:180
+#: includes/admin/ticket_list/get_ticket_list_advanced_settings.php:36
+#: includes/admin/ticket_list/ticket_list.php:52
+#: includes/admin/tickets/individual_ticket/get_clone_ticket.php:35
+#: includes/admin/tickets/individual_ticket/get_edit_thread.php:82
+#: includes/admin/tickets/tickets.php:38
+#: includes/frontend/create_ticket_shortcode.php:44
+#: includes/frontend/shortcode.php:57
+msgid "Save Changes"
+msgstr ""
+
+#: includes/admin/appearance_settings/get_appearance_create_ticket.php:17
+msgid "Submit Button"
+msgstr ""
+
+#: includes/admin/appearance_settings/get_appearance_create_ticket.php:20
+#: includes/admin/appearance_settings/get_appearance_create_ticket.php:38
+#: includes/admin/appearance_settings/get_appearance_create_ticket.php:56
+#: includes/admin/appearance_settings/get_appearance_create_ticket.php:70
+#: includes/admin/appearance_settings/get_appearance_general_settings.php:50
+#: includes/admin/appearance_settings/get_appearance_general_settings.php:64
+#: includes/admin/appearance_settings/get_appearance_general_settings.php:79
+#: includes/admin/appearance_settings/get_appearance_individual_ticket_page.php:20
+#: includes/admin/appearance_settings/get_appearance_individual_ticket_page.php:38
+#: includes/admin/appearance_settings/get_appearance_individual_ticket_page.php:56
+#: includes/admin/appearance_settings/get_appearance_individual_ticket_page.php:74
+#: includes/admin/appearance_settings/get_appearance_individual_ticket_page.php:92
+#: includes/admin/appearance_settings/get_appearance_individual_ticket_page.php:110
+#: includes/admin/appearance_settings/get_appearance_individual_ticket_page.php:128
+#: includes/admin/appearance_settings/get_appearance_individual_ticket_page.php:146
+#: includes/admin/appearance_settings/get_appearance_individual_ticket_page.php:164
+#: includes/admin/appearance_settings/get_appearance_login_form.php:31
+#: includes/admin/appearance_settings/get_appearance_modal_window.php:20
+#: includes/admin/appearance_settings/get_appearance_modal_window.php:34
+#: includes/admin/appearance_settings/get_appearance_modal_window.php:44
+#: includes/admin/appearance_settings/get_appearance_modal_window.php:58
+#: includes/admin/appearance_settings/get_appearance_signup.php:21
+#: includes/admin/appearance_settings/get_appearance_signup.php:41
+#: includes/admin/appearance_settings/get_appearance_ticket_list.php:20
+#: includes/admin/appearance_settings/get_appearance_ticket_list.php:38
+#: includes/admin/appearance_settings/get_appearance_ticket_list.php:52
+#: includes/admin/appearance_settings/get_appearance_ticket_list.php:66
+#: includes/admin/appearance_settings/get_appearance_ticket_list.php:84
+#: includes/admin/appearance_settings/get_appearance_ticket_list.php:102
+msgid "Background color"
+msgstr ""
+
+#: includes/admin/appearance_settings/get_appearance_create_ticket.php:24
+#: includes/admin/appearance_settings/get_appearance_create_ticket.php:42
+#: includes/admin/appearance_settings/get_appearance_create_ticket.php:60
+#: includes/admin/appearance_settings/get_appearance_general_settings.php:27
+#: includes/admin/appearance_settings/get_appearance_general_settings.php:54
+#: includes/admin/appearance_settings/get_appearance_general_settings.php:69
+#: includes/admin/appearance_settings/get_appearance_general_settings.php:84
+#: includes/admin/appearance_settings/get_appearance_individual_ticket_page.php:24
+#: includes/admin/appearance_settings/get_appearance_individual_ticket_page.php:42
+#: includes/admin/appearance_settings/get_appearance_individual_ticket_page.php:60
+#: includes/admin/appearance_settings/get_appearance_individual_ticket_page.php:78
+#: includes/admin/appearance_settings/get_appearance_individual_ticket_page.php:96
+#: includes/admin/appearance_settings/get_appearance_individual_ticket_page.php:114
+#: includes/admin/appearance_settings/get_appearance_individual_ticket_page.php:132
+#: includes/admin/appearance_settings/get_appearance_individual_ticket_page.php:150
+#: includes/admin/appearance_settings/get_appearance_individual_ticket_page.php:168
+#: includes/admin/appearance_settings/get_appearance_login_form.php:17
+#: includes/admin/appearance_settings/get_appearance_login_form.php:35
+#: includes/admin/appearance_settings/get_appearance_login_form.php:53
+#: includes/admin/appearance_settings/get_appearance_modal_window.php:24
+#: includes/admin/appearance_settings/get_appearance_modal_window.php:48
+#: includes/admin/appearance_settings/get_appearance_modal_window.php:62
+#: includes/admin/appearance_settings/get_appearance_signup.php:26
+#: includes/admin/appearance_settings/get_appearance_signup.php:46
+#: includes/admin/appearance_settings/get_appearance_ticket_list.php:24
+#: includes/admin/appearance_settings/get_appearance_ticket_list.php:42
+#: includes/admin/appearance_settings/get_appearance_ticket_list.php:56
+#: includes/admin/appearance_settings/get_appearance_ticket_list.php:70
+#: includes/admin/appearance_settings/get_appearance_ticket_list.php:88
+#: includes/admin/appearance_settings/get_appearance_ticket_list.php:106
+#: includes/admin/settings/get_add_priority.php:17
+#: includes/admin/settings/get_add_status.php:17
+#: includes/admin/settings/get_edit_priority.php:24
+#: includes/admin/settings/get_edit_status.php:24
+msgid "Color"
+msgstr ""
+
+#: includes/admin/appearance_settings/get_appearance_create_ticket.php:28
+#: includes/admin/appearance_settings/get_appearance_create_ticket.php:46
+#: includes/admin/appearance_settings/get_appearance_individual_ticket_page.php:28
+#: includes/admin/appearance_settings/get_appearance_individual_ticket_page.php:46
+#: includes/admin/appearance_settings/get_appearance_individual_ticket_page.php:64
+#: includes/admin/appearance_settings/get_appearance_individual_ticket_page.php:82
+#: includes/admin/appearance_settings/get_appearance_individual_ticket_page.php:100
+#: includes/admin/appearance_settings/get_appearance_individual_ticket_page.php:118
+#: includes/admin/appearance_settings/get_appearance_individual_ticket_page.php:136
+#: includes/admin/appearance_settings/get_appearance_individual_ticket_page.php:154
+#: includes/admin/appearance_settings/get_appearance_individual_ticket_page.php:172
+#: includes/admin/appearance_settings/get_appearance_login_form.php:21
+#: includes/admin/appearance_settings/get_appearance_login_form.php:39
+#: includes/admin/appearance_settings/get_appearance_login_form.php:57
+#: includes/admin/appearance_settings/get_appearance_signup.php:31
+#: includes/admin/appearance_settings/get_appearance_signup.php:51
+#: includes/admin/appearance_settings/get_appearance_ticket_list.php:28
+#: includes/admin/appearance_settings/get_appearance_ticket_list.php:74
+#: includes/admin/appearance_settings/get_appearance_ticket_list.php:92
+#: includes/admin/appearance_settings/get_appearance_ticket_list.php:110
+msgid "Border Color"
+msgstr ""
+
+#: includes/admin/appearance_settings/get_appearance_create_ticket.php:35
+msgid "Reset Button"
+msgstr ""
+
+#: includes/admin/appearance_settings/get_appearance_create_ticket.php:53
+#: includes/admin/settings/settings.php:29
+msgid "Captcha"
+msgstr ""
+
+#: includes/admin/appearance_settings/get_appearance_create_ticket.php:67
+#: includes/admin/custom_fields/get_add_agentonly_field.php:27
+#: includes/admin/custom_fields/get_add_form_field.php:28
+#: includes/admin/custom_fields/get_edit_agentonly_field.php:51
+#: includes/admin/custom_fields/get_edit_default_form_field.php:35
+#: includes/admin/custom_fields/get_edit_form_field.php:79
+msgid "Extra Information"
+msgstr ""
+
+#: includes/admin/appearance_settings/get_appearance_create_ticket.php:77
+#: includes/admin/appearance_settings/get_appearance_general_settings.php:91
+#: includes/admin/appearance_settings/get_appearance_individual_ticket_page.php:179
+#: includes/admin/appearance_settings/get_appearance_login_form.php:66
+#: includes/admin/appearance_settings/get_appearance_modal_window.php:69
+#: includes/admin/appearance_settings/get_appearance_signup.php:58
+#: includes/admin/appearance_settings/get_appearance_ticket_list.php:117
+msgid "Reset Default"
+msgstr ""
+
+#: includes/admin/appearance_settings/get_appearance_general_settings.php:17
+#: includes/admin/appearance_settings/get_appearance_login_form.php:13
+#: includes/admin/appearance_settings/get_appearance_login_form.php:49
+#: includes/admin/settings/get_add_priority.php:22
+#: includes/admin/settings/get_add_status.php:22
+#: includes/admin/settings/get_edit_priority.php:29
+#: includes/admin/settings/get_edit_status.php:29
+msgid "Background Color"
+msgstr ""
+
+#: includes/admin/appearance_settings/get_appearance_general_settings.php:20
+msgid ""
+"Background color of container for all screens including ticket list, open "
+"ticket, create ticket, etc."
+msgstr ""
+
+#: includes/admin/appearance_settings/get_appearance_general_settings.php:30
+msgid ""
+"Text color of container for all screens including ticket list, open ticket, "
+"create ticket, etc."
+msgstr ""
+
+#: includes/admin/appearance_settings/get_appearance_general_settings.php:37
+msgid "Action Bar Color"
+msgstr ""
+
+#: includes/admin/appearance_settings/get_appearance_general_settings.php:40
+msgid ""
+"Color of action bar for all screens. This color also gets applied to "
+"container border"
+msgstr ""
+
+#: includes/admin/appearance_settings/get_appearance_general_settings.php:47
+msgid "Create Ticket Button (Action Bar)"
+msgstr ""
+
+#: includes/admin/appearance_settings/get_appearance_general_settings.php:61
+msgid "Default Buttons (Action Bar)"
+msgstr ""
+
+#: includes/admin/appearance_settings/get_appearance_general_settings.php:76
+msgid "Sign Out Button"
+msgstr ""
+
+#: includes/admin/appearance_settings/get_appearance_individual_ticket_page.php:17
+#: includes/admin/settings/get_ticket_widget_settings.php:22
+msgid "Ticket Widgets"
+msgstr ""
+
+#: includes/admin/appearance_settings/get_appearance_individual_ticket_page.php:35
+msgid "Report Thread"
+msgstr ""
+
+#: includes/admin/appearance_settings/get_appearance_individual_ticket_page.php:53
+msgid "Reply Thread (Customer)"
+msgstr ""
+
+#: includes/admin/appearance_settings/get_appearance_individual_ticket_page.php:71
+msgid "Reply Thread (Agent)"
+msgstr ""
+
+#: includes/admin/appearance_settings/get_appearance_individual_ticket_page.php:89
+#: includes/class-wppatt-functions.php:1156
+msgid "Private Note"
+msgstr ""
+
+#: includes/admin/appearance_settings/get_appearance_individual_ticket_page.php:107
+msgid "Ticket Logs"
+msgstr ""
+
+#: includes/admin/appearance_settings/get_appearance_individual_ticket_page.php:125
+msgid "Submit Reply Button"
+msgstr ""
+
+#: includes/admin/appearance_settings/get_appearance_individual_ticket_page.php:143
+msgid "Other Reply Form Buttons"
+msgstr ""
+
+#: includes/admin/appearance_settings/get_appearance_individual_ticket_page.php:161
+msgid "Edit Buttons"
+msgstr ""
+
+#: includes/admin/appearance_settings/get_appearance_login_form.php:10
+msgid "Sign In Button"
+msgstr ""
+
+#: includes/admin/appearance_settings/get_appearance_login_form.php:28
+msgid "Register Button"
+msgstr ""
+
+#: includes/admin/appearance_settings/get_appearance_login_form.php:46
+msgid "Continue as Guest Button"
+msgstr ""
+
+#: includes/admin/appearance_settings/get_appearance_modal_window.php:17
+msgid "Header"
+msgstr ""
+
+#: includes/admin/appearance_settings/get_appearance_modal_window.php:31
+msgid "Footer"
+msgstr ""
+
+#: includes/admin/appearance_settings/get_appearance_modal_window.php:41
+msgid "Close Button"
+msgstr ""
+
+#: includes/admin/appearance_settings/get_appearance_modal_window.php:55
+msgid "Action Button"
+msgstr ""
+
+#: includes/admin/appearance_settings/get_appearance_signup.php:18
+msgid "Register Button "
+msgstr ""
+
+#: includes/admin/appearance_settings/get_appearance_signup.php:38
+msgid "Cancel Button"
+msgstr ""
+
+#: includes/admin/appearance_settings/get_appearance_ticket_list.php:17
+msgid "Filter Widgets"
+msgstr ""
+
+#: includes/admin/appearance_settings/get_appearance_ticket_list.php:35
+msgid "Ticket List Header "
+msgstr ""
+
+#: includes/admin/appearance_settings/get_appearance_ticket_list.php:49
+msgid "Ticket List Item Mouseover"
+msgstr ""
+
+#: includes/admin/appearance_settings/get_appearance_ticket_list.php:63
+msgid "Advance Filter Apply Button"
+msgstr ""
+
+#: includes/admin/appearance_settings/get_appearance_ticket_list.php:81
+msgid "Advance Filter Save Button"
+msgstr ""
+
+#: includes/admin/appearance_settings/get_appearance_ticket_list.php:99
+msgid "Advance Filter Close Button"
+msgstr ""
+
+#: includes/admin/appearance_settings/get_reset_default_apperance_login_form.php:29
+#: includes/admin/appearance_settings/get_reset_default_create_ticket_settings.php:30
+#: includes/admin/appearance_settings/get_reset_default_general_settings.php:28
+#: includes/admin/appearance_settings/get_reset_default_individual_ticket_settings.php:46
+#: includes/admin/appearance_settings/get_reset_default_modal_window_settings.php:27
+#: includes/admin/appearance_settings/get_reset_default_signup_settings.php:26
+#: includes/admin/appearance_settings/get_reset_default_ticket_list_settings.php:35
+#: includes/admin/appearance_settings/set_appearance_create_ticket_settings.php:17
+#: includes/admin/appearance_settings/set_appearance_general_settings.php:17
+#: includes/admin/appearance_settings/set_appearance_individual_ticket_settings.php:17
+#: includes/admin/appearance_settings/set_appearance_login_form.php:18
+#: includes/admin/appearance_settings/set_appearance_modal_window_settings.php:17
+#: includes/admin/appearance_settings/set_appearance_signup.php:18
+#: includes/admin/appearance_settings/set_appearance_ticket_list_settings.php:17
+#: includes/admin/email_notifications/set_en_general_settings.php:38
+#: includes/admin/settings/custom_start_ticket_number.php:24
+#: includes/admin/settings/set_add_agent_role.php:24
+#: includes/admin/settings/set_advanced_settings.php:88
+#: includes/admin/settings/set_attachment_settings.php:33
+#: includes/admin/settings/set_captcha_settings.php:36
+#: includes/admin/settings/set_cron_setup_settings.php:17
+#: includes/admin/settings/set_edit_agent_role.php:29
+#: includes/admin/settings/set_edit_ticket_widgets.php:29
+#: includes/admin/settings/set_general_settings.php:85
+#: includes/admin/settings/set_rest_api_settings.php:21
+#: includes/admin/settings/set_terms_and_condition_settings.php:40
+#: includes/admin/settings/set_thankyou_settings.php:21
+#: includes/admin/settings/set_tinymce_settings.php:21
+#: includes/admin/ticket_list/set_ticket_list_additional_settings.php:46
+#: includes/admin/ticket_list/set_ticket_list_advanced_settings.php:14
+msgid "Settings saved."
+msgstr ""
+
+#: includes/admin/custom_fields/custom_fields.php:11
+#: includes/class-wppatt-admin.php:146 includes/class-wppatt-admin.php:147
+msgid "Custom Fields"
+msgstr ""
+
+#: includes/admin/custom_fields/custom_fields.php:18
+#: includes/admin/custom_fields/get_ticket_form_fields.php:28
+msgid "Ticket Form Fields"
+msgstr ""
+
+#: includes/admin/custom_fields/custom_fields.php:19
+#: includes/admin/custom_fields/get_agentonly_fields.php:28
+#: includes/class-wppatt-install.php:937
+msgid "Agent Only Fields"
+msgstr ""
+
+#: includes/admin/custom_fields/custom_fields.php:41
+#: includes/admin/tickets/tickets.php:34
+#: includes/frontend/create_ticket_shortcode.php:40
+#: includes/frontend/shortcode.php:53
+msgid "Modal Title"
+msgstr ""
+
+#: includes/admin/custom_fields/custom_fields.php:42
+#: includes/admin/tickets/tickets.php:35
+#: includes/frontend/create_ticket_shortcode.php:41
+#: includes/frontend/shortcode.php:54
+msgid "I am body!"
+msgstr ""
+
+#: includes/admin/custom_fields/delete_custom_field.php:26
+msgid "Field deleted successfully."
+msgstr ""
+
+#: includes/admin/custom_fields/delete_custom_field.php:28
+msgid "Default field can not be deleted."
+msgstr ""
+
+#: includes/admin/custom_fields/get_add_agentonly_field.php:22
+#: includes/admin/custom_fields/get_add_form_field.php:23
+#: includes/admin/custom_fields/get_edit_agentonly_field.php:46
+#: includes/admin/custom_fields/get_edit_default_form_field.php:30
+#: includes/admin/custom_fields/get_edit_form_field.php:74
+msgid "Field Label"
+msgstr ""
+
+#: includes/admin/custom_fields/get_add_agentonly_field.php:23
+msgid ""
+"Insert field label. Please make sure label you are entering should not "
+"already exist in agent only as well as ticket form fields."
+msgstr ""
+
+#: includes/admin/custom_fields/get_add_agentonly_field.php:28
+msgid ""
+"Extra information about the field. Useful if you want to give instructions "
+"or information about the field for agent. Keep this empty if not needed."
+msgstr ""
+
+#: includes/admin/custom_fields/get_add_agentonly_field.php:32
+#: includes/admin/custom_fields/get_add_form_field.php:33
+#: includes/admin/custom_fields/get_edit_agentonly_field.php:56
+#: includes/admin/custom_fields/get_edit_form_field.php:84
+msgid "Personal Information"
+msgstr ""
+
+#: includes/admin/custom_fields/get_add_agentonly_field.php:33
+#: includes/admin/custom_fields/get_add_form_field.php:34
+#: includes/admin/custom_fields/get_edit_agentonly_field.php:57
+#: includes/admin/custom_fields/get_edit_form_field.php:85
+msgid "Enable or disable personal information in ticket form."
+msgstr ""
+
+#: includes/admin/custom_fields/get_add_agentonly_field.php:35
+#: includes/admin/custom_fields/get_add_form_field.php:36
+#: includes/admin/custom_fields/get_add_form_field.php:87
+#: includes/admin/custom_fields/get_edit_agentonly_field.php:60
+#: includes/admin/custom_fields/get_edit_form_field.php:88
+#: includes/admin/custom_fields/get_edit_form_field.php:151
+#: includes/admin/settings/get_general_settings.php:156
+#: includes/admin/settings/get_general_settings.php:214
+msgid "No"
+msgstr ""
+
+#: includes/admin/custom_fields/get_add_agentonly_field.php:36
+#: includes/admin/custom_fields/get_add_form_field.php:37
+#: includes/admin/custom_fields/get_add_form_field.php:86
+#: includes/admin/custom_fields/get_edit_agentonly_field.php:59
+#: includes/admin/custom_fields/get_edit_form_field.php:87
+#: includes/admin/custom_fields/get_edit_form_field.php:150
+#: includes/admin/settings/get_general_settings.php:154
+#: includes/admin/settings/get_general_settings.php:212
+msgid "Yes"
+msgstr ""
+
+#: includes/admin/custom_fields/get_add_agentonly_field.php:40
+#: includes/admin/custom_fields/get_add_form_field.php:41
+#: includes/admin/custom_fields/get_edit_agentonly_field.php:64
+#: includes/admin/custom_fields/get_edit_form_field.php:92
+msgid "Field Type"
+msgstr ""
+
+#: includes/admin/custom_fields/get_add_agentonly_field.php:41
+#: includes/admin/custom_fields/get_add_form_field.php:42
+#: includes/admin/custom_fields/get_edit_agentonly_field.php:65
+#: includes/admin/custom_fields/get_edit_form_field.php:93
+msgid "Select field type."
+msgstr ""
+
+#: includes/admin/custom_fields/get_add_agentonly_field.php:50
+#: includes/admin/custom_fields/get_add_form_field.php:55
+#: includes/admin/custom_fields/get_edit_agentonly_field.php:79
+#: includes/admin/custom_fields/get_edit_form_field.php:110
+msgid "Field Options"
+msgstr ""
+
+#: includes/admin/custom_fields/get_add_agentonly_field.php:51
+#: includes/admin/custom_fields/get_add_form_field.php:56
+#: includes/admin/custom_fields/get_edit_agentonly_field.php:80
+#: includes/admin/custom_fields/get_edit_form_field.php:111
+msgid "Insert field options. New option should begin on new line."
+msgstr ""
+
+#: includes/admin/custom_fields/get_add_agentonly_field.php:56
+#: includes/admin/custom_fields/get_add_form_field.php:110
+#: includes/admin/custom_fields/get_edit_agentonly_field.php:85
+#: includes/admin/custom_fields/get_edit_default_form_field.php:89
+#: includes/admin/custom_fields/get_edit_form_field.php:165
+msgid "Character Limit"
+msgstr ""
+
+#: includes/admin/custom_fields/get_add_agentonly_field.php:57
+msgid ""
+"Limit number of characters to be accepted for this field.Enter 0 for "
+"unlimited characters."
+msgstr ""
+
+#: includes/admin/custom_fields/get_add_agentonly_field.php:62
+#: includes/admin/custom_fields/get_add_form_field.php:100
+#: includes/admin/custom_fields/get_edit_agentonly_field.php:100
+#: includes/admin/custom_fields/get_edit_form_field.php:137
+msgid "Allowed Dates"
+msgstr ""
+
+#: includes/admin/custom_fields/get_add_agentonly_field.php:63
+#: includes/admin/custom_fields/get_edit_agentonly_field.php:101
+#: includes/admin/custom_fields/get_edit_form_field.php:138
+msgid "Please select date range."
+msgstr ""
+
+#: includes/admin/custom_fields/get_add_agentonly_field.php:65
+#: includes/admin/custom_fields/get_add_form_field.php:103
+#: includes/admin/custom_fields/get_edit_agentonly_field.php:103
+#: includes/admin/custom_fields/get_edit_form_field.php:140
+msgid "All"
+msgstr ""
+
+#: includes/admin/custom_fields/get_add_agentonly_field.php:66
+#: includes/admin/custom_fields/get_add_form_field.php:104
+#: includes/admin/custom_fields/get_edit_agentonly_field.php:104
+#: includes/admin/custom_fields/get_edit_form_field.php:141
+msgid "Past"
+msgstr ""
+
+#: includes/admin/custom_fields/get_add_agentonly_field.php:67
+#: includes/admin/custom_fields/get_add_form_field.php:105
+#: includes/admin/custom_fields/get_edit_agentonly_field.php:105
+#: includes/admin/custom_fields/get_edit_form_field.php:142
+msgid "Future"
+msgstr ""
+
+#: includes/admin/custom_fields/get_add_agentonly_field.php:72
+#: includes/admin/custom_fields/get_add_form_field.php:74
+#: includes/admin/custom_fields/get_edit_agentonly_field.php:91
+#: includes/admin/custom_fields/get_edit_form_field.php:128
+msgid "Time Format"
+msgstr ""
+
+#: includes/admin/custom_fields/get_add_agentonly_field.php:73
+#: includes/admin/custom_fields/get_add_form_field.php:75
+#: includes/admin/custom_fields/get_edit_agentonly_field.php:92
+#: includes/admin/custom_fields/get_edit_form_field.php:129
+msgid "Please select the time format"
+msgstr ""
+
+#: includes/admin/custom_fields/get_add_agentonly_field.php:75
+#: includes/admin/custom_fields/get_add_form_field.php:77
+#: includes/admin/custom_fields/get_edit_agentonly_field.php:94
+#: includes/admin/custom_fields/get_edit_form_field.php:131
+msgid "12 Hrs"
+msgstr ""
+
+#: includes/admin/custom_fields/get_add_agentonly_field.php:76
+#: includes/admin/custom_fields/get_add_form_field.php:78
+#: includes/admin/custom_fields/get_edit_agentonly_field.php:95
+#: includes/admin/custom_fields/get_edit_form_field.php:132
+msgid "24 Hrs"
+msgstr ""
+
+#: includes/admin/custom_fields/get_add_agentonly_field.php:116
+#: includes/admin/custom_fields/get_add_form_field.php:290
+#: includes/admin/custom_fields/get_edit_agentonly_field.php:146
+#: includes/admin/custom_fields/get_edit_default_form_field.php:118
+#: includes/admin/custom_fields/get_edit_form_field.php:374
+#: includes/admin/settings/get_add_agent_role.php:331
+#: includes/admin/settings/get_add_category.php:21
+#: includes/admin/settings/get_add_priority.php:36
+#: includes/admin/settings/get_add_status.php:36
+#: includes/admin/settings/get_edit_agent_role.php:344
+#: includes/admin/settings/get_edit_priority.php:43
+#: includes/admin/settings/get_edit_status.php:43
+#: includes/admin/support_agents/get_add_support_agent.php:63
+#: includes/admin/support_agents/get_edit_support_agent.php:32
+#: includes/admin/ticket_list/get_add_agent_list_field.php:44
+#: includes/admin/ticket_list/get_add_agent_ticket_filters.php:44
+#: includes/admin/ticket_list/get_add_customer_list_field.php:44
+#: includes/admin/ticket_list/get_add_customer_ticket_filters.php:44
+#: includes/admin/tickets/ticket_list/filters/get_save_ticket_filter.php:21
+msgid "Submit"
+msgstr ""
+
+#: includes/admin/custom_fields/get_add_form_field.php:24
+#: includes/admin/custom_fields/get_edit_agentonly_field.php:47
+#: includes/admin/custom_fields/get_edit_default_form_field.php:31
+#: includes/admin/custom_fields/get_edit_form_field.php:75
+msgid ""
+"Insert field label. Please make sure label you are entering should not "
+"already exist."
+msgstr ""
+
+#: includes/admin/custom_fields/get_add_form_field.php:29
+#: includes/admin/custom_fields/get_edit_agentonly_field.php:52
+#: includes/admin/custom_fields/get_edit_default_form_field.php:36
+#: includes/admin/custom_fields/get_edit_form_field.php:80
+msgid ""
+"Extra information about the field. Useful if you want to give instructions "
+"or information about the field in create ticket from. Keep this empty if not "
+"needed."
+msgstr ""
+
+#: includes/admin/custom_fields/get_add_form_field.php:50
+#: includes/admin/custom_fields/get_edit_default_form_field.php:96
+msgid "Placeholder Text"
+msgstr ""
+
+#: includes/admin/custom_fields/get_add_form_field.php:51
+#: includes/admin/custom_fields/get_edit_default_form_field.php:97
+msgid "Enter the placeholder text."
+msgstr ""
+
+#: includes/admin/custom_fields/get_add_form_field.php:61
+#: includes/admin/custom_fields/get_edit_form_field.php:116
+msgid "Content"
+msgstr ""
+
+#: includes/admin/custom_fields/get_add_form_field.php:65
+#: includes/admin/custom_fields/get_edit_form_field.php:120
+#: includes/admin/email_notifications/get_add_ticket_notification.php:49
+#: includes/admin/email_notifications/get_edit_ticket_notification.php:58
+#: includes/admin/settings/get_thankyou_settings.php:25
+#: includes/admin/support_agents/get_agent_setting.php:25
+msgid "Visual"
+msgstr ""
+
+#: includes/admin/custom_fields/get_add_form_field.php:66
+#: includes/admin/custom_fields/get_edit_form_field.php:121
+#: includes/admin/email_notifications/get_add_ticket_notification.php:50
+#: includes/admin/email_notifications/get_edit_ticket_notification.php:59
+#: includes/admin/settings/get_thankyou_settings.php:26
+#: includes/admin/support_agents/get_agent_setting.php:26
+msgid "Text"
+msgstr ""
+
+#: includes/admin/custom_fields/get_add_form_field.php:83
+#: includes/admin/custom_fields/get_edit_form_field.php:147
+msgid "Required"
+msgstr ""
+
+#: includes/admin/custom_fields/get_add_form_field.php:84
+#: includes/admin/custom_fields/get_edit_form_field.php:148
+msgid ""
+"Whether this field is medatory or optional. Yes indicates mendatory whereas "
+"no indicates optional."
+msgstr ""
+
+#: includes/admin/custom_fields/get_add_form_field.php:91
+#: includes/admin/custom_fields/get_edit_default_form_field.php:40
+#: includes/admin/custom_fields/get_edit_form_field.php:155
+msgid "Width"
+msgstr ""
+
+#: includes/admin/custom_fields/get_add_form_field.php:92
+#: includes/admin/custom_fields/get_edit_default_form_field.php:41
+#: includes/admin/custom_fields/get_edit_form_field.php:156
+msgid "Please select width of the field in create ticket form."
+msgstr ""
+
+#: includes/admin/custom_fields/get_add_form_field.php:94
+#: includes/admin/custom_fields/get_edit_default_form_field.php:43
+#: includes/admin/custom_fields/get_edit_form_field.php:158
+msgid "1/3 width of Row"
+msgstr ""
+
+#: includes/admin/custom_fields/get_add_form_field.php:95
+#: includes/admin/custom_fields/get_edit_default_form_field.php:44
+#: includes/admin/custom_fields/get_edit_form_field.php:159
+msgid "Half width of Row"
+msgstr ""
+
+#: includes/admin/custom_fields/get_add_form_field.php:96
+#: includes/admin/custom_fields/get_edit_default_form_field.php:45
+#: includes/admin/custom_fields/get_edit_form_field.php:160
+msgid "Full width of Row"
+msgstr ""
+
+#: includes/admin/custom_fields/get_add_form_field.php:101
+msgid "Please select Date range."
+msgstr ""
+
+#: includes/admin/custom_fields/get_add_form_field.php:111
+#: includes/admin/custom_fields/get_edit_agentonly_field.php:86
+#: includes/admin/custom_fields/get_edit_default_form_field.php:90
+#: includes/admin/custom_fields/get_edit_form_field.php:166
+msgid ""
+"Limit number of characters to be accepted for this field. Enter 0 for "
+"unlimited characters."
+msgstr ""
+
+#: includes/admin/custom_fields/get_add_form_field.php:115
+#: includes/admin/custom_fields/get_edit_form_field.php:170
+msgid "Visibility"
+msgstr ""
+
+#: includes/admin/custom_fields/get_add_form_field.php:116
+#: includes/admin/custom_fields/get_edit_form_field.php:171
+msgid ""
+"Select conditions to show this field in create ticket form. Visible if no "
+"conditions set. Visible if any one of added conditions matches while "
+"creating ticket."
+msgstr ""
+
+#: includes/admin/custom_fields/get_add_form_field.php:123
+#: includes/admin/custom_fields/get_edit_form_field.php:206
+msgid "Select field"
+msgstr ""
+
+#: includes/admin/custom_fields/get_add_form_field.php:164
+#: includes/admin/custom_fields/get_conditional_options_fields.php:27
+#: includes/admin/custom_fields/get_conditional_options_fields.php:44
+#: includes/admin/custom_fields/get_conditional_options_fields.php:61
+#: includes/admin/custom_fields/get_conditional_options_fields.php:73
+#: includes/admin/custom_fields/get_edit_form_field.php:248
+msgid "Select option"
+msgstr ""
+
+#: includes/admin/custom_fields/get_add_form_field.php:168
+#: includes/admin/custom_fields/get_edit_form_field.php:252
+msgid "Add"
+msgstr ""
+
+#: includes/admin/custom_fields/get_agentonly_fields.php:29
+#: includes/admin/custom_fields/get_ticket_form_fields.php:29
+#: includes/admin/email_notifications/get_en_ticket_notifications.php:23
+#: includes/admin/settings/get_agent_roles.php:16
+#: includes/admin/settings/get_category_settings.php:22
+#: includes/admin/settings/get_priority_settings.php:22
+#: includes/admin/settings/get_status_settings.php:22
+#: includes/admin/support_agents/get_support_agents.php:28
+#: includes/admin/ticket_list/get_agent_ticket_filters.php:35
+#: includes/admin/ticket_list/get_agent_ticket_list.php:35
+#: includes/admin/ticket_list/get_customer_ticket_filters.php:35
+#: includes/admin/ticket_list/get_customer_ticket_list.php:35
+msgid "+Add New"
+msgstr ""
+
+#: includes/admin/custom_fields/get_agentonly_fields.php:105
+#: includes/admin/custom_fields/get_agentonly_fields.php:169
+#: includes/admin/custom_fields/get_ticket_form_fields.php:131
+#: includes/admin/custom_fields/get_ticket_form_fields.php:223
+#: includes/admin/custom_fields/get_ticket_form_fields.php:288
+#: includes/admin/settings/get_category_settings.php:82
+#: includes/admin/settings/get_category_settings.php:126
+#: includes/admin/settings/get_priority_settings.php:93
+#: includes/admin/settings/get_priority_settings.php:147
+#: includes/admin/settings/get_status_settings.php:93
+#: includes/admin/settings/get_status_settings.php:147
+#: includes/admin/support_agents/get_support_agents.php:85
+#: includes/admin/support_agents/get_support_agents.php:127
+#: includes/admin/ticket_list/get_agent_ticket_filters.php:91
+#: includes/admin/ticket_list/get_agent_ticket_list.php:91
+#: includes/admin/ticket_list/get_customer_ticket_filters.php:91
+#: includes/admin/ticket_list/get_customer_ticket_list.php:91
+#: includes/admin/tickets/ticket_list/get_ticket_list.php:407
+msgid "Please wait ..."
+msgstr ""
+
+#: includes/admin/custom_fields/get_edit_default_form_field.php:52
+#: includes/admin/tickets/individual_ticket/load_guest_individual_ticket.php:291
+#: includes/admin/tickets/individual_ticket/load_individual_ticket.php:484
+#: includes/class-wppatt-functions.php:1093 includes/class-wppatt-install.php:261
+#: includes/class-wppatt-install.php:905
+msgid "Status"
+msgstr ""
+
+#: includes/admin/custom_fields/get_edit_default_form_field.php:53
+msgid ""
+"If disabled, will not be available in create ticket form. This will disable "
+"ability of customer to insert while creating ticket but agents can edit "
+"these values and remian visible in open ticket"
+msgstr ""
+
+#: includes/admin/custom_fields/get_edit_default_form_field.php:55
+#: includes/admin/settings/get_add_agent_role.php:25
+#: includes/admin/settings/get_add_agent_role.php:33
+#: includes/admin/settings/get_add_agent_role.php:41
+#: includes/admin/settings/get_add_agent_role.php:52
+#: includes/admin/settings/get_add_agent_role.php:60
+#: includes/admin/settings/get_add_agent_role.php:68
+#: includes/admin/settings/get_add_agent_role.php:79
+#: includes/admin/settings/get_add_agent_role.php:87
+#: includes/admin/settings/get_add_agent_role.php:95
+#: includes/admin/settings/get_add_agent_role.php:106
+#: includes/admin/settings/get_add_agent_role.php:114
+#: includes/admin/settings/get_add_agent_role.php:122
+#: includes/admin/settings/get_add_agent_role.php:133
+#: includes/admin/settings/get_add_agent_role.php:141
+#: includes/admin/settings/get_add_agent_role.php:149
+#: includes/admin/settings/get_add_agent_role.php:160
+#: includes/admin/settings/get_add_agent_role.php:168
+#: includes/admin/settings/get_add_agent_role.php:176
+#: includes/admin/settings/get_add_agent_role.php:187
+#: includes/admin/settings/get_add_agent_role.php:195
+#: includes/admin/settings/get_add_agent_role.php:203
+#: includes/admin/settings/get_add_agent_role.php:214
+#: includes/admin/settings/get_add_agent_role.php:222
+#: includes/admin/settings/get_add_agent_role.php:230
+#: includes/admin/settings/get_add_agent_role.php:241
+#: includes/admin/settings/get_add_agent_role.php:249
+#: includes/admin/settings/get_add_agent_role.php:257
+#: includes/admin/settings/get_add_agent_role.php:268
+#: includes/admin/settings/get_add_agent_role.php:277
+#: includes/admin/settings/get_add_agent_role.php:286
+#: includes/admin/settings/get_add_agent_role.php:297
+#: includes/admin/settings/get_add_agent_role.php:306
+#: includes/admin/settings/get_add_agent_role.php:315
+#: includes/admin/settings/get_advanced_settings.php:36
+#: includes/admin/settings/get_advanced_settings.php:50
+#: includes/admin/settings/get_advanced_settings.php:78
+#: includes/admin/settings/get_advanced_settings.php:112
+#: includes/admin/settings/get_advanced_settings.php:154
+#: includes/admin/settings/get_advanced_settings.php:235
+#: includes/admin/settings/get_advanced_settings.php:249
+#: includes/admin/settings/get_advanced_settings.php:288
+#: includes/admin/settings/get_attachment_settings.php:90
+#: includes/admin/settings/get_captcha_settings.php:20
+#: includes/admin/settings/get_captcha_settings.php:34
+#: includes/admin/settings/get_captcha_settings.php:48
+#: includes/admin/settings/get_edit_agent_role.php:33
+#: includes/admin/settings/get_edit_agent_role.php:41
+#: includes/admin/settings/get_edit_agent_role.php:49
+#: includes/admin/settings/get_edit_agent_role.php:60
+#: includes/admin/settings/get_edit_agent_role.php:68
+#: includes/admin/settings/get_edit_agent_role.php:76
+#: includes/admin/settings/get_edit_agent_role.php:87
+#: includes/admin/settings/get_edit_agent_role.php:95
+#: includes/admin/settings/get_edit_agent_role.php:103
+#: includes/admin/settings/get_edit_agent_role.php:114
+#: includes/admin/settings/get_edit_agent_role.php:122
+#: includes/admin/settings/get_edit_agent_role.php:130
+#: includes/admin/settings/get_edit_agent_role.php:141
+#: includes/admin/settings/get_edit_agent_role.php:149
+#: includes/admin/settings/get_edit_agent_role.php:157
+#: includes/admin/settings/get_edit_agent_role.php:168
+#: includes/admin/settings/get_edit_agent_role.php:176
+#: includes/admin/settings/get_edit_agent_role.php:184
+#: includes/admin/settings/get_edit_agent_role.php:195
+#: includes/admin/settings/get_edit_agent_role.php:203
+#: includes/admin/settings/get_edit_agent_role.php:211
+#: includes/admin/settings/get_edit_agent_role.php:222
+#: includes/admin/settings/get_edit_agent_role.php:230
+#: includes/admin/settings/get_edit_agent_role.php:238
+#: includes/admin/settings/get_edit_agent_role.php:249
+#: includes/admin/settings/get_edit_agent_role.php:258
+#: includes/admin/settings/get_edit_agent_role.php:267
+#: includes/admin/settings/get_edit_agent_role.php:279
+#: includes/admin/settings/get_edit_agent_role.php:288
+#: includes/admin/settings/get_edit_agent_role.php:297
+#: includes/admin/settings/get_edit_agent_role.php:309
+#: includes/admin/settings/get_edit_agent_role.php:318
+#: includes/admin/settings/get_edit_agent_role.php:327
+#: includes/admin/settings/get_edit_ticket_widget.php:31
+#: includes/admin/settings/get_general_settings.php:270
+#: includes/admin/settings/get_rest_api_settings.php:24
+#: includes/admin/settings/get_terms_and_condition_settings.php:27
+#: includes/admin/settings/get_terms_and_condition_settings.php:47
+#: includes/admin/settings/get_terms_and_condition_settings.php:69
+msgid "Enable"
+msgstr ""
+
+#: includes/admin/custom_fields/get_edit_default_form_field.php:56
+#: includes/admin/settings/get_add_agent_role.php:24
+#: includes/admin/settings/get_add_agent_role.php:32
+#: includes/admin/settings/get_add_agent_role.php:40
+#: includes/admin/settings/get_add_agent_role.php:51
+#: includes/admin/settings/get_add_agent_role.php:59
+#: includes/admin/settings/get_add_agent_role.php:67
+#: includes/admin/settings/get_add_agent_role.php:78
+#: includes/admin/settings/get_add_agent_role.php:86
+#: includes/admin/settings/get_add_agent_role.php:94
+#: includes/admin/settings/get_add_agent_role.php:105
+#: includes/admin/settings/get_add_agent_role.php:113
+#: includes/admin/settings/get_add_agent_role.php:121
+#: includes/admin/settings/get_add_agent_role.php:132
+#: includes/admin/settings/get_add_agent_role.php:140
+#: includes/admin/settings/get_add_agent_role.php:148
+#: includes/admin/settings/get_add_agent_role.php:159
+#: includes/admin/settings/get_add_agent_role.php:167
+#: includes/admin/settings/get_add_agent_role.php:175
+#: includes/admin/settings/get_add_agent_role.php:186
+#: includes/admin/settings/get_add_agent_role.php:194
+#: includes/admin/settings/get_add_agent_role.php:202
+#: includes/admin/settings/get_add_agent_role.php:213
+#: includes/admin/settings/get_add_agent_role.php:221
+#: includes/admin/settings/get_add_agent_role.php:229
+#: includes/admin/settings/get_add_agent_role.php:240
+#: includes/admin/settings/get_add_agent_role.php:248
+#: includes/admin/settings/get_add_agent_role.php:256
+#: includes/admin/settings/get_add_agent_role.php:267
+#: includes/admin/settings/get_add_agent_role.php:276
+#: includes/admin/settings/get_add_agent_role.php:285
+#: includes/admin/settings/get_add_agent_role.php:296
+#: includes/admin/settings/get_add_agent_role.php:305
+#: includes/admin/settings/get_add_agent_role.php:314
+#: includes/admin/settings/get_advanced_settings.php:38
+#: includes/admin/settings/get_advanced_settings.php:52
+#: includes/admin/settings/get_advanced_settings.php:80
+#: includes/admin/settings/get_advanced_settings.php:114
+#: includes/admin/settings/get_advanced_settings.php:156
+#: includes/admin/settings/get_advanced_settings.php:237
+#: includes/admin/settings/get_advanced_settings.php:251
+#: includes/admin/settings/get_advanced_settings.php:290
+#: includes/admin/settings/get_attachment_settings.php:93
+#: includes/admin/settings/get_captcha_settings.php:22
+#: includes/admin/settings/get_captcha_settings.php:36
+#: includes/admin/settings/get_captcha_settings.php:50
+#: includes/admin/settings/get_edit_agent_role.php:32
+#: includes/admin/settings/get_edit_agent_role.php:40
+#: includes/admin/settings/get_edit_agent_role.php:48
+#: includes/admin/settings/get_edit_agent_role.php:59
+#: includes/admin/settings/get_edit_agent_role.php:67
+#: includes/admin/settings/get_edit_agent_role.php:75
+#: includes/admin/settings/get_edit_agent_role.php:86
+#: includes/admin/settings/get_edit_agent_role.php:94
+#: includes/admin/settings/get_edit_agent_role.php:102
+#: includes/admin/settings/get_edit_agent_role.php:113
+#: includes/admin/settings/get_edit_agent_role.php:121
+#: includes/admin/settings/get_edit_agent_role.php:129
+#: includes/admin/settings/get_edit_agent_role.php:140
+#: includes/admin/settings/get_edit_agent_role.php:148
+#: includes/admin/settings/get_edit_agent_role.php:156
+#: includes/admin/settings/get_edit_agent_role.php:167
+#: includes/admin/settings/get_edit_agent_role.php:175
+#: includes/admin/settings/get_edit_agent_role.php:183
+#: includes/admin/settings/get_edit_agent_role.php:194
+#: includes/admin/settings/get_edit_agent_role.php:202
+#: includes/admin/settings/get_edit_agent_role.php:210
+#: includes/admin/settings/get_edit_agent_role.php:221
+#: includes/admin/settings/get_edit_agent_role.php:229
+#: includes/admin/settings/get_edit_agent_role.php:237
+#: includes/admin/settings/get_edit_agent_role.php:248
+#: includes/admin/settings/get_edit_agent_role.php:257
+#: includes/admin/settings/get_edit_agent_role.php:266
+#: includes/admin/settings/get_edit_agent_role.php:278
+#: includes/admin/settings/get_edit_agent_role.php:287
+#: includes/admin/settings/get_edit_agent_role.php:296
+#: includes/admin/settings/get_edit_agent_role.php:308
+#: includes/admin/settings/get_edit_agent_role.php:317
+#: includes/admin/settings/get_edit_agent_role.php:326
+#: includes/admin/settings/get_edit_ticket_widget.php:33
+#: includes/admin/settings/get_general_settings.php:272
+#: includes/admin/settings/get_rest_api_settings.php:22
+#: includes/admin/settings/get_terms_and_condition_settings.php:29
+#: includes/admin/settings/get_terms_and_condition_settings.php:49
+#: includes/admin/settings/get_terms_and_condition_settings.php:67
+msgid "Disable"
+msgstr ""
+
+#: includes/admin/custom_fields/get_edit_default_form_field.php:70
+#: includes/admin/custom_fields/get_edit_default_form_field.php:80
+msgid "Default Text"
+msgstr ""
+
+#: includes/admin/custom_fields/get_edit_default_form_field.php:71
+#: includes/admin/custom_fields/get_edit_default_form_field.php:81
+msgid ""
+"Default text for custom fields. If text is set, this text will appear in "
+"ticket after ticket creation. "
+msgstr ""
+
+#: includes/admin/custom_fields/get_edit_form_field.php:104
+msgid "Placeholder text"
+msgstr ""
+
+#: includes/admin/custom_fields/get_edit_form_field.php:105
+msgid "Enter the placeholder text"
+msgstr ""
+
+#: includes/admin/custom_fields/set_add_agentonly_field.php:85
+#: includes/admin/custom_fields/set_add_form_field.php:116
+msgid "Field added successfully."
+msgstr ""
+
+#: includes/admin/custom_fields/set_add_agentonly_field.php:87
+#: includes/admin/custom_fields/set_add_form_field.php:118
+msgid "An error occured while creating custom field."
+msgstr ""
+
+#: includes/admin/custom_fields/set_edit_agentonly_field.php:99
+#: includes/admin/custom_fields/set_edit_default_form_field.php:59
+#: includes/admin/custom_fields/set_edit_form_field.php:123
+msgid "updated successfully."
+msgstr ""
+
+#: includes/admin/custom_fields/set_form_field_order.php:17
+msgid "Form field order saved."
+msgstr ""
+
+#: includes/admin/email_notifications/clone_ticket_notification.php:40
+msgid "Email Notification clone successfull."
+msgstr ""
+
+#: includes/admin/email_notifications/clone_ticket_notification.php:43
+#: includes/admin/email_notifications/set_add_ticket_notification.php:55
+msgid "An error occured while creating email notification."
+msgstr ""
+
+#: includes/admin/email_notifications/delete_ticket_notification.php:27
+msgid "Email Notification delete successfull."
+msgstr ""
+
+#: includes/admin/email_notifications/delete_ticket_notification.php:30
+msgid "An error occured while deleting email notification."
+msgstr ""
+
+#: includes/admin/email_notifications/email_notifications.php:11
+#: includes/class-wppatt-admin.php:162 includes/class-wppatt-admin.php:163
+msgid "Email Notifications"
+msgstr ""
+
+#: includes/admin/email_notifications/email_notifications.php:18
+msgid "General Settings"
+msgstr ""
+
+#: includes/admin/email_notifications/email_notifications.php:19
+#: includes/admin/email_notifications/get_en_ticket_notifications.php:22
+msgid "Ticket Notifications"
+msgstr ""
+
+#: includes/admin/email_notifications/get_add_ticket_notification.php:18
+msgid "Add new email notification"
+msgstr ""
+
+#: includes/admin/email_notifications/get_add_ticket_notification.php:23
+#: includes/admin/email_notifications/get_edit_ticket_notification.php:28
+#: includes/admin/email_notifications/get_en_ticket_notifications.php:30
+#: includes/admin/settings/get_edit_ticket_widget.php:20
+msgid "Title"
+msgstr ""
+
+#: includes/admin/email_notifications/get_add_ticket_notification.php:24
+#: includes/admin/email_notifications/get_edit_ticket_notification.php:29
+msgid ""
+"Title to show in notification list. Please make sure title you are entering "
+"is not already available in other notifications."
+msgstr ""
+
+#: includes/admin/email_notifications/get_add_ticket_notification.php:29
+#: includes/admin/email_notifications/get_edit_ticket_notification.php:35
+#: includes/admin/settings/get_edit_ticket_widget.php:25
+msgid "Type"
+msgstr ""
+
+#: includes/admin/email_notifications/get_add_ticket_notification.php:30
+#: includes/admin/email_notifications/get_edit_ticket_notification.php:36
+msgid "Select event to send this email."
+msgstr ""
+
+#: includes/admin/email_notifications/get_add_ticket_notification.php:39
+#: includes/admin/email_notifications/get_edit_ticket_notification.php:47
+msgid "Email Subject"
+msgstr ""
+
+#: includes/admin/email_notifications/get_add_ticket_notification.php:40
+#: includes/admin/email_notifications/get_edit_ticket_notification.php:48
+msgid "Subject for email to send."
+msgstr ""
+
+#: includes/admin/email_notifications/get_add_ticket_notification.php:45
+#: includes/admin/email_notifications/get_edit_ticket_notification.php:54
+msgid "Email Body"
+msgstr ""
+
+#: includes/admin/email_notifications/get_add_ticket_notification.php:46
+#: includes/admin/email_notifications/get_edit_ticket_notification.php:55
+msgid ""
+"Body for email to send. Use macros for ticket specific details. Macros will "
+"get replaced by its value while sending an email."
+msgstr ""
+
+#: includes/admin/email_notifications/get_add_ticket_notification.php:55
+#: includes/admin/email_notifications/get_edit_ticket_notification.php:64
+#: includes/admin/settings/get_thankyou_settings.php:31
+#: includes/admin/tickets/create_ticket/class-ticket-form-field-format.php:532
+#: includes/admin/tickets/individual_ticket/reply_form.php:54
+msgid "Insert Macros"
+msgstr ""
+
+#: includes/admin/email_notifications/get_add_ticket_notification.php:60
+#: includes/admin/email_notifications/get_edit_ticket_notification.php:70
+#: includes/class-wppatt-admin.php:88 includes/class-wppatt-frontend.php:74
+#: includes/class-wppatt-install.php:1200
+msgid "Recipients"
+msgstr ""
+
+#: includes/admin/email_notifications/get_add_ticket_notification.php:61
+#: includes/admin/email_notifications/get_edit_ticket_notification.php:71
+msgid ""
+"Select roles who will receive email notifications. Assigned Agent will be "
+"none if type is New Ticket. If you want to automate assign agent for new "
+"ticket, you can purchase our <strong>Assign Agent Rules</strong> add-on."
+msgstr ""
+
+#: includes/admin/email_notifications/get_add_ticket_notification.php:65
+#: includes/admin/email_notifications/get_edit_ticket_notification.php:75
+#: includes/admin/settings/get_attachment_settings.php:33
+#: includes/admin/settings/get_attachment_settings.php:52
+#: includes/admin/settings/get_edit_ticket_widget.php:57
+msgid "Customer"
+msgstr ""
+
+#: includes/admin/email_notifications/get_add_ticket_notification.php:69
+#: includes/admin/email_notifications/get_edit_ticket_notification.php:79
+#: includes/class-wppatt-install.php:391
+msgid "Assigned Agent"
+msgstr ""
+
+#: includes/admin/email_notifications/get_add_ticket_notification.php:74
+#: includes/admin/email_notifications/get_edit_ticket_notification.php:84
+msgid "(all agents)"
+msgstr ""
+
+#: includes/admin/email_notifications/get_add_ticket_notification.php:80
+#: includes/admin/email_notifications/get_edit_ticket_notification.php:90
+msgid "Additional Ticket Recipients"
+msgstr ""
+
+#: includes/admin/email_notifications/get_add_ticket_notification.php:85
+#: includes/admin/email_notifications/get_edit_ticket_notification.php:95
+msgid "Previously Assigned Agents"
+msgstr ""
+
+#: includes/admin/email_notifications/get_add_ticket_notification.php:94
+#: includes/admin/email_notifications/get_edit_ticket_notification.php:105
+msgid "Additional Recipients"
+msgstr ""
+
+#: includes/admin/email_notifications/get_add_ticket_notification.php:95
+#: includes/admin/email_notifications/get_edit_ticket_notification.php:106
+msgid ""
+"(Optional) Enter additional recipient email address. One email per line."
+msgstr ""
+
+#: includes/admin/email_notifications/get_add_ticket_notification.php:100
+#: includes/admin/email_notifications/get_edit_ticket_notification.php:112
+msgid "Conditions"
+msgstr ""
+
+#: includes/admin/email_notifications/get_add_ticket_notification.php:101
+#: includes/admin/email_notifications/get_edit_ticket_notification.php:113
+msgid "(Optional) Email will only send when all condition matches."
+msgstr ""
+
+#: includes/admin/email_notifications/get_edit_ticket_notification.php:23
+msgid "Edit email notification"
+msgstr ""
+
+#: includes/admin/email_notifications/get_en_general_setting.php:15
+msgid "From Name"
+msgstr ""
+
+#: includes/admin/email_notifications/get_en_general_setting.php:16
+msgid "Emails to send by this name."
+msgstr ""
+
+#: includes/admin/email_notifications/get_en_general_setting.php:21
+msgid "From Email"
+msgstr ""
+
+#: includes/admin/email_notifications/get_en_general_setting.php:22
+msgid "Emails to send from this email."
+msgstr ""
+
+#: includes/admin/email_notifications/get_en_general_setting.php:27
+msgid "Reply to"
+msgstr ""
+
+#: includes/admin/email_notifications/get_en_general_setting.php:28
+msgid ""
+"(Optional) When recipients reply to the notification from their inbox, reply "
+"will be sent to this email address."
+msgstr ""
+
+#: includes/admin/email_notifications/get_en_general_setting.php:33
+msgid "Ignore Emails"
+msgstr ""
+
+#: includes/admin/email_notifications/get_en_general_setting.php:34
+msgid ""
+"Emails will not be sent to these email addresses. New email should begin on "
+"new line."
+msgstr ""
+
+#: includes/admin/email_notifications/get_en_general_setting.php:42
+msgid "Email frequency"
+msgstr ""
+
+#: includes/admin/email_notifications/get_en_general_setting.php:43
+msgid "Number of emails sent for each cron job call."
+msgstr ""
+
+#: includes/admin/email_notifications/get_en_general_setting.php:48
+msgid "Email sending preference"
+msgstr ""
+
+#: includes/admin/email_notifications/get_en_general_setting.php:49
+msgid "Select how an email notification will be sent."
+msgstr ""
+
+#: includes/admin/email_notifications/get_en_general_setting.php:54
+msgid "Background (Increase screen load time)"
+msgstr ""
+
+#: includes/admin/email_notifications/get_en_general_setting.php:56
+msgid "Instant"
+msgstr ""
+
+#: includes/admin/email_notifications/get_en_ticket_notifications.php:31
+msgid "Notification Type"
+msgstr ""
+
+#: includes/admin/email_notifications/get_en_ticket_notifications.php:32
+#: includes/admin/support_agents/get_support_agents.php:37
+msgid "Actions"
+msgstr ""
+
+#: includes/admin/email_notifications/set_add_ticket_notification.php:52
+msgid "Email Notification added successfully."
+msgstr ""
+
+#: includes/admin/email_notifications/set_edit_ticket_notification.php:54
+msgid "Email Notification updated successfully."
+msgstr ""
+
+#: includes/admin/gdpr_data/wppatt_privacy_ticket_exporter.php:95
+#: includes/admin/gdpr_data/wppatt_privacy_ticket_exporter.php:98
+#: includes/admin/gdpr_data/wppatt_privacy_ticket_exporter.php:101
+#: includes/admin/gdpr_data/wppatt_privacy_ticket_exporter.php:109
+#: includes/admin/tickets/individual_ticket/get_thread_info.php:22
+#: includes/admin/tickets/individual_ticket/get_thread_info.php:25
+#: includes/admin/tickets/individual_ticket/get_thread_info.php:28
+#: includes/admin/tickets/individual_ticket/get_thread_info.php:36
+msgid "Not Found"
+msgstr ""
+
+#: includes/admin/gdpr_data/wppatt_privacy_ticket_exporter.php:113
+#: includes/admin/tickets/individual_ticket/get_thread_info.php:55
+msgid "IP Address"
+msgstr ""
+
+#: includes/admin/gdpr_data/wppatt_privacy_ticket_exporter.php:117
+#: includes/admin/tickets/individual_ticket/get_thread_info.php:60
+msgid "Ticket Source"
+msgstr ""
+
+#: includes/admin/gdpr_data/wppatt_privacy_ticket_exporter.php:121
+#: includes/admin/tickets/individual_ticket/get_thread_info.php:67
+msgid "Operating System"
+msgstr ""
+
+#: includes/admin/gdpr_data/wppatt_privacy_ticket_exporter.php:125
+#: includes/admin/tickets/individual_ticket/get_thread_info.php:71
+msgid "Browser"
+msgstr ""
+
+#: includes/admin/gdpr_data/wppatt_privacy_ticket_exporter.php:133
+#: includes/admin/settings/get_advanced_settings.php:177
+msgid "Ticket ID"
+msgstr ""
+
+#: includes/admin/gdpr_data/wppatt_privacy_ticket_exporter.php:137
+#: includes/class-wppatt-install.php:299
+msgid "Email Address"
+msgstr ""
+
+#: includes/admin/gdpr_data/wppatt_privacy_ticket_exporter.php:141
+#: includes/admin/tickets/individual_ticket/get_create_ticket_thread.php:25
+#: includes/class-wppatt-install.php:318
+msgid "Subject"
+msgstr ""
+
+#: includes/admin/gdpr_data/wppatt_privacy_ticket_exporter.php:151
+msgid "User Tickets"
+msgstr ""
+
+#: includes/admin/license/addons.php:10 includes/class-wppatt-admin.php:197
+#: includes/class-wppatt-admin.php:198
+msgid "Addons"
+msgstr ""
+
+#: includes/admin/license/license.php:8
+msgid ""
+"Enter your add-ons license keys here to receive updates for purchased add-"
+"ons. If your license key has expired, please renew your license."
+msgstr ""
+
+#: includes/admin/license/license.php:10
+#, php-format
+msgid "No add-ons installed. See available add-ons - %1$s."
+msgstr ""
+
+#: includes/admin/license/license.php:19 includes/class-wppatt-admin.php:189
+#: includes/class-wppatt-admin.php:190
+msgid "License"
+msgstr ""
+
+#: includes/admin/settings/custom_start_ticket_number.php:27
+msgid "Ticket number must be greater than current ticket number"
+msgstr ""
+
+#: includes/admin/settings/delete_agent_role.php:20
+msgid "Deleted successfully."
+msgstr ""
+
+#: includes/admin/settings/delete_agent_role.php:22
+msgid "Default role can not be deleted."
+msgstr ""
+
+#: includes/admin/settings/delete_category.php:21
+msgid "Category deleted successfully."
+msgstr ""
+
+#: includes/admin/settings/delete_category.php:23
+msgid "Default category can not be deleted."
+msgstr ""
+
+#: includes/admin/settings/delete_priority.php:14
+msgid "Default ticket priority can not be deleted."
+msgstr ""
+
+#: includes/admin/settings/delete_priority.php:26
+msgid "Priority deleted successfully."
+msgstr ""
+
+#: includes/admin/settings/delete_status.php:14
+msgid "Default ticket status can not be deleted."
+msgstr ""
+
+#: includes/admin/settings/delete_status.php:19
+msgid "Ticket status after customer reply can not be deleted."
+msgstr ""
+
+#: includes/admin/settings/delete_status.php:24
+msgid "Ticket status after agent reply can not be deleted."
+msgstr ""
+
+#: includes/admin/settings/delete_status.php:29
+msgid "Default ticket close status can not be deleted."
+msgstr ""
+
+#: includes/admin/settings/delete_status.php:41
+msgid "Status deleted successfully."
+msgstr ""
+
+#: includes/admin/settings/get_add_agent_role.php:14
+#: includes/admin/settings/get_edit_agent_role.php:22
+msgid "Label"
+msgstr ""
+
+#: includes/admin/settings/get_add_agent_role.php:18
+#: includes/admin/settings/get_edit_agent_role.php:26
+msgid "Ticket Permissions"
+msgstr ""
+
+#: includes/admin/settings/get_add_agent_role.php:21
+#: includes/admin/settings/get_edit_agent_role.php:29
+msgid "View unassigned"
+msgstr ""
+
+#: includes/admin/settings/get_add_agent_role.php:22
+#: includes/admin/settings/get_edit_agent_role.php:30
+msgid "Unassigned ticket list visibility."
+msgstr ""
+
+#: includes/admin/settings/get_add_agent_role.php:29
+#: includes/admin/settings/get_edit_agent_role.php:37
+msgid "View assigned me"
+msgstr ""
+
+#: includes/admin/settings/get_add_agent_role.php:30
+#: includes/admin/settings/get_edit_agent_role.php:38
+msgid "Ticket assigned to user himself. This will also enable private notes."
+msgstr ""
+
+#: includes/admin/settings/get_add_agent_role.php:37
+#: includes/admin/settings/get_edit_agent_role.php:45
+msgid "View assigned others"
+msgstr ""
+
+#: includes/admin/settings/get_add_agent_role.php:38
+#: includes/admin/settings/get_edit_agent_role.php:46
+msgid ""
+"Ticket assigned to all other agents. This will also enable private notes."
+msgstr ""
+
+#: includes/admin/settings/get_add_agent_role.php:48
+#: includes/admin/settings/get_edit_agent_role.php:56
+msgid "Assign unassigned"
+msgstr ""
+
+#: includes/admin/settings/get_add_agent_role.php:49
+#: includes/admin/settings/get_edit_agent_role.php:57
+msgid "Unassigned ticket assign agent capability."
+msgstr ""
+
+#: includes/admin/settings/get_add_agent_role.php:56
+#: includes/admin/settings/get_edit_agent_role.php:64
+msgid "Assign assigned me"
+msgstr ""
+
+#: includes/admin/settings/get_add_agent_role.php:57
+#: includes/admin/settings/get_edit_agent_role.php:65
+msgid "Ticket assigned to user himself further assign capability."
+msgstr ""
+
+#: includes/admin/settings/get_add_agent_role.php:64
+#: includes/admin/settings/get_edit_agent_role.php:72
+msgid "Assign assigned others"
+msgstr ""
+
+#: includes/admin/settings/get_add_agent_role.php:65
+#: includes/admin/settings/get_edit_agent_role.php:73
+msgid "Ticket assigned to all other agents further assign capability."
+msgstr ""
+
+#: includes/admin/settings/get_add_agent_role.php:75
+#: includes/admin/settings/get_edit_agent_role.php:83
+msgid "Reply unassigned"
+msgstr ""
+
+#: includes/admin/settings/get_add_agent_role.php:76
+#: includes/admin/settings/get_edit_agent_role.php:84
+msgid "Unassigned ticket reply capability."
+msgstr ""
+
+#: includes/admin/settings/get_add_agent_role.php:83
+#: includes/admin/settings/get_edit_agent_role.php:91
+msgid "Reply assigned me"
+msgstr ""
+
+#: includes/admin/settings/get_add_agent_role.php:84
+#: includes/admin/settings/get_edit_agent_role.php:92
+msgid "Ticket assigned to user himself reply capability."
+msgstr ""
+
+#: includes/admin/settings/get_add_agent_role.php:91
+#: includes/admin/settings/get_edit_agent_role.php:99
+msgid "Reply assigned others"
+msgstr ""
+
+#: includes/admin/settings/get_add_agent_role.php:92
+#: includes/admin/settings/get_edit_agent_role.php:100
+msgid "Ticket assigned to all other agents reply capability."
+msgstr ""
+
+#: includes/admin/settings/get_add_agent_role.php:102
+#: includes/admin/settings/get_edit_agent_role.php:110
+msgid "Change status unassigned"
+msgstr ""
+
+#: includes/admin/settings/get_add_agent_role.php:103
+#: includes/admin/settings/get_edit_agent_role.php:111
+msgid "Unassigned ticket status change capability."
+msgstr ""
+
+#: includes/admin/settings/get_add_agent_role.php:110
+#: includes/admin/settings/get_edit_agent_role.php:118
+msgid "Change status assigned me"
+msgstr ""
+
+#: includes/admin/settings/get_add_agent_role.php:111
+#: includes/admin/settings/get_edit_agent_role.php:119
+msgid "Ticket assigned to user himself change ticket status capability."
+msgstr ""
+
+#: includes/admin/settings/get_add_agent_role.php:118
+#: includes/admin/settings/get_edit_agent_role.php:126
+msgid "Change status assigned others"
+msgstr ""
+
+#: includes/admin/settings/get_add_agent_role.php:119
+#: includes/admin/settings/get_edit_agent_role.php:127
+msgid "Ticket assigned to all other agents change ticket status capability."
+msgstr ""
+
+#: includes/admin/settings/get_add_agent_role.php:129
+#: includes/admin/settings/get_edit_agent_role.php:137
+msgid "Change ticket fields unassigned"
+msgstr ""
+
+#: includes/admin/settings/get_add_agent_role.php:130
+#: includes/admin/settings/get_edit_agent_role.php:138
+msgid "Unassigned change ticket fields capability."
+msgstr ""
+
+#: includes/admin/settings/get_add_agent_role.php:137
+#: includes/admin/settings/get_edit_agent_role.php:145
+msgid "Change ticket fields assigned me"
+msgstr ""
+
+#: includes/admin/settings/get_add_agent_role.php:138
+#: includes/admin/settings/get_edit_agent_role.php:146
+msgid "Ticket assigned to user himself change ticket fields capability."
+msgstr ""
+
+#: includes/admin/settings/get_add_agent_role.php:145
+#: includes/admin/settings/get_edit_agent_role.php:153
+msgid "Change ticket fields assigned others"
+msgstr ""
+
+#: includes/admin/settings/get_add_agent_role.php:146
+#: includes/admin/settings/get_edit_agent_role.php:154
+msgid "Ticket assigned to all other agents change ticket fields capability."
+msgstr ""
+
+#: includes/admin/settings/get_add_agent_role.php:156
+#: includes/admin/settings/get_edit_agent_role.php:164
+msgid "Change agentonly fields unassigned"
+msgstr ""
+
+#: includes/admin/settings/get_add_agent_role.php:157
+#: includes/admin/settings/get_edit_agent_role.php:165
+msgid "Unassigned change agentonly fields capability."
+msgstr ""
+
+#: includes/admin/settings/get_add_agent_role.php:164
+#: includes/admin/settings/get_edit_agent_role.php:172
+msgid "Change agentonly fields assigned me"
+msgstr ""
+
+#: includes/admin/settings/get_add_agent_role.php:165
+#: includes/admin/settings/get_edit_agent_role.php:173
+msgid "Ticket assigned to user himself change agentonly fields capability."
+msgstr ""
+
+#: includes/admin/settings/get_add_agent_role.php:172
+#: includes/admin/settings/get_edit_agent_role.php:180
+msgid "Change agentonly fields assigned others"
+msgstr ""
+
+#: includes/admin/settings/get_add_agent_role.php:173
+#: includes/admin/settings/get_edit_agent_role.php:181
+msgid "Ticket assigned to all other agents change agentonly fields capability."
+msgstr ""
+
+#: includes/admin/settings/get_add_agent_role.php:183
+#: includes/admin/settings/get_edit_agent_role.php:191
+msgid "Change Raised By unassigned"
+msgstr ""
+
+#: includes/admin/settings/get_add_agent_role.php:184
+#: includes/admin/settings/get_edit_agent_role.php:192
+msgid "Unassigned ticket change raised by capability."
+msgstr ""
+
+#: includes/admin/settings/get_add_agent_role.php:191
+#: includes/admin/settings/get_edit_agent_role.php:199
+msgid "Change Raised By assigned me"
+msgstr ""
+
+#: includes/admin/settings/get_add_agent_role.php:192
+#: includes/admin/settings/get_edit_agent_role.php:200
+msgid "Ticket assigned to user himself change Raised By capability."
+msgstr ""
+
+#: includes/admin/settings/get_add_agent_role.php:199
+#: includes/admin/settings/get_edit_agent_role.php:207
+msgid "Change Raised By assigned others"
+msgstr ""
+
+#: includes/admin/settings/get_add_agent_role.php:200
+#: includes/admin/settings/get_edit_agent_role.php:208
+msgid "Ticket assigned to all other agents change Raised By capability."
+msgstr ""
+
+#: includes/admin/settings/get_add_agent_role.php:210
+#: includes/admin/settings/get_edit_agent_role.php:218
+msgid "Delete unassigned"
+msgstr ""
+
+#: includes/admin/settings/get_add_agent_role.php:211
+#: includes/admin/settings/get_edit_agent_role.php:219
+msgid "Delete unassigned ticket capability."
+msgstr ""
+
+#: includes/admin/settings/get_add_agent_role.php:218
+#: includes/admin/settings/get_edit_agent_role.php:226
+msgid "Delete assigned me"
+msgstr ""
+
+#: includes/admin/settings/get_add_agent_role.php:219
+#: includes/admin/settings/get_edit_agent_role.php:227
+msgid "Ticket assigned to user himself delete capability."
+msgstr ""
+
+#: includes/admin/settings/get_add_agent_role.php:226
+#: includes/admin/settings/get_edit_agent_role.php:234
+msgid "Delete assigned others"
+msgstr ""
+
+#: includes/admin/settings/get_add_agent_role.php:227
+#: includes/admin/settings/get_edit_agent_role.php:235
+msgid "Ticket assigned to all other agents delete capability."
+msgstr ""
+
+#: includes/admin/settings/get_add_agent_role.php:237
+#: includes/admin/settings/get_edit_agent_role.php:275
+msgid "Edit/Delete unassigned threads"
+msgstr ""
+
+#: includes/admin/settings/get_add_agent_role.php:238
+#: includes/admin/settings/get_edit_agent_role.php:276
+msgid "Edit/Delete unassigned ticket threads capability."
+msgstr ""
+
+#: includes/admin/settings/get_add_agent_role.php:245
+#: includes/admin/settings/get_edit_agent_role.php:284
+msgid "Edit/Delete assigned me threads"
+msgstr ""
+
+#: includes/admin/settings/get_add_agent_role.php:246
+#: includes/admin/settings/get_edit_agent_role.php:285
+msgid "Ticket assigned to user himself edit/delete threads capability."
+msgstr ""
+
+#: includes/admin/settings/get_add_agent_role.php:253
+#: includes/admin/settings/get_edit_agent_role.php:293
+msgid "Edit/Delete assigned others threads"
+msgstr ""
+
+#: includes/admin/settings/get_add_agent_role.php:254
+#: includes/admin/settings/get_edit_agent_role.php:294
+msgid "Ticket assigned to all other agents edit/delete threads capability."
+msgstr ""
+
+#: includes/admin/settings/get_add_agent_role.php:264
+#: includes/admin/settings/get_edit_agent_role.php:245
+msgid "Private note unassigned"
+msgstr ""
+
+#: includes/admin/settings/get_add_agent_role.php:265
+#: includes/admin/settings/get_edit_agent_role.php:246
+msgid "Private note unassigned ticket capability."
+msgstr ""
+
+#: includes/admin/settings/get_add_agent_role.php:273
+#: includes/admin/settings/get_edit_agent_role.php:254
+msgid "Private note assigned me"
+msgstr ""
+
+#: includes/admin/settings/get_add_agent_role.php:274
+#: includes/admin/settings/get_edit_agent_role.php:255
+msgid "Ticket assigned to user himself private note capability."
+msgstr ""
+
+#: includes/admin/settings/get_add_agent_role.php:282
+#: includes/admin/settings/get_edit_agent_role.php:263
+msgid "Private note assigned others"
+msgstr ""
+
+#: includes/admin/settings/get_add_agent_role.php:283
+#: includes/admin/settings/get_edit_agent_role.php:264
+msgid "Ticket assigned to all other agents private note capability."
+msgstr ""
+
+#: includes/admin/settings/get_add_agent_role.php:293
+#: includes/admin/settings/get_edit_agent_role.php:305
+msgid "View log unassigned"
+msgstr ""
+
+#: includes/admin/settings/get_add_agent_role.php:294
+#: includes/admin/settings/get_edit_agent_role.php:306
+msgid "View log unassigned ticket capability."
+msgstr ""
+
+#: includes/admin/settings/get_add_agent_role.php:302
+#: includes/admin/settings/get_edit_agent_role.php:314
+msgid "View log assigned me"
+msgstr ""
+
+#: includes/admin/settings/get_add_agent_role.php:303
+#: includes/admin/settings/get_edit_agent_role.php:315
+msgid "Ticket assigned to user himself view log capability."
+msgstr ""
+
+#: includes/admin/settings/get_add_agent_role.php:311
+#: includes/admin/settings/get_edit_agent_role.php:323
+msgid "View log assigned others"
+msgstr ""
+
+#: includes/admin/settings/get_add_agent_role.php:312
+#: includes/admin/settings/get_edit_agent_role.php:324
+msgid "Ticket assigned to all other agents view log capability."
+msgstr ""
+
+#: includes/admin/settings/get_add_category.php:12
+#: includes/admin/settings/get_edit_category.php:17
+msgid "Category Name"
+msgstr ""
+
+#: includes/admin/settings/get_add_category.php:13
+msgid ""
+"Insert category name. Please make sure category name you are entering should "
+"not already exist."
+msgstr ""
+
+#: includes/admin/settings/get_add_priority.php:12
+#: includes/admin/settings/get_edit_priority.php:19
+msgid "Priority Name"
+msgstr ""
+
+#: includes/admin/settings/get_add_priority.php:13
+#: includes/admin/settings/get_edit_priority.php:20
+msgid ""
+"Insert priority name. Please make sure priority name you are entering should "
+"not already exist."
+msgstr ""
+
+#: includes/admin/settings/get_add_priority.php:18
+#: includes/admin/settings/get_edit_priority.php:25
+msgid "Text color of priority."
+msgstr ""
+
+#: includes/admin/settings/get_add_priority.php:23
+#: includes/admin/settings/get_edit_priority.php:30
+msgid "Background color of priority."
+msgstr ""
+
+#: includes/admin/settings/get_add_status.php:12
+#: includes/admin/settings/get_edit_status.php:19
+msgid "Status Name"
+msgstr ""
+
+#: includes/admin/settings/get_add_status.php:13
+#: includes/admin/settings/get_edit_status.php:20
+msgid ""
+"Insert status name. Please make sure status name you are entering should not "
+"already exist."
+msgstr ""
+
+#: includes/admin/settings/get_add_status.php:18
+#: includes/admin/settings/get_edit_status.php:25
+msgid "Text color of status."
+msgstr ""
+
+#: includes/admin/settings/get_add_status.php:23
+#: includes/admin/settings/get_edit_status.php:30
+msgid "Background color of status."
+msgstr ""
+
+#: includes/admin/settings/get_advanced_settings.php:17
+msgid "Ticket URL Permissions"
+msgstr ""
+
+#: includes/admin/settings/get_advanced_settings.php:22
+msgid "Anyone can see"
+msgstr ""
+
+#: includes/admin/settings/get_advanced_settings.php:24
+msgid "Login required"
+msgstr ""
+
+#: includes/admin/settings/get_advanced_settings.php:30
+msgid "Logout button"
+msgstr ""
+
+#: includes/admin/settings/get_advanced_settings.php:31
+msgid "Enable/Disable logout button on ticket list action bar."
+msgstr ""
+
+#: includes/admin/settings/get_advanced_settings.php:44
+msgid "Public Mode"
+msgstr ""
+
+#: includes/admin/settings/get_advanced_settings.php:45
+msgid ""
+"If you enable this setting then all tickets will be visible to all users and "
+"they can reply to each others tickets."
+msgstr ""
+
+#: includes/admin/settings/get_advanced_settings.php:58
+msgid "Ticket list filters default visibility"
+msgstr ""
+
+#: includes/admin/settings/get_advanced_settings.php:59
+msgid "Default show/hide filters on ticket list on page load."
+msgstr ""
+
+#: includes/admin/settings/get_advanced_settings.php:64
+#: includes/admin/settings/get_advanced_settings.php:140
+msgid "Show"
+msgstr ""
+
+#: includes/admin/settings/get_advanced_settings.php:66
+#: includes/admin/settings/get_advanced_settings.php:142
+msgid "Hide"
+msgstr ""
+
+#: includes/admin/settings/get_advanced_settings.php:72
+msgid "Allow Reply Confirmation"
+msgstr ""
+
+#: includes/admin/settings/get_advanced_settings.php:73
+msgid ""
+"If you enable this setting, it will ask confirmation before submitting reply."
+msgstr ""
+
+#: includes/admin/settings/get_advanced_settings.php:86
+msgid "Thread Date Format"
+msgstr ""
+
+#: includes/admin/settings/get_advanced_settings.php:87
+msgid "This format will be applicable for thread log time."
+msgstr ""
+
+#: includes/admin/settings/get_advanced_settings.php:92
+msgid "In words (eg. 1 min ago)"
+msgstr ""
+
+#: includes/admin/settings/get_advanced_settings.php:94
+msgid "Timestamp"
+msgstr ""
+
+#: includes/admin/settings/get_advanced_settings.php:99
+msgid "Timestamp Format"
+msgstr ""
+
+#: includes/admin/settings/get_advanced_settings.php:106
+msgid "Do Not Notify Owner"
+msgstr ""
+
+#: includes/admin/settings/get_advanced_settings.php:107
+msgid "Enable or Disable Do Not Notify Owner checkbox in create ticket."
+msgstr ""
+
+#: includes/admin/settings/get_advanced_settings.php:120
+msgid "Don't Notify Owner Checkbox"
+msgstr ""
+
+#: includes/admin/settings/get_advanced_settings.php:121
+msgid "Checked or Unchecked Don't Notify Owner checkbox in create ticket."
+msgstr ""
+
+#: includes/admin/settings/get_advanced_settings.php:126
+msgid "Checked"
+msgstr ""
+
+#: includes/admin/settings/get_advanced_settings.php:128
+msgid "Unchecked"
+msgstr ""
+
+#: includes/admin/settings/get_advanced_settings.php:134
+msgid "Priority Visibility"
+msgstr ""
+
+#: includes/admin/settings/get_advanced_settings.php:135
+msgid "Show/Hide priority in individual ticket for customers."
+msgstr ""
+
+#: includes/admin/settings/get_advanced_settings.php:148
+msgid "Ticket Thread View More"
+msgstr ""
+
+#: includes/admin/settings/get_advanced_settings.php:149
+msgid ""
+"Enable/Disable View More button in individual ticket thread. This will show "
+"full content of the thread if disabled."
+msgstr ""
+
+#: includes/admin/settings/get_advanced_settings.php:162
+msgid "Auto Refresh Default Status"
+msgstr ""
+
+#: includes/admin/settings/get_advanced_settings.php:163
+msgid "Default status of auto-refresh on ticket list on page load."
+msgstr ""
+
+#: includes/admin/settings/get_advanced_settings.php:168
+msgid "On"
+msgstr ""
+
+#: includes/admin/settings/get_advanced_settings.php:170
+msgid "Off"
+msgstr ""
+
+#: includes/admin/settings/get_advanced_settings.php:178
+msgid "This is applicable for Ticket id being created for new ticket."
+msgstr ""
+
+#: includes/admin/settings/get_advanced_settings.php:183
+msgid "Sequential"
+msgstr ""
+
+#: includes/admin/settings/get_advanced_settings.php:185
+msgid "Random"
+msgstr ""
+
+#: includes/admin/settings/get_advanced_settings.php:191
+msgid "Starting Ticket ID"
+msgstr ""
+
+#: includes/admin/settings/get_advanced_settings.php:192
+msgid "This is applicable only for Sequential ticket id type."
+msgstr ""
+
+#: includes/admin/settings/get_advanced_settings.php:198
+#: includes/admin/tickets/individual_ticket/get_add_ticket_users.php:38
+#: includes/admin/tickets/individual_ticket/get_bulk_assign_agent.php:75
+#: includes/admin/tickets/individual_ticket/get_bulk_change_status.php:90
+#: includes/admin/tickets/individual_ticket/get_change_agent_fields.php:56
+#: includes/admin/tickets/individual_ticket/get_change_assign_agent.php:99
+#: includes/admin/tickets/individual_ticket/get_change_raised_by.php:92
+#: includes/admin/tickets/individual_ticket/get_change_ticket_fields.php:61
+#: includes/admin/tickets/individual_ticket/get_change_ticket_status.php:92
+#: includes/admin/tickets/individual_ticket/get_edit_ticket_subject.php:35
+#: includes/admin/tickets/ticket_list/filters/get_update_filter.php:314
+msgid "Save"
+msgstr ""
+
+#: includes/admin/settings/get_advanced_settings.php:207
+msgid "Ticket History Limit"
+msgstr ""
+
+#: includes/admin/settings/get_advanced_settings.php:208
+msgid "Number of threads for ticket history macro."
+msgstr ""
+
+#: includes/admin/settings/get_advanced_settings.php:215
+msgid "Ticket reply redirect"
+msgstr ""
+
+#: includes/admin/settings/get_advanced_settings.php:216
+msgid ""
+"Set screen to which user should be redirected after successful ticket reply."
+msgstr ""
+
+#: includes/admin/settings/get_advanced_settings.php:223
+msgid "Ticket Itself"
+msgstr ""
+
+#: includes/admin/settings/get_advanced_settings.php:229
+msgid "Register user on creating ticket"
+msgstr ""
+
+#: includes/admin/settings/get_advanced_settings.php:230
+msgid "Register user upon create ticket if not exists (Guest User) "
+msgstr ""
+
+#: includes/admin/settings/get_advanced_settings.php:243
+msgid "Auto delete tickets"
+msgstr ""
+
+#: includes/admin/settings/get_advanced_settings.php:244
+msgid "If enabled, ticket will get deleted after given time interval."
+msgstr ""
+
+#: includes/admin/settings/get_advanced_settings.php:256
+msgid "Age"
+msgstr ""
+
+#: includes/admin/settings/get_advanced_settings.php:257
+msgid "Set time interval."
+msgstr ""
+
+#: includes/admin/settings/get_advanced_settings.php:282
+msgid "BCC"
+msgstr ""
+
+#: includes/admin/settings/get_advanced_settings.php:283
+msgid "Enable/Disable Bcc field in reply ticket form."
+msgstr ""
+
+#: includes/admin/settings/get_advanced_settings.php:296
+msgid "Exclude Scripts"
+msgstr ""
+
+#: includes/admin/settings/get_advanced_settings.php:297
+msgid "It will get excluded from frontend."
+msgstr ""
+
+#: includes/admin/settings/get_advanced_settings.php:305
+msgid "DateTimePicker"
+msgstr ""
+
+#: includes/admin/settings/get_agent_roles.php:15
+#: includes/admin/support_agents/support_agents.php:19
+msgid "Agent Roles"
+msgstr ""
+
+#: includes/admin/settings/get_attachment_settings.php:16
+msgid "Attachment max filesize(MB)"
+msgstr ""
+
+#: includes/admin/settings/get_attachment_settings.php:17
+msgid ""
+"Maximum attachment size of file to be able to attach for attachment fields."
+msgstr ""
+
+#: includes/admin/settings/get_attachment_settings.php:22
+msgid "Allow Attachment"
+msgstr ""
+
+#: includes/admin/settings/get_attachment_settings.php:23
+msgid "Create ticket form"
+msgstr ""
+
+#: includes/admin/settings/get_attachment_settings.php:28
+#: includes/admin/settings/get_attachment_settings.php:47
+#: includes/class-wppatt-install.php:640
+#: includes/functions/conditions/get_condition_options.php:128
+msgid "Agent"
+msgstr ""
+
+#: includes/admin/settings/get_attachment_settings.php:39
+#: includes/admin/settings/get_attachment_settings.php:57
+#: includes/admin/settings/get_tinymce_settings.php:27
+#: includes/admin/tickets/ticket_list/class-ticket-list-field-format.php:208
+#: includes/admin/tickets/ticket_list/filters/filter_autocomplete.php:149
+#: includes/class-wppatt-functions.php:468
+msgid "Guest"
+msgstr ""
+
+#: includes/admin/settings/get_attachment_settings.php:42
+msgid "Reply form"
+msgstr ""
+
+#: includes/admin/settings/get_attachment_settings.php:63
+msgid "Allow attachment type"
+msgstr ""
+
+#: includes/admin/settings/get_attachment_settings.php:64
+msgid "Please enter comma separated extension. e.g. jpg, png, zip"
+msgstr ""
+
+#: includes/admin/settings/get_attachment_settings.php:69
+msgid "Image Attachment"
+msgstr ""
+
+#: includes/admin/settings/get_attachment_settings.php:70
+msgid "Set image attachment behaviour in the ticket."
+msgstr ""
+
+#: includes/admin/settings/get_attachment_settings.php:75
+msgid "Show in Browser"
+msgstr ""
+
+#: includes/admin/settings/get_attachment_settings.php:77
+msgid "Download"
+msgstr ""
+
+#: includes/admin/settings/get_attachment_settings.php:83
+msgid "Show file attachment notice"
+msgstr ""
+
+#: includes/admin/settings/get_attachment_settings.php:84
+msgid "Enable/Disable file attachment notice"
+msgstr ""
+
+#: includes/admin/settings/get_attachment_settings.php:99
+msgid "Attachment notice"
+msgstr ""
+
+#: includes/admin/settings/get_captcha_settings.php:14
+msgid "Allow Captcha"
+msgstr ""
+
+#: includes/admin/settings/get_captcha_settings.php:15
+msgid "Enable or disable Captcha in ticket form."
+msgstr ""
+
+#: includes/admin/settings/get_captcha_settings.php:28
+msgid "Allow Captcha In Registration Form"
+msgstr ""
+
+#: includes/admin/settings/get_captcha_settings.php:29
+msgid "Enable or disable Captcha in registration form."
+msgstr ""
+
+#: includes/admin/settings/get_captcha_settings.php:42
+msgid "Allow Captcha In Login Form"
+msgstr ""
+
+#: includes/admin/settings/get_captcha_settings.php:43
+msgid "Enable or disable Captcha in Login form."
+msgstr ""
+
+#: includes/admin/settings/get_captcha_settings.php:56
+msgid "Recaptcha Type"
+msgstr ""
+
+#: includes/admin/settings/get_captcha_settings.php:57
+msgid "Select the captcha type for Supportcandy on create ticket page."
+msgstr ""
+
+#: includes/admin/settings/get_captcha_settings.php:59
+msgid "Please Use Google Recaptcha Version 2.0."
+msgstr ""
+
+#: includes/admin/settings/get_captcha_settings.php:59
+#, php-format
+msgid "%1$s for steps to get Site Key and Secret Key for Google Recaptcha."
+msgstr ""
+
+#: includes/admin/settings/get_captcha_settings.php:65
+msgid "SupportCandy Captcha"
+msgstr ""
+
+#: includes/admin/settings/get_captcha_settings.php:67
+msgid "Google reCaptcha"
+msgstr ""
+
+#: includes/admin/settings/get_captcha_settings.php:73
+msgid "Enter Site Key"
+msgstr ""
+
+#: includes/admin/settings/get_captcha_settings.php:78
+msgid "Enter Secret Key"
+msgstr ""
+
+#: includes/admin/settings/get_captcha_settings.php:156
+msgid "Enter site key"
+msgstr ""
+
+#: includes/admin/settings/get_captcha_settings.php:160
+msgid "Enter secret key"
+msgstr ""
+
+#: includes/admin/settings/get_category_settings.php:21
+#: includes/admin/settings/settings.php:20
+msgid "Ticket Categories"
+msgstr ""
+
+#: includes/admin/settings/get_cron_setup_settings.php:11
+#: includes/admin/settings/settings.php:25
+msgid "Cron Setting"
+msgstr ""
+
+#: includes/admin/settings/get_cron_setup_settings.php:16
+msgid "Cron Method"
+msgstr ""
+
+#: includes/admin/settings/get_cron_setup_settings.php:24
+msgid "WP Cron (Wordpress Cron)"
+msgstr ""
+
+#: includes/admin/settings/get_cron_setup_settings.php:31
+msgid "External"
+msgstr ""
+
+#: includes/admin/settings/get_cron_setup_settings.php:35
+msgid ""
+"<i>Set cron in your hosting control panel to execute below command every "
+"minute -</i>"
+msgstr ""
+
+#: includes/admin/settings/get_edit_category.php:18
+msgid "Insert category name."
+msgstr ""
+
+#: includes/admin/settings/get_edit_ticket_widget.php:19
+msgid "Edit Ticket Widget"
+msgstr ""
+
+#: includes/admin/settings/get_edit_ticket_widget.php:26
+msgid "Show/hide ticket widget in open ticket."
+msgstr ""
+
+#: includes/admin/settings/get_edit_ticket_widget.php:42
+#: includes/admin/support_agents/get_support_agents.php:36
+msgid "Role"
+msgstr ""
+
+#: includes/admin/settings/get_edit_ticket_widget.php:43
+msgid "Selected users can see the widget."
+msgstr ""
+
+#: includes/admin/settings/get_edit_ticket_widget.php:64
+#: includes/admin/tickets/individual_ticket/get_bulk_restore_ticket.php:30
+#: includes/admin/tickets/individual_ticket/get_clone_ticket.php:34
+#: includes/admin/tickets/individual_ticket/get_close_ticket.php:33
+#: includes/admin/tickets/individual_ticket/get_delete_permanently_bulk_ticket.php:30
+#: includes/admin/tickets/individual_ticket/get_delete_thread.php:38
+#: includes/admin/tickets/individual_ticket/get_delete_ticket.php:32
+#: includes/admin/tickets/individual_ticket/get_delete_ticket_permanently.php:35
+#: includes/admin/tickets/individual_ticket/get_restore_ticket.php:34
+#: includes/admin/tickets/sign_in/sign_up_user.php:79
+#: includes/admin/tickets/ticket_list/filters/get_delete_bulk_ticket.php:31
+msgid "Cancel"
+msgstr ""
+
+#: includes/admin/settings/get_general_settings.php:15
+msgid "Support Page"
+msgstr ""
+
+#: includes/admin/settings/get_general_settings.php:16
+msgid ""
+"Select page in which shortcode is inserted. Create a page with shortcode "
+"[supportcandy] if not created yet. Fullwidth page template is recommended."
+msgstr ""
+
+#: includes/admin/settings/get_general_settings.php:37
+msgid "Click here to go to support page"
+msgstr ""
+
+#: includes/admin/settings/get_general_settings.php:41
+msgid "Default ticket status"
+msgstr ""
+
+#: includes/admin/settings/get_general_settings.php:42
+msgid "This status will get applied for newly created ticket."
+msgstr ""
+
+#: includes/admin/settings/get_general_settings.php:62
+msgid "Default ticket category"
+msgstr ""
+
+#: includes/admin/settings/get_general_settings.php:63
+msgid "This category will get applied for newly created ticket."
+msgstr ""
+
+#: includes/admin/settings/get_general_settings.php:83
+msgid "Default ticket priority"
+msgstr ""
+
+#: includes/admin/settings/get_general_settings.php:84
+msgid "This priority will get applied for newly created ticket."
+msgstr ""
+
+#: includes/admin/settings/get_general_settings.php:104
+msgid "Ticket status after customer reply"
+msgstr ""
+
+#: includes/admin/settings/get_general_settings.php:105
+msgid ""
+"This status will be applied to the ticket if customer post reply in ticket. "
+"'Default' will not change status of the ticket in this case."
+msgstr ""
+
+#: includes/admin/settings/get_general_settings.php:107
+#: includes/admin/settings/get_general_settings.php:122
+msgid "Default"
+msgstr ""
+
+#: includes/admin/settings/get_general_settings.php:119
+msgid "Ticket status after agent reply"
+msgstr ""
+
+#: includes/admin/settings/get_general_settings.php:120
+msgid ""
+"This status will be applied to the ticket if agent or any support staff post "
+"reply in ticket. 'Default' will not change status of the ticket in this case."
+msgstr ""
+
+#: includes/admin/settings/get_general_settings.php:134
+msgid "Close ticket status"
+msgstr ""
+
+#: includes/admin/settings/get_general_settings.php:135
+msgid "Status to apply if 'Close Ticket' button clicked for a ticket."
+msgstr ""
+
+#: includes/admin/settings/get_general_settings.php:148
+msgid "Allow customer to close ticket"
+msgstr ""
+
+#: includes/admin/settings/get_general_settings.php:149
+msgid "Enables 'Close Ticket' button for customer inside open ticket screen."
+msgstr ""
+
+#: includes/admin/settings/get_general_settings.php:162
+msgid "Reply form position"
+msgstr ""
+
+#: includes/admin/settings/get_general_settings.php:163
+msgid ""
+"Reply form position in open ticket page. 'Top' will load reply form above "
+"ticket threads and ticket threads will load in decending order. Whereas, "
+"'Bottom' will load reply form below ticket thread and threads loaded in "
+"acending order."
+msgstr ""
+
+#: includes/admin/settings/get_general_settings.php:168
+msgid "Top"
+msgstr ""
+
+#: includes/admin/settings/get_general_settings.php:170
+msgid "Bottom"
+msgstr ""
+
+#: includes/admin/settings/get_general_settings.php:176
+msgid "Calender date format"
+msgstr ""
+
+#: includes/admin/settings/get_general_settings.php:177
+msgid ""
+"This format will be applicable for input date fields (datepicker) for "
+"SupportCandy."
+msgstr ""
+
+#: includes/admin/settings/get_general_settings.php:198
+msgid "Ticket Alice in Email Notification Subject"
+msgstr ""
+
+#: includes/admin/settings/get_general_settings.php:199
+msgid ""
+"Label to represent ticket in email notification subject etc e.g. You may "
+"want to use this as a bug tracking then you can label it like issue #123, "
+"bug #132 etc. So that it should be  show in issue #123 or Bug #123. Please "
+"note this will only work in email subject. If you want to change all places, "
+"you will need to translate .pot"
+msgstr ""
+
+#: includes/admin/settings/get_general_settings.php:206
+msgid "Allow guest ticket"
+msgstr ""
+
+#: includes/admin/settings/get_general_settings.php:207
+msgid ""
+"Enables guest ticket facility. Guest will able to create ticket without "
+"needing them to have an user account on website. They can create ticket "
+"using their name and email address."
+msgstr ""
+
+#: includes/admin/settings/get_general_settings.php:223
+msgid "Allow Reply to Closed Tickets"
+msgstr ""
+
+#: includes/admin/settings/get_general_settings.php:224
+msgid "Only selected roles can reply to closed tickets."
+msgstr ""
+
+#: includes/admin/settings/get_general_settings.php:229
+msgid "Customers"
+msgstr ""
+
+#: includes/admin/settings/get_general_settings.php:234
+msgid "Agents"
+msgstr ""
+
+#: includes/admin/settings/get_general_settings.php:240
+msgid "Default Login"
+msgstr ""
+
+#: includes/admin/settings/get_general_settings.php:241
+msgid " Default Login on support page."
+msgstr ""
+
+#: includes/admin/settings/get_general_settings.php:258
+#: includes/admin/settings/get_general_settings.php:296
+msgid "Custom Url"
+msgstr ""
+
+#: includes/admin/settings/get_general_settings.php:277
+msgid "User Registration Method"
+msgstr ""
+
+#: includes/admin/settings/get_priority_settings.php:21
+#: includes/admin/settings/settings.php:22
+msgid "Ticket Priorities"
+msgstr ""
+
+#: includes/admin/settings/get_rest_api_settings.php:11
+#: includes/admin/settings/settings.php:30
+msgid "REST API"
+msgstr ""
+
+#: includes/admin/settings/get_rest_api_settings.php:16
+msgid "Allow REST API"
+msgstr ""
+
+#: includes/admin/settings/get_rest_api_settings.php:17
+msgid "Enable or disable REST API for SupportCandy."
+msgstr ""
+
+#: includes/admin/settings/get_rest_api_settings.php:30
+msgid "Secret Key"
+msgstr ""
+
+#: includes/admin/settings/get_rest_api_settings.php:31
+msgid ""
+"This will be required to authorize your api requests. Store this at safe "
+"place in your application so that it should not be accessible to public."
+msgstr ""
+
+#: includes/admin/settings/get_status_settings.php:21
+#: includes/admin/settings/settings.php:21
+msgid "Ticket Statuses"
+msgstr ""
+
+#: includes/admin/settings/get_templates.php:24
+msgid "Tag"
+msgstr ""
+
+#: includes/admin/settings/get_templates.php:25
+msgid "Field Name"
+msgstr ""
+
+#: includes/admin/settings/get_templates.php:41
+msgid "Copy"
+msgstr ""
+
+#: includes/admin/settings/get_terms_and_condition_settings.php:21
+msgid "Terms & Canditions"
+msgstr ""
+
+#: includes/admin/settings/get_terms_and_condition_settings.php:22
+msgid "Enable or disable Terms and Condition ticket form."
+msgstr ""
+
+#: includes/admin/settings/get_terms_and_condition_settings.php:35
+msgid "Terms and Conditions Text"
+msgstr ""
+
+#: includes/admin/settings/get_terms_and_condition_settings.php:36
+#: includes/admin/settings/get_terms_and_condition_settings.php:56
+msgid "Text to show on create ticket page."
+msgstr ""
+
+#: includes/admin/settings/get_terms_and_condition_settings.php:41
+msgid "GDPR"
+msgstr ""
+
+#: includes/admin/settings/get_terms_and_condition_settings.php:42
+msgid "Enable or disable GDPR condition on ticket form."
+msgstr ""
+
+#: includes/admin/settings/get_terms_and_condition_settings.php:55
+msgid "GDPR Text"
+msgstr ""
+
+#: includes/admin/settings/get_terms_and_condition_settings.php:61
+msgid "Personal Data Retention"
+msgstr ""
+
+#: includes/admin/settings/get_terms_and_condition_settings.php:62
+msgid "Enable or disable personal data retention policy ."
+msgstr ""
+
+#: includes/admin/settings/get_terms_and_condition_settings.php:75
+msgid "Set retention period"
+msgstr ""
+
+#: includes/admin/settings/get_terms_and_condition_settings.php:76
+msgid "Set time for which personal data should be retained."
+msgstr ""
+
+#: includes/admin/settings/get_thankyou_settings.php:21
+msgid "Thank you text"
+msgstr ""
+
+#: includes/admin/settings/get_thankyou_settings.php:22
+msgid "Text to show on thank you screen."
+msgstr ""
+
+#: includes/admin/settings/get_thankyou_settings.php:36
+msgid "Thank you page redirect url"
+msgstr ""
+
+#: includes/admin/settings/get_thankyou_settings.php:37
+msgid ""
+"Url to redirect in case you want to show your custom thank you page. Keep "
+"this empty to show above default thank you messege."
+msgstr ""
+
+#: includes/admin/settings/get_tinymce_settings.php:13
+msgid "Allow rich text editor"
+msgstr ""
+
+#: includes/admin/settings/get_tinymce_settings.php:14
+msgid "Only selected roles can use rich text editor."
+msgstr ""
+
+#: includes/admin/settings/get_tinymce_settings.php:21
+msgid "Registered Users"
+msgstr ""
+
+#: includes/admin/settings/get_tinymce_settings.php:38
+msgid "Tinymce toolbar"
+msgstr ""
+
+#: includes/admin/settings/set_add_category.php:27
+msgid "Category added successfully."
+msgstr ""
+
+#: includes/admin/settings/set_add_category.php:29
+msgid "An error occured while creating category."
+msgstr ""
+
+#: includes/admin/settings/set_add_priority.php:19
+#: includes/admin/settings/set_edit_priority.php:22
+msgid "Priority color and background color should not be same."
+msgstr ""
+
+#: includes/admin/settings/set_add_priority.php:38
+msgid "Priority added successfully."
+msgstr ""
+
+#: includes/admin/settings/set_add_priority.php:40
+msgid "An error occured while creating priority."
+msgstr ""
+
+#: includes/admin/settings/set_add_status.php:19
+#: includes/admin/settings/set_edit_status.php:22
+msgid "Status color and background color should not be same."
+msgstr ""
+
+#: includes/admin/settings/set_add_status.php:38
+msgid "Status added successfully."
+msgstr ""
+
+#: includes/admin/settings/set_add_status.php:40
+msgid "An error occured while creating status."
+msgstr ""
+
+#: includes/admin/settings/set_advanced_settings.php:84
+msgid "Auto delete ticket time must be greater than zero."
+msgstr ""
+
+#: includes/admin/settings/set_advanced_settings.php:86
+msgid "Ticket history limit greater than zero."
+msgstr ""
+
+#: includes/admin/settings/set_category_order.php:17
+msgid "Category order saved."
+msgstr ""
+
+#: includes/admin/settings/set_priority_order.php:17
+msgid "Priority order saved."
+msgstr ""
+
+#: includes/admin/settings/set_status_order.php:17
+msgid "Status order saved."
+msgstr ""
+
+#: includes/admin/settings/set_ticket_widgets.php:17
+msgid "Ticket Widget Order  saved."
+msgstr ""
+
+#: includes/admin/settings/settings.php:11 includes/class-wppatt-admin.php:181
+#: includes/class-wppatt-admin.php:182
+msgid "Settings"
+msgstr ""
+
+#: includes/admin/settings/settings.php:23
+msgid "Open Ticket Widget"
+msgstr ""
+
+#: includes/admin/settings/settings.php:24
+msgid "Thank you page"
+msgstr ""
+
+#: includes/admin/settings/settings.php:26
+#: includes/admin/tickets/individual_ticket/load_guest_individual_ticket.php:132
+#: includes/admin/tickets/individual_ticket/load_guest_individual_ticket.php:208
+#: includes/admin/tickets/individual_ticket/load_individual_ticket.php:204
+#: includes/admin/tickets/individual_ticket/load_individual_ticket.php:297
+#: includes/admin/tickets/individual_ticket/load_individual_ticket.php:387
+msgid "Attachments"
+msgstr ""
+
+#: includes/admin/settings/settings.php:27
+msgid "Term & Conditions & GDPR"
+msgstr ""
+
+#: includes/admin/settings/settings.php:28
+msgid "Advanced Settings"
+msgstr ""
+
+#: includes/admin/settings/settings.php:31
+msgid "TinyMCE"
+msgstr ""
+
+#: includes/admin/support_agents/delete_support_agent.php:23
+msgid "Agent deleted successfully."
+msgstr ""
+
+#: includes/admin/support_agents/get_add_support_agent.php:14
+msgid "Select User"
+msgstr ""
+
+#: includes/admin/support_agents/get_add_support_agent.php:15
+msgid "Select user to whome you want to make an agent."
+msgstr ""
+
+#: includes/admin/support_agents/get_add_support_agent.php:16
+#: includes/admin/tickets/ticket_list/filters/get_update_filter.php:84
+#: includes/admin/tickets/ticket_list/filters/get_update_filter.php:300
+#: includes/admin/tickets/ticket_list/get_ticket_list.php:102
+#: includes/admin/tickets/ticket_list/get_ticket_list.php:165
+#: includes/functions/conditions/load_conditions_ui.php:193
+#: includes/functions/conditions/load_conditions_ui.php:255
+msgid "Search..."
+msgstr ""
+
+#: includes/admin/support_agents/get_add_support_agent.php:20
+#: includes/admin/support_agents/get_edit_support_agent.php:19
+msgid "Select Role"
+msgstr ""
+
+#: includes/admin/support_agents/get_add_support_agent.php:21
+#: includes/admin/support_agents/get_edit_support_agent.php:20
+msgid ""
+"Select agent role. You can create new role in Agent Roles section if needed."
+msgstr ""
+
+#: includes/admin/support_agents/get_agent_setting.php:21
+msgid "Signature"
+msgstr ""
+
+#: includes/admin/support_agents/get_agent_setting.php:34
+msgid "Default Filter"
+msgstr ""
+
+#: includes/admin/support_agents/get_agent_setting.php:140
+#: includes/admin/tickets/create_ticket/class-ticket-form-field-format.php:622
+#: includes/admin/tickets/create_ticket/load_create_ticket.php:318
+#: includes/admin/tickets/individual_ticket/guest_reply_form.php:178
+#: includes/admin/tickets/individual_ticket/load_guest_individual_ticket.php:424
+#: includes/admin/tickets/individual_ticket/load_individual_ticket.php:844
+#: includes/admin/tickets/individual_ticket/reply_form.php:119
+msgid "Attached file type not allowed!"
+msgstr ""
+
+#: includes/admin/support_agents/get_agent_setting.php:189
+msgid "Save Settings"
+msgstr ""
+
+#: includes/admin/support_agents/get_support_agents.php:27
+#: includes/admin/support_agents/support_agents.php:11
+#: includes/admin/support_agents/support_agents.php:18
+#: includes/class-wppatt-admin.php:138 includes/class-wppatt-admin.php:139
+msgid "Support Agents"
+msgstr ""
+
+#: includes/admin/support_agents/get_support_agents.php:35
+msgid "Agent Name"
+msgstr ""
+
+#: includes/admin/support_agents/get_users_add_agent.php:25
+#: includes/admin/tickets/create_ticket/get_users.php:48
+msgid "No matching users"
+msgstr ""
+
+#: includes/admin/support_agents/set_add_support_agent.php:38
+msgid "Agent added successfully."
+msgstr ""
+
+#: includes/admin/support_agents/set_add_support_agent.php:41
+msgid "Agent already exist."
+msgstr ""
+
+#: includes/admin/ticket_list/delete_agent_filter_item.php:14
+#: includes/admin/ticket_list/delete_agent_list_field.php:14
+#: includes/admin/ticket_list/delete_customer_filter_item.php:14
+#: includes/admin/ticket_list/delete_customer_list_field.php:14
+msgid "Removed successfully."
+msgstr ""
+
+#: includes/admin/ticket_list/get_add_agent_list_field.php:30
+#: includes/admin/ticket_list/get_add_agent_ticket_filters.php:30
+#: includes/admin/ticket_list/get_add_customer_list_field.php:30
+#: includes/admin/ticket_list/get_add_customer_ticket_filters.php:30
+msgid "Select Field"
+msgstr ""
+
+#: includes/admin/ticket_list/get_agent_ticket_filters.php:34
+#: includes/admin/ticket_list/ticket_list.php:21
+msgid "Agent Ticket Filters"
+msgstr ""
+
+#: includes/admin/ticket_list/get_agent_ticket_list.php:34
+#: includes/admin/ticket_list/ticket_list.php:19
+msgid "Agent Ticket List"
+msgstr ""
+
+#: includes/admin/ticket_list/get_customer_ticket_filters.php:34
+#: includes/admin/ticket_list/ticket_list.php:22
+msgid "Customer Ticket Filters"
+msgstr ""
+
+#: includes/admin/ticket_list/get_customer_ticket_list.php:34
+#: includes/admin/ticket_list/ticket_list.php:20
+msgid "Customer Ticket List"
+msgstr ""
+
+#: includes/admin/ticket_list/get_ticket_list_additional_settings.php:34
+msgid "Agent View"
+msgstr ""
+
+#: includes/admin/ticket_list/get_ticket_list_additional_settings.php:38
+#: includes/admin/ticket_list/get_ticket_list_additional_settings.php:111
+msgid "Default order by"
+msgstr ""
+
+#: includes/admin/ticket_list/get_ticket_list_additional_settings.php:39
+msgid "Tickets are loaded by selected order for agent view by default."
+msgstr ""
+
+#: includes/admin/ticket_list/get_ticket_list_additional_settings.php:66
+#: includes/admin/ticket_list/get_ticket_list_additional_settings.php:139
+msgid "Number of tickets"
+msgstr ""
+
+#: includes/admin/ticket_list/get_ticket_list_additional_settings.php:67
+msgid "Number of Tickets shown per page for agent view."
+msgstr ""
+
+#: includes/admin/ticket_list/get_ticket_list_additional_settings.php:72
+#: includes/admin/ticket_list/get_ticket_list_additional_settings.php:145
+msgid "10"
+msgstr ""
+
+#: includes/admin/ticket_list/get_ticket_list_additional_settings.php:73
+#: includes/admin/ticket_list/get_ticket_list_additional_settings.php:146
+msgid "20"
+msgstr ""
+
+#: includes/admin/ticket_list/get_ticket_list_additional_settings.php:74
+#: includes/admin/ticket_list/get_ticket_list_additional_settings.php:147
+msgid "30"
+msgstr ""
+
+#: includes/admin/ticket_list/get_ticket_list_additional_settings.php:75
+#: includes/admin/ticket_list/get_ticket_list_additional_settings.php:148
+msgid "40"
+msgstr ""
+
+#: includes/admin/ticket_list/get_ticket_list_additional_settings.php:76
+#: includes/admin/ticket_list/get_ticket_list_additional_settings.php:149
+msgid "50"
+msgstr ""
+
+#: includes/admin/ticket_list/get_ticket_list_additional_settings.php:77
+#: includes/admin/ticket_list/get_ticket_list_additional_settings.php:150
+msgid "100"
+msgstr ""
+
+#: includes/admin/ticket_list/get_ticket_list_additional_settings.php:78
+#: includes/admin/ticket_list/get_ticket_list_additional_settings.php:151
+msgid "500"
+msgstr ""
+
+#: includes/admin/ticket_list/get_ticket_list_additional_settings.php:85
+#: includes/admin/ticket_list/get_ticket_list_additional_settings.php:158
+msgid "Unresolved Statuses"
+msgstr ""
+
+#: includes/admin/ticket_list/get_ticket_list_additional_settings.php:86
+#: includes/admin/ticket_list/get_ticket_list_additional_settings.php:159
+msgid "Select statuses for unresolved filter in ticket list."
+msgstr ""
+
+#: includes/admin/ticket_list/get_ticket_list_additional_settings.php:107
+msgid "Customer View"
+msgstr ""
+
+#: includes/admin/ticket_list/get_ticket_list_additional_settings.php:112
+msgid "Tickets are loaded by selected order for customer view by default."
+msgstr ""
+
+#: includes/admin/ticket_list/get_ticket_list_additional_settings.php:140
+msgid "Number of Tickets shown per page for customer view."
+msgstr ""
+
+#: includes/admin/ticket_list/get_ticket_list_advanced_settings.php:9
+msgid "Closed Status group"
+msgstr ""
+
+#: includes/admin/ticket_list/get_ticket_list_advanced_settings.php:10
+msgid ""
+"Select statuses you refer as closed. It will be applicable only to Closed "
+"filter on ticket list."
+msgstr ""
+
+#: includes/admin/ticket_list/set_add_agent_list_field.php:15
+#: includes/admin/ticket_list/set_add_agent_ticket_filters.php:15
+#: includes/admin/ticket_list/set_add_customer_list_field.php:15
+#: includes/admin/ticket_list/set_add_customer_ticket_filters.php:15
+msgid "Already available in list."
+msgstr ""
+
+#: includes/admin/ticket_list/set_add_agent_list_field.php:20
+#: includes/admin/ticket_list/set_add_agent_ticket_filters.php:20
+#: includes/admin/ticket_list/set_add_customer_list_field.php:20
+#: includes/admin/ticket_list/set_add_customer_ticket_filters.php:20
+msgid "Added successfully."
+msgstr ""
+
+#: includes/admin/ticket_list/set_agent_filter_order.php:17
+#: includes/admin/ticket_list/set_agent_list_order.php:17
+#: includes/admin/ticket_list/set_customer_filter_order.php:17
+#: includes/admin/ticket_list/set_customer_list_order.php:17
+msgid "List order saved."
+msgstr ""
+
+#: includes/admin/ticket_list/ticket_list.php:23
+msgid "More Settings"
+msgstr ""
+
+#: includes/admin/ticket_list/ticket_list.php:24
+msgid "Advanced"
+msgstr ""
+
+#: includes/admin/tickets/create_ticket/class-fields-formatting.php:73
+msgid "Click Here"
+msgstr ""
+
+#: includes/admin/tickets/create_ticket/class-ticket-form-field-format.php:407
+#: includes/admin/tickets/create_ticket/class-ticket-form-field-format.php:527
+#: includes/admin/tickets/create_ticket/class-ticket-list-format.php:318
+#: includes/admin/tickets/individual_ticket/guest_reply_form.php:63
+#: includes/admin/tickets/individual_ticket/reply_form.php:50
+msgid "Attach file"
+msgstr ""
+
+#: includes/admin/tickets/create_ticket/load_create_ticket.php:50
+#: includes/admin/tickets/individual_ticket/load_guest_individual_ticket.php:38
+#: includes/admin/tickets/individual_ticket/load_individual_ticket.php:64
+#: includes/admin/tickets/ticket_list/load_list.php:28
+#: includes/class-wppatt-functions.php:1151
+msgid "New Ticket"
+msgstr ""
+
+#: includes/admin/tickets/create_ticket/load_create_ticket.php:78
+#: includes/admin/tickets/sign_in/sign_in.php:46
+#: includes/admin/tickets/sign_in/sign_up_user.php:63
+msgid "I'm not a robot"
+msgstr ""
+
+#: includes/admin/tickets/create_ticket/load_create_ticket.php:143
+msgid "Don't notify owner"
+msgstr ""
+
+#: includes/admin/tickets/create_ticket/load_create_ticket.php:152
+msgid "Submit Ticket"
+msgstr ""
+
+#: includes/admin/tickets/create_ticket/load_create_ticket.php:153
+msgid "Reset Form"
+msgstr ""
+
+#: includes/admin/tickets/create_ticket/load_create_ticket.php:325
+#: includes/admin/tickets/individual_ticket/guest_reply_form.php:184
+#: includes/admin/tickets/individual_ticket/reply_form.php:125
+msgid "File size exceed allowed limit!"
+msgstr ""
+
+#: includes/admin/tickets/create_ticket/load_create_ticket.php:453
+#: includes/admin/tickets/sign_in/sign_up_user.php:104
+msgid "Required fields can not be empty!"
+msgstr ""
+
+#: includes/admin/tickets/create_ticket/load_create_ticket.php:469
+#: includes/admin/tickets/individual_ticket/guest_reply_form.php:100
+msgid "Incorrect email address!"
+msgstr ""
+
+#: includes/admin/tickets/create_ticket/load_create_ticket.php:485
+msgid "Incorrect URL!"
+msgstr ""
+
+#: includes/admin/tickets/create_ticket/load_create_ticket.php:498
+#: includes/admin/tickets/create_ticket/load_create_ticket.php:507
+#: includes/admin/tickets/sign_in/sign_in.php:146
+#: includes/admin/tickets/sign_in/sign_in.php:155
+#: includes/admin/tickets/sign_in/sign_up_user.php:127
+#: includes/admin/tickets/sign_in/sign_up_user.php:136
+msgid "Please confirm you are not a robot!"
+msgstr ""
+
+#: includes/admin/tickets/create_ticket/load_create_ticket.php:518
+msgid "Ticket can not be created unless you agree to privacy policy."
+msgstr ""
+
+#: includes/admin/tickets/create_ticket/load_create_ticket.php:528
+msgid "Ticket can not be created unless you agree to terms & coditions."
+msgstr ""
+
+#: includes/admin/tickets/create_ticket/submit_ticket.php:15
+#: includes/admin/tickets/create_ticket/submit_ticket.php:23
+#: includes/admin/tickets/create_ticket/submit_ticket.php:30
+#: includes/admin/tickets/individual_ticket/submit_note.php:16
+#: includes/admin/tickets/individual_ticket/submit_reply.php:16
+#: includes/admin/tickets/sign_in/set_user_login.php:8
+#: includes/admin/tickets/sign_in/set_user_login.php:26
+#: includes/admin/tickets/sign_in/set_user_login.php:35
+#: includes/admin/tickets/sign_in/submit_user.php:27
+#: includes/admin/tickets/sign_in/submit_user.php:38
+msgid "Cheating huh?"
+msgstr ""
+
+#: includes/admin/tickets/individual_ticket/get_add_ticket_users.php:22
+msgid ""
+"(Optional) Enter additional recepient email addresses to whom you want to "
+"send email notifications as raised by user. One email per line."
+msgstr ""
+
+#: includes/admin/tickets/individual_ticket/get_bulk_assign_agent.php:20
+#: includes/admin/tickets/individual_ticket/get_change_assign_agent.php:19
+msgid "Search agent ..."
+msgstr ""
+
+#: includes/admin/tickets/individual_ticket/get_bulk_change_status.php:20
+#: includes/admin/tickets/individual_ticket/get_change_ticket_status.php:24
+msgid "Ticket Status"
+msgstr ""
+
+#: includes/admin/tickets/individual_ticket/get_bulk_change_status.php:40
+#: includes/admin/tickets/individual_ticket/get_change_ticket_status.php:43
+msgid "Ticket Category"
+msgstr ""
+
+#: includes/admin/tickets/individual_ticket/get_bulk_change_status.php:60
+#: includes/admin/tickets/individual_ticket/get_change_ticket_status.php:62
+msgid "Ticket priority"
+msgstr ""
+
+#: includes/admin/tickets/individual_ticket/get_bulk_restore_ticket.php:15
+msgid "Are you sure to restore these tickets?"
+msgstr ""
+
+#: includes/admin/tickets/individual_ticket/get_bulk_restore_ticket.php:31
+#: includes/admin/tickets/individual_ticket/get_close_ticket.php:34
+#: includes/admin/tickets/individual_ticket/get_delete_permanently_bulk_ticket.php:31
+#: includes/admin/tickets/individual_ticket/get_delete_thread.php:39
+#: includes/admin/tickets/individual_ticket/get_delete_ticket.php:33
+#: includes/admin/tickets/individual_ticket/get_delete_ticket_permanently.php:36
+#: includes/admin/tickets/individual_ticket/get_restore_ticket.php:35
+#: includes/admin/tickets/ticket_list/filters/get_delete_bulk_ticket.php:32
+msgid "Confirm"
+msgstr ""
+
+#: includes/admin/tickets/individual_ticket/get_change_agent_fields.php:42
+msgid "No Agent fields"
+msgstr ""
+
+#: includes/admin/tickets/individual_ticket/get_change_ticket_fields.php:47
+#: includes/admin/tickets/individual_ticket/load_guest_individual_ticket.php:341
+#: includes/admin/tickets/individual_ticket/load_guest_individual_ticket.php:344
+#: includes/admin/tickets/individual_ticket/load_individual_ticket.php:664
+msgid "No Ticket Fields"
+msgstr ""
+
+#: includes/admin/tickets/individual_ticket/get_close_ticket.php:17
+msgid "Are you sure to close this ticket?"
+msgstr ""
+
+#: includes/admin/tickets/individual_ticket/get_create_ticket_thread.php:45
+msgid "Create New Ticket"
+msgstr ""
+
+#: includes/admin/tickets/individual_ticket/get_delete_permanently_bulk_ticket.php:15
+msgid "Are you sure to delete these tickets permanently?"
+msgstr ""
+
+#: includes/admin/tickets/individual_ticket/get_delete_thread.php:21
+msgid "Are you sure to delete this thread?"
+msgstr ""
+
+#: includes/admin/tickets/individual_ticket/get_delete_ticket.php:17
+#: includes/admin/tickets/ticket_list/filters/get_delete_bulk_ticket.php:16
+msgid "Are you sure to delete these tickets?"
+msgstr ""
+
+#: includes/admin/tickets/individual_ticket/get_delete_ticket_permanently.php:19
+msgid "Are you sure to delete this ticket permanently?"
+msgstr ""
+
+#: includes/admin/tickets/individual_ticket/get_restore_ticket.php:18
+msgid "Are you sure to restore this ticket?"
+msgstr ""
+
+#: includes/admin/tickets/individual_ticket/get_thread_info.php:43
+msgid "Click here"
+msgstr ""
+
+#: includes/admin/tickets/individual_ticket/get_thread_info.php:45
+msgid "Please select support page in settings."
+msgstr ""
+
+#: includes/admin/tickets/individual_ticket/get_thread_info.php:62
+msgid "Thread Source"
+msgstr ""
+
+#: includes/admin/tickets/individual_ticket/get_thread_info.php:75
+#: includes/class-wppatt-install.php:450
+msgid "Ticket URL"
+msgstr ""
+
+#: includes/admin/tickets/individual_ticket/guest_reply_form.php:40
+msgid "Your Name"
+msgstr ""
+
+#: includes/admin/tickets/individual_ticket/guest_reply_form.php:41
+msgid "Please insert your name"
+msgstr ""
+
+#: includes/admin/tickets/individual_ticket/guest_reply_form.php:45
+msgid "Your Email"
+msgstr ""
+
+#: includes/admin/tickets/individual_ticket/guest_reply_form.php:46
+msgid "Please insert your email address"
+msgstr ""
+
+#: includes/admin/tickets/individual_ticket/guest_reply_form.php:88
+msgid "Reply"
+msgstr ""
+
+#: includes/admin/tickets/individual_ticket/guest_reply_form.php:120
+#: includes/admin/tickets/individual_ticket/guest_reply_form.php:129
+#: includes/admin/tickets/individual_ticket/load_individual_ticket.php:895
+msgid "Description empty!"
+msgstr ""
+
+#: includes/admin/tickets/individual_ticket/guest_reply_form.php:137
+#: includes/admin/tickets/individual_ticket/load_individual_ticket.php:933
+#: includes/class-wppatt-admin.php:59 includes/class-wppatt-frontend.php:58
+msgid "Are you sure?"
+msgstr ""
+
+#: includes/admin/tickets/individual_ticket/individual_ticket.php:17
+#: includes/admin/tickets/individual_ticket/individual_ticket.php:26
+msgid "Ticket not found."
+msgstr ""
+
+#: includes/admin/tickets/individual_ticket/individual_ticket.php:47
+msgid "You are not authorized to view this ticket."
+msgstr ""
+
+#: includes/admin/tickets/individual_ticket/load_guest_individual_ticket.php:98
+#: includes/admin/tickets/individual_ticket/load_guest_individual_ticket.php:100
+#: includes/admin/tickets/individual_ticket/load_individual_ticket.php:164
+#: includes/admin/tickets/individual_ticket/load_individual_ticket.php:166
+#: includes/admin/tickets/individual_ticket/load_individual_ticket.php:425
+#: includes/admin/tickets/individual_ticket/load_individual_ticket.php:427
+#, php-format
+msgid "reported %1$s"
+msgstr ""
+
+#: includes/admin/tickets/individual_ticket/load_guest_individual_ticket.php:127
+#: includes/admin/tickets/individual_ticket/load_guest_individual_ticket.php:203
+#: includes/admin/tickets/individual_ticket/load_individual_ticket.php:198
+#: includes/admin/tickets/individual_ticket/load_individual_ticket.php:292
+#: includes/admin/tickets/individual_ticket/load_individual_ticket.php:382
+msgid "View More ..."
+msgstr ""
+
+#: includes/admin/tickets/individual_ticket/load_guest_individual_ticket.php:174
+#: includes/admin/tickets/individual_ticket/load_guest_individual_ticket.php:176
+#: includes/admin/tickets/individual_ticket/load_individual_ticket.php:248
+#: includes/admin/tickets/individual_ticket/load_individual_ticket.php:250
+#, php-format
+msgid "replied %1$s"
+msgstr ""
+
+#: includes/admin/tickets/individual_ticket/load_guest_individual_ticket.php:293
+#: includes/admin/tickets/individual_ticket/load_individual_ticket.php:486
+#: includes/class-wppatt-install.php:348
+msgid "Category"
+msgstr ""
+
+#: includes/admin/tickets/individual_ticket/load_guest_individual_ticket.php:301
+#: includes/admin/tickets/individual_ticket/load_individual_ticket.php:494
+#: includes/class-wppatt-install.php:372
+msgid "Priority"
+msgstr ""
+
+#: includes/admin/tickets/individual_ticket/load_individual_ticket.php:70
+msgid "Refresh"
+msgstr ""
+
+#: includes/admin/tickets/individual_ticket/load_individual_ticket.php:73
+msgid "Restore"
+msgstr ""
+
+#: includes/admin/tickets/individual_ticket/load_individual_ticket.php:76
+msgid "Delete Permanently"
+msgstr ""
+
+#: includes/admin/tickets/individual_ticket/load_individual_ticket.php:86
+msgid "Delete"
+msgstr ""
+
+#: includes/admin/tickets/individual_ticket/load_individual_ticket.php:90
+msgid "Clone"
+msgstr ""
+
+#: includes/admin/tickets/individual_ticket/load_individual_ticket.php:176
+#: includes/admin/tickets/individual_ticket/load_individual_ticket.php:271
+msgid "Delete this thread"
+msgstr ""
+
+#: includes/admin/tickets/individual_ticket/load_individual_ticket.php:177
+#: includes/admin/tickets/individual_ticket/load_individual_ticket.php:272
+msgid "Edit this thread"
+msgstr ""
+
+#: includes/admin/tickets/individual_ticket/load_individual_ticket.php:180
+#: includes/admin/tickets/individual_ticket/load_individual_ticket.php:275
+#: includes/admin/tickets/individual_ticket/load_individual_ticket.php:361
+msgid "Create new ticket from this thread"
+msgstr ""
+
+#: includes/admin/tickets/individual_ticket/load_individual_ticket.php:181
+#: includes/admin/tickets/individual_ticket/load_individual_ticket.php:276
+#: includes/admin/tickets/individual_ticket/load_individual_ticket.php:364
+#: includes/class-wppatt-admin.php:91 includes/class-wppatt-frontend.php:69
+msgid "Thread Info"
+msgstr ""
+
+#: includes/admin/tickets/individual_ticket/load_individual_ticket.php:221
+#: includes/admin/tickets/individual_ticket/load_individual_ticket.php:314
+#: includes/admin/tickets/individual_ticket/load_individual_ticket.php:406
+msgid "Delete attachment"
+msgstr ""
+
+#: includes/admin/tickets/individual_ticket/load_individual_ticket.php:236
+#: includes/admin/tickets/individual_ticket/load_individual_ticket.php:328
+msgid "Seen: "
+msgstr ""
+
+#: includes/admin/tickets/individual_ticket/load_individual_ticket.php:345
+#: includes/admin/tickets/individual_ticket/load_individual_ticket.php:347
+#, php-format
+msgid "added note %1$s"
+msgstr ""
+
+#: includes/admin/tickets/individual_ticket/load_individual_ticket.php:527
+#: includes/class-wppatt-admin.php:93 includes/class-wppatt-frontend.php:71
+#: includes/class-wppatt-functions.php:204
+msgid "All Tickets"
+msgstr ""
+
+#: includes/admin/tickets/individual_ticket/load_individual_ticket.php:528
+msgid "Ticket Info"
+msgstr ""
+
+#: includes/admin/tickets/individual_ticket/load_individual_ticket.php:547
+msgid "Emails:"
+msgstr ""
+
+#: includes/admin/tickets/individual_ticket/load_individual_ticket.php:567
+#: includes/admin/tickets/individual_ticket/load_individual_ticket.php:613
+#: includes/admin/tickets/ticket_list/class-ticket-list-field-format.php:192
+#: includes/class-wppatt-actions.php:712 includes/class-wppatt-functions.php:452
+#: includes/class-wppatt-functions.php:868
+msgid "None"
+msgstr ""
+
+#: includes/admin/tickets/individual_ticket/load_individual_ticket.php:717
+msgid "No Agent Only Fields"
+msgstr ""
+
+#: includes/admin/tickets/individual_ticket/load_individual_ticket.php:748
+#: includes/admin/tickets/individual_ticket/load_individual_ticket.php:753
+msgid "No Biographical Info added."
+msgstr ""
+
+#: includes/admin/tickets/individual_ticket/reply_form.php:39
+msgid "BCC (Comma separated list)"
+msgstr ""
+
+#: includes/admin/tickets/individual_ticket/reply_form.php:79
+msgid "Submit Reply"
+msgstr ""
+
+#: includes/admin/tickets/individual_ticket/reply_form.php:84
+msgid "Add Note"
+msgstr ""
+
+#: includes/admin/tickets/individual_ticket/set_delete_attached_files.php:24
+msgid "File deleted successfully."
+msgstr ""
+
+#: includes/admin/tickets/sign_in/set_user_login.php:56
+msgid "Success!"
+msgstr ""
+
+#: includes/admin/tickets/sign_in/sign_in.php:20
+msgid "Please sign in"
+msgstr ""
+
+#: includes/admin/tickets/sign_in/sign_in.php:24
+#: includes/admin/tickets/sign_in/sign_in.php:25
+msgid "Username or email"
+msgstr ""
+
+#: includes/admin/tickets/sign_in/sign_in.php:26
+#: includes/admin/tickets/sign_in/sign_in.php:27
+#: includes/admin/tickets/sign_in/sign_up_user.php:46
+msgid "Password"
+msgstr ""
+
+#: includes/admin/tickets/sign_in/sign_in.php:30
+msgid "Remember me"
+msgstr ""
+
+#: includes/admin/tickets/sign_in/sign_in.php:33
+msgid "Forgot your password?"
+msgstr ""
+
+#: includes/admin/tickets/sign_in/sign_in.php:64
+#: includes/admin/tickets/sign_in/sign_in.php:83
+msgid "Sign In"
+msgstr ""
+
+#: includes/admin/tickets/sign_in/sign_in.php:92
+#: includes/admin/tickets/sign_in/sign_in.php:104
+#: includes/admin/tickets/sign_in/sign_up_user.php:78
+msgid "Register Now"
+msgstr ""
+
+#: includes/admin/tickets/sign_in/sign_in.php:114
+msgid "Continue as Guest"
+msgstr ""
+
+#: includes/admin/tickets/sign_in/sign_up_user.php:19
+msgid "Please Sign Up"
+msgstr ""
+
+#: includes/admin/tickets/sign_in/sign_up_user.php:22
+msgid "First Name"
+msgstr ""
+
+#: includes/admin/tickets/sign_in/sign_up_user.php:28
+msgid "Last Name"
+msgstr ""
+
+#: includes/admin/tickets/sign_in/sign_up_user.php:34
+msgid "Username"
+msgstr ""
+
+#: includes/admin/tickets/sign_in/sign_up_user.php:40
+#: includes/class-wppatt-functions.php:70
+msgid "Email"
+msgstr ""
+
+#: includes/admin/tickets/sign_in/sign_up_user.php:51
+msgid "Confirm Password"
+msgstr ""
+
+#: includes/admin/tickets/sign_in/sign_up_user.php:114
+msgid "Please enter correct email address!"
+msgstr ""
+
+#: includes/admin/tickets/sign_in/sign_up_user.php:120
+msgid "Password and confirm password does not match."
+msgstr ""
+
+#: includes/admin/tickets/sign_in/sign_up_user.php:157
+msgid "This email is already registered, please choose another one."
+msgstr ""
+
+#: includes/admin/tickets/sign_in/sign_up_user.php:159
+msgid "This username is already registered. Please choose another one."
+msgstr ""
+
+#: includes/admin/tickets/ticket_list/class-ticket-list-field-format.php:206
+#: includes/admin/tickets/ticket_list/filters/filter_autocomplete.php:142
+#: includes/class-wppatt-functions.php:465
+msgid "User"
+msgstr ""
+
+#: includes/admin/tickets/ticket_list/filters/filter_autocomplete.php:248
+msgid "No matching data"
+msgstr ""
+
+#: includes/admin/tickets/ticket_list/filters/get_save_ticket_filter.php:12
+#: includes/admin/tickets/ticket_list/filters/get_update_filter.php:23
+msgid "Filter label"
+msgstr ""
+
+#: includes/admin/tickets/ticket_list/filters/get_update_filter.php:131
+#: includes/admin/tickets/ticket_list/filters/get_update_filter.php:168
+#: includes/admin/tickets/ticket_list/filters/get_update_filter.php:203
+#: includes/admin/tickets/ticket_list/filters/get_update_filter.php:236
+#: includes/admin/tickets/ticket_list/get_ticket_list.php:213
+#: includes/admin/tickets/ticket_list/get_ticket_list.php:252
+#: includes/admin/tickets/ticket_list/get_ticket_list.php:291
+#: includes/admin/tickets/ticket_list/get_ticket_list.php:332
+msgid "From"
+msgstr ""
+
+#: includes/admin/tickets/ticket_list/filters/get_update_filter.php:134
+#: includes/admin/tickets/ticket_list/filters/get_update_filter.php:171
+#: includes/admin/tickets/ticket_list/filters/get_update_filter.php:206
+#: includes/admin/tickets/ticket_list/filters/get_update_filter.php:239
+#: includes/admin/tickets/ticket_list/get_ticket_list.php:216
+#: includes/admin/tickets/ticket_list/get_ticket_list.php:255
+#: includes/admin/tickets/ticket_list/get_ticket_list.php:294
+#: includes/admin/tickets/ticket_list/get_ticket_list.php:335
+msgid "To"
+msgstr ""
+
+#: includes/admin/tickets/ticket_list/get_ticket_list.php:425
+msgid "Apply Filter"
+msgstr ""
+
+#: includes/admin/tickets/ticket_list/get_ticket_list.php:426
+#: includes/class-wppatt-admin.php:96
+msgid "Save Filter"
+msgstr ""
+
+#: includes/admin/tickets/ticket_list/get_ticket_list.php:528
+#: includes/admin/tickets/ticket_list/get_ticket_list.php:610
+msgid "of"
+msgstr ""
+
+#: includes/admin/tickets/ticket_list/get_ticket_list.php:528
+#: includes/admin/tickets/ticket_list/get_ticket_list.php:532
+#: includes/admin/tickets/tickets.php:13 includes/class-wppatt-actions.php:559
+#: includes/class-wppatt-admin.php:131
+msgid "Tickets"
+msgstr ""
+
+#: includes/admin/tickets/ticket_list/get_ticket_list.php:528
+#: includes/admin/tickets/ticket_list/get_ticket_list.php:532
+msgid "Ticket"
+msgstr ""
+
+#: includes/admin/tickets/ticket_list/get_ticket_list.php:589
+msgid "No tickets found!"
+msgstr ""
+
+#: includes/admin/tickets/ticket_list/get_ticket_list.php:610
+msgid "Pages"
+msgstr ""
+
+#: includes/admin/tickets/ticket_list/load_list.php:31
+msgid "Agent Settings"
+msgstr ""
+
+#: includes/admin/tickets/ticket_list/load_list.php:33
+#: includes/admin/tickets/ticket_list/load_list.php:37
+#: includes/admin/tickets/ticket_list/load_list.php:190
+#: includes/admin/tickets/ticket_list/load_list.php:208
+msgid "Show Filters"
+msgstr ""
+
+#: includes/admin/tickets/ticket_list/load_list.php:35
+#: includes/admin/tickets/ticket_list/load_list.php:185
+#: includes/admin/tickets/ticket_list/load_list.php:201
+msgid "Hide Filters"
+msgstr ""
+
+#: includes/admin/tickets/ticket_list/load_list.php:46
+msgid "Reset Filters"
+msgstr ""
+
+#: includes/admin/tickets/ticket_list/load_list.php:48
+#: includes/admin/tickets/ticket_list/load_list.php:215
+msgid "Auto Refresh : Off"
+msgstr ""
+
+#: includes/admin/tickets/ticket_list/load_list.php:52
+#: includes/class-wppatt-admin.php:52 includes/class-wppatt-frontend.php:51
+#: includes/class-wppatt-functions.php:1154 includes/class-wppatt-install.php:921
+msgid "Assign Agent"
+msgstr ""
+
+#: includes/admin/tickets/ticket_list/load_list.php:55
+msgid "Change Status"
+msgstr ""
+
+#: includes/admin/tickets/ticket_list/load_list.php:58
+#: includes/class-wppatt-admin.php:51 includes/class-wppatt-frontend.php:50
+msgid "Delete Tickets"
+msgstr ""
+
+#: includes/admin/tickets/ticket_list/load_list.php:59
+#: includes/class-wppatt-admin.php:80 includes/class-wppatt-frontend.php:63
+msgid "Restore Ticket"
+msgstr ""
+
+#: includes/admin/tickets/ticket_list/load_list.php:60
+#: includes/class-wppatt-admin.php:85
+msgid "Delete Tickets Permanently"
+msgstr ""
+
+#: includes/admin/tickets/ticket_list/load_list.php:67
+msgid "Log Out"
+msgstr ""
+
+#: includes/admin/tickets/ticket_list/load_list.php:75
+#: includes/admin/tickets/ticket_list/load_list.php:116
+msgid "Filters"
+msgstr ""
+
+#: includes/admin/tickets/ticket_list/load_list.php:96
+#: includes/admin/tickets/ticket_list/load_list.php:137
+msgid "Saved Filters"
+msgstr ""
+
+#: includes/admin/tickets/ticket_list/load_list.php:110
+#: includes/admin/tickets/ticket_list/load_list.php:153
+msgid "No filters found!"
+msgstr ""
+
+#: includes/admin/tickets/ticket_list/load_list.php:218
+msgid "Auto Refresh : On"
+msgstr ""
+
+#: includes/admin/tickets/upload_file.php:28
+#: includes/admin/tickets/upload_file.php:33
+#: includes/admin/tickets/upload_file.php:37
+msgid "Error: file format not supported!"
+msgstr ""
+
+#: includes/admin/tickets/upload_file.php:43
+msgid "Error: file size exceeded allowed limit!"
+msgstr ""
+
+#: includes/admin/tickets/upload_file.php:98
+msgid "done"
+msgstr ""
+
+#: includes/class-wppatt-actions.php:100
+#, php-format
+msgid "%1$s changed status from %2$s to %3$s"
+msgstr ""
+
+#: includes/class-wppatt-actions.php:102
+#, php-format
+msgid "status changed to %1$s"
+msgstr ""
+
+#: includes/class-wppatt-actions.php:119
+#, php-format
+msgid "%1$s changed category from %2$s to %3$s"
+msgstr ""
+
+#: includes/class-wppatt-actions.php:121
+#, php-format
+msgid "category changed to %1$s"
+msgstr ""
+
+#: includes/class-wppatt-actions.php:138
+#, php-format
+msgid "%1$s changed priority from %2$s to %3$s"
+msgstr ""
+
+#: includes/class-wppatt-actions.php:140
+#, php-format
+msgid "priority changed to %1$s"
+msgstr ""
+
+#: includes/class-wppatt-actions.php:163
+#, php-format
+msgid "%1$s changed assign agent from %2$s to %3$s"
+msgstr ""
+
+#: includes/class-wppatt-actions.php:165
+#, php-format
+msgid "%1$s changed assign agent to %2$s"
+msgstr ""
+
+#: includes/class-wppatt-actions.php:167
+#, php-format
+msgid "assign agent changed to %1$s"
+msgstr ""
+
+#: includes/class-wppatt-actions.php:327
+#, php-format
+msgid "%1$s changed raised by from %2$s to %3$s"
+msgstr ""
+
+#: includes/class-wppatt-actions.php:357
+#: includes/rest_api/v1/update_ticket_fields.php:159
+#, php-format
+msgid "%1$s removed %2$s"
+msgstr ""
+
+#: includes/class-wppatt-actions.php:372 includes/class-wppatt-actions.php:393
+#: includes/class-wppatt-actions.php:408 includes/class-wppatt-actions.php:424
+#: includes/rest_api/v1/update_ticket_fields.php:165
+#, php-format
+msgid "%1$s changed %2$s from %3$s to %4$s"
+msgstr ""
+
+#: includes/class-wppatt-actions.php:374 includes/class-wppatt-actions.php:395
+#: includes/class-wppatt-actions.php:410 includes/class-wppatt-actions.php:426
+#: includes/rest_api/v1/update_ticket_fields.php:162
+#, php-format
+msgid "%1$s changed %2$s to %3$s"
+msgstr ""
+
+#: includes/class-wppatt-actions.php:376 includes/class-wppatt-actions.php:397
+#: includes/class-wppatt-actions.php:412 includes/class-wppatt-actions.php:428
+#, php-format
+msgid "%1$s changed to %2$s"
+msgstr ""
+
+#: includes/class-wppatt-actions.php:576
+msgid "Tickets Record"
+msgstr ""
+
+#: includes/class-wppatt-actions.php:647
+#, php-format
+msgid "Tickets of customer having email %s has been anonymized."
+msgstr ""
+
+#: includes/class-wppatt-actions.php:708
+#, php-format
+msgid "%1$s changed extra ticket users from %2$s to %3$s"
+msgstr ""
+
+#: includes/class-wppatt-actions.php:710
+#, php-format
+msgid "%1$s added extra ticket users to %2$s"
+msgstr ""
+
+#: includes/class-wppatt-actions.php:713
+#, php-format
+msgid "%1$s changed extra ticket users from  %2$s to %3$s"
+msgstr ""
+
+#: includes/class-wppatt-actions.php:715
+#, php-format
+msgid "added extra users %1$s"
+msgstr ""
+
+#: includes/class-wppatt-admin.php:49 includes/class-wppatt-frontend.php:48
+msgid "Agent Setting"
+msgstr ""
+
+#: includes/class-wppatt-admin.php:50 includes/class-wppatt-admin.php:53
+#: includes/class-wppatt-frontend.php:49 includes/class-wppatt-frontend.php:52
+#: includes/class-wppatt-functions.php:1153
+msgid "Change Ticket Status"
+msgstr ""
+
+#: includes/class-wppatt-admin.php:54 includes/class-wppatt-frontend.php:53
+msgid "Edit This Thread"
+msgstr ""
+
+#: includes/class-wppatt-admin.php:55 includes/class-wppatt-frontend.php:54
+msgid "Close Ticket"
+msgstr ""
+
+#: includes/class-wppatt-admin.php:56 includes/class-wppatt-frontend.php:55
+msgid "Clone Ticket"
+msgstr ""
+
+#: includes/class-wppatt-admin.php:57 includes/class-wppatt-frontend.php:56
+msgid "Delete This Thread"
+msgstr ""
+
+#: includes/class-wppatt-admin.php:58 includes/class-wppatt-frontend.php:57
+msgid "Edit Subject"
+msgstr ""
+
+#: includes/class-wppatt-admin.php:60 includes/class-wppatt-frontend.php:59
+msgid "Templates"
+msgstr ""
+
+#: includes/class-wppatt-admin.php:63
+msgid "Add new agent only field"
+msgstr ""
+
+#: includes/class-wppatt-admin.php:64
+msgid "Edit agent only field"
+msgstr ""
+
+#: includes/class-wppatt-admin.php:65
+msgid "Add New Form Field"
+msgstr ""
+
+#: includes/class-wppatt-admin.php:66
+msgid "Edit Form Field"
+msgstr ""
+
+#: includes/class-wppatt-admin.php:67
+msgid "Add New Role"
+msgstr ""
+
+#: includes/class-wppatt-admin.php:68
+msgid "Edit Agent Role"
+msgstr ""
+
+#: includes/class-wppatt-admin.php:69
+msgid "Add New Category"
+msgstr ""
+
+#: includes/class-wppatt-admin.php:70
+msgid "Edit Category"
+msgstr ""
+
+#: includes/class-wppatt-admin.php:71
+msgid "Add New Priority"
+msgstr ""
+
+#: includes/class-wppatt-admin.php:72
+msgid "Edit Priority"
+msgstr ""
+
+#: includes/class-wppatt-admin.php:73
+msgid "Add New Status"
+msgstr ""
+
+#: includes/class-wppatt-admin.php:74
+msgid "Edit Status"
+msgstr ""
+
+#: includes/class-wppatt-admin.php:75
+msgid "Add New Agent"
+msgstr ""
+
+#: includes/class-wppatt-admin.php:76
+msgid "Edit Agent"
+msgstr ""
+
+#: includes/class-wppatt-admin.php:77
+msgid "Add filter item"
+msgstr ""
+
+#: includes/class-wppatt-admin.php:78
+msgid "Add list item"
+msgstr ""
+
+#: includes/class-wppatt-admin.php:79 includes/class-wppatt-frontend.php:62
+msgid "Change Agent Fields"
+msgstr ""
+
+#: includes/class-wppatt-admin.php:81
+msgid "Restore Deleted Tickets"
+msgstr ""
+
+#: includes/class-wppatt-admin.php:82 includes/class-wppatt-frontend.php:64
+msgid "Change Raised By"
+msgstr ""
+
+#: includes/class-wppatt-admin.php:83 includes/class-wppatt-frontend.php:65
+msgid "View More"
+msgstr ""
+
+#: includes/class-wppatt-admin.php:84 includes/class-wppatt-frontend.php:66
+#: includes/class-wppatt-frontend.php:68
+msgid "View Less"
+msgstr ""
+
+#: includes/class-wppatt-admin.php:86
+msgid "Delete Ticket Permanently"
+msgstr ""
+
+#: includes/class-wppatt-admin.php:87 includes/class-wppatt-frontend.php:67
+#: includes/class-wppatt-frontend.php:72
+msgid "Create Ticket From Thread"
+msgstr ""
+
+#: includes/class-wppatt-admin.php:89 includes/class-wppatt-frontend.php:75
+msgid "Please insert customer name"
+msgstr ""
+
+#: includes/class-wppatt-admin.php:90 includes/class-wppatt-frontend.php:76
+msgid "Please insert customer email"
+msgstr ""
+
+#: includes/class-wppatt-admin.php:92 includes/class-wppatt-frontend.php:70
+msgid "Ticket Info "
+msgstr ""
+
+#: includes/class-wppatt-admin.php:94 includes/class-wppatt-frontend.php:73
+msgid ""
+"There is unposted text in the reply area. Are you sure you want to discard "
+"and proceed?"
+msgstr ""
+
+#: includes/class-wppatt-admin.php:95 includes/class-wppatt-frontend.php:77
+msgid "Incorrect Email Address"
+msgstr ""
+
+#: includes/class-wppatt-admin.php:97 includes/class-wppatt-frontend.php:78
+msgid "Edit Filter"
+msgstr ""
+
+#: includes/class-wppatt-admin.php:98 includes/class-wppatt-frontend.php:79
+msgid "Please insert filter title"
+msgstr ""
+
+#: includes/class-wppatt-admin.php:99 includes/class-wppatt-frontend.php:80
+msgid "Please wait..."
+msgstr ""
+
+#: includes/class-wppatt-admin.php:100
+msgid "Please select at least one status for agent unresolved filter"
+msgstr ""
+
+#: includes/class-wppatt-admin.php:101
+msgid "Please select at least one status for customer unresolved filter"
+msgstr ""
+
+#: includes/class-wppatt-admin.php:119 includes/class-wppatt-admin.php:120
+msgid "Support"
+msgstr ""
+
+#: includes/class-wppatt-admin.php:170 includes/class-wppatt-admin.php:171
+msgid "Appearance"
+msgstr ""
+
+#: includes/class-wppatt-functions.php:14
+msgid "Text Field"
+msgstr ""
+
+#: includes/class-wppatt-functions.php:22
+msgid "Drop Down"
+msgstr ""
+
+#: includes/class-wppatt-functions.php:30
+msgid "Checkbox"
+msgstr ""
+
+#: includes/class-wppatt-functions.php:38
+msgid "Radio Button"
+msgstr ""
+
+#: includes/class-wppatt-functions.php:46
+msgid "Textarea"
+msgstr ""
+
+#: includes/class-wppatt-functions.php:54
+msgid "Date"
+msgstr ""
+
+#: includes/class-wppatt-functions.php:62
+msgid "URL"
+msgstr ""
+
+#: includes/class-wppatt-functions.php:78
+msgid "Number Only"
+msgstr ""
+
+#: includes/class-wppatt-functions.php:86
+msgid "File Attachment"
+msgstr ""
+
+#: includes/class-wppatt-functions.php:94
+msgid "Date Time"
+msgstr ""
+
+#: includes/class-wppatt-functions.php:102
+msgid "Time"
+msgstr ""
+
+#: includes/class-wppatt-functions.php:110
+msgid "HTML"
+msgstr ""
+
+#: includes/class-wppatt-functions.php:209 includes/class-wppatt-functions.php:214
+msgid "Unresolved"
+msgstr ""
+
+#: includes/class-wppatt-functions.php:219
+msgid "Unassigned"
+msgstr ""
+
+#: includes/class-wppatt-functions.php:224
+msgid "Mine"
+msgstr ""
+
+#: includes/class-wppatt-functions.php:229 includes/class-wppatt-install.php:210
+msgid "Closed"
+msgstr ""
+
+#: includes/class-wppatt-functions.php:234
+msgid "Deleted"
+msgstr ""
+
+#: includes/class-wppatt-functions.php:493
+msgid "years"
+msgstr ""
+
+#: includes/class-wppatt-functions.php:494
+msgid "months"
+msgstr ""
+
+#: includes/class-wppatt-functions.php:495
+msgid "weeks"
+msgstr ""
+
+#: includes/class-wppatt-functions.php:496
+msgid "days"
+msgstr ""
+
+#: includes/class-wppatt-functions.php:497
+msgid "hours"
+msgstr ""
+
+#: includes/class-wppatt-functions.php:498
+msgid "minutes"
+msgstr ""
+
+#: includes/class-wppatt-functions.php:499
+msgid "seconds"
+msgstr ""
+
+#: includes/class-wppatt-functions.php:515
+#, php-format
+msgid "%d %s ago"
+msgstr ""
+
+#: includes/class-wppatt-functions.php:519
+msgid "just now"
+msgstr ""
+
+#: includes/class-wppatt-functions.php:1152
+msgid "Ticket Reply"
+msgstr ""
+
+#: includes/class-wppatt-functions.php:1155
+msgid "Delete Ticket"
+msgstr ""
+
+#: includes/class-wppatt-functions.php:1157
+msgid "Change Ticket Category"
+msgstr ""
+
+#: includes/class-wppatt-functions.php:1158
+msgid "Change Ticket Priority"
+msgstr ""
+
+#: includes/class-wppatt-functions.php:1799
+#, php-format
+msgid "The %s constant is set to true. WP-Cron spawning is disabled."
+msgstr ""
+
+#: includes/class-wppatt-functions.php:1804
+#, php-format
+msgid "The %s constant is set to true."
+msgstr ""
+
+#: includes/class-wppatt-functions.php:1835
+#, php-format
+msgid "Unexpected HTTP response code: %s"
+msgstr ""
+
+#: includes/class-wppatt-install.php:189
+msgid "Open"
+msgstr ""
+
+#: includes/class-wppatt-install.php:196
+msgid "Awaiting customer reply"
+msgstr ""
+
+#: includes/class-wppatt-install.php:203
+msgid "Awaiting agent reply"
+msgstr ""
+
+#: includes/class-wppatt-install.php:219
+msgid "Low"
+msgstr ""
+
+#: includes/class-wppatt-install.php:226
+msgid "Medium"
+msgstr ""
+
+#: includes/class-wppatt-install.php:232
+msgid "High"
+msgstr ""
+
+#: includes/class-wppatt-install.php:243
+msgid "ID"
+msgstr ""
+
+#: includes/class-wppatt-install.php:279
+msgid "Name"
+msgstr ""
+
+#: includes/class-wppatt-install.php:280
+msgid "Please insert your name."
+msgstr ""
+
+#: includes/class-wppatt-install.php:300
+msgid "Please insert your email."
+msgstr ""
+
+#: includes/class-wppatt-install.php:319
+msgid "Short description of the ticket."
+msgstr ""
+
+#: includes/class-wppatt-install.php:335
+msgid "Description"
+msgstr ""
+
+#: includes/class-wppatt-install.php:336
+msgid "Detailed description of the ticket"
+msgstr ""
+
+#: includes/class-wppatt-install.php:349
+msgid "Please select category."
+msgstr ""
+
+#: includes/class-wppatt-install.php:373
+msgid "Please select priority."
+msgstr ""
+
+#: includes/class-wppatt-install.php:406
+msgid "Date Created"
+msgstr ""
+
+#: includes/class-wppatt-install.php:423
+msgid "Date Updated"
+msgstr ""
+
+#: includes/class-wppatt-install.php:437
+msgid "Agent Created"
+msgstr ""
+
+#: includes/class-wppatt-install.php:458
+msgid "Last reply"
+msgstr ""
+
+#: includes/class-wppatt-install.php:466
+msgid "Last reply user name"
+msgstr ""
+
+#: includes/class-wppatt-install.php:474
+msgid "Last reply user email"
+msgstr ""
+
+#: includes/class-wppatt-install.php:482
+msgid "Last Note"
+msgstr ""
+
+#: includes/class-wppatt-install.php:490
+msgid "Last note user name"
+msgstr ""
+
+#: includes/class-wppatt-install.php:498
+msgid "Last note user email"
+msgstr ""
+
+#: includes/class-wppatt-install.php:506
+msgid "Current user name"
+msgstr ""
+
+#: includes/class-wppatt-install.php:514
+msgid "Current user email"
+msgstr ""
+
+#: includes/class-wppatt-install.php:522
+msgid "All threads in decending order except last reply"
+msgstr ""
+
+#: includes/class-wppatt-install.php:544
+msgid "New ticket customer confirmation"
+msgstr ""
+
+#: includes/class-wppatt-install.php:546
+msgid "new_ticket"
+msgstr ""
+
+#: includes/class-wppatt-install.php:547
+msgid "Your ticket has been created successfully!"
+msgstr ""
+
+#: includes/class-wppatt-install.php:548
+msgid ""
+"<p>Dear {customer_name},</p><p>Thank you for creating a ticket. We confirm "
+"that we have received your ticket and you will soon hear back from us.</"
+"p><p>Your ticket id is #{ticket_id}. You will get an email notification "
+"after we post a reply to your ticket. However, in case the email "
+"notification fails, then you can check your ticket status at the link below:"
+"</p><p>{ticket_url}</p>"
+msgstr ""
+
+#: includes/class-wppatt-install.php:553
+msgid "New ticket staff notification"
+msgstr ""
+
+#: includes/class-wppatt-install.php:557
+msgid ""
+"<p>You have received new ticket from&nbsp;<strong>{customer_name}</strong>!</"
+"p><p>Below are details of the ticket:</p><p><strong>Subject:</strong>&nbsp;"
+"{ticket_subject}</p><p><strong>Description:</strong></"
+"p><p>{ticket_description}</p><p>{ticket_url}</p>"
+msgstr ""
+
+#: includes/class-wppatt-install.php:562
+msgid "Reply ticket notification"
+msgstr ""
+
+#: includes/class-wppatt-install.php:566
+msgid ""
+"<p><strong>{last_reply_user_name}</strong> wrote:</p><p>{last_reply}</"
+"p><p>{ticket_url}</p><p>{ticket_history}</p>"
+msgstr ""
+
+#: includes/class-wppatt-install.php:571
+msgid "Close ticket customer notification"
+msgstr ""
+
+#: includes/class-wppatt-install.php:574
+msgid "Your ticket has been closed!"
+msgstr ""
+
+#: includes/class-wppatt-install.php:575
+msgid ""
+"<p>Dear {customer_name},</p><p>Your ticket #{ticket_id} has been closed. We "
+"hope you are satisfied with our support.</p><p>If you have some further "
+"queries on this ticket, please feel free to reply same ticket. For queries "
+"not related to this ticket, please create new ticket.</p><p>{ticket_url}</p>"
+msgstr ""
+
+#: includes/class-wppatt-install.php:593
+msgid ""
+"<p>Dear {customer_name},</p><p>We have received your ticket and confirmation "
+"has been sent to your email address&nbsp;{customer_email}.</p><p>Your ticket "
+"id is #{ticket_id}. You will get email notification after we post reply in "
+"your ticket but in case email notification failed, you can check your ticket "
+"status on below link:</p><p>{ticket_url}</p>"
+msgstr ""
+
+#: includes/class-wppatt-install.php:613
+msgid "Administrator"
+msgstr ""
+
+#: includes/class-wppatt-install.php:713
+msgid ""
+"I understand my personal information like Name, Email address, IP address "
+"etc will be stored in database."
+msgstr ""
+
+#: includes/class-wppatt-install.php:913
+msgid "Raised By"
+msgstr ""
+
+#: includes/class-wppatt-install.php:929
+msgid "Ticket Fields"
+msgstr ""
+
+#: includes/class-wppatt-install.php:997
+#, php-format
+msgid "I agree the %1$s"
+msgstr ""
+
+#: includes/class-wppatt-install.php:999
+msgid "I agree the Terms & Conditions."
+msgstr ""
+
+#: includes/class-wppatt-install.php:1016
+msgid "Bold"
+msgstr ""
+
+#: includes/class-wppatt-install.php:1017
+msgid "Italic"
+msgstr ""
+
+#: includes/class-wppatt-install.php:1018
+msgid "Underline"
+msgstr ""
+
+#: includes/class-wppatt-install.php:1019
+msgid "Blockquote"
+msgstr ""
+
+#: includes/class-wppatt-install.php:1020
+msgid "Align"
+msgstr ""
+
+#: includes/class-wppatt-install.php:1021
+msgid "Bulleted list"
+msgstr ""
+
+#: includes/class-wppatt-install.php:1022
+msgid "Numbered list"
+msgstr ""
+
+#: includes/class-wppatt-install.php:1023
+msgid "Right to left"
+msgstr ""
+
+#: includes/class-wppatt-install.php:1024
+msgid "Link"
+msgstr ""
+
+#: includes/class-wppatt-install.php:1025
+msgid "Image"
+msgstr ""
+
+#: includes/class-wppatt-install.php:1171
+msgid "Date Closed"
+msgstr ""
+
+#: includes/class-wppatt-install.php:1365
+msgid "All threads in decending order"
+msgstr ""
+
+#: includes/class-wppatt-install.php:1377
+msgid "All threads in decending order with private note"
+msgstr ""
+
+#: includes/class-wppatt-install.php:1389
+msgid "All private notes in decending order"
+msgstr ""
+
+#: includes/class-wppatt-install.php:1422
+#: includes/functions/conditions/load_conditions_ui.php:96
+msgid "User Type"
+msgstr ""
+
+#: includes/class-wppatt-install.php:1437
+msgid "Bio"
+msgstr ""
+
+#: includes/class-wppatt-install.php:1478
+msgid "Previously Assigned Agent"
+msgstr ""
+
+#: includes/class-wppatt-install.php:1553
+msgid "All threads in descending order with logs"
+msgstr ""
+
+#: includes/class-wppatt-install.php:1565
+msgid "All threads in descending order with private note and logs"
+msgstr ""
+
+#: includes/class-wppatt-install.php:1577
+msgid "All private notes in descending order with logs"
+msgstr ""
+
+#: includes/class-wppatt-install.php:1591
+#, php-format
+msgid "You can upload files maximum size %1$s mb of types %2$s."
+msgstr ""
+
+#: includes/functions/conditions/get_condition_options.php:124
+msgid "User himself"
+msgstr ""
+
+#: includes/functions/conditions/get_condition_options.php:137
+msgid "Registered User"
+msgstr ""
+
+#: includes/functions/conditions/get_condition_options.php:141
+msgid "Guest User"
+msgstr ""
+
+#: includes/functions/conditions/load_conditions_ui.php:90
+msgid "Ticket Submitted By"
+msgstr ""
+
+#: includes/functions/conditions/load_conditions_ui.php:120
+#: includes/functions/conditions/load_conditions_ui.php:221
+msgid "Select Condition"
+msgstr ""
+
+#: includes/functions/conditions/load_conditions_ui.php:147
+#: includes/functions/conditions/load_conditions_ui.php:157
+#: includes/functions/conditions/load_conditions_ui.php:237
+#: includes/functions/conditions/load_conditions_ui.php:245
+msgid "Matches"
+msgstr ""
+
+#: includes/functions/conditions/load_conditions_ui.php:148
+#: includes/functions/conditions/load_conditions_ui.php:158
+#: includes/functions/conditions/load_conditions_ui.php:238
+#: includes/functions/conditions/load_conditions_ui.php:246
+msgid "Not Matches"
+msgstr ""
+
+#: includes/functions/conditions/load_conditions_ui.php:156
+#: includes/functions/conditions/load_conditions_ui.php:244
+msgid "Contains"
+msgstr ""
+
+#: includes/functions/conditions/load_conditions_ui.php:212
+msgid "Add New"
+msgstr ""
+
+#: includes/functions/create_clone_ticket.php:17
+#: includes/functions/create_clone_ticket.php:140
+msgid "NA"
+msgstr ""

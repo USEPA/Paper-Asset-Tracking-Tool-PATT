@@ -1,0 +1,10 @@
+.export-flex-container {
+  display: flex;
+  border-radius: 3px;
+  max-width: 320px;
+}
+
+.export-flex-container > div {
+  padding: 3px;
+  font-size: 12px;
+}

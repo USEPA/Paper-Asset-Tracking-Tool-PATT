@@ -1,0 +1,160 @@
+/* SupportCandy Admin */
+
+.wpsc_padding_space{
+  padding-top: 20px;
+}
+
+.wpsc_setting_col1{
+  
+}
+
+.wpsc_setting_col2{
+  background-color: #fff;
+  width:  62% !important;
+  padding: 20px;
+  border-radius: 5px;
+}
+
+.wpsc_setting_pills > li > a {
+  color: #333333;
+  border-width: 0.5px;
+  border-style: solid;
+  background-color: #ffffff !important;
+  border-color:#fff;
+}
+
+.wpsc_setting_pills > li.active > a, .wpsc_setting_pills > li.active > a:hover, .wpsc_setting_pills > li.active > a:focus {
+  color: #ffffff;
+  background-color: #0088CC !important;
+  border-color:#0088CC;
+}
+
+.wpsc_setting_pills > li > a:hover, .wpsc_setting_pills > li > a:focus{
+  color: #333333;
+  background-color: #E8EBF0 !important;
+  border-color:#333;
+}
+
+.wpsc_loading_icon img{
+  margin-left:  auto;
+  margin-right:  auto;
+  display:  block;
+}
+
+.wpsc_submit_wait, .wpsc_submit_wait_1{
+  width: 30px;
+  margin-left: -70px;
+}
+
+.wpsc_alert{
+  position: fixed;
+  top: 50px;
+  right: 50px;
+  font-size: 15px;
+  font-weight: bold;
+}
+
+.wpsc-flex-container {
+  display: flex;
+  border-radius: 4px;
+  max-width: 320px;
+}
+
+.wpsc-flex-container > div {
+  margin: 5px 0 5px 5px;
+  padding: 3px;
+  font-size: 12px;
+}
+
+.wpsc-sortable-handle,.wpsc-sortable-edit,.wpsc-sortable-delete,.wpsc-sortable-clone{
+  cursor: pointer;
+  width: 25px;
+}
+
+.wpsc-sortable-label{
+  width: 220px;
+}
+
+.wpsc_tag_td:hover{
+  color: blue;
+  cursor: pointer;
+}
+
+/***
+ * Filter display css start
+ */
+.wpsp_filter_display_container{
+  list-style-type: none !important;
+  width: 100% !important;
+  margin: 0 !important;
+  float: left;
+}
+.wpsp_filter_display_element{
+  max-width: 300px !important;
+  float: left;
+  margin: 3px 3px 3px 0 !important;
+}
+.wpsp_filter_display_element .flex-container{
+  display: flex;
+  border-radius: 4px;
+  background-color:#1E90FF;
+  color:#fff;
+  font-size: 10px;
+}
+.wpsp_filter_display_text{
+  max-width: 280px !important;
+  padding: 5px;
+}
+.wpsp_filter_display_remove{
+  width: 20px !important;
+  padding: 5px;
+  cursor: pointer;
+}
+
+/* Filter display end */
+
+.wpsc_flex {
+  display: flex !important;
+}
+
+.bootstrap-iso .ui-state-default{
+  background-color: transparent !important;
+  border: none !important;
+  background : none !important;
+}
+
+.thread_messege p img{
+  max-width: 100%;
+  height: auto;
+}
+
+.mce-window.mce-in, .mce-menu.mce-in.mce-animate{
+  z-index: 900000000001 !important;;
+}
+
+#wpsc_thankyou_html, #wpsc_en_body, #wpsc_agent_signature,#wpsc_sf_email_body,#wpsc_ct_warn_email_body,#wpsc_close_user_warn_email_body,#wpsc_atc_email_body{
+	height: 200px !important;
+}
+
+.wp-admin .bootstrap-iso select{
+  max-width:100% !important;
+}
+
+.wpsc-switch-editor{
+  position: relative;
+  top: 1px;
+  background: #ebebeb;
+  color: #666;
+  cursor: pointer;
+  font-size: 13px;
+  line-height: 1.46153846;
+  margin: 5px 0 0 5px;
+  padding: 3px 8px 4px;
+  border: 1px solid #e5e5e5;
+  outline: 0;
+}
+
+.wpsc-switch-editor-active{
+  background: #265a88;
+  color: #fff !important;
+}

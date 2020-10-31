@@ -1,0 +1,123 @@
+/* Restrict textarea to div */
+textarea {
+    max-width: 100%; 
+    max-height: 100%;
+}
+
+/* Create three unequal columns that floats next to each other */
+.column {
+  float: left;
+  padding: 10px;
+  width: 100%;
+}
+
+.left, .middle {
+  width: 15%;
+}
+
+.right {
+  width: 50%;
+}
+
+/* Clear floats after the columns */
+#scan_input_row:after {
+
+  display: table;
+  clear: both;
+}
+
+#scan-input {
+  border-radius: 4px;
+  width: 91.2%;
+}
+
+.focused {  
+  border: 2px solid #0741AB;
+  box-shadow: 0 0 2px #00A0D2 ; 
+}
+
+/*  Responsive layout - makes the two columns stack on top of each other instead of next to each other */
+@media screen and (max-width: 600px) {
+  .column {
+    width: 100%;
+  }
+}
+
+#wpsc_tickets_container {
+    border-radius: 4px;
+    border: 1px solid #1C5D8A;
+    background-color: #fff;
+    color: #2C3E50;
+    min-height: 470px;
+    width: 99%;
+}
+.wpsc_tl_action_bar {
+    padding: 10px 0;
+    background-color: #1C5D8A;
+}
+
+/* 10/2/2020 - Changed display flex to inline-block */
+.justified {
+    justify-content: center;
+}
+
+#wpwrap {
+    height: auto;
+    min-height: 100%;
+    width: 100%;
+    position: relative;
+    -webkit-font-smoothing: subpixel-antialiased;
+}
+
+.confirmation {
+  display: none;
+}
+.hidden { 
+    display: none; 
+    
+}
+
+.bootstrap-iso .col-md-8 {
+    float: left;
+}
+.bootstrap-iso .col-md-9 {
+    width: 75%;
+    float: left;
+}
+#wpfooter {
+    position: absolute;
+    left: 0;
+    right: 0;
+    padding: 10px 20px;
+    color: #555d66;
+}
+#boxid-textarea {
+    width: 100%;
+}
+input[type=search] {
+    -webkit-appearance: none;
+}
+
+.dvscanner-layer {
+  text-align: center;
+}
+
+.header-left { display: inline-flex; }
+.header-center { display: inline; }
+.header-right { float: right;}
+
+#resetscanbtn {
+        height: 30px;
+        margin: 0 auto;
+}
+#submitbtn {
+        height: 30px;
+        margin: 0 auto;
+}
+.dvsubmission_layer .wpsc-thread-log .confirmation{
+    width: 100%;
+}
+.dvconfirmation{
+    display: inline-block;
+}
+}

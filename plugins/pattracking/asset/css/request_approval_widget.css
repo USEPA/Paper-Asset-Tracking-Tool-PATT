@@ -1,0 +1,78 @@
+
+#approval_widget_noti_message {
+	color: #3c763d;
+	font-weight: bold;
+	/*display : inline-block;*/
+	line-height: normal;
+	margin-top: 15px;
+}
+
+
+#approval_widget_noti_message .alert {
+	margin-bottom: 0;
+	border-radius: unset;
+	height: 35px;
+}
+#approval_widget_noti_message .alert.alert-warning {
+	margin-top: 15px;
+}
+
+#approval_foia h4 ,
+#approval_congressional h4 ,
+#approval_destruction_authorization h4 ,
+#approval_litigation_letter h4 {
+	margin-bottom:20px;
+	margin-top:20px;
+}
+#approval_destruction_authorization .destruction_auth_instruction{
+	margin: 10px 0;
+	display: block;
+}
+
+#approval_widget_form .preview-image {
+	margin: 10px 0;
+	position: relative;
+	display: block;
+}
+
+#approval_widget_form .preview-image .delete-image {
+	height: 25px;
+	width: 25px;
+	background-color: #fff;
+	line-height: 10px;
+	cursor: pointer;
+}
+
+#approval_widget_form button[type='submit'] {
+	background-color: #0473AA;
+    background-image: unset;
+    border-color: #0473AA;
+}
+
+/*#wpsc_frm_create_ticket .foia-dropzone ,
+#wpsc_frm_create_ticket .congressional-dropzone ,
+#wpsc_frm_create_ticket .litigation-letter-dropzone {
+	display: none;
+}*/
+
+#wpsc_frm_create_ticket .request-associated-docs {
+	display: none;
+}
+
+/*#wpsc_frm_create_ticket .create_ticket_fields_container .wpsc_form_field[data-fieldtype=dropdown] ,*/
+#wpsc_frm_create_ticket .create_ticket_fields_container:nth-of-type(2) {
+	display: none;
+}
+
+#wpsc_frm_create_ticket label span.red-text {
+	color: red;
+}
+
+#wpsc_frm_create_ticket .create_ticket_fields_container ul.nav-tabs li a:focus {
+	box-shadow: unset;
+}
+
+#wpsc_tickets_container #create_ticket_body .ticket-error-msg {
+	margin-top:20px;
+	color: red;
+}

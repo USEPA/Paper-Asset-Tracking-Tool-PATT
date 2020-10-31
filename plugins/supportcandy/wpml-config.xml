@@ -1,0 +1,48 @@
+<wpml-config>
+  <admin-texts>
+    <key name="wpsc_custom_fields_localize">
+        <key name="custom_fields_*"/>
+    </key>
+      
+    <key name="wpsc_custom_fields_extra_info">
+      <key name="custom_fields_extra_info_*"/>
+    </key>
+    
+    <key name="wpsc_email_notification_subject">
+      <key name="email_subject_*"/>
+    </key>
+    
+    <key name="wpsc_email_notification_body">
+      <key name="email_body_*"/>
+    </key>
+    
+    <key name="wpsc_custom_status_localize">
+      <key name="custom_status_*"/>
+    </key>
+    
+    <key name="wpsc_custom_category_localize">
+      <key name="custom_category_*"/>
+    </key>
+    
+    <key name="wpsc_custom_priority_localize">
+      <key name="custom_priority_*"/>
+    </key>
+    
+    <key name="wpsc_thankyou_html">
+    </key>   
+    
+    <key name="wpsc_custom_widget_localize" >
+      <key name="custom_widget_*"/>
+    </key>
+
+    <key name="wpsc_terms_and_conditions_html" >
+    </key>
+    
+    <key name="wpsc_gdpr_html" >
+    </key>
+
+    <key name="wpsc_print_btn_lbl" >
+    </key>
+    
+  </admin-texts>
+</wpml-config>

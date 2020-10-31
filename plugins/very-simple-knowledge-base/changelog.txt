@@ -1,0 +1,183 @@
+CHANGELOG
+=========
+
+= Version 5.3 =
+* Removed file vskb-list
+* Added file vskb-template instead
+* Minor changes in code
+
+= Version 5.2 =
+* After some discussion I have decided to remove the max character length of widget inputs again
+
+= Version 5.1 =
+* Fix: version 5.0 breaks the knowledge base, please update to version 5.1 (thanks Brian)
+* Minor changes in code
+
+= Version 5.0 =
+* Fix: view all link
+* Fix: replaced deprecated get_woocommerce_term_meta() with get_term_meta()
+* Because of fix above plugin now requires at least WP 4.4
+* Minor changes in code
+* Added, removed and changed escaping and sanitizing of many items
+
+= Version 4.9 =
+* Added CSS class to each knowledge base: vskb-one-container, vskb-two-container, vskb-three-container, vskb-four-container
+* Added attribute to change this CSS class per knowledge base
+* This can be useful if you want to apply different styling when having multiple knowledge bases
+* Increased max character length of widget inputs
+
+= Version 4.8 =
+* The CSS class of each WooCommerce product now also contains the relevant category and tag
+* Added check for WooCommerce
+
+= Version 4.7 =
+* The CSS class of each post now also contains the relevant category and tag
+* This can be handy if you want to style or hide certain posts
+
+= Version 4.6 =
+* Added attribute to show view all link
+* Added attribute to change default view all label
+* Changed attribute "no_title" into "no_title_label"
+* Stylesheet update
+* Added more reset CSS to avoid conflict with your theme
+
+= Version 4.5 =
+* Some textual changes
+
+= Version 4.4 =
+* Added file vskb-shortcodes
+* Relocated all shortcodes to this file
+* Removed the old shortcode files
+* Added file vskb-list
+* Relocated knowledge base template from shortcodes to this file
+* Removed unnecessary whitespaces from most files
+* Added minified CSS file in folder /css (kept the original CSS file for reference)
+* Some textual changes
+* Removed unnecessary notifications from changelog (such as "updated readme file")
+
+= Version 4.3 =
+* Readme file: removed donate link
+* Updated theme author info
+
+= Version 4.2 =
+* Fix: counter did not work when posts from a custom taxonomy where displayed (thanks Bart)
+
+= Version 4.1 =
+* All shortcode files: updated label of post without title
+* It now also links to the post
+
+= Version 4.0 =
+* Added file uninstall (to remove widget settings upon uninstall)
+* Updated file vskb-style
+
+= Version 3.9 =
+* Fix: post title check not supported in PHP 5.4 and older (thanks dhjdhj)
+* Few minor changes
+
+= Version 3.8 =
+* New: display your categories and posts in 1 column
+* New: display your categories and posts in a widget
+* New attribute: display event meta (date and author)
+* Added files vskb-one-column and vskb-widget
+* Updated most files
+
+= Version 3.7 =
+* Best practice: removed closing PHP tag from most files
+* Best practice: added newline at end of most files
+
+= Version 3.6 =
+* New: attribute to display the amount of posts per category
+* Updated all shortcode files
+
+= Version 3.5 =
+* New: display your categories and posts in 2 columns
+* Added file vskb-two-columns
+* Updated file vskb
+* Updated file vskb-style
+
+= Version 3.4 =
+* No update: made mistake in version number
+
+= Version 3.3 =
+* Shortcode attribute to display category description
+* Shortcode attribute to display image of WooCommerce product category
+
+= Version 3.2 =
+* Custom post types are supported: products, events, projects, etc
+* Added 2 shortcode attributes: taxonomy and post_type
+
+= Version 3.1 =
+* All PHP files: disable direct access to file
+
+= Version 3.0 =
+* Both shortcode files: removed comments
+
+= Version 2.9 =
+* Added file changelog
+
+= Version 2.8 =
+* Changed file names
+
+= Version 2.7 =
+* Relocated file vskb_style to folder /css
+
+= Version 2.6 =
+* Added a PayPal donate link
+
+= Version 2.5 =
+* Only updated readme file
+
+= Version 2.4 =
+* Added extra shortcode attributes
+
+= Version 2.3 =
+* Added fix to remove border bottom from links in Twenty Sixteen
+
+= Version 2.2 =
+* Modified the shortcode again: it supports several category and post attributes now
+
+= Version 2.1 =
+* Modified the shortcode: it supports several category attributes now
+
+= Version 2.0 =
+* Removed translations: plugin now supports WordPress language packs
+
+= Version 1.9 =
+* Changed text domain for the wordpress.org translation system
+
+= Version 1.8 =
+* Removed files three_columns_subcats and four_columns_subcats again
+* Updated files three_columns and four_columns: will list sub categories now as well
+
+= Version 1.7 =
+* Added 2 files to list sub categories too: three_columns_subcats and four_columns_subcats
+* Updated files three_columns and four_columns
+
+= Version 1.6 =
+* Updated language files
+
+= Version 1.5 =
+* Relocated shortcode from file vskb to files three_columns and four_columns
+* Files four_columns and vskb_style: changed div vskb into vskb-four
+* Hide subcategory name in list (post name will be displayed under parent category name)
+
+= Version 1.4 =
+* Reordered file vskb_style
+* Added fix to remove border bottom from links in Twenty Fifteen
+
+= Version 1.3 =
+* Now also shortcode for 3 columns: [knowledgebase-three]
+* Changes in files vskb and vskb_style
+* Added files three_columns and four_columns
+* Updated language files
+
+= Version 1.2 =
+* Shortcode changes
+* Removed background color and link color from stylesheet
+
+= Version 1.1 =
+* Forgot pot file and Dutch translation files in version 1.0
+* Minor CSS changes
+
+= Version 1.0 =
+* First stable release

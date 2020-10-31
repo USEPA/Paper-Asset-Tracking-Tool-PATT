@@ -1,0 +1,440 @@
+[29-Oct-2020 16:42:51 UTC] PHP Warning:  count(): Parameter must be an array or an object that implements Countable in /home/acy3/public_html/wordpress3/wp-content/plugins/pattracking/includes/class-wppatt-custom-function.php on line 1240
+[29-Oct-2020 16:42:51 UTC] WordPress database error You have an error in your SQL syntax; check the manual that corresponds to your MariaDB server version for the right syntax to use near 'AND
+				    unauthorized_destruction = 1
+				ORDER BY id ASC' at line 9 for query SELECT 
+					folderinfo.id as id, 
+				    folderinfo.folderdocinfo_id as display_folderdocinfo_id,
+				    folderinfo.unauthorized_destruction as unauthorized_destruction
+				FROM 
+					wpqa_wpsc_epa_folderdocinfo as folderinfo
+				WHERE
+				    folderinfo.box_id = 
+				   AND
+				    unauthorized_destruction = 1
+				ORDER BY id ASC
+[29-Oct-2020 17:08:17 UTC] PHP Warning:  count(): Parameter must be an array or an object that implements Countable in /home/acy3/public_html/wordpress3/wp-content/plugins/pattracking/includes/class-wppatt-custom-function.php on line 1240
+[29-Oct-2020 17:08:17 UTC] WordPress database error You have an error in your SQL syntax; check the manual that corresponds to your MariaDB server version for the right syntax to use near 'AND
+				    unauthorized_destruction = 1
+				ORDER BY id ASC' at line 9 for query SELECT 
+					folderinfo.id as id, 
+				    folderinfo.folderdocinfo_id as display_folderdocinfo_id,
+				    folderinfo.unauthorized_destruction as unauthorized_destruction
+				FROM 
+					wpqa_wpsc_epa_folderdocinfo as folderinfo
+				WHERE
+				    folderinfo.box_id = 
+				   AND
+				    unauthorized_destruction = 1
+				ORDER BY id ASC
+[29-Oct-2020 17:08:43 UTC] PHP Warning:  count(): Parameter must be an array or an object that implements Countable in /home/acy3/public_html/wordpress3/wp-content/plugins/pattracking/includes/class-wppatt-custom-function.php on line 1240
+[29-Oct-2020 17:08:55 UTC] PHP Warning:  count(): Parameter must be an array or an object that implements Countable in /home/acy3/public_html/wordpress3/wp-content/plugins/pattracking/includes/class-wppatt-custom-function.php on line 1240
+[29-Oct-2020 17:08:55 UTC] WordPress database error You have an error in your SQL syntax; check the manual that corresponds to your MariaDB server version for the right syntax to use near 'AND
+				    unauthorized_destruction = 1
+				ORDER BY id ASC' at line 9 for query SELECT 
+					folderinfo.id as id, 
+				    folderinfo.folderdocinfo_id as display_folderdocinfo_id,
+				    folderinfo.unauthorized_destruction as unauthorized_destruction
+				FROM 
+					wpqa_wpsc_epa_folderdocinfo as folderinfo
+				WHERE
+				    folderinfo.box_id = 
+				   AND
+				    unauthorized_destruction = 1
+				ORDER BY id ASC
+[29-Oct-2020 17:15:23 UTC] PHP Warning:  count(): Parameter must be an array or an object that implements Countable in /home/acy3/public_html/wordpress3/wp-content/plugins/pattracking/includes/class-wppatt-custom-function.php on line 1240
+[29-Oct-2020 17:15:23 UTC] PHP Warning:  count(): Parameter must be an array or an object that implements Countable in /home/acy3/public_html/wordpress3/wp-content/plugins/pattracking/includes/class-wppatt-custom-function.php on line 1240
+[29-Oct-2020 17:15:23 UTC] WordPress database error You have an error in your SQL syntax; check the manual that corresponds to your MariaDB server version for the right syntax to use near 'AND
+				    unauthorized_destruction = 1
+				ORDER BY id ASC' at line 9 for query SELECT 
+					folderinfo.id as id, 
+				    folderinfo.folderdocinfo_id as display_folderdocinfo_id,
+				    folderinfo.unauthorized_destruction as unauthorized_destruction
+				FROM 
+					wpqa_wpsc_epa_folderdocinfo as folderinfo
+				WHERE
+				    folderinfo.box_id = 
+				   AND
+				    unauthorized_destruction = 1
+				ORDER BY id ASC
+[29-Oct-2020 17:15:24 UTC] PHP Warning:  count(): Parameter must be an array or an object that implements Countable in /home/acy3/public_html/wordpress3/wp-content/plugins/pattracking/includes/class-wppatt-custom-function.php on line 1240
+[29-Oct-2020 17:15:24 UTC] WordPress database error You have an error in your SQL syntax; check the manual that corresponds to your MariaDB server version for the right syntax to use near 'AND
+				    unauthorized_destruction = 1
+				ORDER BY id ASC' at line 9 for query SELECT 
+					folderinfo.id as id, 
+				    folderinfo.folderdocinfo_id as display_folderdocinfo_id,
+				    folderinfo.unauthorized_destruction as unauthorized_destruction
+				FROM 
+					wpqa_wpsc_epa_folderdocinfo as folderinfo
+				WHERE
+				    folderinfo.box_id = 
+				   AND
+				    unauthorized_destruction = 1
+				ORDER BY id ASC
+[29-Oct-2020 17:15:34 UTC] PHP Warning:  count(): Parameter must be an array or an object that implements Countable in /home/acy3/public_html/wordpress3/wp-content/plugins/pattracking/includes/class-wppatt-custom-function.php on line 1240
+[29-Oct-2020 17:15:34 UTC] WordPress database error You have an error in your SQL syntax; check the manual that corresponds to your MariaDB server version for the right syntax to use near 'AND
+				    unauthorized_destruction = 1
+				ORDER BY id ASC' at line 9 for query SELECT 
+					folderinfo.id as id, 
+				    folderinfo.folderdocinfo_id as display_folderdocinfo_id,
+				    folderinfo.unauthorized_destruction as unauthorized_destruction
+				FROM 
+					wpqa_wpsc_epa_folderdocinfo as folderinfo
+				WHERE
+				    folderinfo.box_id = 
+				   AND
+				    unauthorized_destruction = 1
+				ORDER BY id ASC
+[29-Oct-2020 17:15:43 UTC] PHP Warning:  count(): Parameter must be an array or an object that implements Countable in /home/acy3/public_html/wordpress3/wp-content/plugins/pattracking/includes/class-wppatt-custom-function.php on line 1240
+[29-Oct-2020 17:15:43 UTC] WordPress database error You have an error in your SQL syntax; check the manual that corresponds to your MariaDB server version for the right syntax to use near 'AND
+				    unauthorized_destruction = 1
+				ORDER BY id ASC' at line 9 for query SELECT 
+					folderinfo.id as id, 
+				    folderinfo.folderdocinfo_id as display_folderdocinfo_id,
+				    folderinfo.unauthorized_destruction as unauthorized_destruction
+				FROM 
+					wpqa_wpsc_epa_folderdocinfo as folderinfo
+				WHERE
+				    folderinfo.box_id = 
+				   AND
+				    unauthorized_destruction = 1
+				ORDER BY id ASC
+[29-Oct-2020 17:16:04 UTC] PHP Warning:  count(): Parameter must be an array or an object that implements Countable in /home/acy3/public_html/wordpress3/wp-content/plugins/pattracking/includes/class-wppatt-custom-function.php on line 1240
+[29-Oct-2020 17:16:04 UTC] WordPress database error You have an error in your SQL syntax; check the manual that corresponds to your MariaDB server version for the right syntax to use near 'AND
+				    unauthorized_destruction = 1
+				ORDER BY id ASC' at line 9 for query SELECT 
+					folderinfo.id as id, 
+				    folderinfo.folderdocinfo_id as display_folderdocinfo_id,
+				    folderinfo.unauthorized_destruction as unauthorized_destruction
+				FROM 
+					wpqa_wpsc_epa_folderdocinfo as folderinfo
+				WHERE
+				    folderinfo.box_id = 
+				   AND
+				    unauthorized_destruction = 1
+				ORDER BY id ASC
+[29-Oct-2020 17:16:21 UTC] PHP Warning:  count(): Parameter must be an array or an object that implements Countable in /home/acy3/public_html/wordpress3/wp-content/plugins/pattracking/includes/class-wppatt-custom-function.php on line 1240
+[29-Oct-2020 17:16:21 UTC] WordPress database error You have an error in your SQL syntax; check the manual that corresponds to your MariaDB server version for the right syntax to use near 'AND
+				    unauthorized_destruction = 1
+				ORDER BY id ASC' at line 9 for query SELECT 
+					folderinfo.id as id, 
+				    folderinfo.folderdocinfo_id as display_folderdocinfo_id,
+				    folderinfo.unauthorized_destruction as unauthorized_destruction
+				FROM 
+					wpqa_wpsc_epa_folderdocinfo as folderinfo
+				WHERE
+				    folderinfo.box_id = 
+				   AND
+				    unauthorized_destruction = 1
+				ORDER BY id ASC
+[29-Oct-2020 17:16:25 UTC] PHP Warning:  count(): Parameter must be an array or an object that implements Countable in /home/acy3/public_html/wordpress3/wp-content/plugins/pattracking/includes/class-wppatt-custom-function.php on line 1240
+[29-Oct-2020 17:16:49 UTC] PHP Warning:  count(): Parameter must be an array or an object that implements Countable in /home/acy3/public_html/wordpress3/wp-content/plugins/pattracking/includes/class-wppatt-custom-function.php on line 1240
+[29-Oct-2020 17:16:49 UTC] WordPress database error You have an error in your SQL syntax; check the manual that corresponds to your MariaDB server version for the right syntax to use near 'AND
+				    unauthorized_destruction = 1
+				ORDER BY id ASC' at line 9 for query SELECT 
+					folderinfo.id as id, 
+				    folderinfo.folderdocinfo_id as display_folderdocinfo_id,
+				    folderinfo.unauthorized_destruction as unauthorized_destruction
+				FROM 
+					wpqa_wpsc_epa_folderdocinfo as folderinfo
+				WHERE
+				    folderinfo.box_id = 
+				   AND
+				    unauthorized_destruction = 1
+				ORDER BY id ASC
+[29-Oct-2020 21:56:12 UTC] PHP Warning:  count(): Parameter must be an array or an object that implements Countable in /home/acy3/public_html/wordpress3/wp-content/plugins/pattracking/includes/class-wppatt-custom-function.php on line 1240
+[29-Oct-2020 21:56:12 UTC] WordPress database error You have an error in your SQL syntax; check the manual that corresponds to your MariaDB server version for the right syntax to use near 'AND
+				    unauthorized_destruction = 1
+				ORDER BY id ASC' at line 9 for query SELECT 
+					folderinfo.id as id, 
+				    folderinfo.folderdocinfo_id as display_folderdocinfo_id,
+				    folderinfo.unauthorized_destruction as unauthorized_destruction
+				FROM 
+					wpqa_wpsc_epa_folderdocinfo as folderinfo
+				WHERE
+				    folderinfo.box_id = 
+				   AND
+				    unauthorized_destruction = 1
+				ORDER BY id ASC
+[29-Oct-2020 21:56:20 UTC] PHP Warning:  count(): Parameter must be an array or an object that implements Countable in /home/acy3/public_html/wordpress3/wp-content/plugins/pattracking/includes/class-wppatt-custom-function.php on line 1240
+[29-Oct-2020 21:56:20 UTC] WordPress database error You have an error in your SQL syntax; check the manual that corresponds to your MariaDB server version for the right syntax to use near 'AND
+				    unauthorized_destruction = 1
+				ORDER BY id ASC' at line 9 for query SELECT 
+					folderinfo.id as id, 
+				    folderinfo.folderdocinfo_id as display_folderdocinfo_id,
+				    folderinfo.unauthorized_destruction as unauthorized_destruction
+				FROM 
+					wpqa_wpsc_epa_folderdocinfo as folderinfo
+				WHERE
+				    folderinfo.box_id = 
+				   AND
+				    unauthorized_destruction = 1
+				ORDER BY id ASC
+[29-Oct-2020 21:58:31 UTC] PHP Warning:  count(): Parameter must be an array or an object that implements Countable in /home/acy3/public_html/wordpress3/wp-content/plugins/pattracking/includes/class-wppatt-custom-function.php on line 1240
+[29-Oct-2020 21:58:31 UTC] WordPress database error You have an error in your SQL syntax; check the manual that corresponds to your MariaDB server version for the right syntax to use near 'AND
+				    unauthorized_destruction = 1
+				ORDER BY id ASC' at line 9 for query SELECT 
+					folderinfo.id as id, 
+				    folderinfo.folderdocinfo_id as display_folderdocinfo_id,
+				    folderinfo.unauthorized_destruction as unauthorized_destruction
+				FROM 
+					wpqa_wpsc_epa_folderdocinfo as folderinfo
+				WHERE
+				    folderinfo.box_id = 
+				   AND
+				    unauthorized_destruction = 1
+				ORDER BY id ASC
+[29-Oct-2020 21:58:56 UTC] PHP Warning:  count(): Parameter must be an array or an object that implements Countable in /home/acy3/public_html/wordpress3/wp-content/plugins/pattracking/includes/class-wppatt-custom-function.php on line 1240
+[29-Oct-2020 21:58:56 UTC] WordPress database error You have an error in your SQL syntax; check the manual that corresponds to your MariaDB server version for the right syntax to use near 'AND
+				    unauthorized_destruction = 1
+				ORDER BY id ASC' at line 9 for query SELECT 
+					folderinfo.id as id, 
+				    folderinfo.folderdocinfo_id as display_folderdocinfo_id,
+				    folderinfo.unauthorized_destruction as unauthorized_destruction
+				FROM 
+					wpqa_wpsc_epa_folderdocinfo as folderinfo
+				WHERE
+				    folderinfo.box_id = 
+				   AND
+				    unauthorized_destruction = 1
+				ORDER BY id ASC
+[29-Oct-2020 21:59:07 UTC] PHP Warning:  count(): Parameter must be an array or an object that implements Countable in /home/acy3/public_html/wordpress3/wp-content/plugins/pattracking/includes/class-wppatt-custom-function.php on line 1240
+[29-Oct-2020 21:59:07 UTC] WordPress database error You have an error in your SQL syntax; check the manual that corresponds to your MariaDB server version for the right syntax to use near 'AND
+				    unauthorized_destruction = 1
+				ORDER BY id ASC' at line 9 for query SELECT 
+					folderinfo.id as id, 
+				    folderinfo.folderdocinfo_id as display_folderdocinfo_id,
+				    folderinfo.unauthorized_destruction as unauthorized_destruction
+				FROM 
+					wpqa_wpsc_epa_folderdocinfo as folderinfo
+				WHERE
+				    folderinfo.box_id = 
+				   AND
+				    unauthorized_destruction = 1
+				ORDER BY id ASC
+[29-Oct-2020 21:59:32 UTC] PHP Warning:  count(): Parameter must be an array or an object that implements Countable in /home/acy3/public_html/wordpress3/wp-content/plugins/pattracking/includes/class-wppatt-custom-function.php on line 1240
+[29-Oct-2020 21:59:32 UTC] WordPress database error You have an error in your SQL syntax; check the manual that corresponds to your MariaDB server version for the right syntax to use near 'AND
+				    unauthorized_destruction = 1
+				ORDER BY id ASC' at line 9 for query SELECT 
+					folderinfo.id as id, 
+				    folderinfo.folderdocinfo_id as display_folderdocinfo_id,
+				    folderinfo.unauthorized_destruction as unauthorized_destruction
+				FROM 
+					wpqa_wpsc_epa_folderdocinfo as folderinfo
+				WHERE
+				    folderinfo.box_id = 
+				   AND
+				    unauthorized_destruction = 1
+				ORDER BY id ASC
+[29-Oct-2020 21:59:35 UTC] PHP Warning:  count(): Parameter must be an array or an object that implements Countable in /home/acy3/public_html/wordpress3/wp-content/plugins/pattracking/includes/class-wppatt-custom-function.php on line 1240
+[29-Oct-2020 21:59:35 UTC] WordPress database error You have an error in your SQL syntax; check the manual that corresponds to your MariaDB server version for the right syntax to use near 'AND
+				    unauthorized_destruction = 1
+				ORDER BY id ASC' at line 9 for query SELECT 
+					folderinfo.id as id, 
+				    folderinfo.folderdocinfo_id as display_folderdocinfo_id,
+				    folderinfo.unauthorized_destruction as unauthorized_destruction
+				FROM 
+					wpqa_wpsc_epa_folderdocinfo as folderinfo
+				WHERE
+				    folderinfo.box_id = 
+				   AND
+				    unauthorized_destruction = 1
+				ORDER BY id ASC
+[29-Oct-2020 21:59:46 UTC] PHP Warning:  count(): Parameter must be an array or an object that implements Countable in /home/acy3/public_html/wordpress3/wp-content/plugins/pattracking/includes/class-wppatt-custom-function.php on line 1240
+[29-Oct-2020 21:59:46 UTC] WordPress database error You have an error in your SQL syntax; check the manual that corresponds to your MariaDB server version for the right syntax to use near 'AND
+				    unauthorized_destruction = 1
+				ORDER BY id ASC' at line 9 for query SELECT 
+					folderinfo.id as id, 
+				    folderinfo.folderdocinfo_id as display_folderdocinfo_id,
+				    folderinfo.unauthorized_destruction as unauthorized_destruction
+				FROM 
+					wpqa_wpsc_epa_folderdocinfo as folderinfo
+				WHERE
+				    folderinfo.box_id = 
+				   AND
+				    unauthorized_destruction = 1
+				ORDER BY id ASC
+[29-Oct-2020 21:59:53 UTC] PHP Warning:  count(): Parameter must be an array or an object that implements Countable in /home/acy3/public_html/wordpress3/wp-content/plugins/pattracking/includes/class-wppatt-custom-function.php on line 1240
+[29-Oct-2020 21:59:53 UTC] WordPress database error You have an error in your SQL syntax; check the manual that corresponds to your MariaDB server version for the right syntax to use near 'AND
+				    unauthorized_destruction = 1
+				ORDER BY id ASC' at line 9 for query SELECT 
+					folderinfo.id as id, 
+				    folderinfo.folderdocinfo_id as display_folderdocinfo_id,
+				    folderinfo.unauthorized_destruction as unauthorized_destruction
+				FROM 
+					wpqa_wpsc_epa_folderdocinfo as folderinfo
+				WHERE
+				    folderinfo.box_id = 
+				   AND
+				    unauthorized_destruction = 1
+				ORDER BY id ASC
+[29-Oct-2020 22:00:09 UTC] PHP Warning:  count(): Parameter must be an array or an object that implements Countable in /home/acy3/public_html/wordpress3/wp-content/plugins/pattracking/includes/class-wppatt-custom-function.php on line 1240
+[29-Oct-2020 22:00:18 UTC] PHP Warning:  count(): Parameter must be an array or an object that implements Countable in /home/acy3/public_html/wordpress3/wp-content/plugins/pattracking/includes/class-wppatt-custom-function.php on line 1240
+[29-Oct-2020 22:00:18 UTC] WordPress database error You have an error in your SQL syntax; check the manual that corresponds to your MariaDB server version for the right syntax to use near 'AND
+				    unauthorized_destruction = 1
+				ORDER BY id ASC' at line 9 for query SELECT 
+					folderinfo.id as id, 
+				    folderinfo.folderdocinfo_id as display_folderdocinfo_id,
+				    folderinfo.unauthorized_destruction as unauthorized_destruction
+				FROM 
+					wpqa_wpsc_epa_folderdocinfo as folderinfo
+				WHERE
+				    folderinfo.box_id = 
+				   AND
+				    unauthorized_destruction = 1
+				ORDER BY id ASC
+[29-Oct-2020 22:02:46 UTC] PHP Warning:  count(): Parameter must be an array or an object that implements Countable in /home/acy3/public_html/wordpress3/wp-content/plugins/pattracking/includes/class-wppatt-custom-function.php on line 1240
+[29-Oct-2020 22:02:46 UTC] WordPress database error You have an error in your SQL syntax; check the manual that corresponds to your MariaDB server version for the right syntax to use near 'AND
+				    unauthorized_destruction = 1
+				ORDER BY id ASC' at line 9 for query SELECT 
+					folderinfo.id as id, 
+				    folderinfo.folderdocinfo_id as display_folderdocinfo_id,
+				    folderinfo.unauthorized_destruction as unauthorized_destruction
+				FROM 
+					wpqa_wpsc_epa_folderdocinfo as folderinfo
+				WHERE
+				    folderinfo.box_id = 
+				   AND
+				    unauthorized_destruction = 1
+				ORDER BY id ASC
+[29-Oct-2020 22:53:29 UTC] PHP Warning:  count(): Parameter must be an array or an object that implements Countable in /home/acy3/public_html/wordpress3/wp-content/plugins/pattracking/includes/class-wppatt-custom-function.php on line 1240
+[29-Oct-2020 22:53:29 UTC] WordPress database error You have an error in your SQL syntax; check the manual that corresponds to your MariaDB server version for the right syntax to use near 'AND
+				    unauthorized_destruction = 1
+				ORDER BY id ASC' at line 9 for query SELECT 
+					folderinfo.id as id, 
+				    folderinfo.folderdocinfo_id as display_folderdocinfo_id,
+				    folderinfo.unauthorized_destruction as unauthorized_destruction
+				FROM 
+					wpqa_wpsc_epa_folderdocinfo as folderinfo
+				WHERE
+				    folderinfo.box_id = 
+				   AND
+				    unauthorized_destruction = 1
+				ORDER BY id ASC
+[29-Oct-2020 22:53:33 UTC] PHP Warning:  count(): Parameter must be an array or an object that implements Countable in /home/acy3/public_html/wordpress3/wp-content/plugins/pattracking/includes/class-wppatt-custom-function.php on line 1240
+[29-Oct-2020 22:53:47 UTC] PHP Warning:  count(): Parameter must be an array or an object that implements Countable in /home/acy3/public_html/wordpress3/wp-content/plugins/pattracking/includes/class-wppatt-custom-function.php on line 1240
+[29-Oct-2020 22:53:47 UTC] WordPress database error You have an error in your SQL syntax; check the manual that corresponds to your MariaDB server version for the right syntax to use near 'AND
+				    unauthorized_destruction = 1
+				ORDER BY id ASC' at line 9 for query SELECT 
+					folderinfo.id as id, 
+				    folderinfo.folderdocinfo_id as display_folderdocinfo_id,
+				    folderinfo.unauthorized_destruction as unauthorized_destruction
+				FROM 
+					wpqa_wpsc_epa_folderdocinfo as folderinfo
+				WHERE
+				    folderinfo.box_id = 
+				   AND
+				    unauthorized_destruction = 1
+				ORDER BY id ASC
+[30-Oct-2020 15:03:06 UTC] PHP Warning:  count(): Parameter must be an array or an object that implements Countable in /home/acy3/public_html/wordpress3/wp-content/plugins/pattracking/includes/class-wppatt-custom-function.php on line 1240
+[30-Oct-2020 15:03:06 UTC] WordPress database error You have an error in your SQL syntax; check the manual that corresponds to your MariaDB server version for the right syntax to use near 'AND
+				    unauthorized_destruction = 1
+				ORDER BY id ASC' at line 9 for query SELECT 
+					folderinfo.id as id, 
+				    folderinfo.folderdocinfo_id as display_folderdocinfo_id,
+				    folderinfo.unauthorized_destruction as unauthorized_destruction
+				FROM 
+					wpqa_wpsc_epa_folderdocinfo as folderinfo
+				WHERE
+				    folderinfo.box_id = 
+				   AND
+				    unauthorized_destruction = 1
+				ORDER BY id ASC
+[30-Oct-2020 15:04:15 UTC] PHP Warning:  count(): Parameter must be an array or an object that implements Countable in /home/acy3/public_html/wordpress3/wp-content/plugins/pattracking/includes/class-wppatt-custom-function.php on line 1240
+[30-Oct-2020 15:04:15 UTC] WordPress database error You have an error in your SQL syntax; check the manual that corresponds to your MariaDB server version for the right syntax to use near 'AND
+				    unauthorized_destruction = 1
+				ORDER BY id ASC' at line 9 for query SELECT 
+					folderinfo.id as id, 
+				    folderinfo.folderdocinfo_id as display_folderdocinfo_id,
+				    folderinfo.unauthorized_destruction as unauthorized_destruction
+				FROM 
+					wpqa_wpsc_epa_folderdocinfo as folderinfo
+				WHERE
+				    folderinfo.box_id = 
+				   AND
+				    unauthorized_destruction = 1
+				ORDER BY id ASC
+[30-Oct-2020 15:20:38 UTC] PHP Warning:  count(): Parameter must be an array or an object that implements Countable in /home/acy3/public_html/wordpress3/wp-content/plugins/pattracking/includes/class-wppatt-custom-function.php on line 1240
+[30-Oct-2020 15:20:38 UTC] WordPress database error You have an error in your SQL syntax; check the manual that corresponds to your MariaDB server version for the right syntax to use near 'AND
+				    unauthorized_destruction = 1
+				ORDER BY id ASC' at line 9 for query SELECT 
+					folderinfo.id as id, 
+				    folderinfo.folderdocinfo_id as display_folderdocinfo_id,
+				    folderinfo.unauthorized_destruction as unauthorized_destruction
+				FROM 
+					wpqa_wpsc_epa_folderdocinfo as folderinfo
+				WHERE
+				    folderinfo.box_id = 
+				   AND
+				    unauthorized_destruction = 1
+				ORDER BY id ASC
+[30-Oct-2020 15:21:10 UTC] PHP Warning:  count(): Parameter must be an array or an object that implements Countable in /home/acy3/public_html/wordpress3/wp-content/plugins/pattracking/includes/class-wppatt-custom-function.php on line 1240
+[30-Oct-2020 15:21:10 UTC] WordPress database error You have an error in your SQL syntax; check the manual that corresponds to your MariaDB server version for the right syntax to use near 'AND
+				    unauthorized_destruction = 1
+				ORDER BY id ASC' at line 9 for query SELECT 
+					folderinfo.id as id, 
+				    folderinfo.folderdocinfo_id as display_folderdocinfo_id,
+				    folderinfo.unauthorized_destruction as unauthorized_destruction
+				FROM 
+					wpqa_wpsc_epa_folderdocinfo as folderinfo
+				WHERE
+				    folderinfo.box_id = 
+				   AND
+				    unauthorized_destruction = 1
+				ORDER BY id ASC
+[30-Oct-2020 15:30:30 UTC] PHP Warning:  count(): Parameter must be an array or an object that implements Countable in /home/acy3/public_html/wordpress3/wp-content/plugins/pattracking/includes/class-wppatt-custom-function.php on line 1240
+[30-Oct-2020 15:30:30 UTC] WordPress database error You have an error in your SQL syntax; check the manual that corresponds to your MariaDB server version for the right syntax to use near 'AND
+				    unauthorized_destruction = 1
+				ORDER BY id ASC' at line 9 for query SELECT 
+					folderinfo.id as id, 
+				    folderinfo.folderdocinfo_id as display_folderdocinfo_id,
+				    folderinfo.unauthorized_destruction as unauthorized_destruction
+				FROM 
+					wpqa_wpsc_epa_folderdocinfo as folderinfo
+				WHERE
+				    folderinfo.box_id = 
+				   AND
+				    unauthorized_destruction = 1
+				ORDER BY id ASC
+[30-Oct-2020 15:32:24 UTC] PHP Warning:  count(): Parameter must be an array or an object that implements Countable in /home/acy3/public_html/wordpress3/wp-content/plugins/pattracking/includes/class-wppatt-custom-function.php on line 1240
+[30-Oct-2020 15:32:24 UTC] WordPress database error You have an error in your SQL syntax; check the manual that corresponds to your MariaDB server version for the right syntax to use near 'AND
+				    unauthorized_destruction = 1
+				ORDER BY id ASC' at line 9 for query SELECT 
+					folderinfo.id as id, 
+				    folderinfo.folderdocinfo_id as display_folderdocinfo_id,
+				    folderinfo.unauthorized_destruction as unauthorized_destruction
+				FROM 
+					wpqa_wpsc_epa_folderdocinfo as folderinfo
+				WHERE
+				    folderinfo.box_id = 
+				   AND
+				    unauthorized_destruction = 1
+				ORDER BY id ASC
+[30-Oct-2020 15:45:04 UTC] PHP Warning:  count(): Parameter must be an array or an object that implements Countable in /home/acy3/public_html/wordpress3/wp-content/plugins/pattracking/includes/class-wppatt-custom-function.php on line 1240
+[30-Oct-2020 15:45:04 UTC] WordPress database error You have an error in your SQL syntax; check the manual that corresponds to your MariaDB server version for the right syntax to use near 'AND
+				    unauthorized_destruction = 1
+				ORDER BY id ASC' at line 9 for query SELECT 
+					folderinfo.id as id, 
+				    folderinfo.folderdocinfo_id as display_folderdocinfo_id,
+				    folderinfo.unauthorized_destruction as unauthorized_destruction
+				FROM 
+					wpqa_wpsc_epa_folderdocinfo as folderinfo
+				WHERE
+				    folderinfo.box_id = 
+				   AND
+				    unauthorized_destruction = 1
+				ORDER BY id ASC
+[30-Oct-2020 15:45:36 UTC] PHP Warning:  count(): Parameter must be an array or an object that implements Countable in /home/acy3/public_html/wordpress3/wp-content/plugins/pattracking/includes/class-wppatt-custom-function.php on line 1240
+[30-Oct-2020 15:45:49 UTC] PHP Warning:  count(): Parameter must be an array or an object that implements Countable in /home/acy3/public_html/wordpress3/wp-content/plugins/pattracking/includes/class-wppatt-custom-function.php on line 1240
+[30-Oct-2020 15:45:49 UTC] WordPress database error You have an error in your SQL syntax; check the manual that corresponds to your MariaDB server version for the right syntax to use near 'AND
+				    unauthorized_destruction = 1
+				ORDER BY id ASC' at line 9 for query SELECT 
+					folderinfo.id as id, 
+				    folderinfo.folderdocinfo_id as display_folderdocinfo_id,
+				    folderinfo.unauthorized_destruction as unauthorized_destruction
+				FROM 
+					wpqa_wpsc_epa_folderdocinfo as folderinfo
+				WHERE
+				    folderinfo.box_id = 
+				   AND
+				    unauthorized_destruction = 1
+				ORDER BY id ASC

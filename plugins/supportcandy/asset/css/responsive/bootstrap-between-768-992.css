@@ -1,0 +1,28 @@
+
+/* @media (min-width: 768px) and (max-width: 991px) */
+
+.bootstrap-iso .visible-sm {
+  display: block !important;
+}
+.bootstrap-iso table.visible-sm {
+  display: table;
+}
+.bootstrap-iso tr.visible-sm {
+  display: table-row !important;
+}
+.bootstrap-iso th.visible-sm,
+.bootstrap-iso td.visible-sm {
+  display: table-cell !important;
+}
+.bootstrap-iso .visible-sm-block {
+  display: block !important;
+}
+.bootstrap-iso .visible-sm-inline {
+  display: inline !important;
+}
+.bootstrap-iso .visible-sm-inline-block {
+  display: inline-block !important;
+}
+.bootstrap-iso .hidden-sm {
+  display: none !important;
+}

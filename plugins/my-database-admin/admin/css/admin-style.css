@@ -1,0 +1,7 @@
+.my-database-admin-table{width:100%; border-collapse: collapse; margin:20px 0px}
+.my-database-admin-table, .my-database-admin-table tr, .my-database-admin-table th, .my-database-admin-table td {border:1px solid #888}
+.my-database-admin-table th, .my-database-admin-table td{padding:4px}
+
+.my_database_admin_querytable {width:100%}
+.my_database_admin_querytable td{padding:10px;padding-left:30px}
+.my_database_admin_querytable td:first-child{border-right:1px solid #ddd;padding-left:0px;padding-right:30px}

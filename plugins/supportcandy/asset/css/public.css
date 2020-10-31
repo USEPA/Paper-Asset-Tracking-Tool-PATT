@@ -1,0 +1,447 @@
+
+.bootstrap-iso{
+  font-size: 13px !important;
+}
+
+#wpsc_tickets_container {
+  border-radius: 4px;
+  border: 1px solid #1C5D8A;
+  background-color: #fff;
+  color: #2C3E50;
+  min-height: 300px;
+  width: 99%;
+}
+
+#wpsc_tickets_container .wpsc_loading_icon{
+  margin-top: 118px;
+}
+
+.wpsc_reply_widget .wpsc_loading_icon{
+  margin-top: 60px !important;
+  margin-bottom: 60px !important;
+}
+
+.wpsc_tl_action_bar{
+  padding: 10px 0;
+  background-color: #1C5D8A;
+}
+
+.wpsc_create_ticket_btn{
+  background-color: #E74C3C;
+  color: #fff !important;
+  margin-bottom: 3px !important;
+}
+
+.wpsc_action_btn{
+  background-color: #FFF;
+  color: #383333 !important;
+  margin-bottom: 3px !important;
+}
+
+.wpsc_search_btn{
+  margin-top: -24px;
+  cursor: pointer;
+}
+
+.wpsc_search_btn_sarch{
+  margin-left: 10px;
+  float: left;
+}
+
+.wpsc_search_btn_filter{
+  margin-right: 10px;
+  float: right;
+  position: relative;
+}
+
+#wpsc_ticket_search{
+  padding: 0 30px !important;
+}
+
+.wpsp_custom_filter_container{
+  width: 100%;
+  background-color: #fff;
+  border: 1px solid #cccccc !important;
+  position: absolute;
+  z-index: 999999;
+  top: 32px;
+  left: 0px;
+}
+
+.wpsp_filter_btn{
+  margin: 3px 0 !important;
+}
+
+.wpsp_filter_body{
+  max-height: 250px;
+  overflow-y: auto;
+  padding: 15px 0;
+}
+
+.wpsp_filter_footer{
+  padding: 10px 0;
+  background-color: #F3F3F7;
+}
+
+.wpsc_sidebar, .wpsc_it_body{
+  padding-top: 20px;
+}
+
+.wpsc_sidebar .row{
+  background-color: #fff;
+  padding: 0 15px;
+  border-radius: 4px;
+  margin-bottom: 15px;
+  border: 1px solid #c3c3c3;
+}
+
+.wpsp_sidebar_labels{
+  font-size: 15px;
+  margin: 10px 0;
+  cursor: pointer;
+  overflow: hidden;
+}
+
+#wpsc_md_filters .wpsp_sidebar_labels.active, #wpsc_md_filters .wpsp_sidebar_labels:hover{
+  font-weight: bold;
+}
+
+@media (max-width: 991px) and (min-width: 768px){
+  .bootstrap-iso .wpsc_action_btn.visible-sm{
+    display: inline !important;
+  }
+}
+
+@media (max-width: 767px){
+  .bootstrap-iso .wpsc_action_btn.visible-xs{
+    display: inline !important;
+  }
+}
+
+.wpsc_ticket_list_container{
+  padding-top: 20px;
+  min-height: 500px !important;
+}
+
+.wpsc_ticket_list_container td,.wpsc_ticket_list_container th,.wpsc_ticket_list_container tr,.wpsc_ticket_list_container table{
+  border: none !important;
+}
+
+.wpsc_ticket_list_container td,.wpsc_ticket_list_container th{
+  white-space: nowrap;
+}
+
+.wpsc_ticket_list_container th{
+  background-color: #424949;
+  color: #ffffff;
+}
+
+.wpsc_ticket_list_container tr:hover{
+  cursor: pointer;
+}
+
+.wpsc_ticket_list_container input[type=checkbox]{
+  margin: 0 !important;
+  vertical-align: middle !important;
+}
+
+.wpsp_admin_label{
+  border-radius: 4px;
+  font-weight: bold;
+  padding: 5px 10px;
+  font-size: 10px;
+}
+
+.wpsc_thread{
+  display: table;
+  width: 100%;
+  padding: 10px;
+  background-color: #FFFFFF;
+  border-radius: 5px;
+  margin-bottom: 20px;
+  border: 1px solid #c3c3c3;
+}
+
+.wpsc_thread.note{
+  background-color: #FEF9E7;
+}
+
+.thread_avatar, .thread_body{
+  display: table-cell;
+  vertical-align: top;
+}
+
+.thread_avatar{
+  width: 40px;
+}
+
+.thread_avatar img{
+  border-radius: 5px;
+}
+
+.thread_body{
+  padding: 0 15px 5px 15px;
+}
+
+.thread_user_name{
+  margin-bottom: 10px;
+}
+
+.thread_user_name strong{
+  font-size: 16px;
+}
+
+.thread_user_name i {
+  margin-left: 5px;
+}
+
+.thread_messege, .thread_messege p{
+  font-size: 13px !important;
+}
+
+.thread_action_btn{
+  float: right;
+  cursor: pointer;
+  margin-left: 10px;
+  color: #a7a9ab;
+  font-size: 14px;
+}
+
+.thread_action_btn:hover{
+  color:black;
+}
+
+.wpsc_raised_by_action:hover{
+  color:black;
+}
+
+.wpsc_thread_log{
+  padding: 10px;
+  margin-bottom: 20px;
+  background-color: #D6EAF8;
+  text-align: center;
+  border-radius: 5px;
+  overflow: hidden;
+}
+
+.wpsc_reply_widget{
+  margin-bottom: 20px;
+}
+
+.bootstrap-iso .attachment {
+  text-align:left !important;
+}
+
+#wpsc_frm_create_ticket .attachment{
+  width: 100% !important;
+}
+
+.wpsc_reply_widget .attachment, .wpsc_reply_widget .submit{
+  padding: 5px 0;
+}
+
+.attachment_link span{
+  font-size: 13px;
+  color: #0077AE;
+  cursor: pointer;
+  text-decoration-line: underline;
+  text-decoration-style:dotted;
+  padding-right: 10px;
+}
+
+.wpsc_reply_widget button, .wpsc_reply_widget .btn-group{
+  float: right;
+  margin-top: 5px;
+}
+
+.btn {
+  margin-right: 2px !important;
+}
+
+.individual_ticket_widget .wpsp_sidebar_labels{
+  font-size: 12px;
+  cursor: auto;
+}
+
+.wpsc_sf_del{
+  padding: 1px 5px !important;
+}
+
+.raisedby_img{
+  width: 100%
+}
+
+.raisedby_img img{
+  border-radius: 5px;
+}
+
+.raisedby_name{
+  width: 100%;
+  font-size: 17px;
+  margin: 15px 0;
+}
+
+.raised_by_div{
+  margin-bottom: 10px;
+  background-color: #D6DBDF;
+  overflow: hidden;
+  color: #000;
+  border: none !important;
+}
+
+.raised_by_div div{
+  vertical-align: middle;
+}
+
+.raised_by_div .thread_avatar{
+  width: 20px;
+}
+
+.raised_by_div .thread_body{
+  padding: 0 15px 0 15px;
+}
+
+.raised_by_div .thread_user_name{
+  margin-bottom: 0;
+}
+
+.wpsc_page_heading{
+  margin-left: 30px;
+  margin-bottom: 35px !important;
+}
+
+.wpsc_ct_field_label{
+  font-size: 15px;
+}
+
+.create_ticket_fields_container{
+  padding: 0 20px;
+  padding-top: 15px;
+}
+
+.create_ticket_frm_submit{
+  padding: 0 30px;
+  margin: 30px 0;
+}
+
+.assigned_agent{
+  padding-bottom: 20px !important;
+}
+
+.attachment_container{
+  margin-top: 10px;
+}
+
+.attachment_cancel{
+    float: right;
+    margin: -40px 0px 0 0;
+    cursor: pointer;
+}
+
+.captcha_container{
+  margin-bottom: 10px;
+  display: flex;
+  padding: 20px;
+  margin-left: 15px;
+  background-color: #B2BABB;
+  color: #000;
+  font-size: 15px;
+  border-radius: 5px;
+  font-weight: bold;
+}
+
+.widget_header{
+  margin-bottom: 3px !important;
+  font-size: 16px !important;
+}
+
+.widget_divider{
+  margin-top: 4px !important;
+  margin-bottom: 6px !important;
+}
+
+#wpsc_message_login{
+  padding: 5px;
+  border-radius: 4px;
+}
+
+.wpsc_attachment_tbl table, .wpsc_attachment_tbl th, .wpsc_attachment_tbl td{
+      border: hidden !important;
+      padding: 0px !important;
+}
+
+.wpsc_ticket_thread_expander{
+  margin-top: 10px;
+  color: #003eff;
+  cursor: pointer;
+}
+
+.thread_messege{
+    overflow: hidden;
+}
+
+.wpsc_ticket_thread_content img{
+    cursor: pointer;
+}
+
+.wpsc_textarea{
+  height: 160px !important;
+  width: 100%  !important;
+}
+
+#wpsc_ticket_fields{
+  margin: 10px 0;
+}
+
+#wpsc_ticket_aof_fields{
+  margin: 10px 0;
+}
+
+.wpsc_tl_action_bar button{ 
+  float: left !important; 
+}
+
+#wpsc_register_email_error, #wpsc_register_username_error{
+  color: red;
+}
+
+.thread_messege ul{
+  list-style-type:disc !important;
+  padding-inline-start: 40px;
+}
+
+.wpsc_seen_info{
+  float:right;
+  cursor:pointer;
+}
+
+#wpsc_additional_users{
+  margin: 10px 0;
+}
+
+#biographical_info{
+  margin: 10px 0;
+}
+
+.bootstrap-iso .mce-tinymce{
+  border: 1px solid #ccc;
+}
+
+#inputEmail{
+  margin-bottom: 5px;
+}
+
+.thread_messege #wpsc_timer_table {
+  width: auto !important;
+  border-collapse: collapse;
+  border-top: 1px solid #ddd;
+}
+
+.thread_messege #wpsc_timer_table td, .thread_messege #wpsc_timer_table th {
+  border: 1px solid #ddd;
+  padding: 8px;
+}
+
+.wpsc_reg_required_sym{
+  color:red;
+}

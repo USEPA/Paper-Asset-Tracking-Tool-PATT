@@ -1,0 +1,9 @@
+.tooltip-inner {
+    white-space:pre-wrap;
+}
+
+a[data-toggle="tooltip"] {
+text-decoration: none !important;
+/*font-weight: bold;*/
+cursor: help;
+}

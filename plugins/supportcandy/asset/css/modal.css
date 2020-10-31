@@ -1,0 +1,69 @@
+/**
+ * Pop-up styles start
+ **/
+#wpsc_popup_background{
+  position: fixed;
+  top:0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 900000000000;
+  background-color: #000;
+  opacity: 0.8;
+}
+
+#wpsc_popup_container{
+  position: fixed;
+  top:30px;
+  left: 0;
+  width: 100%;
+  z-index: 900000000001;
+}
+
+#wpsc_popup{
+  background-color: #fff;
+  height: 100px;
+  padding: 0 !important;
+}
+
+#wpsc_popup_title{
+  background-color: #0473AA;
+  color: #fff;
+  padding: 15px !important;
+}
+
+#wpsc_popup_title h3{
+  font-size: 18px;
+  margin: 0 !important;
+}
+
+#wpsc_popup_body{
+  min-height: 100px;
+  max-height: 300px;
+  overflow-x: hidden;
+  overflow-y: auto;
+  background-color: #fff;
+  padding: 15px !important;
+}
+
+#wpsc_popup_footer{
+  background-color: #F6F6F6;
+  padding: 15px !important;
+}
+
+#wpsc_popup_footer button{
+  width: 120px;
+  height: 40px;
+  border-radius: 0;
+  margin-right: 10px;
+}
+
+.wpsc_popup_close{
+  background-color: #AFAFAF;
+  color: #fff !important;
+}
+
+.wpsc_popup_action{
+  background-color: #0473AA;
+  color: #fff !important;
+}

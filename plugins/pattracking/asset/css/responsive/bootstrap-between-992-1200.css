@@ -1,0 +1,28 @@
+
+/* @media (min-width: 992px) and (max-width: 1199px) */
+
+.bootstrap-iso .visible-md {
+  display: block !important;
+}
+.bootstrap-iso table.visible-md {
+  display: table;
+}
+.bootstrap-iso tr.visible-md {
+  display: table-row !important;
+}
+.bootstrap-iso th.visible-md,
+.bootstrap-iso td.visible-md {
+  display: table-cell !important;
+}
+.bootstrap-iso .visible-md-block {
+  display: block !important;
+}
+.bootstrap-iso .visible-md-inline {
+  display: inline !important;
+}
+.bootstrap-iso .visible-md-inline-block {
+  display: inline-block !important;
+}
+.bootstrap-iso .hidden-md {
+  display: none !important;
+}

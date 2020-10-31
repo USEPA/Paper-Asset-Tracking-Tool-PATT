@@ -1,0 +1,155 @@
+
+/* @media screen and (max-width: 767px) */
+
+.bootstrap-iso .table-responsive {
+  width: 100%;
+  margin-bottom: 15px;
+  overflow-y: hidden;
+  -ms-overflow-style: -ms-autohiding-scrollbar;
+  border: 1px solid #dddddd;
+}
+.bootstrap-iso .table-responsive > .table {
+  margin-bottom: 0;
+}
+.bootstrap-iso .table-responsive > .table > thead > tr > th,
+.bootstrap-iso .table-responsive > .table > tbody > tr > th,
+.bootstrap-iso .table-responsive > .table > tfoot > tr > th,
+.bootstrap-iso .table-responsive > .table > thead > tr > td,
+.bootstrap-iso .table-responsive > .table > tbody > tr > td,
+.bootstrap-iso .table-responsive > .table > tfoot > tr > td {
+  white-space: nowrap;
+}
+.bootstrap-iso .table-responsive > .table-bordered {
+  border: 0;
+}
+.bootstrap-iso .table-responsive > .table-bordered > thead > tr > th:first-child,
+.bootstrap-iso .table-responsive > .table-bordered > tbody > tr > th:first-child,
+.bootstrap-iso .table-responsive > .table-bordered > tfoot > tr > th:first-child,
+.bootstrap-iso .table-responsive > .table-bordered > thead > tr > td:first-child,
+.bootstrap-iso .table-responsive > .table-bordered > tbody > tr > td:first-child,
+.bootstrap-iso .table-responsive > .table-bordered > tfoot > tr > td:first-child {
+  border-left: 0;
+}
+.bootstrap-iso .table-responsive > .table-bordered > thead > tr > th:last-child,
+.bootstrap-iso .table-responsive > .table-bordered > tbody > tr > th:last-child,
+.bootstrap-iso .table-responsive > .table-bordered > tfoot > tr > th:last-child,
+.bootstrap-iso .table-responsive > .table-bordered > thead > tr > td:last-child,
+.bootstrap-iso .table-responsive > .table-bordered > tbody > tr > td:last-child,
+.bootstrap-iso .table-responsive > .table-bordered > tfoot > tr > td:last-child {
+  border-right: 0;
+}
+.bootstrap-iso .table-responsive > .table-bordered > tbody > tr:last-child > th,
+.bootstrap-iso .table-responsive > .table-bordered > tfoot > tr:last-child > th,
+.bootstrap-iso .table-responsive > .table-bordered > tbody > tr:last-child > td,
+.bootstrap-iso .table-responsive > .table-bordered > tfoot > tr:last-child > td {
+  border-bottom: 0;
+}
+.bootstrap-iso .navbar-nav .open .dropdown-menu {
+  position: static;
+  float: none;
+  width: auto;
+  margin-top: 0;
+  background-color: transparent;
+  border: 0;
+  -webkit-box-shadow: none;
+  box-shadow: none;
+}
+.bootstrap-iso .navbar-nav .open .dropdown-menu > li > a,
+.bootstrap-iso .navbar-nav .open .dropdown-menu .dropdown-header {
+  padding: 5px 15px 5px 25px;
+}
+.bootstrap-iso .navbar-nav .open .dropdown-menu > li > a {
+  line-height: 20px;
+}
+.bootstrap-iso .navbar-nav .open .dropdown-menu > li > a:hover,
+.bootstrap-iso .navbar-nav .open .dropdown-menu > li > a:focus {
+  background-image: none;
+}
+.bootstrap-iso .navbar-form .form-group {
+  margin-bottom: 5px;
+}
+.bootstrap-iso .navbar-form .form-group:last-child {
+  margin-bottom: 0;
+}
+.bootstrap-iso .navbar-default .navbar-nav .open .dropdown-menu > li > a {
+  color: #777777;
+}
+.bootstrap-iso .navbar-default .navbar-nav .open .dropdown-menu > li > a:hover,
+.bootstrap-iso .navbar-default .navbar-nav .open .dropdown-menu > li > a:focus {
+  color: #333333;
+  background-color: transparent;
+}
+.bootstrap-iso .navbar-default .navbar-nav .open .dropdown-menu > .active > a,
+.bootstrap-iso .navbar-default .navbar-nav .open .dropdown-menu > .active > a:hover,
+.bootstrap-iso .navbar-default .navbar-nav .open .dropdown-menu > .active > a:focus {
+  color: #555555;
+  background-color: #e7e7e7;
+}
+.bootstrap-iso .navbar-default .navbar-nav .open .dropdown-menu > .disabled > a,
+.bootstrap-iso .navbar-default .navbar-nav .open .dropdown-menu > .disabled > a:hover,
+.bootstrap-iso .navbar-default .navbar-nav .open .dropdown-menu > .disabled > a:focus {
+  color: #cccccc;
+  background-color: transparent;
+}
+.bootstrap-iso .navbar-inverse .navbar-nav .open .dropdown-menu > .dropdown-header {
+  border-color: #080808;
+}
+.bootstrap-iso .navbar-inverse .navbar-nav .open .dropdown-menu .divider {
+  background-color: #080808;
+}
+.bootstrap-iso .navbar-inverse .navbar-nav .open .dropdown-menu > li > a {
+  color: #9d9d9d;
+}
+.bootstrap-iso .navbar-inverse .navbar-nav .open .dropdown-menu > li > a:hover,
+.bootstrap-iso .navbar-inverse .navbar-nav .open .dropdown-menu > li > a:focus {
+  color: #ffffff;
+  background-color: transparent;
+}
+.bootstrap-iso .navbar-inverse .navbar-nav .open .dropdown-menu > .active > a,
+.bootstrap-iso .navbar-inverse .navbar-nav .open .dropdown-menu > .active > a:hover,
+.bootstrap-iso .navbar-inverse .navbar-nav .open .dropdown-menu > .active > a:focus {
+  color: #ffffff;
+  background-color: #080808;
+}
+.bootstrap-iso .navbar-inverse .navbar-nav .open .dropdown-menu > .disabled > a,
+.bootstrap-iso .navbar-inverse .navbar-nav .open .dropdown-menu > .disabled > a:hover,
+.bootstrap-iso .navbar-inverse .navbar-nav .open .dropdown-menu > .disabled > a:focus {
+  color: #444444;
+  background-color: transparent;
+}
+.bootstrap-iso .visible-xs {
+  display: block !important;
+}
+.bootstrap-iso table.visible-xs {
+  display: table;
+}
+.bootstrap-iso tr.visible-xs {
+  display: table-row !important;
+}
+.bootstrap-iso th.visible-xs,
+.bootstrap-iso td.visible-xs {
+  display: table-cell !important;
+}
+.bootstrap-iso .visible-xs-block {
+  display: block !important;
+}
+.bootstrap-iso .visible-xs-inline {
+  display: inline !important;
+}
+.bootstrap-iso .visible-xs-inline-block {
+  display: inline-block !important;
+}
+.bootstrap-iso .hidden-xs {
+  display: none !important;
+}
+.bootstrap-iso .navbar .navbar-nav .open .dropdown-menu > .active > a,
+.bootstrap-iso .navbar .navbar-nav .open .dropdown-menu > .active > a:hover,
+.bootstrap-iso .navbar .navbar-nav .open .dropdown-menu > .active > a:focus {
+  color: #fff;
+  background-image: -webkit-linear-gradient(top, #337ab7 0%, #2e6da4 100%);
+  background-image: -o-linear-gradient(top, #337ab7 0%, #2e6da4 100%);
+  background-image: -webkit-gradient(linear, left top, left bottom, from(#337ab7), to(#2e6da4));
+  background-image: linear-gradient(to bottom, #337ab7 0%, #2e6da4 100%);
+  background-repeat: repeat-x;
+  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#ff337ab7', endColorstr='#ff2e6da4', GradientType=0);
+}

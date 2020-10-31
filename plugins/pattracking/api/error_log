@@ -1,0 +1,96 @@
+[28-Oct-2020 15:27:24 Europe/London] PHP Fatal error:  Uncaught Error: Call to undefined function mysql_real_escape_string() in /home/acy3/public_html/wp-content/themes/omnom/library/functions/multi_city_functions.php:228
+Stack trace:
+#0 /home/acy3/public_html/wp-content/themes/omnom/library/functions/listing_filters.php(318): get_current_city_lat()
+#1 /home/acy3/public_html/wp-content/themes/omnom/functions.php(164): include_once('/home/acy3/publ...')
+#2 /home/acy3/public_html/wp-settings.php(426): include('/home/acy3/publ...')
+#3 /home/acy3/public_html/wp-config.php(93): require_once('/home/acy3/publ...')
+#4 /home/acy3/public_html/wordpress3/wp-content/plugins/pattracking/api/api.php(11338): require_once('/home/acy3/publ...')
+#5 {main}
+  thrown in /home/acy3/public_html/wp-content/themes/omnom/library/functions/multi_city_functions.php on line 228
+[28-Oct-2020 15:27:35 Europe/London] PHP Fatal error:  Uncaught Error: Call to undefined function mysql_real_escape_string() in /home/acy3/public_html/wp-content/themes/omnom/library/functions/multi_city_functions.php:228
+Stack trace:
+#0 /home/acy3/public_html/wp-content/themes/omnom/library/functions/listing_filters.php(318): get_current_city_lat()
+#1 /home/acy3/public_html/wp-content/themes/omnom/functions.php(164): include_once('/home/acy3/publ...')
+#2 /home/acy3/public_html/wp-settings.php(426): include('/home/acy3/publ...')
+#3 /home/acy3/public_html/wp-config.php(93): require_once('/home/acy3/publ...')
+#4 /home/acy3/public_html/wordpress3/wp-content/plugins/pattracking/api/api.php(11338): require_once('/home/acy3/publ...')
+#5 {main}
+  thrown in /home/acy3/public_html/wp-content/themes/omnom/library/functions/multi_city_functions.php on line 228
+[28-Oct-2020 15:27:40 Europe/London] PHP Fatal error:  Uncaught Error: Call to undefined function mysql_real_escape_string() in /home/acy3/public_html/wp-content/themes/omnom/library/functions/multi_city_functions.php:228
+Stack trace:
+#0 /home/acy3/public_html/wp-content/themes/omnom/library/functions/listing_filters.php(318): get_current_city_lat()
+#1 /home/acy3/public_html/wp-content/themes/omnom/functions.php(164): include_once('/home/acy3/publ...')
+#2 /home/acy3/public_html/wp-settings.php(426): include('/home/acy3/publ...')
+#3 /home/acy3/public_html/wp-config.php(93): require_once('/home/acy3/publ...')
+#4 /home/acy3/public_html/wordpress3/wp-content/plugins/pattracking/api/api.php(11338): require_once('/home/acy3/publ...')
+#5 {main}
+  thrown in /home/acy3/public_html/wp-content/themes/omnom/library/functions/multi_city_functions.php on line 228
+[28-Oct-2020 15:28:48 Europe/London] PHP Fatal error:  Uncaught Error: Call to undefined function mysql_real_escape_string() in /home/acy3/public_html/wp-content/themes/omnom/library/functions/multi_city_functions.php:228
+Stack trace:
+#0 /home/acy3/public_html/wp-content/themes/omnom/library/functions/listing_filters.php(318): get_current_city_lat()
+#1 /home/acy3/public_html/wp-content/themes/omnom/functions.php(164): include_once('/home/acy3/publ...')
+#2 /home/acy3/public_html/wp-settings.php(426): include('/home/acy3/publ...')
+#3 /home/acy3/public_html/wp-config.php(93): require_once('/home/acy3/publ...')
+#4 /home/acy3/public_html/wordpress3/wp-content/plugins/pattracking/api/api.php(11338): require_once('/home/acy3/publ...')
+#5 {main}
+  thrown in /home/acy3/public_html/wp-content/themes/omnom/library/functions/multi_city_functions.php on line 228
+[28-Oct-2020 11:29:08 America/Detroit] PHP Warning:  require_once(/home/acy3/public_html/wordpress3/wp-content/wp-config.php): failed to open stream: No such file or directory in /home/acy3/public_html/wordpress3/wp-content/plugins/pattracking/api/api.php on line 11338
+[28-Oct-2020 11:29:08 America/Detroit] PHP Fatal error:  require_once(): Failed opening required '/home/acy3/public_html/wordpress3/wp-content/wp-config.php' (include_path='.:/opt/alt/php72/usr/share/pear') in /home/acy3/public_html/wordpress3/wp-content/plugins/pattracking/api/api.php on line 11338
+[28-Oct-2020 11:29:12 America/Detroit] PHP Warning:  require_once(/home/acy3/public_html/wordpress3/wp-content/wp-config.php): failed to open stream: No such file or directory in /home/acy3/public_html/wordpress3/wp-content/plugins/pattracking/api/api.php on line 11338
+[28-Oct-2020 11:29:12 America/Detroit] PHP Fatal error:  require_once(): Failed opening required '/home/acy3/public_html/wordpress3/wp-content/wp-config.php' (include_path='.:/opt/alt/php72/usr/share/pear') in /home/acy3/public_html/wordpress3/wp-content/plugins/pattracking/api/api.php on line 11338
+[28-Oct-2020 11:29:35 America/Detroit] PHP Warning:  require_once(/home/acy3/public_html/wordpress3/wp-content/wp-config.php): failed to open stream: No such file or directory in /home/acy3/public_html/wordpress3/wp-content/plugins/pattracking/api/api.php on line 11338
+[28-Oct-2020 11:29:35 America/Detroit] PHP Fatal error:  require_once(): Failed opening required '/home/acy3/public_html/wordpress3/wp-content/wp-config.php' (include_path='.:/opt/alt/php72/usr/share/pear') in /home/acy3/public_html/wordpress3/wp-content/plugins/pattracking/api/api.php on line 11338
+[28-Oct-2020 15:30:43 Europe/London] PHP Fatal error:  Uncaught Error: Call to undefined function mysql_real_escape_string() in /home/acy3/public_html/wp-content/themes/omnom/library/functions/multi_city_functions.php:228
+Stack trace:
+#0 /home/acy3/public_html/wp-content/themes/omnom/library/functions/listing_filters.php(318): get_current_city_lat()
+#1 /home/acy3/public_html/wp-content/themes/omnom/functions.php(164): include_once('/home/acy3/publ...')
+#2 /home/acy3/public_html/wp-settings.php(426): include('/home/acy3/publ...')
+#3 /home/acy3/public_html/wp-config.php(93): require_once('/home/acy3/publ...')
+#4 /home/acy3/public_html/wordpress3/wp-content/plugins/pattracking/api/api.php(11338): require_once('/home/acy3/publ...')
+#5 {main}
+  thrown in /home/acy3/public_html/wp-content/themes/omnom/library/functions/multi_city_functions.php on line 228
+[28-Oct-2020 15:30:47 Europe/London] PHP Fatal error:  Uncaught Error: Call to undefined function mysql_real_escape_string() in /home/acy3/public_html/wp-content/themes/omnom/library/functions/multi_city_functions.php:228
+Stack trace:
+#0 /home/acy3/public_html/wp-content/themes/omnom/library/functions/listing_filters.php(318): get_current_city_lat()
+#1 /home/acy3/public_html/wp-content/themes/omnom/functions.php(164): include_once('/home/acy3/publ...')
+#2 /home/acy3/public_html/wp-settings.php(426): include('/home/acy3/publ...')
+#3 /home/acy3/public_html/wp-config.php(93): require_once('/home/acy3/publ...')
+#4 /home/acy3/public_html/wordpress3/wp-content/plugins/pattracking/api/api.php(11338): require_once('/home/acy3/publ...')
+#5 {main}
+  thrown in /home/acy3/public_html/wp-content/themes/omnom/library/functions/multi_city_functions.php on line 228
+[28-Oct-2020 15:30:49 Europe/London] PHP Fatal error:  Uncaught Error: Call to undefined function mysql_real_escape_string() in /home/acy3/public_html/wp-content/themes/omnom/library/functions/multi_city_functions.php:228
+Stack trace:
+#0 /home/acy3/public_html/wp-content/themes/omnom/library/functions/listing_filters.php(318): get_current_city_lat()
+#1 /home/acy3/public_html/wp-content/themes/omnom/functions.php(164): include_once('/home/acy3/publ...')
+#2 /home/acy3/public_html/wp-settings.php(426): include('/home/acy3/publ...')
+#3 /home/acy3/public_html/wp-config.php(93): require_once('/home/acy3/publ...')
+#4 /home/acy3/public_html/wordpress3/wp-content/plugins/pattracking/api/api.php(11338): require_once('/home/acy3/publ...')
+#5 {main}
+  thrown in /home/acy3/public_html/wp-content/themes/omnom/library/functions/multi_city_functions.php on line 228
+[28-Oct-2020 15:30:49 Europe/London] PHP Fatal error:  Uncaught Error: Call to undefined function mysql_real_escape_string() in /home/acy3/public_html/wp-content/themes/omnom/library/functions/multi_city_functions.php:228
+Stack trace:
+#0 /home/acy3/public_html/wp-content/themes/omnom/library/functions/listing_filters.php(318): get_current_city_lat()
+#1 /home/acy3/public_html/wp-content/themes/omnom/functions.php(164): include_once('/home/acy3/publ...')
+#2 /home/acy3/public_html/wp-settings.php(426): include('/home/acy3/publ...')
+#3 /home/acy3/public_html/wp-config.php(93): require_once('/home/acy3/publ...')
+#4 /home/acy3/public_html/wordpress3/wp-content/plugins/pattracking/api/api.php(11338): require_once('/home/acy3/publ...')
+#5 {main}
+  thrown in /home/acy3/public_html/wp-content/themes/omnom/library/functions/multi_city_functions.php on line 228
+[28-Oct-2020 17:15:19 Europe/London] PHP Fatal error:  Uncaught Error: Call to undefined function mysql_real_escape_string() in /home/acy3/public_html/wp-content/themes/omnom/library/functions/multi_city_functions.php:228
+Stack trace:
+#0 /home/acy3/public_html/wp-content/themes/omnom/library/functions/listing_filters.php(318): get_current_city_lat()
+#1 /home/acy3/public_html/wp-content/themes/omnom/functions.php(164): include_once('/home/acy3/publ...')
+#2 /home/acy3/public_html/wp-settings.php(426): include('/home/acy3/publ...')
+#3 /home/acy3/public_html/wp-config.php(93): require_once('/home/acy3/publ...')
+#4 /home/acy3/public_html/wordpress3/wp-content/plugins/pattracking/api/api.php(11338): require_once('/home/acy3/publ...')
+#5 {main}
+  thrown in /home/acy3/public_html/wp-content/themes/omnom/library/functions/multi_city_functions.php on line 228
+[28-Oct-2020 18:08:08 Europe/London] PHP Fatal error:  Uncaught Error: Call to undefined function mysql_real_escape_string() in /home/acy3/public_html/wp-content/themes/omnom/library/functions/multi_city_functions.php:228
+Stack trace:
+#0 /home/acy3/public_html/wp-content/themes/omnom/library/functions/listing_filters.php(318): get_current_city_lat()
+#1 /home/acy3/public_html/wp-content/themes/omnom/functions.php(164): include_once('/home/acy3/publ...')
+#2 /home/acy3/public_html/wp-settings.php(426): include('/home/acy3/publ...')
+#3 /home/acy3/public_html/wp-config.php(93): require_once('/home/acy3/publ...')
+#4 /home/acy3/public_html/wordpress3/wp-content/plugins/pattracking/api/api.php(11338): require_once('/home/acy3/publ...')
+#5 {main}
+  thrown in /home/acy3/public_html/wp-content/themes/omnom/library/functions/multi_city_functions.php on line 228

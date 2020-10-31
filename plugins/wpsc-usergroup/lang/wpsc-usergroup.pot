@@ -1,0 +1,200 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: wpsc-usergroup\n"
+"POT-Creation-Date: 2019-11-15 12:10+0530\n"
+"PO-Revision-Date: 2019-11-15 12:10+0530\n"
+"Last-Translator: \n"
+"Language-Team: \n"
+"Language: en\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Poedit 2.0.6\n"
+"X-Poedit-Basepath: ../www/live_backup/plugins/usergroup\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Poedit-SourceCharset: UTF-8\n"
+"X-Poedit-KeywordsList: __;_e\n"
+"X-Poedit-SearchPath-0: .\n"
+
+#: includes/admin/ajax/add_new_company_settings.php:13
+msgid "Add New Usergroup"
+msgstr ""
+
+#: includes/admin/ajax/add_new_company_settings.php:19
+#: includes/admin/ajax/add_new_company_settings.php:35
+#: includes/admin/ajax/edit_company.php:24
+#: includes/admin/ajax/edit_company.php:44
+msgid "Name"
+msgstr ""
+
+#: includes/admin/ajax/add_new_company_settings.php:23
+#: includes/admin/ajax/edit_company.php:29
+msgid "Add User"
+msgstr ""
+
+#: includes/admin/ajax/add_new_company_settings.php:25
+#: includes/admin/ajax/edit_company.php:31
+msgid "Search User ..."
+msgstr ""
+
+#: includes/admin/ajax/add_new_company_settings.php:30
+#: includes/admin/ajax/edit_company.php:37
+msgid "Usergroup Users"
+msgstr ""
+
+#: includes/admin/ajax/add_new_company_settings.php:36
+msgid "Supervisors"
+msgstr ""
+
+#: includes/admin/ajax/add_new_company_settings.php:37
+#: includes/admin/ajax/edit_company.php:46
+#: includes/admin/ajax/get_company_usergroup_settings.php:39
+msgid "Action"
+msgstr ""
+
+#: includes/admin/ajax/add_new_company_settings.php:46
+#: includes/admin/ajax/edit_company.php:71
+msgid "Category"
+msgstr ""
+
+#: includes/admin/ajax/add_new_company_settings.php:67
+#: includes/admin/ajax/edit_company.php:93
+#: includes/admin/ajax/get_company_usergroup_settings.php:104
+msgid "Save Changes"
+msgstr ""
+
+#: includes/admin/ajax/add_new_company_settings.php:68
+#: includes/admin/ajax/edit_company.php:94
+msgid "Cancel"
+msgstr ""
+
+#: includes/admin/ajax/edit_company.php:19
+msgid "Update Usergroup"
+msgstr ""
+
+#: includes/admin/ajax/edit_company.php:45
+#: includes/admin/ajax/get_company_usergroup_settings.php:38
+msgid "Supervisor"
+msgstr ""
+
+#: includes/admin/ajax/filter_autocomplete.php:25
+msgid "No matching users"
+msgstr ""
+
+#: includes/admin/ajax/get_company_usergroup_settings.php:8
+#: includes/class-wpsc-usergroup-admin.php:33
+#: includes/class-wpsc-usergroup-install.php:45
+msgid "Usergroup"
+msgstr ""
+
+#: includes/admin/ajax/get_company_usergroup_settings.php:9
+msgid "Other Settings"
+msgstr ""
+
+#: includes/admin/ajax/get_company_usergroup_settings.php:30
+msgid "+ Add New"
+msgstr ""
+
+#: includes/admin/ajax/get_company_usergroup_settings.php:36
+msgid "Sr. No"
+msgstr ""
+
+#: includes/admin/ajax/get_company_usergroup_settings.php:37
+msgid "Usergroup Name"
+msgstr ""
+
+#: includes/admin/ajax/get_company_usergroup_settings.php:85
+msgid "Usergroup field label"
+msgstr ""
+
+#: includes/admin/ajax/get_company_usergroup_settings.php:86
+msgid "This will change usergroup label text in ticket list and filter."
+msgstr ""
+
+#: includes/admin/ajax/get_company_usergroup_settings.php:91
+msgid "Allow user to change category"
+msgstr ""
+
+#: includes/admin/ajax/get_company_usergroup_settings.php:92
+msgid "This will change category in ticket list ."
+msgstr ""
+
+#: includes/admin/ajax/get_company_usergroup_settings.php:96
+msgid "Enable"
+msgstr ""
+
+#: includes/admin/ajax/get_company_usergroup_settings.php:98
+msgid "Disable"
+msgstr ""
+
+#: includes/admin/ajax/set_add_new_company_settings.php:25
+msgid "Setting saved!"
+msgstr ""
+
+#: includes/class-wpsc-usergroup-action.php:38
+#, php-format
+msgid "%1$s changed usergroups from %2$s to %3$s"
+msgstr ""
+
+#: includes/class-wpsc-usergroup-action.php:40
+#, php-format
+msgid "%1$s changed usergroups to %2$s"
+msgstr ""
+
+#: includes/class-wpsc-usergroup-action.php:42
+msgid "None"
+msgstr ""
+
+#: includes/class-wpsc-usergroup-action.php:43
+#, php-format
+msgid "%1$s changed usergroups from  %2$s to %3$s"
+msgstr ""
+
+#: includes/class-wpsc-usergroup-action.php:45
+#, php-format
+msgid "added extra usergroups %1$s"
+msgstr ""
+
+#: includes/class-wpsc-usergroup-admin.php:25
+msgid "Please select atleast one user"
+msgstr ""
+
+#: includes/class-wpsc-usergroup-admin.php:26
+msgid "Please enter required Name"
+msgstr ""
+
+#: includes/class-wpsc-usergroup-admin.php:41
+#: includes/class-wpsc-usergroup-admin.php:54
+msgid "Usergroup Supervisors"
+msgstr ""
+
+#: includes/class-wpsc-usergroup-admin.php:45
+#: includes/class-wpsc-usergroup-admin.php:58
+msgid "Usergroup Members"
+msgstr ""
+
+#: includes/class-wpsc-usergroup-frontend.php:166
+msgid "Usergroups:"
+msgstr ""
+
+#: includes/frontend/add_extra_ticket_usergroup.php:16
+msgid "Usergroups"
+msgstr ""
+
+#: includes/frontend/add_extra_ticket_usergroup.php:17
+msgid ""
+"(Optional) Select usergroups so that email notifications of this ticket will "
+"get sent to users of all usergroups as raised by user."
+msgstr ""
+
+#: includes/frontend/add_extra_ticket_usergroup.php:18
+msgid "Search Usergroup ..."
+msgstr ""
+
+#: includes/frontend/filter_autocomplete_usergroups.php:45
+msgid "No matching data"
+msgstr ""
+
+#: includes/set_other_settings.php:16
+msgid "Settings saved."
+msgstr ""

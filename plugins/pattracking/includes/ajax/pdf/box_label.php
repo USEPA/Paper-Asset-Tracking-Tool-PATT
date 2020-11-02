@@ -31,7 +31,7 @@ if (isset($_GET['id']))
         global $wpdb;
         $array = array();
         
-        $box_result = $wpdb->get_results( "SELECT * FROM wpqa_wpsc_epa_boxinfo a INNER JOIN wpqa_wpsc_epa_storage_location b ON a.storage_location_id = b. id WHERE b.aisle <> 0 AND b.bay <> 0 AND b.shelf <> 0 AND b.position <> 0 AND b.digitization_center <> 666 AND a.ticket_id = " . $GLOBALS['id']);
+        $box_result = $wpdb->get_results( "SELECT * FROM wpqa_wpsc_epa_boxinfo a INNER JOIN wpqa_wpsc_epa_storage_location b ON a.storage_location_id = b.id WHERE b.aisle <> 0 AND b.bay <> 0 AND b.shelf <> 0 AND b.position <> 0 AND b.digitization_center <> 666 AND a.ticket_id = " . $GLOBALS['id']);
 
         foreach ( $box_result as $box )
             {
@@ -139,7 +139,7 @@ if (isset($_GET['id']))
         
         foreach($request_shelf as $location)
         {
-            array_push($array, strtoupper($location->aisle.'A_'.$location->aisle.'B_'.$location->shelf.'S_'.$location->position.'P_'.$location->digitization_center));
+            array_push($array, strtoupper($location->aisle.'A_'.$location->bay.'B_'.$location->shelf.'S_'.$location->position.'P_'.$location->digitization_center));
         }
         
         return $array;
@@ -292,7 +292,7 @@ if (preg_match("/^([0-9]{7}-[0-9]{1,4})(?:,\s*(?1))*$/", $GLOBALS['id'])) {
         $box_digitization_center = $wpdb->get_row( "
         SELECT wpqa_terms.name as digitization_center
         FROM wpqa_wpsc_epa_boxinfo
-        INNER JOIN wpqa_wpsc_epa_storage_location ON wpqa_wpsc_epa_boxinfo.storage_location_id = wpqa_wpsc_epa_storage_location.id
+        INNER JOIN wpqa_wpsc_epa_storage_location ON wpqa_wpsc  _epa_boxinfo.storage_location_id = wpqa_wpsc_epa_storage_location.id
         INNER JOIN wpqa_terms ON wpqa_terms.term_id = wpqa_wpsc_epa_storage_location.digitization_center
         WHERE wpqa_wpsc_epa_boxinfo.box_id = '" . $box_array[$i] ."'");
         
@@ -307,7 +307,7 @@ if (preg_match("/^([0-9]{7}-[0-9]{1,4})(?:,\s*(?1))*$/", $GLOBALS['id'])) {
         $request_location_position = $wpdb->get_row("SELECT wpqa_wpsc_epa_storage_location.aisle as aisle, wpqa_wpsc_epa_storage_location.bay as bay, wpqa_wpsc_epa_storage_location.shelf as shelf, wpqa_wpsc_epa_storage_location.position as position,
             UPPER(wpqa_terms.slug) as digitization_center FROM wpqa_wpsc_epa_storage_location, wpqa_wpsc_epa_boxinfo, wpqa_wpsc_epa_program_office, wpqa_terms  WHERE wpqa_terms.term_id = wpqa_wpsc_epa_storage_location.digitization_center AND wpqa_wpsc_epa_storage_location.id = wpqa_wpsc_epa_boxinfo.storage_location_id AND wpqa_wpsc_epa_boxinfo.program_office_id = wpqa_wpsc_epa_program_office.office_code AND box_id =  '" . $box_array[$i] ."'");
         
-        $request_location_position_a = $request_location_position->aisle.'A_'.$request_location_position->aisle.'B_'.$request_location_position->shelf.'S_'.$request_location_position->position.'P_'.$request_location_position->digitization_center;
+        $request_location_position_a = $request_location_position->aisle.'A_'.$request_location_position->bay.'B_'.$request_location_position->shelf.'S_'.$request_location_position->position.'P_'.$request_location_position->digitization_center;
 
         $request_create_date = $wpdb->get_row( "SELECT date_created FROM wpqa_wpsc_ticket WHERE id = " . $asset_ticket_id->ticket_id);
         

@@ -41,12 +41,21 @@ $columnName = $_POST['columns'][$columnIndex]['data']; // Column name
 $columnSortOrder = $_POST['order'][0]['dir']; // asc or desc
 $searchValue = $_POST['search']['value']; // Search value
 
+if($columnName == 'ticket_priority') {
+$columnName = 'ticket_priority_order';
+} elseif($columnName == 'ticket_status') {
+$columnName = 'ticket_status_order';
+} else {
+$columnName = $_POST['columns'][$columnIndex]['data']; // Column name
+}
+
 ## Custom Field value
 $searchByRequestID = str_replace(",", "|", $_POST['searchByRequestID']);
 $searchByDigitizationCenter = $_POST['searchByDigitizationCenter'];
 $searchGeneric = $_POST['searchGeneric'];
 $searchByStatus = $_POST['searchByStatus'];
 $searchByPriority = $_POST['searchByPriority'];
+$searchByRecallDecline = $_POST['searchByRecallDecline'];
 $currentUser = $_POST['currentUser'];
 ## User Search
 $searchByUser = $_POST['searchByUser'];
@@ -116,6 +125,30 @@ if($searchByDigitizationCenter != ''){
    $searchHaving = " HAVING location like '%".$searchByDigitizationCenter."%' ";
 }
 
+//Get term_ids for Recall status slugs
+$status_recall_denied_term_id = Patt_Custom_Func::get_term_by_slug( 'recall-denied' );	 // 878
+$status_recall_cancelled_term_id = Patt_Custom_Func::get_term_by_slug( 'recall-cancelled' ); //734
+$status_recall_complete_term_id = Patt_Custom_Func::get_term_by_slug( 'recall-complete' ); //733
+
+$status_decline_cancelled_term_id = Patt_Custom_Func::get_term_by_slug( 'decline-cancelled' );	 // 791
+$status_decline_completed_term_id = Patt_Custom_Func::get_term_by_slug( 'decline-complete' ); //754
+    
+if($searchByRecallDecline != ''){
+
+        if($searchByRecallDecline == 'Recall') {
+            $searchQuery .= "and (
+            COALESCE(x.recall_status_id, h.recall_status_id) NOT IN (".$status_recall_denied_term_id.",".$status_recall_cancelled_term_id.",".$status_recall_complete_term_id.")
+            )";
+        }
+
+        if($searchByRecallDecline == 'Decline') {
+            $searchQuery .= "and (
+            i.return_id <> '' OR j.return_id <> ''
+            )";
+        }
+
+}
+
 if($searchGeneric != ''){
 if(in_array(strtolower($searchGeneric), $locationarray)){
    $searchHaving = " HAVING location like '%".$searchGeneric."%' ";
@@ -151,6 +184,20 @@ FROM wpqa_wpsc_ticket as a
 INNER JOIN wpqa_wpsc_epa_boxinfo as b ON a.id = b.ticket_id
 INNER JOIN wpqa_wpsc_epa_storage_location as d ON b.storage_location_id = d.id
 INNER JOIN wpqa_terms e ON e.term_id = d.digitization_center
+LEFT JOIN wpqa_wpsc_epa_folderdocinfo as z ON z.box_id = b.id
+LEFT JOIN wpqa_wpsc_epa_recallrequest AS x ON (x.box_id = b.id AND x.folderdoc_id = '-99999')
+LEFT JOIN wpqa_wpsc_epa_recallrequest AS h ON (h.folderdoc_id = z.id AND h.folderdoc_id <> '-99999')
+
+LEFT JOIN (   SELECT a.box_id, a.return_id
+   FROM   wpqa_wpsc_epa_return_items a
+   LEFT JOIN  wpqa_wpsc_epa_return b ON a.return_id = b.id
+   WHERE box_id <> '-99999' AND b.return_status_id NOT IN (".$status_decline_cancelled_term_id.",".$status_decline_completed_term_id.")
+   GROUP  BY box_id ) AS i ON i.box_id = b.id
+LEFT JOIN (   SELECT a.folderdoc_id, a.return_id
+   FROM   wpqa_wpsc_epa_return_items a
+   LEFT JOIN  wpqa_wpsc_epa_return b ON a.return_id = b.id
+   WHERE folderdoc_id <> '-99999' AND b.return_status_id NOT IN (".$status_decline_cancelled_term_id.",".$status_decline_completed_term_id.")
+   GROUP  BY folderdoc_id )  AS j ON j.folderdoc_id = z.id
 WHERE 1 ".$searchQuery." AND a.active <> 0 AND a.id <> -99999 group by a.request_id ".$searchHaving.") t");
 
 $records = mysqli_fetch_assoc($sel);
@@ -196,17 +243,60 @@ CONCAT(
 ';\">',
 (SELECT name from wpqa_terms where term_id = a.ticket_status),
 '</span>') as ticket_status,
-CONCAT(h.meta_value, ' ', i.meta_value) as full_name,
+
+CASE 
+WHEN a.ticket_priority = 621
+THEN
+1
+WHEN a.ticket_priority = 9
+THEN
+2
+WHEN a.ticket_priority = 8
+THEN
+3
+WHEN a.ticket_priority = 7
+THEN
+4
+ELSE
+999
+END
+ as ticket_priority_order,
+
+CASE 
+WHEN a.ticket_status = 3
+THEN
+1
+WHEN a.ticket_status = 4
+THEN
+2
+WHEN a.ticket_status = 670
+THEN
+3
+WHEN a.ticket_status = 5
+THEN
+4
+WHEN a.ticket_status = 63
+THEN
+5
+WHEN a.ticket_status = 69
+THEN
+6
+ELSE
+999
+END
+ as ticket_status_order,
+
+CONCAT((SELECT meta_value FROM wpqa_usermeta WHERE meta_key = 'first_name' AND user_id = g.ID), ' ', (SELECT meta_value FROM wpqa_usermeta WHERE meta_key = 'last_name' AND user_id = g.ID)) as full_name,
 CONCAT (
 CASE
-WHEN (h.meta_value <> '') AND (i.meta_value <> '') THEN CONCAT ( '<a href=\"#\" style=\"color: #000000 !important;\" data-toggle=\"tooltip\" data-placement=\"right\" data-html=\"true\" aria-label=\"Name\" title=\"',
+WHEN ((SELECT meta_value FROM wpqa_usermeta WHERE meta_key = 'first_name' AND user_id = g.ID) <> '') AND ((SELECT meta_value FROM wpqa_usermeta WHERE meta_key = 'last_name' AND user_id = g.ID) <> '') THEN CONCAT ( '<a href=\"#\" style=\"color: #000000 !important;\" data-toggle=\"tooltip\" data-placement=\"bottom\" data-html=\"true\" aria-label=\"Name\" title=\"',
 g.user_login
 ,'\">',
 
 (
-    CASE WHEN length(CONCAT(h.meta_value, ' ', i.meta_value)) > 15 THEN
-        CONCAT(LEFT(CONCAT(h.meta_value, ' ', i.meta_value), 15), '...')
-    ELSE CONCAT(h.meta_value, ' ', i.meta_value)
+    CASE WHEN length(CONCAT((SELECT meta_value FROM wpqa_usermeta WHERE meta_key = 'first_name' AND user_id = g.ID), ' ', (SELECT meta_value FROM wpqa_usermeta WHERE meta_key = 'last_name' AND user_id = g.ID))) > 15 THEN
+        CONCAT(LEFT(CONCAT((SELECT meta_value FROM wpqa_usermeta WHERE meta_key = 'first_name' AND user_id = g.ID), ' ', (SELECT meta_value FROM wpqa_usermeta WHERE meta_key = 'last_name' AND user_id = g.ID)), 15), '...')
+    ELSE CONCAT((SELECT meta_value FROM wpqa_usermeta WHERE meta_key = 'first_name' AND user_id = g.ID), ' ', (SELECT meta_value FROM wpqa_usermeta WHERE meta_key = 'last_name' AND user_id = g.ID))
     END
 )
 
@@ -224,11 +314,23 @@ INNER JOIN wpqa_wpsc_epa_boxinfo as b ON a.id = b.ticket_id
 INNER JOIN wpqa_wpsc_epa_storage_location as d ON b.storage_location_id = d.id
 INNER JOIN wpqa_terms e ON e.term_id = d.digitization_center
 INNER JOIN wpqa_wpsc_epa_folderdocinfo f ON f.box_id = b.id
-LEFT JOIN wpqa_users g ON g.display_name = a.customer_name
-INNER JOIN wpqa_usermeta h ON h.user_id = g.ID
-INNER JOIN wpqa_usermeta i ON i.user_id = g.ID
-WHERE 1 ".$searchQuery." AND active <> 0 AND a.id <> -99999 AND h.meta_key = 'first_name' AND i.meta_key = 'last_name'
-group by request_id ".$searchHaving." order by ".$columnName." ".$columnSortOrder." limit ".$row.",".$rowperpage;
+LEFT JOIN wpqa_users g ON g.user_email = a.customer_email
+LEFT JOIN wpqa_wpsc_epa_folderdocinfo as z ON z.box_id = b.id
+LEFT JOIN wpqa_wpsc_epa_recallrequest AS x ON (x.box_id = b.id AND x.folderdoc_id = '-99999')
+LEFT JOIN wpqa_wpsc_epa_recallrequest AS h ON (h.folderdoc_id = z.id AND h.folderdoc_id <> '-99999')
+
+LEFT JOIN (   SELECT a.box_id, a.return_id
+   FROM   wpqa_wpsc_epa_return_items a
+   LEFT JOIN  wpqa_wpsc_epa_return b ON a.return_id = b.id
+   WHERE box_id <> '-99999' AND b.return_status_id NOT IN (".$status_decline_cancelled_term_id.",".$status_decline_completed_term_id.")
+   GROUP  BY box_id ) AS i ON i.box_id = b.id
+LEFT JOIN (   SELECT a.folderdoc_id, a.return_id
+   FROM   wpqa_wpsc_epa_return_items a
+   LEFT JOIN  wpqa_wpsc_epa_return b ON a.return_id = b.id
+   WHERE folderdoc_id <> '-99999' AND b.return_status_id NOT IN (".$status_decline_cancelled_term_id.",".$status_decline_completed_term_id.")
+   GROUP  BY folderdoc_id )  AS j ON j.folderdoc_id = z.id
+WHERE 1 ".$searchQuery." AND a.active <> 0 AND a.id <> -99999
+group by a.request_id ".$searchHaving." order by ".$columnName." ".$columnSortOrder." limit ".$row.",".$rowperpage;
 
 $boxRecords = mysqli_query($con, $boxQuery);
 $data = array();

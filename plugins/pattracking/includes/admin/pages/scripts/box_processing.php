@@ -24,11 +24,19 @@ $columnName = $_POST['columns'][$columnIndex]['data']; // Column name
 $columnSortOrder = $_POST['order'][0]['dir']; // asc or desc
 $searchValue = $_POST['search']['value']; // Search value
 
+if($columnName == 'ticket_priority') {
+$columnName = 'ticket_priority_order';
+} elseif($columnName == 'status') {
+$columnName = 'box_status_order';
+} else {
+$columnName = $_POST['columns'][$columnIndex]['data']; // Column name
+}
 ## Custom Field value
 $searchByBoxID = str_replace(",", "|", $_POST['searchByBoxID']);
 $searchByProgramOffice = $_POST['searchByProgramOffice'];
 $searchByDigitizationCenter = $_POST['searchByDigitizationCenter'];
 $searchByPriority = $_POST['searchByPriority'];
+$searchByRecallDecline = $_POST['searchByRecallDecline'];
 $searchGeneric = $_POST['searchGeneric'];
 $searchByStatus = $_POST['searchByStatus'];
 $searchByUser = $_POST['searchByUser'];
@@ -57,6 +65,30 @@ if($searchByPriority != ''){
 
 if($searchByStatus != ''){
    $searchQuery .= " and (f.name ='".$searchByStatus."') ";
+}
+
+//Get term_ids for Recall status slugs
+$status_recall_denied_term_id = Patt_Custom_Func::get_term_by_slug( 'recall-denied' );	 // 878
+$status_recall_cancelled_term_id = Patt_Custom_Func::get_term_by_slug( 'recall-cancelled' ); //734
+$status_recall_complete_term_id = Patt_Custom_Func::get_term_by_slug( 'recall-complete' ); //733
+
+$status_decline_cancelled_term_id = Patt_Custom_Func::get_term_by_slug( 'decline-cancelled' );	 // 791
+$status_decline_completed_term_id = Patt_Custom_Func::get_term_by_slug( 'decline-complete' ); //754
+    
+if($searchByRecallDecline != ''){
+
+        if($searchByRecallDecline == 'Recall') {
+            $searchQuery .= "and (
+            COALESCE(g.recall_status_id, h.recall_status_id) NOT IN (".$status_recall_denied_term_id.",".$status_recall_cancelled_term_id.",".$status_recall_complete_term_id.")
+            )";
+        }
+
+        if($searchByRecallDecline == 'Decline') {
+            $searchQuery .= "and (
+            i.return_id <> '' OR j.return_id <> ''
+            )";
+        }
+
 }
 
 // If a user is a requester, only show the boxes from requests (tickets) they have submitted. 
@@ -198,19 +230,37 @@ if($searchValue != ''){
 }
 
 ## Total number of records without filtering
-$sel = mysqli_query($con,"select count(*) as allcount from wpqa_wpsc_epa_boxinfo as a INNER JOIN wpqa_wpsc_ticket as b ON a.ticket_id = b.id WHERE a.id <> -99999 AND b.active <> 0");
+$sel = mysqli_query($con,"select count(*) as allcount 
+from wpqa_wpsc_epa_boxinfo as a
+INNER JOIN wpqa_wpsc_ticket as b ON a.ticket_id = b.id 
+WHERE a.id <> -99999 AND b.active <> 0");
 //$sel = mysqli_query($con,"select count(*) as allcount from wpqa_wpsc_epa_boxinfo WHERE id <> -99999");
 //$sel = mysqli_query($con,"select count(*) as allcount from wpqa_wpsc_ticket WHERE id <> -99999 AND active <> 0");
 $records = mysqli_fetch_assoc($sel);
 $totalRecords = $records['allcount'];
 
 ## Total number of records with filtering
-$sel = mysqli_query($con,"select count(a.box_id) as allcount FROM wpqa_wpsc_epa_boxinfo as a
+$sel = mysqli_query($con,"select count(a.box_id) as allcount 
+FROM wpqa_wpsc_epa_boxinfo as a
 INNER JOIN wpqa_terms f ON f.term_id = a.box_status
 INNER JOIN wpqa_wpsc_ticket as b ON a.ticket_id = b.id
 INNER JOIN wpqa_wpsc_epa_program_office as c ON a.program_office_id = c.office_code
 INNER JOIN wpqa_wpsc_epa_storage_location as d ON a.storage_location_id = d.id
 INNER JOIN wpqa_terms e ON e.term_id = d.digitization_center
+LEFT JOIN wpqa_wpsc_epa_folderdocinfo as z ON z.box_id = a.id
+LEFT JOIN wpqa_wpsc_epa_recallrequest AS g ON (g.box_id = a.id AND g.folderdoc_id = '-99999')
+LEFT JOIN wpqa_wpsc_epa_recallrequest AS h ON (h.folderdoc_id = z.id AND h.folderdoc_id <> '-99999')
+
+LEFT JOIN (   SELECT a.box_id, a.return_id
+   FROM   wpqa_wpsc_epa_return_items a
+   LEFT JOIN  wpqa_wpsc_epa_return b ON a.return_id = b.id
+   WHERE box_id <> '-99999' AND b.return_status_id <> 791
+   GROUP  BY box_id ) AS i ON i.box_id = a.id
+LEFT JOIN (   SELECT a.folderdoc_id, a.return_id
+   FROM   wpqa_wpsc_epa_return_items a
+   LEFT JOIN  wpqa_wpsc_epa_return b ON a.return_id = b.id
+   WHERE folderdoc_id <> '-99999' AND b.return_status_id <> 791
+   GROUP  BY folderdoc_id )  AS j ON j.folderdoc_id = z.id
 WHERE (b.active <> 0) AND (a.id <> -99999) AND 1 ".$searchQuery); //(b.active <> 0) AND
 $records = mysqli_fetch_assoc($sel);
 $totalRecordwithFilter = $records['allcount'];
@@ -259,6 +309,66 @@ CONCAT(
 (SELECT name from wpqa_terms where term_id = b.ticket_priority),
 '</span>') as ticket_priority,
 
+CASE 
+WHEN b.ticket_priority = 621
+THEN
+1
+WHEN b.ticket_priority = 9
+THEN
+2
+WHEN b.ticket_priority = 8
+THEN
+3
+WHEN b.ticket_priority = 7
+THEN
+4
+ELSE
+999
+END
+ as ticket_priority_order,
+
+CASE 
+WHEN a.box_status = 748
+THEN
+1
+WHEN a.box_status = 816
+THEN
+2
+WHEN a.box_status = 672
+THEN
+3
+WHEN a.box_status = 671
+THEN
+4
+WHEN a.box_status = 65
+THEN
+5
+WHEN a.box_status = 6
+THEN
+6
+WHEN a.box_status = 673
+THEN
+7
+WHEN a.box_status = 674
+THEN
+8
+WHEN a.box_status = 743
+THEN
+9
+WHEN a.box_status = 68
+THEN
+10
+WHEN a.box_status = 67
+THEN
+11
+WHEN a.box_status = 66
+THEN
+12
+ELSE
+999
+END
+ as box_status_order,
+
 CONCAT('<a href=admin.php?page=wpsc-tickets&id=',b.request_id,'>',b.request_id,'</a>') as request_id, 
 e.name as location, 
 c.office_acronym as acronym,
@@ -299,6 +409,20 @@ INNER JOIN wpqa_wpsc_ticket as b ON a.ticket_id = b.id
 INNER JOIN wpqa_wpsc_epa_program_office as c ON a.program_office_id = c.office_code
 INNER JOIN wpqa_wpsc_epa_storage_location as d ON a.storage_location_id = d.id
 INNER JOIN wpqa_terms e ON e.term_id = d.digitization_center
+LEFT JOIN wpqa_wpsc_epa_folderdocinfo as z ON z.box_id = a.id
+LEFT JOIN wpqa_wpsc_epa_recallrequest AS g ON (g.box_id = a.id AND g.folderdoc_id = '-99999')
+LEFT JOIN wpqa_wpsc_epa_recallrequest AS h ON (h.folderdoc_id = z.id AND h.folderdoc_id <> '-99999')
+
+LEFT JOIN (   SELECT a.box_id, a.return_id
+   FROM   wpqa_wpsc_epa_return_items a
+   LEFT JOIN  wpqa_wpsc_epa_return b ON a.return_id = b.id
+   WHERE box_id <> '-99999' AND b.return_status_id <> 791
+   GROUP  BY box_id ) AS i ON i.box_id = a.id
+LEFT JOIN (   SELECT a.folderdoc_id, a.return_id
+   FROM   wpqa_wpsc_epa_return_items a
+   LEFT JOIN  wpqa_wpsc_epa_return b ON a.return_id = b.id
+   WHERE folderdoc_id <> '-99999' AND b.return_status_id <> 791
+   GROUP  BY folderdoc_id )  AS j ON j.folderdoc_id = z.id
 WHERE (b.active <> 0) AND (a.id <> -99999) AND 1 ".$searchQuery." order by ".$columnName." ".$columnSortOrder." limit ".$row.",".$rowperpage;
 
 //INNER JOIN wpqa_wpsc_epa_boxinfo_userstatus g ON g.box_id = a.id
@@ -330,10 +454,12 @@ $decline_icon = '<span style="font-size: 1em; color: #FF0000;margin-left:4px;"><
 
 if(Patt_Custom_Func::id_in_recall($row['box_id'],$type) == 1){
 $recall_icon = '<span style="font-size: 1em; color: #000;margin-left:4px;"><i class="far fa-registered" title="Recall"></i></span>';
-}	
+}
+
 	$data[] = array(
 		"box_id"=>$row['box_id'],
 		"box_id_flag"=>$row['box_id_flag'].$decline_icon.$recall_icon.$assigned_agents_icon,
+		//"ticket_priority"=>$row['ticket_priority_text'],
 		"ticket_priority"=>$row['ticket_priority'],
 		"status"=>$box_status,
 		"request_id"=>$row['request_id'],

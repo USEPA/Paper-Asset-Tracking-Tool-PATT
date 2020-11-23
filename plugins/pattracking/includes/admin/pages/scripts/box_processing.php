@@ -248,18 +248,18 @@ INNER JOIN wpqa_wpsc_epa_program_office as c ON a.program_office_id = c.office_c
 INNER JOIN wpqa_wpsc_epa_storage_location as d ON a.storage_location_id = d.id
 INNER JOIN wpqa_terms e ON e.term_id = d.digitization_center
 LEFT JOIN wpqa_wpsc_epa_folderdocinfo as z ON z.box_id = a.id
-LEFT JOIN wpqa_wpsc_epa_recallrequest AS g ON (g.box_id = a.id AND g.folderdoc_id = '-99999')
+LEFT JOIN wpqa_wpsc_epa_recallrequest AS x ON (x.box_id = a.id AND x.folderdoc_id = '-99999')
 LEFT JOIN wpqa_wpsc_epa_recallrequest AS h ON (h.folderdoc_id = z.id AND h.folderdoc_id <> '-99999')
 
 LEFT JOIN (   SELECT a.box_id, a.return_id
    FROM   wpqa_wpsc_epa_return_items a
    LEFT JOIN  wpqa_wpsc_epa_return b ON a.return_id = b.id
-   WHERE box_id <> '-99999' AND b.return_status_id <> 791
+   WHERE box_id <> '-99999' AND b.return_status_id NOT IN (".$status_decline_cancelled_term_id.",".$status_decline_completed_term_id.")
    GROUP  BY box_id ) AS i ON i.box_id = a.id
 LEFT JOIN (   SELECT a.folderdoc_id, a.return_id
    FROM   wpqa_wpsc_epa_return_items a
    LEFT JOIN  wpqa_wpsc_epa_return b ON a.return_id = b.id
-   WHERE folderdoc_id <> '-99999' AND b.return_status_id <> 791
+   WHERE folderdoc_id <> '-99999' AND b.return_status_id NOT IN (".$status_decline_cancelled_term_id.",".$status_decline_completed_term_id.")
    GROUP  BY folderdoc_id )  AS j ON j.folderdoc_id = z.id
 WHERE (b.active <> 0) AND (a.id <> -99999) AND 1 ".$searchQuery); //(b.active <> 0) AND
 $records = mysqli_fetch_assoc($sel);
@@ -410,18 +410,18 @@ INNER JOIN wpqa_wpsc_epa_program_office as c ON a.program_office_id = c.office_c
 INNER JOIN wpqa_wpsc_epa_storage_location as d ON a.storage_location_id = d.id
 INNER JOIN wpqa_terms e ON e.term_id = d.digitization_center
 LEFT JOIN wpqa_wpsc_epa_folderdocinfo as z ON z.box_id = a.id
-LEFT JOIN wpqa_wpsc_epa_recallrequest AS g ON (g.box_id = a.id AND g.folderdoc_id = '-99999')
+LEFT JOIN wpqa_wpsc_epa_recallrequest AS x ON (x.box_id = a.id AND x.folderdoc_id = '-99999')
 LEFT JOIN wpqa_wpsc_epa_recallrequest AS h ON (h.folderdoc_id = z.id AND h.folderdoc_id <> '-99999')
 
 LEFT JOIN (   SELECT a.box_id, a.return_id
    FROM   wpqa_wpsc_epa_return_items a
    LEFT JOIN  wpqa_wpsc_epa_return b ON a.return_id = b.id
-   WHERE box_id <> '-99999' AND b.return_status_id <> 791
+   WHERE box_id <> '-99999' AND b.return_status_id NOT IN (".$status_decline_cancelled_term_id.",".$status_decline_completed_term_id.")
    GROUP  BY box_id ) AS i ON i.box_id = a.id
 LEFT JOIN (   SELECT a.folderdoc_id, a.return_id
    FROM   wpqa_wpsc_epa_return_items a
    LEFT JOIN  wpqa_wpsc_epa_return b ON a.return_id = b.id
-   WHERE folderdoc_id <> '-99999' AND b.return_status_id <> 791
+   WHERE folderdoc_id <> '-99999' AND b.return_status_id NOT IN (".$status_decline_cancelled_term_id.",".$status_decline_completed_term_id.")
    GROUP  BY folderdoc_id )  AS j ON j.folderdoc_id = z.id
 WHERE (b.active <> 0) AND (a.id <> -99999) AND 1 ".$searchQuery." order by ".$columnName." ".$columnSortOrder." limit ".$row.",".$rowperpage;
 

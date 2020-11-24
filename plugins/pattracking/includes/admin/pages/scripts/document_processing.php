@@ -38,6 +38,7 @@ $searchByDigitizationCenter = $_POST['searchByDigitizationCenter'];
 $searchByPriority = $_POST['searchByPriority'];
 $searchByRecallDecline = $_POST['searchByRecallDecline'];
 $searchGeneric = $_POST['searchGeneric'];
+$is_requester = $_POST['is_requester'];
 
 ## Search 
 $searchQuery = " ";
@@ -81,6 +82,12 @@ if($searchByRecallDecline != ''){
 
 }
 
+// If a user is a requester, only show the folder/files from requests (tickets) they have submitted. 
+if( $is_requester == 'true' ){
+	$user_name = $current_user->display_name;
+	$searchQuery .= " and (b.customer_name ='".$user_name."') ";
+}
+
 if($searchGeneric != ''){
    $searchQuery .= " and (a.folderdocinfo_id like '%".$searchGeneric."%' or 
       b.request_id like '%".$searchGeneric."%' or 
@@ -108,7 +115,6 @@ INNER JOIN wpqa_wpsc_epa_program_office as c ON d.program_office_id = c.office_c
 INNER JOIN wpqa_terms f ON f.term_id = e.digitization_center
 LEFT JOIN wpqa_wpsc_epa_recallrequest AS g ON (g.box_id = d.id AND g.folderdoc_id = '-99999')
 LEFT JOIN wpqa_wpsc_epa_recallrequest AS h ON (h.folderdoc_id = a.id AND h.folderdoc_id <> '-99999')
-
 LEFT JOIN (   SELECT a.box_id, a.return_id
    FROM   wpqa_wpsc_epa_return_items a
    LEFT JOIN  wpqa_wpsc_epa_return b ON a.return_id = b.id
@@ -126,33 +132,7 @@ $records = mysqli_fetch_assoc($sel);
 $totalRecords = $records['allcount'];
 
 ## Total number of records with filtering
-//gets all folder/files for a user with the requester role, only shows their own folder/files
-if($agent_permissions['label'] == 'Requester') {
-$sel = mysqli_query($con,"select count(a.folderdocinfo_id) as allcount FROM wpqa_wpsc_epa_folderdocinfo as a
-INNER JOIN wpqa_wpsc_epa_boxinfo as d ON a.box_id = d.id
-INNER JOIN wpqa_wpsc_epa_storage_location as e ON d.storage_location_id = e.id
-INNER JOIN wpqa_wpsc_ticket as b ON d.ticket_id = b.id
-INNER JOIN wpqa_wpsc_epa_program_office as c ON d.program_office_id = c.office_code
-INNER JOIN wpqa_terms f ON f.term_id = e.digitization_center
-LEFT JOIN wpqa_wpsc_epa_recallrequest AS g ON (g.box_id = d.id AND g.folderdoc_id = '-99999')
-LEFT JOIN wpqa_wpsc_epa_recallrequest AS h ON (h.folderdoc_id = a.id AND h.folderdoc_id <> '-99999')
-
-LEFT JOIN (   SELECT a.box_id, a.return_id
-   FROM   wpqa_wpsc_epa_return_items a
-   LEFT JOIN  wpqa_wpsc_epa_return b ON a.return_id = b.id
-   WHERE a.box_id <> '-99999' AND b.return_status_id NOT IN (".$status_decline_cancelled_term_id.",".$status_decline_completed_term_id.")
-   GROUP  BY a.box_id ) AS i ON i.box_id = d.id
-LEFT JOIN (   SELECT a.folderdoc_id, a.return_id
-   FROM   wpqa_wpsc_epa_return_items a
-   LEFT JOIN  wpqa_wpsc_epa_return b ON a.return_id = b.id
-   WHERE a.folderdoc_id <> '-99999' AND b.return_status_id NOT IN (".$status_decline_cancelled_term_id.",".$status_decline_completed_term_id.")
-   GROUP  BY a.folderdoc_id )  AS j ON j.folderdoc_id = a.id
-   
-WHERE (b.active <> 0) AND (a.id <> -99999) AND b.customer_name = '" .  $current_user->display_name . "' 
-AND 1 ".$searchQuery);
-}
 //gets all folder/files for every user
-else {
 $sel = mysqli_query($con,"select count(a.folderdocinfo_id) as allcount FROM wpqa_wpsc_epa_folderdocinfo as a
 INNER JOIN wpqa_wpsc_epa_boxinfo as d ON a.box_id = d.id
 INNER JOIN wpqa_wpsc_epa_storage_location as e ON d.storage_location_id = e.id
@@ -161,7 +141,6 @@ INNER JOIN wpqa_wpsc_epa_program_office as c ON d.program_office_id = c.office_c
 INNER JOIN wpqa_terms f ON f.term_id = e.digitization_center
 LEFT JOIN wpqa_wpsc_epa_recallrequest AS g ON (g.box_id = d.id AND g.folderdoc_id = '-99999')
 LEFT JOIN wpqa_wpsc_epa_recallrequest AS h ON (h.folderdoc_id = a.id AND h.folderdoc_id <> '-99999')
-
 LEFT JOIN (   SELECT a.box_id, a.return_id
    FROM   wpqa_wpsc_epa_return_items a
    LEFT JOIN  wpqa_wpsc_epa_return b ON a.return_id = b.id
@@ -174,108 +153,11 @@ LEFT JOIN (   SELECT a.folderdoc_id, a.return_id
    GROUP  BY a.folderdoc_id )  AS j ON j.folderdoc_id = a.id
    
 WHERE (b.active <> 0) AND (a.id <> -99999) AND 1 ".$searchQuery);
-}
 $records = mysqli_fetch_assoc($sel);
 $totalRecordwithFilter = $records['allcount'];
 
 ## Fetch records
-//if user is a requester, only show their own requests
-if($agent_permissions['label'] == 'Requester') {
-$docQuery = "SELECT 
-a.folderdocinfo_id as folderdocinfo_id,
-CONCAT(
-CASE WHEN d.box_destroyed > 0  AND a.freeze <> 1
-THEN CONCAT('<a href=\"admin.php?pid=docsearch&page=filedetails&id=',a.folderdocinfo_id,'\" style=\"color: #FF0000 !important; text-decoration: line-through;\">',a.folderdocinfo_id,'</a> <span style=\"font-size: 1em; color: #FF0000;\"><i class=\"fas fa-ban\" title=\"Box Destroyed\"></i></span>')
-ELSE CONCAT('<a href=\"admin.php?pid=docsearch&page=filedetails&id=',a.folderdocinfo_id,'\">',a.folderdocinfo_id,'</a>')
-END,
-CASE 
-WHEN (unauthorized_destruction = 1 AND freeze = 1) THEN CONCAT(' <span style=\"font-size: 1em; color: #8b0000;\"><i class=\"fas fa-flag\" title=\"Unauthorized Destruction\"></i></span>', ' <span style=\"font-size: 1em; color: #009ACD;\"><i class=\"fas fa-snowflake\" title=\"Freeze\"></i></span>')
-WHEN(freeze = 1)  THEN ' <span style=\"font-size: 1em; color: #009ACD;\"><i class=\"fas fa-snowflake\" title=\"Freeze\"></i></span>'
-WHEN (unauthorized_destruction = 1) THEN ' <span style=\"font-size: 1em; color: #8b0000;\"><i class=\"fas fa-flag\" title=\"Unauthorized Destruction\"></i></span>'
-ELSE ''
-END) as folderdocinfo_id_flag,
-
-CONCAT(
-'<span class=\"wpsp_admin_label\" style=\"background-color:',
-(SELECT meta_value from wpqa_termmeta where meta_key = 'wpsc_priority_background_color' AND term_id = b.ticket_priority),
-';color:',
-(SELECT meta_value from wpqa_termmeta where meta_key = 'wpsc_priority_color' AND term_id = b.ticket_priority),
-';\">',
-(SELECT name from wpqa_terms where term_id = b.ticket_priority),
-'</span>') as ticket_priority,
-
-CASE 
-WHEN b.ticket_priority = 621
-THEN
-1
-WHEN b.ticket_priority = 9
-THEN
-2
-WHEN b.ticket_priority = 8
-THEN
-3
-WHEN b.ticket_priority = 7
-THEN
-4
-ELSE
-999
-END
- as ticket_priority_order,
-
-CONCAT('<a href=admin.php?page=wpsc-tickets&id=',b.request_id,'>',b.request_id,'</a>') as request_id, f.name as location, c.office_acronym as acronym,
-
-CONCAT(
-CASE 
-WHEN validation = 1 THEN CONCAT('<span style=\"font-size: 1.3em; color: #008000;\"><i class=\"fas fa-check-circle\" title=\"Validated\"></i></span> ',' [',
-
-CONCAT (
-CASE
-WHEN ((SELECT meta_value FROM wpqa_usermeta WHERE meta_key = 'first_name' AND user_id = u.ID) <> '') AND ((SELECT meta_value FROM wpqa_usermeta WHERE meta_key = 'last_name' AND user_id = u.ID) <> '') THEN CONCAT ( '<a href=\"#\" style=\"color: #000000 !important;\" data-toggle=\"tooltip\" data-placement=\"bottom\" data-html=\"true\" aria-label=\"Name\" title=\"',
-u.user_login
-,'\">',
-
-(
-    CASE WHEN length(CONCAT((SELECT meta_value FROM wpqa_usermeta WHERE meta_key = 'first_name' AND user_id = u.ID), ' ', (SELECT meta_value FROM wpqa_usermeta WHERE meta_key = 'last_name' AND user_id = u.ID))) > 15 THEN
-        CONCAT(LEFT(CONCAT((SELECT meta_value FROM wpqa_usermeta WHERE meta_key = 'first_name' AND user_id = u.ID), ' ', (SELECT meta_value FROM wpqa_usermeta WHERE meta_key = 'last_name' AND user_id = u.ID)), 15), '...')
-    ELSE CONCAT((SELECT meta_value FROM wpqa_usermeta WHERE meta_key = 'first_name' AND user_id = u.ID), ' ', (SELECT meta_value FROM wpqa_usermeta WHERE meta_key = 'last_name' AND user_id = u.ID))
-    END
-)
-
-,'</a>' )
-ELSE u.user_login
-END
-)
-
-,']')
-WHEN rescan = 1 THEN CONCAT('<span style=\"font-size: 1.3em; color: #8b0000;\"><i class=\"fas fa-times-circle\" title=\"Not Validated\"></i></span> ',' <span style=\"color: #FF0000;\"><strong>[Re-scan]</strong></span>')
-ELSE '<span style=\"font-size: 1.3em; color: #8b0000;\"><i class=\"fas fa-times-circle\" title=\"Not Validated\"></i></span> '
-END) as validation
-
-FROM wpqa_wpsc_epa_folderdocinfo as a
-LEFT JOIN wpqa_users as u ON a.validation_user_id = u.ID
-INNER JOIN wpqa_wpsc_epa_boxinfo as d ON a.box_id = d.id
-INNER JOIN wpqa_wpsc_epa_storage_location as e ON d.storage_location_id = e.id
-INNER JOIN wpqa_wpsc_ticket as b ON d.ticket_id = b.id
-INNER JOIN wpqa_wpsc_epa_program_office as c ON d.program_office_id = c.office_code
-INNER JOIN wpqa_terms f ON f.term_id = e.digitization_center
-LEFT JOIN wpqa_wpsc_epa_recallrequest AS g ON (g.box_id = d.id AND g.folderdoc_id = '-99999')
-LEFT JOIN wpqa_wpsc_epa_recallrequest AS h ON (h.folderdoc_id = a.id AND h.folderdoc_id <> '-99999')
-
-LEFT JOIN (   SELECT a.box_id, a.return_id
-   FROM   wpqa_wpsc_epa_return_items a
-   LEFT JOIN  wpqa_wpsc_epa_return b ON a.return_id = b.id
-   WHERE a.box_id <> '-99999' AND b.return_status_id NOT IN (".$status_decline_cancelled_term_id.",".$status_decline_completed_term_id.")
-   GROUP  BY a.box_id ) AS i ON i.box_id = d.id
-LEFT JOIN (   SELECT a.folderdoc_id, a.return_id
-   FROM   wpqa_wpsc_epa_return_items a
-   LEFT JOIN  wpqa_wpsc_epa_return b ON a.return_id = b.id
-   WHERE a.folderdoc_id <> '-99999' AND b.return_status_id NOT IN (".$status_decline_cancelled_term_id.",".$status_decline_completed_term_id.")
-   GROUP  BY a.folderdoc_id )  AS j ON j.folderdoc_id = a.id
-WHERE (b.active <> 0) AND (a.id <> -99999) AND b.customer_name =  '" .  $current_user->display_name . "'
-AND 1 ".$searchQuery." order by ".$columnName." ".$columnSortOrder." limit ".$row.",".$rowperpage;
-}
 //shows all folder/files
-else {
 $docQuery = "SELECT 
 a.folderdocinfo_id as folderdocinfo_id,
 CONCAT(
@@ -289,7 +171,6 @@ WHEN(freeze = 1)  THEN ' <span style=\"font-size: 1em; color: #009ACD;\"><i clas
 WHEN (unauthorized_destruction = 1) THEN ' <span style=\"font-size: 1em; color: #8b0000;\"><i class=\"fas fa-flag\" title=\"Unauthorized Destruction\"></i></span>'
 ELSE ''
 END) as folderdocinfo_id_flag,
-
 CONCAT(
 '<span class=\"wpsp_admin_label\" style=\"background-color:',
 (SELECT meta_value from wpqa_termmeta where meta_key = 'wpsc_priority_background_color' AND term_id = b.ticket_priority),
@@ -298,7 +179,6 @@ CONCAT(
 ';\">',
 (SELECT name from wpqa_terms where term_id = b.ticket_priority),
 '</span>') as ticket_priority,
-
 CASE 
 WHEN b.ticket_priority = 621
 THEN
@@ -316,35 +196,29 @@ ELSE
 999
 END
  as ticket_priority_order,
-
 CONCAT('<a href=admin.php?page=wpsc-tickets&id=',b.request_id,'>',b.request_id,'</a>') as request_id, f.name as location, c.office_acronym as acronym,
 CONCAT(
 CASE 
 WHEN validation = 1 THEN CONCAT('<span style=\"font-size: 1.3em; color: #008000;\"><i class=\"fas fa-check-circle\" title=\"Validated\"></i></span> ',' [',
-
 CONCAT (
 CASE
-WHEN ((SELECT meta_value FROM wpqa_usermeta WHERE meta_key = 'first_name' AND user_id = u.ID) <> '') AND ((SELECT meta_value FROM wpqa_usermeta WHERE meta_key = 'last_name' AND user_id = u.ID) <> '') THEN CONCAT ( '<a href=\"#\" style=\"color: #000000 !important;\" data-toggle=\"tooltip\" data-placement=\"bottom\" data-html=\"true\" aria-label=\"Name\" title=\"',
+WHEN ((SELECT meta_value FROM wpqa_usermeta WHERE meta_key = 'first_name' AND user_id = u.ID) <> '') AND ((SELECT meta_value FROM wpqa_usermeta WHERE meta_key = 'last_name' AND user_id = u.ID) <> '') THEN CONCAT ( '<a href=\"#\" style=\"color: #000000 !important;\" data-toggle=\"tooltip\" data-placement=\"left\" data-html=\"true\" aria-label=\"Name\" title=\"',
 u.user_login
 ,'\">',
-
 (
     CASE WHEN length(CONCAT((SELECT meta_value FROM wpqa_usermeta WHERE meta_key = 'first_name' AND user_id = u.ID), ' ', (SELECT meta_value FROM wpqa_usermeta WHERE meta_key = 'last_name' AND user_id = u.ID))) > 15 THEN
         CONCAT(LEFT(CONCAT((SELECT meta_value FROM wpqa_usermeta WHERE meta_key = 'first_name' AND user_id = u.ID), ' ', (SELECT meta_value FROM wpqa_usermeta WHERE meta_key = 'last_name' AND user_id = u.ID)), 15), '...')
     ELSE CONCAT((SELECT meta_value FROM wpqa_usermeta WHERE meta_key = 'first_name' AND user_id = u.ID), ' ', (SELECT meta_value FROM wpqa_usermeta WHERE meta_key = 'last_name' AND user_id = u.ID))
     END
 )
-
 ,'</a>' )
 ELSE u.user_login
 END
 )
-
 ,']')
 WHEN rescan = 1 THEN CONCAT('<span style=\"font-size: 1.3em; color: #8b0000;\"><i class=\"fas fa-times-circle\" title=\"Not Validated\"></i></span> ',' <span style=\"color: #FF0000;\"><strong>[Re-scan]</strong></span>')
 ELSE '<span style=\"font-size: 1.3em; color: #8b0000;\"><i class=\"fas fa-times-circle\" title=\"Not Validated\"></i></span> '
 END) as validation
-
 FROM wpqa_wpsc_epa_folderdocinfo as a
 LEFT JOIN wpqa_users as u ON a.validation_user_id = u.ID
 INNER JOIN wpqa_wpsc_epa_boxinfo as d ON a.box_id = d.id
@@ -354,7 +228,6 @@ INNER JOIN wpqa_wpsc_epa_program_office as c ON d.program_office_id = c.office_c
 INNER JOIN wpqa_terms f ON f.term_id = e.digitization_center
 LEFT JOIN wpqa_wpsc_epa_recallrequest AS g ON (g.box_id = d.id AND g.folderdoc_id = '-99999')
 LEFT JOIN wpqa_wpsc_epa_recallrequest AS h ON (h.folderdoc_id = a.id AND h.folderdoc_id <> '-99999')
-
 LEFT JOIN (   SELECT a.box_id, a.return_id
    FROM   wpqa_wpsc_epa_return_items a
    LEFT JOIN  wpqa_wpsc_epa_return b ON a.return_id = b.id
@@ -367,7 +240,7 @@ LEFT JOIN (   SELECT a.folderdoc_id, a.return_id
    GROUP  BY a.folderdoc_id )  AS j ON j.folderdoc_id = a.id
    
 WHERE (b.active <> 0) AND (a.id <> -99999) AND 1 ".$searchQuery." order by ".$columnName." ".$columnSortOrder." limit ".$row.",".$rowperpage;
-}
+
 $docRecords = mysqli_query($con, $docQuery);
 $data = array();
 
@@ -404,7 +277,8 @@ $response = array(
   "iTotalRecords" => $totalRecords,
   "iTotalDisplayRecords" => $totalRecordwithFilter,
   "aaData" => $data,
-  "sqlQuery" => $docQuery
+  "sqlQuery" => $docQuery,
+  "is_requester" => $is_requester
 );
 
 echo json_encode($response);

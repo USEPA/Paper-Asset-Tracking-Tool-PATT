@@ -91,6 +91,24 @@ Enter one or more Document IDs:<br />
      </datalist>
      
 <br /><br />
+
+<?php
+//Priorities
+$not_assigned_tag = get_term_by('slug', 'not-assigned', 'wpsc_priorities');
+$normal_tag = get_term_by('slug', 'low', 'wpsc_priorities');
+$high_tag = get_term_by('slug', 'medium', 'wpsc_priorities');
+$critical_tag = get_term_by('slug', 'high', 'wpsc_priorities');
+?>
+
+        <select id='searchByPriority' aria-label="Search by Priority">
+           <option value=''>-- Select Priority --</option>
+			<option value="<?php echo $not_assigned_tag->term_id; ?>">Not Assigned</option>
+			<option value="<?php echo $normal_tag->term_id; ?>">Normal</option>
+			<option value="<?php echo $high_tag->term_id; ?>">High</option>
+			<option value="<?php echo $critical_tag->term_id; ?>">Critical</option>
+         </select>
+<br /><br />
+
         <select id='searchByDigitizationCenter'>
            <option value=''>-- Select Digitization Center --</option>
            <option value='East'>East</option>
@@ -101,12 +119,10 @@ Enter one or more Document IDs:<br />
          </select>
 <br /><br />
 
-        <select id='searchByPriority' aria-label="Search by Priority">
-           <option value=''>-- Select Priority --</option>
-			<option value="621">Not Assigned</option>
-			<option value="7">Normal</option>
-			<option value="8">High</option>
-			<option value="9">Critical</option>
+        <select id='searchByRecallDecline' aria-label='Search by Recall or Decline'>
+           <option value=''>-- Select Recall or Decline --</option>
+           <option value='Recall'>Recall</option>
+           <option value='Decline'>Decline</option>
          </select>
 <br /><br />
 	                            </div>
@@ -188,6 +204,12 @@ $box_id = $convert_box_id->id;
 jQuery(document).ready(function(){
 jQuery('[data-toggle="tooltip"]').tooltip(); 
 
+var agent_permission_label = '<?php echo $agent_permissions["label"] ?>';
+var is_requester = false;
+if( agent_permission_label == 'Requester' ) {
+	is_requester = true;
+}
+
   var dataTable = jQuery('#tbl_templates_folderfile').DataTable({
     'processing': true,
     'serverSide': true,
@@ -195,12 +217,18 @@ jQuery('[data-toggle="tooltip"]').tooltip();
     'stateSave': true,
     'deferRender': true, // new on oct 10-29
     'scrollX' : true,
+    'drawCallback': function( settings ) {
+
+ jQuery('[data-toggle="tooltip"]').tooltip();
+
+     },
     'stateSaveParams': function(settings, data) {
       data.sg = jQuery('#searchGeneric').val();
       data.bid = jQuery('#searchByDocID').val();
       data.po = jQuery('#searchByProgramOffice').val();
       data.dc = jQuery('#searchByDigitizationCenter').val();
       data.sp = jQuery('#searchByPriority').val();
+      data.rd = jQuery('#searchByRecallDecline').val();
     },
     'stateLoadParams': function(settings, data) {
       jQuery('#searchGeneric').val(data.sg);
@@ -208,6 +236,7 @@ jQuery('[data-toggle="tooltip"]').tooltip();
       jQuery('#searchByProgramOffice').val(data.po);
       jQuery('#searchByDigitizationCenter').val(data.dc);
       jQuery('#searchByPriority').val(data.sp);
+      jQuery('#searchByRecallDecline').val(data.rd);
     },
     'searching': false, // Remove default Search Control
     'paging': true,
@@ -223,6 +252,7 @@ jQuery('[data-toggle="tooltip"]').tooltip();
           var docid = jQuery('#searchByDocID').val();
           var dc = jQuery('#searchByDigitizationCenter').val();
           var sp = jQuery('#searchByPriority').val();
+          var rd = jQuery('#searchByRecallDecline').val();
           
           var boxid = jQuery('#box_id').val();
           var page = jQuery('#page').val();
@@ -233,6 +263,8 @@ jQuery('[data-toggle="tooltip"]').tooltip();
           data.searchByProgramOffice = po;
           data.searchByDigitizationCenter = dc;
           data.searchByPriority = sp;
+          data.searchByRecallDecline = rd;
+          data.is_requester = is_requester;
           
           data.BoxID = boxid;
           data.PID = pid;
@@ -308,6 +340,12 @@ jQuery("#searchByPriority").change(function(){
     dataTable.draw();
 });
 
+jQuery("#searchByRecallDecline").change(function(){
+    dataTable.state.save();
+    dataTable.draw();
+});
+
+
 //jQuery('#searchGeneric').on('input keyup paste', function () {
  //       dataTable.state.save();
  //       dataTable.draw();
@@ -327,6 +365,7 @@ jQuery('#wpsc_individual_refresh_btn').on('click', function(e){
     jQuery('#searchByProgramOffice').val('');
     jQuery('#searchByDigitizationCenter').val('');
     jQuery('#searchByPriority').val('');
+    jQuery('#searchByRecallDecline').val('');
     jQuery('#searchByDocID').importTags('');
     dataTable.column(0).checkboxes.deselectAll();
 	dataTable.state.clear();

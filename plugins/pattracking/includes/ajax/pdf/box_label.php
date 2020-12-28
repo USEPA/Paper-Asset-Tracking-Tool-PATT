@@ -199,6 +199,18 @@ INNER JOIN wpqa_wpsc_epa_storage_location c ON b.storage_location_id = c.id
         return $count_val;
     }
     
+    //Function to pull ECMS/SEMS
+    function fetch_ecms_sems(){
+        global $wpdb;
+        $get_ecms_sems = $wpdb->get_row("SELECT a.request_id, b.meta_key, b.meta_value as ecms_sems
+        FROM wpqa_wpsc_ticket a
+        INNER JOIN wpqa_wpsc_ticketmeta b ON b.ticket_id = a.id
+        WHERE b.meta_key = 'super_fund' AND a.id = " . $GLOBALS['id']);
+        $ecms_sems = $get_ecms_sems->ecms_sems;
+        
+        return $ecms_sems;
+    }
+    
     //Pull in the TCPDF library
     require_once ('tcpdf/tcpdf.php');
 
@@ -278,6 +290,7 @@ if (preg_match('/^\d+$/', $GLOBALS['id'])) {
         $box_location_position = fetch_aisle_bay_shelf_position();
         $box_date = fetch_create_date();
         $box_count = fetch_box_count();
+        $box_ecms_sems = fetch_ecms_sems();
 }
 
 if (preg_match("/^([0-9]{7}-[0-9]{1,4})(?:,\s*(?1))*$/", $GLOBALS['id'])) {  
@@ -303,7 +316,7 @@ if (preg_match("/^([0-9]{7}-[0-9]{1,4})(?:,\s*(?1))*$/", $GLOBALS['id'])) {
         $box_digitization_center = $wpdb->get_row( "
         SELECT wpqa_terms.name as digitization_center
         FROM wpqa_wpsc_epa_boxinfo
-        INNER JOIN wpqa_wpsc_epa_storage_location ON wpqa_wpsc  _epa_boxinfo.storage_location_id = wpqa_wpsc_epa_storage_location.id
+        INNER JOIN wpqa_wpsc_epa_storage_location ON wpqa_wpsc_epa_boxinfo.storage_location_id = wpqa_wpsc_epa_storage_location.id
         INNER JOIN wpqa_terms ON wpqa_terms.term_id = wpqa_wpsc_epa_storage_location.digitization_center
         WHERE wpqa_wpsc_epa_boxinfo.box_id = '" . $box_array[$i] ."'");
         
@@ -409,6 +422,9 @@ if (preg_match("/^([0-9]{7}-[0-9]{1,4})(?:,\s*(?1))*$/", $GLOBALS['id'])) {
                 //aisle/bay/shelf/position
                 $x_loc_box_position = 88.5;
                 $y_loc_box_position = 115;
+                //ECMS/SEMS
+                $x_loc_ecms_sems = 38.5;
+                $y_loc_ecms_sems = 105;
             }
             else
             {
@@ -474,6 +490,9 @@ if (preg_match("/^([0-9]{7}-[0-9]{1,4})(?:,\s*(?1))*$/", $GLOBALS['id'])) {
                 //aisle/bay/shelf/position
                 $x_loc_box_position = 88.5;
                 $y_loc_box_position = 245;
+                //ECMS/SEMS
+                $x_loc_ecms_sems = 40;
+                $y_loc_ecms_sems = 235;
             }
             //Determine box count out of total
             
@@ -494,6 +513,21 @@ if (preg_match("/^([0-9]{7}-[0-9]{1,4})(?:,\s*(?1))*$/", $GLOBALS['id'])) {
             //$obj_pdf->Rect($x_loc_ba1, $y_loc_ba1, $x_loc_la2, $y_loc_la2, 'D', array(
                 //'all' => $style_box_dash
             //));
+            
+            //ECMS/SEMS indicator
+            $ecms_sems_indicator = '';
+            if($box_ecms_sems == 'true') {
+                $ecms_sems_indicator = 'SEMS';
+            }
+            else {
+                $ecms_sems_indicator = 'ECMS';
+            }
+            
+            $obj_pdf->SetFont('helvetica', 'B', 40);
+            $obj_pdf->StartTransform();
+            $obj_pdf->Rotate(90, $x_loc_ecms_sems, $y_loc_ecms_sems);
+            $obj_pdf->Text($x_loc_ecms_sems, $y_loc_ecms_sems, $ecms_sems_indicator);
+            $obj_pdf->StopTransform();
             
             //Digitization center box regular border
             //$obj_pdf->Rect($x_loc_digi_box_regular, $y_loc_digi_box_regular, 30, 10, '', '', array(0, 0, 0));
@@ -615,7 +649,7 @@ $url_id = $asset_id;
 }
             //$url_key = fetch_request_key();
             //QR Code of Request
-            $url = 'http://' . $_SERVER['SERVER_NAME'] . $subfolder_path .'/data/?id=' . $num;
+            $url = 'http://' . $_SERVER['SERVER_NAME'] . $subfolder_path .'/wp-admin/admin.php?page=wpsc-tickets&id=' . $num;
             //$obj_pdf->writeHTML($url);
             $obj_pdf->write2DBarcode($url, 'QRCODE,H', $x_loc_2d, $y_loc_2d, '', 50, $style_barcode, 'N');
             //$obj_pdf->Cell(150, 50, $url, 0, 1);

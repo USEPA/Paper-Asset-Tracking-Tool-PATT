@@ -423,7 +423,7 @@ if (preg_match("/^([0-9]{7}-[0-9]{1,4})(?:,\s*(?1))*$/", $GLOBALS['id'])) {
                 $x_loc_box_position = 88.5;
                 $y_loc_box_position = 115;
                 //ECMS/SEMS
-                $x_loc_ecms_sems = 38.5;
+                $x_loc_ecms_sems = 40;
                 $y_loc_ecms_sems = 105;
             }
             else

@@ -92,13 +92,15 @@ $boxlist_po = join(", ", $program_office_array_id);
 $request_id = Patt_Custom_Func::ticket_to_request_id($GLOBALS['id']);
 
 // $request_key = $wpdb->get_row( "SELECT ticket_auth_code FROM wpqa_wpsc_ticket WHERE id = " . $GLOBALS['id']);
+
+/*
         $args = [
             'select' => 'DISTINCT wpqa_wpsc_epa_program_office.office_acronym as program_office',
             'where' => ['id', $GLOBALS['id']],
         ];
         $wpqa_wpsc_ticket = new WP_CUST_QUERY('wpqa_wpsc_ticket');
         $request_key = $wpqa_wpsc_ticket->get_row($args, false);
-
+*/
 
 //$key = $request_key->ticket_auth_code;
 
@@ -122,7 +124,6 @@ else {
 }
 
 $tbl = '
-
 <table style="width:745px">
   <tr>
     <td><h1 style="font-size: 40px">Box List</h1></td>
@@ -130,7 +131,6 @@ $tbl = '
     <td align="right"><tcpdf method="write2DBarcode" params="'.$request_id_barcode.'" /><strong>&nbsp; &nbsp; &nbsp; &nbsp; '.$request_id.'</strong><br /></td>
   </tr>
 </table>
-
 <table style="width: 638px;" cellspacing="0" nobr="true">
   <tr>
     <th style="border: 1px solid #000000; width: 180px; background-color: #f5f5f5; font-weight: bold;">ID</th>

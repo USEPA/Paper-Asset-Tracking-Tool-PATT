@@ -21,15 +21,17 @@ if (isset($_GET['id']))
         global $wpdb;
         $array = array();
         
-        $request_folderdocinfo = $wpdb->get_results("SELECT folderdocinfo_id 
-        FROM wpqa_wpsc_epa_folderdocinfo, wpqa_wpsc_epa_boxinfo, wpqa_wpsc_epa_storage_location 
-        WHERE wpqa_wpsc_epa_folderdocinfo.box_id = wpqa_wpsc_epa_boxinfo.id AND wpqa_wpsc_epa_storage_location.id = wpqa_wpsc_epa_boxinfo.storage_location_id AND 
-        ((index_level = 1 AND freeze = 1) OR (index_level = 1 AND aisle <> 0 AND bay <> 0 AND shelf <> 0 AND position <> 0 AND digitization_center <> 666)) AND 
-        wpqa_wpsc_epa_boxinfo.ticket_id = " . $GLOBALS['id']);
+        $request_folderdocinfo = $wpdb->get_results("SELECT d.folderdocinfofile_id 
+FROM wpqa_wpsc_epa_folderdocinfo a
+INNER JOIN wpqa_wpsc_epa_boxinfo b ON b.id = a.box_id
+INNER JOIN wpqa_wpsc_epa_storage_location c ON c.id = b.storage_location_id
+INNER JOIN wpqa_wpsc_epa_folderdocinfo_files d ON d.folderdocinfo_id = a.folderdocinfo_id
+WHERE ((d.index_level = 1 AND d.freeze = 1) OR (d.index_level = 1 AND c.aisle <> 0 AND c.bay <> 0 AND c.shelf <> 0 AND c.position <> 0 AND c.digitization_center <> 666)) AND 
+b.ticket_id = " . $GLOBALS['id']);
         
         foreach($request_folderdocinfo as $folderdocinfo)
         {
-            array_push($array, strtoupper($folderdocinfo->folderdocinfo_id));
+            array_push($array, strtoupper($folderdocinfo->folderdocinfofile_id));
         }
         
         return $array;
@@ -41,11 +43,14 @@ if (isset($_GET['id']))
         global $wpdb;
         $array = array();
         
-        $request_title = $wpdb->get_results("SELECT title
-        FROM wpqa_wpsc_epa_folderdocinfo, wpqa_wpsc_epa_boxinfo, wpqa_wpsc_epa_storage_location 
-        WHERE wpqa_wpsc_epa_folderdocinfo.box_id = wpqa_wpsc_epa_boxinfo.id AND wpqa_wpsc_epa_storage_location.id = wpqa_wpsc_epa_boxinfo.storage_location_id AND 
-        ((index_level = 1 AND freeze = 1) OR (index_level = 1 AND aisle <> 0 AND bay <> 0 AND shelf <> 0 AND position <> 0 AND digitization_center <> 666)) AND 
-        wpqa_wpsc_epa_boxinfo.ticket_id = " .$GLOBALS['id']);
+        $request_title = $wpdb->get_results("SELECT d.title
+        FROM wpqa_wpsc_epa_folderdocinfo a
+        INNER JOIN wpqa_wpsc_epa_boxinfo b ON b.id = a.box_id
+        INNER JOIN wpqa_wpsc_epa_storage_location c ON c.id = b.storage_location_id
+        INNER JOIN wpqa_wpsc_epa_folderdocinfo_files d ON d.folderdocinfo_id = a.folderdocinfo_id
+        WHERE ((d.index_level = 1 AND d.freeze = 1) OR 
+        (d.index_level = 1 AND c.aisle <> 0 AND c.bay <> 0 AND c.shelf <> 0 AND c.position <> 0 AND c.digitization_center <> 666)) AND 
+        b.ticket_id = " .$GLOBALS['id']);
         
         foreach($request_title as $folder_title)
         {
@@ -84,7 +89,7 @@ if (isset($_GET['id']))
     $x_loc_folderdocinfo_title = 32;
     $y_loc_folderdocinfo_title = 130;
 
-if ((preg_match('/^\d+$/', $GLOBALS['id'])) || (preg_match("/^([0-9]{7}-[0-9]{1,4}-01-[0-9]{1,4})(?:,\s*(?1))*$/", $GLOBALS['id']))) {
+if ((preg_match('/^\d+$/', $GLOBALS['id'])) || (preg_match("/^([0-9]{7}-[0-9]{1,4}-01-[0-9]{1,4}(-[a][0-9]{1,4})?)(?:,\s*(?1))*$/", $GLOBALS['id']))) {
  
 if (preg_match('/^\d+$/', $GLOBALS['id'])) {   
     //Obtain array of Box ID's
@@ -93,7 +98,7 @@ if (preg_match('/^\d+$/', $GLOBALS['id'])) {
     $title_array = fetch_title();
 }
 
-if (preg_match("/^([0-9]{7}-[0-9]{1,4}-01-[0-9]{1,4})(?:,\s*(?1))*$/", $GLOBALS['id'])) {
+if (preg_match("/^([0-9]{7}-[0-9]{1,4}-01-[0-9]{1,4}(-[a][0-9]{1,4})?)(?:,\s*(?1))*$/", $GLOBALS['id'])) {
 
 $folderdocinfo_array = explode(',', $GLOBALS['id']);
 
@@ -103,12 +108,8 @@ $folderdocinfo_array = explode(',', $GLOBALS['id']);
     for ($i = 0;$i < count($folderdocinfo_array);$i++)
     {
         //checks to see if folderdocinfo_id is empty, if so won't reprint file labels
-        $folderdocinfo_new = $wpdb->get_row("SELECT folderdocinfo_id 
-        FROM wpqa_wpsc_epa_folderdocinfo, wpqa_wpsc_epa_boxinfo, wpqa_wpsc_epa_storage_location 
-        WHERE wpqa_wpsc_epa_folderdocinfo.box_id = wpqa_wpsc_epa_boxinfo.id AND wpqa_wpsc_epa_storage_location.id = wpqa_wpsc_epa_boxinfo.storage_location_id AND 
-        ((index_level = 1 AND freeze = 1) OR (index_level = 1 AND aisle <> 0 AND bay <> 0 AND shelf <> 0 AND position <> 0 AND digitization_center <> 666)) AND 
-        folderdocinfo_id = '" .$folderdocinfo_array[$i]."'");
-            $folderdoc_id = $folderdocinfo_new->folderdocinfo_id;
+        $folderdocinfo_new = $wpdb->get_row("SELECT wpqa_wpsc_epa_folderdocinfo_files.folderdocinfofile_id as folderdocinfofile_id FROM wpqa_wpsc_epa_folderdocinfo, wpqa_wpsc_epa_boxinfo, wpqa_wpsc_epa_storage_location, wpqa_wpsc_epa_folderdocinfo_files WHERE wpqa_wpsc_epa_folderdocinfo.box_id = wpqa_wpsc_epa_boxinfo.id AND wpqa_wpsc_epa_storage_location.id = wpqa_wpsc_epa_boxinfo.storage_location_id AND wpqa_wpsc_epa_folderdocinfo_files.folderdocinfo_id = wpqa_wpsc_epa_folderdocinfo.folderdocinfo_id AND ((wpqa_wpsc_epa_folderdocinfo_files.index_level = 1 AND wpqa_wpsc_epa_folderdocinfo_files.freeze = 1) OR (wpqa_wpsc_epa_folderdocinfo_files.index_level = 1 AND aisle <> 0 AND bay <> 0 AND shelf <> 0 AND position <> 0 AND digitization_center <> 666)) AND wpqa_wpsc_epa_folderdocinfo_files.folderdocinfofile_id = '" .$folderdocinfo_array[$i]."'");
+            $folderdoc_id = $folderdocinfo_new->folderdocinfofile_id;
         
         if($folderdoc_id != '') {
         //Begin if statement to determine # of new pages based on length of array
@@ -132,11 +133,11 @@ $folderdocinfo_array = explode(',', $GLOBALS['id']);
         //Folderdocinfo title printout
         $obj_pdf->SetFont('helvetica', '', 30);
         
-    if (preg_match("/^([0-9]{7}-[0-9]{1,4}-01-[0-9]{1,4})(?:,\s*(?1))*$/", $GLOBALS['id'])) {
+    if (preg_match("/^([0-9]{7}-[0-9]{1,4}-01-[0-9]{1,4}(-[a][0-9]{1,4})?)(?:,\s*(?1))*$/", $GLOBALS['id'])) {
         
 $folderfile_info = $wpdb->get_row("SELECT title
-        FROM wpqa_wpsc_epa_folderdocinfo
-        WHERE folderdocinfo_id = '" .$folderdocinfo_array[$i]."'");
+        FROM wpqa_wpsc_epa_folderdocinfo_files
+        WHERE folderdocinfofile_id = '" .$folderdocinfo_array[$i]."'");
 $txt = '<strong>Title:</strong> ' . ((strlen($folderfile_info->title) > 150) ? substr($folderfile_info->title, 0, 150) . "...": $folderfile_info->title);
     }
     

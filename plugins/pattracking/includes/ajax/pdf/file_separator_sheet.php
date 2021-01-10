@@ -27,7 +27,7 @@ if (isset($_GET['id']))
     $obj_pdf->SetAutoPageBreak(true, 10);
     $obj_pdf->SetFont('helvetica', '', 11);
 
-if ((preg_match('/^\d+$/', $GLOBALS['id'])) || (preg_match("/^([0-9]{7}-[0-9]{1,4}-02-[0-9]{1,4})(?:,\s*(?1))*$/", $GLOBALS['id']))) {
+if ((preg_match('/^\d+$/', $GLOBALS['id'])) || (preg_match("/^([0-9]{7}-[0-9]{1,4}-02-[0-9]{1,4}(-[a][0-9]{1,4})?)(?:,\s*(?1))*$/", $GLOBALS['id']))) {
 
 if (preg_match('/^\d+$/', $GLOBALS['id'])) {
     $box_ids = $wpdb->get_results("
@@ -35,18 +35,23 @@ if (preg_match('/^\d+$/', $GLOBALS['id'])) {
     FROM wpqa_wpsc_epa_boxinfo a
     LEFT JOIN wpqa_wpsc_epa_folderdocinfo b ON b.box_id = a.id
     RIGHT JOIN wpqa_wpsc_epa_storage_location s ON a.storage_location_id = s.id
-    WHERE ((index_level = 2 AND freeze = 1) OR (index_level = 2 AND aisle <> 0 AND bay <> 0 AND shelf <> 0 AND position <> 0 AND digitization_center <> 666)) AND 
+    INNER JOIN wpqa_wpsc_epa_folderdocinfo_files c ON c.folderdocinfo_id = b.folderdocinfo_id
+    WHERE ((c.index_level = 2 AND c.freeze = 1) OR (c.index_level = 2 AND s.aisle <> 0 AND s.bay <> 0 AND s.shelf <> 0 AND s.position <> 0 AND s.digitization_center <> 666)) AND 
     a.ticket_id = " .$GLOBALS['id']);
 
 //print_r($box_ids);
-
+ 
     foreach($box_ids as $item)
     {
 
-$folderfile_info = $wpdb->get_results("SELECT folderdocinfo_id, title
-FROM wpqa_wpsc_epa_folderdocinfo, wpqa_wpsc_epa_boxinfo, wpqa_wpsc_epa_storage_location
-WHERE wpqa_wpsc_epa_folderdocinfo.box_id = wpqa_wpsc_epa_boxinfo.id AND wpqa_wpsc_epa_storage_location.id = wpqa_wpsc_epa_boxinfo.storage_location_id AND ((index_level = 2 AND aisle <> 0 AND bay <> 0 AND shelf <> 0 AND position <> 0 AND digitization_center <> 666) OR (index_level = 2 AND freeze = 1)) AND
-wpqa_wpsc_epa_folderdocinfo.box_id = " .$item->id);
+$folderfile_info = $wpdb->get_results("SELECT d.folderdocinfofile_id, d.title
+FROM wpqa_wpsc_epa_folderdocinfo a 
+INNER JOIN wpqa_wpsc_epa_boxinfo b ON b.id = a.box_id
+INNER JOIN wpqa_wpsc_epa_storage_location c ON c.id = b.storage_location_id
+INNER JOIN wpqa_wpsc_epa_folderdocinfo_files d ON d.folderdocinfo_id = a.folderdocinfo_id
+WHERE ((d.index_level = 2 AND c.aisle <> 0 AND c.bay <> 0 AND c.shelf <> 0 AND c.position <> 0 AND c.digitization_center <> 666) OR 
+(d.index_level = 2 AND d.freeze = 1)) AND
+a.box_id = " .$item->id);
 
 //print_r($folderfile_info);
 
@@ -77,7 +82,7 @@ $tbl .= '<tr>';
 
 foreach($b as $info){
 
-    $folderfile_id = $info->folderdocinfo_id;
+    $folderfile_id = $info->folderdocinfofile_id;
     $folderfile_barcode =  $obj_pdf->serializeTCPDFtagParameters(array($folderfile_id, 'C128', '', '', 57, 17, 0.4, array('position'=>'S', 'border'=>false, 'padding'=>1, 'fgcolor'=>array(0,0,0), 'bgcolor'=>array(255,255,255), 'text'=>true, 'font'=>'helvetica', 'fontsize'=>8, 'stretchtext'=>4), 'N'));
     $folderfile_title = $info->title;
     $folderfile_title_truncate = (strlen($folderfile_title) > 30) ? substr($folderfile_title, 0, 30) . '...' : $folderfile_title;
@@ -113,7 +118,7 @@ $obj_pdf->writeHTML($tbl, true, false, false, false, '');
 
 } //endforeach_regex ticket id
 
-if (preg_match("/^([0-9]{7}-[0-9]{1,4}-02-[0-9]{1,4})(?:,\s*(?1))*$/", $GLOBALS['id'])) {
+if (preg_match("/^([0-9]{7}-[0-9]{1,4}-02-[0-9]{1,4}(-[a][0-9]{1,4})?)(?:,\s*(?1))*$/", $GLOBALS['id'])) {
 
 $final_array = array();
 
@@ -121,14 +126,16 @@ $folderfile_array= explode(',', $GLOBALS['id']);
 
 foreach($folderfile_array as $item) {
 
-$folderfile_info = $wpdb->get_row("SELECT folderdocinfo_id, title
-FROM wpqa_wpsc_epa_folderdocinfo, wpqa_wpsc_epa_boxinfo, wpqa_wpsc_epa_storage_location
-WHERE wpqa_wpsc_epa_folderdocinfo.box_id = wpqa_wpsc_epa_boxinfo.id AND wpqa_wpsc_epa_storage_location.id = wpqa_wpsc_epa_boxinfo.storage_location_id AND 
-((index_level = 2 AND aisle <> 0 AND bay <> 0 AND shelf <> 0 AND position <> 0 AND digitization_center <> 666) OR (index_level = 2 AND freeze = 1)) AND
-folderdocinfo_id = '" .$item."'");
+$folderfile_info = $wpdb->get_row("SELECT d.folderdocinfofile_id, d.title
+FROM wpqa_wpsc_epa_folderdocinfo a 
+INNER JOIN wpqa_wpsc_epa_boxinfo b ON b.id = a.box_id
+INNER JOIN wpqa_wpsc_epa_storage_location c ON c.id - b.storage_location_id
+INNER JOIN wpqa_wpsc_epa_folderdocinfo_files d ON d.folderdocinfo_id = a.folderdocinfo_id
+WHERE ((d.index_level = 2 AND c.aisle <> 0 AND c.bay <> 0 AND c.shelf <> 0 AND c.position <> 0 AND c.digitization_center <> 666) OR (d.index_level = 2 AND d.freeze = 1)) AND
+d.folderdocinfofile_id = '" .$item."'");
 
 $parent = new stdClass;
-$parent->folderdocinfo_id = $folderfile_info->folderdocinfo_id;
+$parent->folderdocinfofile_id = $folderfile_info->folderdocinfofile_id;
 $parent->title = $folderfile_info->title;
 $final_array[] = $parent;
 
@@ -156,7 +163,7 @@ $tbl .= '<tr>';
 
 foreach($b as $info){
 
-    $folderfile_id = $info->folderdocinfo_id;
+    $folderfile_id = $info->folderdocinfofile_id;
  $folderfile_barcode =  $obj_pdf->serializeTCPDFtagParameters(array($folderfile_id, 'C128', '', '', 57, 17, 0.4, array('position'=>'S', 'border'=>false, 'padding'=>1, 'fgcolor'=>array(0,0,0), 'bgcolor'=>array(255,255,255), 'text'=>true, 'font'=>'helvetica', 'fontsize'=>8, 'stretchtext'=>4), 'N'));
 $folderfile_title = $info->title;
     $folderfile_title_truncate = (strlen($folderfile_title) > 30) ? substr($folderfile_title, 0, 30) . '...' : $folderfile_title;
